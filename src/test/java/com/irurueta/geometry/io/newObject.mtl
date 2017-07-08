@@ -1,0 +1,13 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl 001-Panel_wallpa
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.329412 0.191373 0.103529
+Ks 0.031373 0.021569 0.013725
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Svalbard.bmp
+map_Disp Svalbard.bmp
