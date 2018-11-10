@@ -1,47 +1,47 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.io.Util
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date Spetember 26, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.irurueta.geometry.io;
 
 
+import org.junit.*;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class UtilTest {
     
-    public UtilTest() {
-    }
+    public UtilTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testToBigEndian(){
+    public void testToBigEndian() {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.BIG_ENDIAN);
         
@@ -88,7 +88,7 @@ public class UtilTest {
     }
     
     @Test
-    public void testToLittleEndian(){
+    public void testToLittleEndian() {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.BIG_ENDIAN);
         
@@ -135,7 +135,7 @@ public class UtilTest {
     }
     
     @Test
-    public void testFromBigEndian(){
+    public void testFromBigEndian() {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.BIG_ENDIAN);
         
@@ -182,7 +182,7 @@ public class UtilTest {
     }
     
     @Test
-    public void testFromLittleEndian(){
+    public void testFromLittleEndian() {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         
@@ -229,7 +229,7 @@ public class UtilTest {
     }
     
     @Test
-    public void testToEndianType(){
+    public void testToEndianType() {
         
         short shortValue = 5436;
         assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, 
@@ -270,7 +270,7 @@ public class UtilTest {
     }
     
     @Test
-    public void testFromEndianType(){
+    public void testFromEndianType() {
         
         short shortValue = 5436;
         assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, 
@@ -307,6 +307,5 @@ public class UtilTest {
                 doubleValue), Util.fromBigEndian(doubleValue), 0.0);
         assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, 
                 doubleValue), Util.fromLittleEndian(doubleValue), 0.0);
-        
     }    
 }

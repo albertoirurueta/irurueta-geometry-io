@@ -1,54 +1,54 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.io.MaterialOBJ
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 14, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class MaterialOBJTest {
     
-    public static final int MIN_COLOR_VALUE = 0;
-    public static final int MAX_COLOR_VALUE = 255;
+    private static final int MIN_COLOR_VALUE = 0;
+    private static final int MAX_COLOR_VALUE = 255;
     
-    public static final float MIN_SPECULAR_COEFFICIENT = 0.0f;
-    public static final float MAX_SPECULAR_COEFFICIENT = 1000.0f;
+    private static final float MIN_SPECULAR_COEFFICIENT = 0.0f;
+    private static final float MAX_SPECULAR_COEFFICIENT = 1000.0f;
     
-    public static final int MIN_ILLUMINATION_VALUE = 0;
-    public static final int MAX_ILLUMINATION_VALUE = 10;
+    private static final int MIN_ILLUMINATION_VALUE = 0;
+    private static final int MAX_ILLUMINATION_VALUE = 10;
         
-    public MaterialOBJTest() {
-    }
+    public MaterialOBJTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         String materialName = "materialName";
         MaterialOBJ material = new MaterialOBJ(materialName);
         assertNotNull(material);
@@ -56,7 +56,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetId(){
+    public void testGetSetId() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -73,7 +73,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetAmbientRedColor(){
+    public void testGetSetAmbientRedColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -93,7 +93,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetAmbientGreenColor(){
+    public void testGetSetAmbientGreenColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -113,7 +113,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetAmbientBlueColor(){
+    public void testGetSetAmbientBlueColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -133,7 +133,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testSetAmbientColor(){
+    public void testSetAmbientColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -170,7 +170,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetDiffuseRedColor(){
+    public void testGetSetDiffuseRedColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -190,7 +190,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetDiffuseGreenColor(){
+    public void testGetSetDiffuseGreenColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -210,7 +210,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetDiffuseBlueColor(){
+    public void testGetSetDiffuseBlueColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -230,7 +230,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testSetDiffuseColor(){
+    public void testSetDiffuseColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -267,7 +267,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetSpecularRedColor(){
+    public void testGetSetSpecularRedColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -287,7 +287,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetSpecularGreenColor(){
+    public void testGetSetSpecularGreenColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -307,7 +307,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetSpecularBlueColor(){
+    public void testGetSetSpecularBlueColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -327,7 +327,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testSetSpecularColor(){
+    public void testSetSpecularColor() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -364,7 +364,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetSpecularCoefficient(){
+    public void testGetSetSpecularCoefficient() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -384,7 +384,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetAmbientTextureMap(){
+    public void testGetSetAmbientTextureMap() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         Texture texture = new Texture("ambient.png", 0);
@@ -401,7 +401,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetDiffuseTextureMap(){
+    public void testGetSetDiffuseTextureMap() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         Texture texture = new Texture("diffuse.png", 0);
@@ -418,7 +418,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetSpecularTextureMap(){
+    public void testGetSetSpecularTextureMap() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         Texture texture = new Texture("specular.png", 0);
@@ -435,7 +435,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetAlphaTextureMap(){
+    public void testGetSetAlphaTextureMap() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         Texture texture = new Texture("alpha.png", 0);
@@ -452,7 +452,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetBumpTextureMap(){
+    public void testGetSetBumpTextureMap() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         Texture texture = new Texture("bump.png", 0);
@@ -469,7 +469,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetTransparency(){
+    public void testGetSetTransparency() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -489,7 +489,7 @@ public class MaterialOBJTest {
     }
     
     @Test
-    public void testGetSetIllumination(){
+    public void testGetSetIllumination() {
         MaterialOBJ material = new MaterialOBJ("materialName");
         
         assertNull(material.getIllumination());
@@ -508,7 +508,7 @@ public class MaterialOBJTest {
     }    
     
     @Test
-    public void testGetSetMaterialName(){
+    public void testGetSetMaterialName() {
         String materialName = "materialName";
         MaterialOBJ material = new MaterialOBJ(materialName);
         

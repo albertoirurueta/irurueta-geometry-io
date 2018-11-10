@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.HeaderPLY
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 24, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
@@ -15,6 +22,7 @@ import java.util.List;
  * This class contains elements of the header of a PLY file.
  * The header of a ply file is stored in text form at the beginning of the file.
  */
+@SuppressWarnings("WeakerAccess")
 public class HeaderPLY {
     /**
      * Indicates storage mode of the file. This can be either binary big-endian,
@@ -25,34 +33,34 @@ public class HeaderPLY {
     /**
      * List containing all the elements forming the data of the file.
      */
-    List<ElementPLY> elements;
+    private List<ElementPLY> elements;
     
     /**
      * List containing all the string comments that the author might have stored
      * in the file.
      */
-    List<String> comments;
+    private List<String> comments;
     
     /**
      * List of strings containing addition object information.
      */
-    List<String> objInfos;
+    private List<String> objInfos;
     
     /**
      * Constructor
      */
-    public HeaderPLY(){
+    public HeaderPLY() {
         storageMode = PLYStorageMode.PLY_ASCII;
-        elements = new LinkedList<ElementPLY>();
-        comments = new LinkedList<String>();
-        objInfos = new LinkedList<String>();
+        elements = new LinkedList<>();
+        comments = new LinkedList<>();
+        objInfos = new LinkedList<>();
     }
     
     /**
      * Returns storage mode of this file.
      * @return Storage mode of this file.
      */
-    public PLYStorageMode getStorageMode(){
+    public PLYStorageMode getStorageMode() {
         return storageMode;
     }
     
@@ -60,7 +68,7 @@ public class HeaderPLY {
      * Sets storage mode of this file.
      * @param storageMode Storage mode to be set.
      */
-    public void setStorageMode(PLYStorageMode storageMode){
+    public void setStorageMode(PLYStorageMode storageMode) {
         this.storageMode = storageMode;
     }
     
@@ -68,7 +76,7 @@ public class HeaderPLY {
      * Returns the structure of all the elements forming the data of this file.
      * @return All the elements forming the data of this file.
      */
-    public List<ElementPLY> getElements(){
+    public List<ElementPLY> getElements() {
         return elements;
     }
     
@@ -77,7 +85,7 @@ public class HeaderPLY {
      * of this file.
      * @return Comments of this file.
      */
-    public List<String> getComments(){
+    public List<String> getComments() {
         return comments;
     }
     
@@ -85,20 +93,20 @@ public class HeaderPLY {
      * Returns list of strings containing additional object information.
      * @return Additional object information.
      */
-    public List<String> getObjInfos(){
+    public List<String> getObjInfos() {
         return objInfos;
     }
     
     /**
      * Converts header data into string format ready to be saved on a PLY file.
-     * @return Header data into string format
+     * @return Header data into string format.
      */
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder builder = new StringBuilder("ply\n");
         
         builder.append("format ");
-        switch(storageMode){
+        switch (storageMode) {
             case PLY_ASCII:
                 builder.append("ascii ");
                 break;
@@ -114,17 +122,17 @@ public class HeaderPLY {
         builder.append("1.0\n");
         
         //add comments
-        for(String comment : comments){
+        for (String comment : comments) {
             builder.append("comment ").append(comment).append("\n");
         }
         
         //add obj_infos
-        for(String objInfo : objInfos){
+        for (String objInfo : objInfos) {
             builder.append("obj_info ").append(objInfo).append("\n");
         }
         
         //add elements
-        for(ElementPLY element : elements){
+        for (ElementPLY element : elements) {
             //NOTE: elements already contain carrier return on their textual
             //representation
             builder.append(element.toString());

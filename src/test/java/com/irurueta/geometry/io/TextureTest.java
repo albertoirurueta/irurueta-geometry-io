@@ -1,55 +1,55 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.io.Texture
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 13, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.io.File;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class TextureTest {
     
-    public static final int MIN_SIZE = 1;
-    public static final int MAX_SIZE = 100;
+    private static final int MIN_SIZE = 1;
+    private static final int MAX_SIZE = 100;
     
-    public TextureTest() {
-    }
+    public TextureTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructorAndGetFileName(){
+    public void testConstructorAndGetFileName() {
         
         String fileName = "fake.png";
         int id = 1;
         Texture tex = new Texture(fileName, id);
         
-        //check correcntess
+        //check correctness
         assertNotNull(tex);
         assertEquals(tex.getFileName(), fileName);
         assertEquals(tex.getId(), id);
@@ -76,16 +76,15 @@ public class TextureTest {
         assertEquals(tex.getHeight(), -1);
         assertFalse(tex.isHeightAvailable());
         assertFalse(tex.isValid());
-        
     }
     
     @Test
-    public void testGetSetFile(){
+    public void testGetSetFile() {
         String fileName = "fake.png";
         int id = 1;
         Texture tex = new Texture(fileName, id);
         
-        //check correcntess
+        //check correctness
         assertNotNull(tex);
         assertEquals(tex.getFileName(), fileName);
         assertEquals(tex.getId(), id);
@@ -110,7 +109,7 @@ public class TextureTest {
     }
     
     @Test
-    public void testGetSetWidth(){
+    public void testGetSetWidth() {
         int id = 1;
         Texture tex = new Texture("fake.png", id);
         
@@ -130,7 +129,7 @@ public class TextureTest {
     }
     
     @Test
-    public void testGetSetHeight(){
+    public void testGetSetHeight() {
         int id = 1;
         Texture tex = new Texture("fake.png", id);
         
@@ -150,7 +149,7 @@ public class TextureTest {
     }
     
     @Test
-    public void testIsSetValid(){
+    public void testIsSetValid() {
         int id = 1;
         Texture tex = new Texture("fake.png", id);
         

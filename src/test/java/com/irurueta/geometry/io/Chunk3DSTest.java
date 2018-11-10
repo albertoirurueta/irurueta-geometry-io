@@ -1,48 +1,48 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.io.Chunk3DS
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 16, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Chunk3DSTest {
     
-    public static final int MIN_VALUE = 0;
-    public static final int MAX_VALUE = 1000;
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 1000;
     
-    public Chunk3DSTest() {
-    }
+    public Chunk3DSTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstants(){
+    public void testConstants() {
         assertEquals(Chunk3DS.NULL_CHUNK, 0x0000);
         assertEquals(Chunk3DS.M3DMAGIC, 0x4D4D);
         assertEquals(Chunk3DS.SMAGIC, 0x2D2D);
@@ -272,7 +272,7 @@ public class Chunk3DSTest {
     }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         Chunk3DS chunk = new Chunk3DS();
         
         //check default values
@@ -287,7 +287,7 @@ public class Chunk3DSTest {
     }
     
     @Test
-    public void testGetSetChunkIdAndAvailability(){
+    public void testGetSetChunkIdAndAvailability() {
         Chunk3DS chunk = new Chunk3DS();
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -306,7 +306,7 @@ public class Chunk3DSTest {
     }
         
     @Test
-    public void testGetSetSizeAndAvailability(){
+    public void testGetSetSizeAndAvailability() {
         Chunk3DS chunk = new Chunk3DS();
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -325,7 +325,7 @@ public class Chunk3DSTest {
     }
     
     @Test
-    public void testGetSetStartStreamPositionAndAvailability(){
+    public void testGetSetStartStreamPositionAndAvailability() {
         Chunk3DS chunk = new Chunk3DS();
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -344,7 +344,7 @@ public class Chunk3DSTest {
     }
     
     @Test
-    public void testGetSetEndStreamPositionAndAvailability(){
+    public void testGetSetEndStreamPositionAndAvailability() {
         Chunk3DS chunk = new Chunk3DS();
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());

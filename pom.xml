@@ -56,7 +56,7 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
@@ -123,7 +123,7 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -136,7 +136,7 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -153,43 +153,23 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
     
     <!-- default profile -->
     <build>
-        <!-- 
-        include al non java files in source and test folders, this can
-        include properties files, or other resources 
-        -->
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </testResource>
-        </testResources>        
         <plugins>
             <!-- unit tests plugins -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>2.22.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>2.22.0</version>
             </plugin>                 
             <!-- code coverage plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
+                <version>0.8.2</version>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
@@ -210,7 +190,13 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.5</version>
+            </plugin>
+            <!-- maven site -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
             </plugin>
             <!-- save build info into generated package -->
             <plugin>
@@ -226,58 +212,69 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
                         <configuration>
                             <source>
                                 <![CDATA[
-                                    import java.util.Date;
-                                    import java.util.Properties;
-                                    import java.text.SimpleDateFormat;
-                                    import java.io.File;
-                                    import java.io.FileWriter;
+                                    import java.util.Date
+                                    import java.util.Properties
+                                    import java.text.SimpleDateFormat
+                                    import java.io.File
+                                    import java.io.FileWriter
                                     
-                                    println("Saving build info...");
-                                    def dateFormatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-                                    def buildTimestamp = dateFormatter.format(new Date());
+                                    println("Saving build info...")
+                                    SimpleDateFormat dateFormatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss")
+                                    def buildTimestamp = dateFormatter.format(new Date())
                                     
-                                    def groupId = "${project.groupId}";
-                                    def artifactId = "${project.artifactId}";
-                                    def version = "${project.version}";
+                                    String groupId = "${project.groupId}"
+                                    String artifactId = "${project.artifactId}"
+                                    String version = "${project.version}"
                                     
                                     //JENKINS
-                                    def buildNumber = System.getenv("BUILD_NUMBER");
-                                    def commit = System.getenv("GIT_COMMIT");
-                                    def branch = System.getenv("GIT_BRANCH");
+                                    def buildNumber = System.getenv("BUILD_NUMBER")
+                                    def commit = System.getenv("GIT_COMMIT")
+                                    def branch = System.getenv("GIT_BRANCH")
                                     
                                     //TRAVIS CI
-                                    if(buildNumber == null){
-                                        buildNumber = System.getenv("TRAVIS_BUILD_NUMBER");
+                                    if (buildNumber == null) {
+                                        buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
                                     }
-                                    if(commit == null){
-                                        commit = System.getenv("TRAVIS_COMMIT");
+                                    if (commit == null) {
+                                        commit = System.getenv("TRAVIS_COMMIT")
                                     }
-                                    if(branch == null){
-                                        branch = System.getenv("TRAVIS_BRANCH");
+                                    if (branch == null) {
+                                        branch = System.getenv("TRAVIS_BRANCH")
+                                    }
+
+                                    //GITLAB
+                                    if (buildNumber == null) {
+                                        buildNumber = System.getenv("CI_JOB_ID")
+                                    }
+                                    if (commit == null) {
+                                        commit = System.getenv("CI_COMMIT_SHA")
+                                    }
+                                    if (branch == null) {
+                                        branch = System.getenv("CI_COMMIT_REF_NAME")
+                                    }
+
+                                    Properties props = new Properties()
+                                    props.setProperty("BUILD_TIMESTAMP", buildTimestamp)
+                                    props.setProperty("GROUP_ID", groupId)
+                                    props.setProperty("ARTIFACT_ID", artifactId)
+                                    props.setProperty("VERSION", version)
+                                    if (buildNumber != null) {
+                                        props.setProperty("BUILD_NUMBER", buildNumber)
+                                    }
+                                    if (commit != null) {
+                                        props.setProperty("COMMIT", commit)
+                                    }
+                                    if (branch != null) {
+                                        props.setProperty("BRANCH", branch)
                                     }
                                     
-                                    def props = new Properties();
-                                    props.setProperty("BUILD_TIMESTAMP", buildTimestamp);
-                                    props.setProperty("GROUP_ID", groupId);
-                                    props.setProperty("ARTIFACT_ID", artifactId);
-                                    props.setProperty("VERSION", version);
-                                    if(buildNumber != null){
-                                        props.setProperty("BUILD_NUMBER", buildNumber);
-                                    }
-                                    if(commit != null){
-                                        props.setProperty("COMMIT", commit);
-                                    }
-                                    if(branch != null){
-                                        props.setProperty("BRANCH", branch);
-                                    }
-                                    
-                                    File dir = new File("src/main/java/com/irurueta/geometry/io");
-                                    dir.mkdirs();
-                                    File file = new File(dir, "build-info.properties");
-                                    FileWriter writer = new FileWriter(file);
-                                    props.store(writer, null);
-                                    writer.close();
-                                    println("Build info saved at " + file);
+                                    File dir = new File("src/main/resources/com/irurueta/geometry/io")
+                                    dir.mkdirs()
+                                    File file = new File(dir, "build-info.properties")
+                                    FileWriter writer = new FileWriter(file)
+                                    props.store(writer, null)
+                                    writer.close()
+                                    println("Build info saved at " + file)
                                 ]]>
                             </source>
                         </configuration>
@@ -300,11 +297,10 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
+                <version>3.0.1</version>
                 <configuration>
                     <show>private</show>
                     <nohelp>true</nohelp>
-                    <aggregate>true</aggregate>
                     <links>
                         <link>http://docs.oracle.com/javase/7/docs/api/</link>
                     </links>
@@ -314,19 +310,19 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.22.0</version>
             </plugin> 
             <!-- adds code coverage report into site -->  
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.6.201602180812</version>
+                <version>0.8.2</version>
             </plugin>     
             <!-- adds code quality reports into site -->               
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>3.0.0</version>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                 </configuration>                
@@ -347,7 +343,7 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
+                <version>3.10.0</version>
             </plugin>
             <!-- 
             adds cross reference into source for easier navigation of source in 
@@ -357,10 +353,7 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
                 <version>2.5</version>
-                <configuration>
-                    <aggregate>true</aggregate>
-                </configuration>
-            </plugin>            
+            </plugin>
         </plugins>
     </reporting>        
 </project>

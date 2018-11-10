@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.Loader3DS
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 14, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
@@ -14,9 +21,9 @@ import java.util.Set;
 
 /**
  * Loads 3D Studio Max files.
- * NOTE: implementation is not yet finished
+ * NOTE: implementation is not yet finished.
  */
-public class Loader3DS extends Loader{
+public class Loader3DS extends Loader {
 
     public static final int ID_MAIN_CHUNK = 0x4D4D;
     public static final int ID_3D_EDITOR_CHUNK = 0x3D3D;

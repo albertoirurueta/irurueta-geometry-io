@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.Loader
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 24, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
@@ -16,7 +23,15 @@ import java.nio.channels.FileChannel;
  * Abstract class defining the interface for file loaders.
  * Specific implementations must be done for each file format to be supported.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class Loader {
+
+    /**
+     * Default limit of bytes to keep mapped in memory.
+     */
+    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY =
+            50000000;
+
     /**
      * Instance in charge of reading data from file.
      */
@@ -24,7 +39,7 @@ public abstract class Loader {
     
     /**
      * Boolean indicating that this instance is locked because decoding is being
-     * done
+     * done.
      */
     protected boolean locked;
     
@@ -35,7 +50,7 @@ public abstract class Loader {
     protected LoaderListener listener;
     
     /**
-     * File to be read
+     * File to be read.
      */
     protected File file;
     
@@ -44,14 +59,11 @@ public abstract class Loader {
      * value, then it is not mapped into memory.
      */
     private long fileSizeLimitToKeepInMemory;
-    
-    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY =
-            50000000;
-    
+
     /**
-     * Default Constructor
+     * Default Constructor.
      */
-    public Loader(){
+    public Loader() {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         reader = null;
         locked = false;
@@ -59,18 +71,18 @@ public abstract class Loader {
     }
     
     /**
-     * Constructor
-     * @param f file to be read
+     * Constructor.
+     * @param f file to be read.
      * @throws IOException raised if provided file does not exist or an I/O
-     * exception occurs
+     * exception occurs.
      */
-    public Loader(File f) throws IOException{        
+    public Loader(File f) throws IOException {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         file = f;
-        if(f.length() < fileSizeLimitToKeepInMemory){
+        if (f.length() < fileSizeLimitToKeepInMemory) {
             reader = new MappedFileReaderAndWriter(f, 
                     FileChannel.MapMode.READ_ONLY);            
-        }else{
+        } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
         locked = false;
@@ -79,10 +91,10 @@ public abstract class Loader {
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to notify start, end and progress events.
      */
-    public Loader(LoaderListener listener){
+    public Loader(LoaderListener listener) {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         reader = null;
         locked = false;
@@ -90,19 +102,19 @@ public abstract class Loader {
     }
     
     /**
-     * Constructor
-     * @param f file to be read
-     * @param listener listener to notify start, end and progress events
+     * Constructor.
+     * @param f file to be read.
+     * @param listener listener to notify start, end and progress events.
      * @throws IOException raised if provided file does not exist or an I/O
-     * exception occurs
+     * exception occurs.
      */
-    public Loader(File f, LoaderListener listener) throws IOException{
+    public Loader(File f, LoaderListener listener) throws IOException {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         file = f;
-        if(f.length() < fileSizeLimitToKeepInMemory){
+        if (f.length() < fileSizeLimitToKeepInMemory) {
             reader = new MappedFileReaderAndWriter(f, 
                     FileChannel.MapMode.READ_ONLY);            
-        }else{
+        } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
         locked = false;
@@ -111,39 +123,41 @@ public abstract class Loader {
     
     /**
      * Method called when an instance of Loader is garbage collected.
-     * This method is in charge of closing input file if it is already open
+     * This method is in charge of closing input file if it is already open.
      * @throws Throwable if something fails during finalization.
      */
     @Override
-    protected void finalize() throws Throwable{
+    protected void finalize() throws Throwable {
         super.finalize();
-        try{
+        try {
             close(); //attempt to close file resources
-        }catch(Throwable ignore){}
+        } catch (Throwable ignore) { }
     }
     
     /**
      * Get maximum size (in bytes) to determine whether a file is completely 
      * cached in memory (if lower than maximum size), or if it is just streamed
-     * (if greater than maximum size)
-     * @return Maximum size to determine whether file is cached in memory or not
+     * (if greater than maximum size).
+     * @return Maximum size to determine whether file is cached in memory or not.
      */
-    public long getFileSizeLimitToKeepInMemory(){
+    public long getFileSizeLimitToKeepInMemory() {
         return fileSizeLimitToKeepInMemory;
     }
     
     /**
      * Sets maximum size (in bytes) to determine whether a file is completely
      * chached in memory (if lower than maximum size), or if it is just streamed
-     * (if greater than maximum size)
+     * (if greater than maximum size).
      * @param fileSizeLimitToKeepInMemory maximum size to determine whether file
-     * is cached in memory or not
+     * is cached in memory or not.
      * @throws LockedException if loader is locked because it is currently 
-     * processing a file
+     * processing a file.
      */
     public void setFileSizeLimitToKeepInMemoery(
-            long fileSizeLimitToKeepInMemory) throws LockedException{
-        if(isLocked()) throw new LockedException();
+            long fileSizeLimitToKeepInMemory) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         
         this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;
     }
@@ -152,40 +166,43 @@ public abstract class Loader {
      * Indicates whether a file to be loaded has already been set.
      * @return True if file has already been provided, false otherwise.
      */
-    public boolean hasFile(){
-        return (reader != null);
+    public boolean hasFile() {
+        return reader != null;
     }
     
     /**
      * Sets file to be loaded.
      * @param f file to be loaded.
      * @throws LockedException raised if this instance is loaded because a file
-     * is already being loaded
+     * is already being loaded.
      * @throws IOException raised if provided file does not exist or if an I/O
-     * exception occurs
-     * @throws LoaderException raised if anything else goes wrong.
+     * exception occurs.
      */
     public void setFile(File f) 
-            throws LockedException, IOException, LoaderException{
-        if(isLocked()) throw new LockedException();        
+            throws LockedException, IOException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         file = f;
         
-        if(reader != null) reader.close(); //close previous file
+        if (reader != null) {
+            reader.close(); //close previous file
+        }
         
-        if(f.length() < fileSizeLimitToKeepInMemory){
+        if (f.length() < fileSizeLimitToKeepInMemory) {
             reader = new MappedFileReaderAndWriter(f, 
                     FileChannel.MapMode.READ_ONLY);            
-        }else{
+        } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
     }
     
     /**
-     * Closes file provided to this loader
-     * @throws IOException if an I/O error occurs
+     * Closes file provided to this loader.
+     * @throws IOException if an I/O error occurs.
      */
-    public void close() throws IOException{
-        if(reader != null){
+    public void close() throws IOException {
+        if (reader != null) {
             reader.close();
             reader = null;
         }
@@ -200,7 +217,7 @@ public abstract class Loader {
      * otherwise a LockedException will be raised.
      * @return True if instance is locked, false otherwise.
      */
-    public synchronized boolean isLocked(){
+    public synchronized boolean isLocked() {
         return locked;
     }
     
@@ -210,7 +227,7 @@ public abstract class Loader {
      * @param locked value that determines whether this instance is locked or 
      * not.
      */
-    protected synchronized void setLocked(boolean locked){
+    protected synchronized void setLocked(boolean locked) {
         this.locked = locked;
     }
     
@@ -229,8 +246,10 @@ public abstract class Loader {
      * @param listener listener of this instance.
      * @throws LockedException Raised if this instance is already locked.
      */
-    public void setListener(LoaderListener listener) throws LockedException{
-        if(isLocked()) throw new LockedException();
+    public void setListener(LoaderListener listener) throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         this.listener = listener;
     }
    
@@ -250,9 +269,9 @@ public abstract class Loader {
     
     /**
      * Determines if provided file is a valid file that can be read by this 
-     * loader
-     * @return true if file is valid, false otherwise
-     * @throws LockedException raised if this instance is already locked
+     * loader.
+     * @return true if file is valid, false otherwise.
+     * @throws LockedException raised if this instance is already locked.
      * @throws IOException if an I/O error occurs.
      */
     public abstract boolean isValidFile() throws LockedException, IOException;
@@ -261,10 +280,10 @@ public abstract class Loader {
      * Starts the loading process of provided file.
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
-     * @return a loader iterator to read the file in a step by step process
-     * @throws LockedException raised if this instance is already locked
-     * @throws NotReadyException raised if this instance is not yet ready
-     * @throws IOException if an I/O error occurs
+     * @return a loader iterator to read the file in a step by step process.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws NotReadyException raised if this instance is not yet ready.
+     * @throws IOException if an I/O error occurs.
      * @throws LoaderException if file is corrupted or cannot be interpreted.
      */
     public abstract LoaderIterator load() throws LockedException, 
@@ -273,11 +292,11 @@ public abstract class Loader {
     /**
      * Internal method to reset the members of this instance.
      */
-    private void reset(){
+    private void reset() {
         locked = false;
-        try{
+        try {
             reader.close(); //attempt to close file
-        }catch(Throwable t){}
+        } catch (Throwable ignore) { }
         reader = null;
         listener = null;
     }

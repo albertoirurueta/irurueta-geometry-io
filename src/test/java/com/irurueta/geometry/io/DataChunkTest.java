@@ -1,39 +1,42 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.io.DataChunk
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 26, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public class DataChunkTest {
     
-    public DataChunkTest() {
-    }
+    public DataChunkTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         DataChunk chunk = new DataChunk();
         
         assertNull(chunk.getVerticesCoordinatesData());
@@ -55,7 +58,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetVerticesCoordinatesData(){
+    public void testGetSetVerticesCoordinatesData() {
         DataChunk chunk = new DataChunk();
         
         assertNull(chunk.getVerticesCoordinatesData());
@@ -69,7 +72,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetColorData(){
+    public void testGetSetColorData() {
         DataChunk chunk = new DataChunk();
         
         assertNull(chunk.getColorData());
@@ -83,7 +86,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetIndicesData(){
+    public void testGetSetIndicesData() {
         DataChunk chunk = new DataChunk();
         
         assertNull(chunk.getIndicesData());
@@ -97,7 +100,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetTextureCoordinatesData(){
+    public void testGetSetTextureCoordinatesData() {
         DataChunk chunk = new DataChunk();
         
         assertNull(chunk.getTextureCoordiantesData());
@@ -111,7 +114,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetNormalsData(){
+    public void testGetSetNormalsData() {
         DataChunk chunk = new DataChunk();
         
         assertNull(chunk.getNormalsData());
@@ -125,7 +128,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetColorComponents(){
+    public void testGetSetColorComponents() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getColorComponents(), 
@@ -139,14 +142,14 @@ public class DataChunkTest {
         assertEquals(chunk.getColorComponents(), components);
         
         //Force IllegalArgumentException
-        try{
+        try {
             chunk.setColorComponents(0);
             fail("IllegalArgumentException not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMinX(){
+    public void testGetSetMinX() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getMinX(), Float.MAX_VALUE, 0.0);
@@ -160,7 +163,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetMinY(){
+    public void testGetSetMinY() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getMinY(), Float.MAX_VALUE, 0.0);
@@ -174,7 +177,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetMinZ(){
+    public void testGetSetMinZ() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getMinZ(), Float.MAX_VALUE, 0.0);
@@ -188,7 +191,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetMaxX(){
+    public void testGetSetMaxX() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getMaxX(), -Float.MAX_VALUE, 0.0);
@@ -202,7 +205,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetMaxY(){
+    public void testGetSetMaxY() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getMaxX(), -Float.MAX_VALUE, 0.0);
@@ -216,7 +219,7 @@ public class DataChunkTest {
     }
     
     @Test
-    public void testGetSetMaxZ(){
+    public void testGetSetMaxZ() {
         DataChunk chunk = new DataChunk();
         
         assertEquals(chunk.getMaxZ(), -Float.MAX_VALUE, 0.0);
@@ -230,7 +233,7 @@ public class DataChunkTest {
     }  
     
     @Test
-    public void testGetSetMaterial(){
+    public void testGetSetMaterial() {
         DataChunk chunk = new DataChunk();
         
         //check default values

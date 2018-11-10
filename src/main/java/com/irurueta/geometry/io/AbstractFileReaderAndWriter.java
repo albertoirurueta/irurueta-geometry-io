@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.AbstractFileReaderAndWriter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 26, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
@@ -16,35 +23,35 @@ import java.io.IOException;
 public abstract class AbstractFileReaderAndWriter {
     
     /**
-     * Method to be called when this instance is garbage collected
-     * @throws Throwable 
+     * Method to be called when this instance is garbage collected.
+     * @throws Throwable if anything fails.
      */
     @Override
-    protected void finalize() throws Throwable{
+    protected void finalize() throws Throwable {
         super.finalize();
-        try{
+        try {
             close(); //attempt to close file resources
-        }catch(Throwable ignore){}
+        } catch (Throwable ignore) { }
     }
     
     
     /**
-     * Reads one byte at current file position and advances one position
-     * @return Next byte of data or -1 if end of file is reached
+     * Reads one byte at current file position and advances one position.
+     * @return Next byte of data or -1 if end of file is reached.
      * @throws IOException if an I/O error occurs. Not thrown if end-of-file has
-     * been reached
+     * been reached.
      */    
     public abstract int read() throws IOException;
     
     /**
      * Reads up to b.length bytes of data from this file into an array of bytes.
      * This method blocks until at least one byte of input is available.
-     * @param b The buffer into which the data is read
+     * @param b The buffer into which the data is read.
      * @return The total number of bytes read into the buffer, or -1 if there is
-     * no more data because the end of the file has been reached
+     * no more data because the end of the file has been reached.
      * @throws IOException If the first byte cannot be read for any reason other
      * than end of file, or if the file has been closed, or if some other I/O
-     * error occurs
+     * error occurs.
      */
     public abstract int read(byte[] b) throws IOException;
     
@@ -53,9 +60,9 @@ public abstract class AbstractFileReaderAndWriter {
      * method blocks until at least one byte of input is available.
      * This method behaves in exactly the same way as the 
      * InputStream.read(byte[], int, int) method of InputStream.
-     * @param b the buffer into which the data is read
+     * @param b the buffer into which the data is read.
      * @param off the start offset in array b at which the data is written.
-     * @param len the maximum number of bytes read
+     * @param len the maximum number of bytes read.
      * @return the total number of bytes read into the buffer, or -1 if there is
      * no more data because the end of the file has been reached.
      * @throws IOException If the first byte cannot be read for any reason other
@@ -80,16 +87,16 @@ public abstract class AbstractFileReaderAndWriter {
     /**
      * Writes the specified byte to this file. The write starts at the current
      * fiel pointer.
-     * @param b the byte to be written
-     * @throws IOException if an I/O error occurs
+     * @param b the byte to be written.
+     * @throws IOException if an I/O error occurs.
      */
     public abstract void write(int b) throws IOException;
     
     /**
      * Writes b.length bytes from the specified byte array to this file, 
-     * starting at the current file pointer
-     * @param b the data
-     * @throws IOException if an I/O error occurs
+     * starting at the current file pointer.
+     * @param b the data.
+     * @throws IOException if an I/O error occurs.
      */
     public abstract void write(byte[] b) throws IOException;    
     
@@ -114,7 +121,7 @@ public abstract class AbstractFileReaderAndWriter {
     /**
      * Determines whether end of file has been reached (next read() will return 
      * -1). or not.
-     * @return True if end of file has been reached, false otherwise
+     * @return True if end of file has been reached, false otherwise.
      * @throws IOException if an I/O error occurs.
      */
     public abstract boolean isEndOfStream() throws IOException;
@@ -180,7 +187,7 @@ public abstract class AbstractFileReaderAndWriter {
      * from this file, starting at the current file pointer. If the two bytes
      * read, in order, are b1 and b2, where each of the two values is between 0 
      * and 255, inclusive, then the result is equal to: (short)((b1 &lt;&lt; 8 |
-     * b2)
+     * b2).
      * This method blocks until the two bytes are read, the end of the stream is
      * detected, or an exception is thrown.
      * @return the next two bytes of this file, interpreted as a signed 16-bit 
@@ -237,7 +244,7 @@ public abstract class AbstractFileReaderAndWriter {
      * from the file, starting at the current file pointer. If the bytes read,
      * in order, are b1, b2, b3, and b4, where 0 &lt;= b1, b3, b4 &lt;= 255, then
      * the result is equal to: (b1 &lt;&lt; 24) | (b2 &lt;&lt; 16) + (b3 &lt;&lt; 8) +
-     * b4
+     * b4.
      * This method blocks until the four bytes are read, the end of the stream 
      * is detected, or an exception is thrown.
      * @return the next four bytes of this file, interpreted as an int.
@@ -299,7 +306,7 @@ public abstract class AbstractFileReaderAndWriter {
      * + ((long)b7 &lt;&lt; 8) + b8
      * This method blocks until the eight bytes are read, the end of the stream
      * is detected, or an exception is thrown.
-     * @return the next eight bytes of this file, interpreted as a long
+     * @return the next eight bytes of this file, interpreted as a long.
      * @throws IOException if an I/O error occurs.
      */
     public abstract long readLong() throws IOException;
@@ -396,6 +403,7 @@ public abstract class AbstractFileReaderAndWriter {
      * stream is reached.
      * @throws IOException if an I/O error occurs.
      */
+    @SuppressWarnings("WeakerAccess")
     public String readWord() throws IOException{
         //reads until space, line feed, carriage return or tab is found
         if(isEndOfStream()) return null;
@@ -406,10 +414,10 @@ public abstract class AbstractFileReaderAndWriter {
      * Sequentially reads characters starting at current file position until one
      * of the characters in provided pattern is found.
      * All characters read so far will be returned without including any of the
-     * pattern characters
-     * @param pattern Stop characters to stop reading when they are found
-     * @return String read so far until any of the pattern characters was found
-     * @throws IOException if an I/O error occurs
+     * pattern characters.
+     * @param pattern Stop characters to stop reading when they are found.
+     * @return String read so far until any of the pattern characters was found.
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalArgumentException if no pattern characters are provided.
      */
     public abstract String readUntilAnyOfTheseCharactersIsFound(String pattern) 
@@ -436,7 +444,7 @@ public abstract class AbstractFileReaderAndWriter {
     /**
      * Writes provided value in the range 0-255 as an unsigned byte. The write
      * starts at the current position of the file pointer.
-     * @param v a value to be written as an unsigned byte
+     * @param v a value to be written as an unsigned byte.
      * @throws IOException if an I/O error occurs.
      */
     public abstract void writeUnsignedByte(short v) throws IOException;    
@@ -453,8 +461,8 @@ public abstract class AbstractFileReaderAndWriter {
      * Writes a short to the file as two bytes using provided enadian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
-     * order is reversed
-     * @param v a short to be written
+     * order is reversed.
+     * @param v a short to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
      * preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
@@ -480,7 +488,7 @@ public abstract class AbstractFileReaderAndWriter {
      * account only the two lower bytes. 
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
-     * order is reversed
+     * order is reversed.
      * The write starts at the current position of the file pointer.
      * @param v an unsigned short to be written (int is converted to unsigned 
      * short).
@@ -569,7 +577,7 @@ public abstract class AbstractFileReaderAndWriter {
      * class Float, and then write that int value to the file as a four-byte 
      * quantity, high byte first. The write starts at the current position of 
      * the file pointer.
-     * @param v a float value to be written
+     * @param v a float value to be written.
      * @throws IOException if an I/O error occurs.
      */
     public abstract void writeFloat(float v) throws IOException;
@@ -582,7 +590,7 @@ public abstract class AbstractFileReaderAndWriter {
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v a float value to be written
+     * @param v a float value to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
      * preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.

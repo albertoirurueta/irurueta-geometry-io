@@ -1,23 +1,27 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.io.MappedFileReaderAndWriter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 28, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
+import org.junit.*;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class MappedFileReaderAndWriterTest {
     
@@ -36,7 +40,7 @@ public class MappedFileReaderAndWriterTest {
     public void tearDown() { }
     
     @Test
-    public void testConstructor() throws FileNotFoundException, IOException{
+    public void testConstructor() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -45,11 +49,11 @@ public class MappedFileReaderAndWriterTest {
         
         assertTrue(f.exists());
         assertTrue(f.delete());
+        assertNotNull(readerWriter);
     }
 
     @Test
-    public void testReadWriteOneByte() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteOneByte() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());        
         
@@ -79,8 +83,7 @@ public class MappedFileReaderAndWriterTest {
     }
     
     @Test
-    public void testReadWriteArrayOfBytes() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteArrayOfBytes() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
                 
@@ -90,7 +93,7 @@ public class MappedFileReaderAndWriterTest {
         
         //initialize array of bytes
         byte[] bytes = new byte[100];
-        for(byte b = 0; b < 100; b++){
+        for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
         
@@ -109,7 +112,7 @@ public class MappedFileReaderAndWriterTest {
         readerWriter.read(bytes2);
         
         //check correctness
-        for(byte b = 0; b < 100; b++){
+        for (byte b = 0; b < 100; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
         
@@ -121,7 +124,7 @@ public class MappedFileReaderAndWriterTest {
     
     @Test
     public void testReadWriteArrayOfBytesWithOffsetAndLength() 
-            throws FileNotFoundException, IOException{
+            throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -132,7 +135,7 @@ public class MappedFileReaderAndWriterTest {
         
         //initialize array of bytes
         byte[] bytes = new byte[100];
-        for(byte b = 0; b < 100; b++){
+        for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
         int offset = 2;
@@ -154,7 +157,7 @@ public class MappedFileReaderAndWriterTest {
         
         //check correctness
         int counter = 0;
-        for(int i = offset; i < 2; i++){
+        for (int i = offset; i < offset + 2; i++) {
             assertEquals(bytes[i], bytes2[counter]);
             counter++;
         }
@@ -166,8 +169,7 @@ public class MappedFileReaderAndWriterTest {
     }
               
     @Test
-    public void testSkipAndGetPosition() throws FileNotFoundException, 
-        IOException{
+    public void testSkipAndGetPosition() throws IOException {
         
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
@@ -181,7 +183,7 @@ public class MappedFileReaderAndWriterTest {
         
         //initialize array of bytes
         byte[] bytes = new byte[100];
-        for(byte b = 0; b < 100; b++){
+        for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
         
@@ -202,7 +204,7 @@ public class MappedFileReaderAndWriterTest {
         assertEquals(readerWriter.getPosition(), 20);
         
         //check correctness
-        for(byte b = 0; b < 20; b++){
+        for (byte b = 0; b < 20; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
         
@@ -216,7 +218,7 @@ public class MappedFileReaderAndWriterTest {
         
         //check correctness
         int counter = 40;
-        for(int i = 0; i < 60; i++){
+        for (int i = 0; i < 60; i++) {
             assertEquals(bytes[counter], bytes2[i]);
             counter++;
         }
@@ -230,7 +232,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testSeekAndClose() throws FileNotFoundException, IOException{
+    public void testSeekAndClose() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -242,7 +244,7 @@ public class MappedFileReaderAndWriterTest {
         
         //initialize array of bytes
         byte[] bytes = new byte[100];
-        for(byte b = 0; b < 100; b++){
+        for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
         
@@ -263,7 +265,7 @@ public class MappedFileReaderAndWriterTest {
         assertEquals(readerWriter.getPosition(), 20);        
         
         //check correctness
-        for(byte b = 0; b < 20; b++){
+        for (byte b = 0; b < 20; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
         
@@ -277,7 +279,7 @@ public class MappedFileReaderAndWriterTest {
         
         //check correctness
         int counter = 10;
-        for(int i = 0; i < 90; i++){
+        for (int i = 0; i < 90; i++) {
             assertEquals(bytes[counter], bytes2[i]);
             counter++;
         }
@@ -291,8 +293,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteBoolean() throws FileNotFoundException, 
-        IOException{
+    public void testReadWriteBoolean() throws IOException {
         
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
@@ -330,7 +331,7 @@ public class MappedFileReaderAndWriterTest {
     }
  
     @Test
-    public void testReadWriteByte() throws FileNotFoundException, IOException{
+    public void testReadWriteByte() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -368,8 +369,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedByte() throws FileNotFoundException, 
-        IOException{
+    public void testReadWriteUnsignedByte() throws IOException {
         
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
@@ -407,7 +407,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteShort() throws FileNotFoundException, IOException{
+    public void testReadWriteShort() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());        
         
@@ -445,7 +445,7 @@ public class MappedFileReaderAndWriterTest {
 
     @Test
     public void testReadWriteShortWithEndianType() 
-            throws FileNotFoundException, IOException{
+            throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -487,7 +487,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsigedShort() throws FileNotFoundException, IOException{
+    public void testReadWriteUnsigedShort() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -526,7 +526,7 @@ public class MappedFileReaderAndWriterTest {
 
     @Test
     public void testReadWriteUnsignedShortWithEndianType() 
-            throws FileNotFoundException, IOException{
+            throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -569,7 +569,7 @@ public class MappedFileReaderAndWriterTest {
     }    
 
     @Test
-    public void testReadWriteInt() throws FileNotFoundException, IOException{
+    public void testReadWriteInt() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -607,8 +607,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteIntWithEndianType() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteIntWithEndianType() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -652,8 +651,7 @@ public class MappedFileReaderAndWriterTest {
     }    
 
     @Test
-    public void testReadWriteUnsignedInt() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteUnsignedInt() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -690,8 +688,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedIntWithEndianType() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteUnsignedIntWithEndianType() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -734,8 +731,7 @@ public class MappedFileReaderAndWriterTest {
     }  
 
     @Test
-    public void testReadWriteLong() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteLong() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -772,8 +768,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteLongWithEndianType() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteLongWithEndianType() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -817,8 +812,7 @@ public class MappedFileReaderAndWriterTest {
     }    
 
     @Test
-    public void testReadFloat() 
-            throws FileNotFoundException, IOException{
+    public void testReadFloat() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -855,8 +849,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteFloatWithEndianType() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteFloatWithEndianType() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -900,8 +893,7 @@ public class MappedFileReaderAndWriterTest {
     }    
 
     @Test
-    public void testReadDouble() 
-            throws FileNotFoundException, IOException{
+    public void testReadDouble() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());        
         
@@ -938,8 +930,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteDoubleWithEndianType() 
-            throws FileNotFoundException, IOException{
+    public void testReadWriteDoubleWithEndianType() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());        
         
@@ -982,7 +973,7 @@ public class MappedFileReaderAndWriterTest {
     }    
 
     @Test
-    public void testReadLine() throws FileNotFoundException, IOException{
+    public void testReadLine() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         
@@ -1016,7 +1007,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWord() throws FileNotFoundException, IOException{
+    public void testReadWord() throws IOException {
         File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
         

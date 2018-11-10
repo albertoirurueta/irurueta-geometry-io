@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.MaterialLoaderListener
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 12, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
@@ -17,20 +24,20 @@ public interface MaterialLoaderListener {
      * This method is called when a MaterialLoader starts decoding a file
      * @param loader Loader decoding a material file.
      */
-    public void onLoadStart(MaterialLoader loader);
+    void onLoadStart(MaterialLoader loader);
     
     /**
      * This method is called when a MaterialLoader ends decoding a file
      * @param loader Loader decoding a material file.
      */
-    public void onLoadEnd(MaterialLoader loader);
+    void onLoadEnd(MaterialLoader loader);
     
     /**
      * This method is called when texture validation is needed, to ensure that
-     * a texture file is in a recognized image format
-     * @param loader Loader decoding a material file
-     * @param texture A texture
-     * @return true if texture is valid, false otherwise
+     * a texture file is in a recognized image format.
+     * @param loader Loader decoding a material file.
+     * @param texture A texture.
+     * @return true if texture is valid, false otherwise.
      */
-    public boolean onValidateTexture(MaterialLoader loader, Texture texture);
+    boolean onValidateTexture(MaterialLoader loader, Texture texture);
 }

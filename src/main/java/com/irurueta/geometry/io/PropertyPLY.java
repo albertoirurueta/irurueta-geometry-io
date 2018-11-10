@@ -1,41 +1,49 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.PropertyPLY
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 24, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
 /**
- * Property contained within a header element
+ * Property contained within a header element.
  */
+@SuppressWarnings("WeakerAccess")
 public class PropertyPLY {
     /**
-     * Name of the property
+     * Name of the property.
      */
     String name;
     
     /**
-     * Property type (either scalar or list)
+     * Property type (either scalar or list).
      */
     PropertyTypePLY type;
     
     /**
-     * Data type of the value indicating length of the array for list properties
+     * Data type of the value indicating length of the array for list properties.
      */
     DataTypePLY lengthType;
     
     /**
-     * Data type for the values contained within this property
+     * Data type for the values contained within this property.
      */
     DataTypePLY valueType;
     
     /**
      * Listener to read the value of this property contained within the byte 
      * read buffer and transform it into the appropriate data type for this 
-     * property
+     * property.
      */
     PLYReadValueFromBufferListener readValueFromBufferListener;    
     
@@ -61,11 +69,11 @@ public class PropertyPLY {
     PLYReadValueFromStreamListener readLengthValueFromStreamListener;
     
     /**
-     * Constructor
-     * @param name name of this property
-     * @param valueType data type of the value of this property
+     * Constructor.
+     * @param name name of this property.
+     * @param valueType data type of the value of this property.
      */
-    public PropertyPLY(String name, DataTypePLY valueType){
+    public PropertyPLY(String name, DataTypePLY valueType) {
         this.name = name;
         type = PropertyTypePLY.PROPERTY_PLY_SCALAR;
         lengthType = null;
@@ -75,13 +83,13 @@ public class PropertyPLY {
     }
     
     /**
-     * Constructor
-     * @param name name of this property
-     * @param lengthType data type of the length value of this property
-     * @param valueType data type of the value of this property
+     * Constructor.
+     * @param name name of this property.
+     * @param lengthType data type of the length value of this property.
+     * @param valueType data type of the value of this property.
      */
     public PropertyPLY(String name, DataTypePLY lengthType, 
-            DataTypePLY valueType){
+            DataTypePLY valueType) {
         this.name = name;
         type = PropertyTypePLY.PROPERTY_PLY_LIST;
         this.lengthType = lengthType;
@@ -91,13 +99,15 @@ public class PropertyPLY {
     }
         
     /**
-     * Returns name of this property
-     * @return Name of this property
+     * Returns name of this property.
+     * @return Name of this property.
      * @throws NotAvailableException Raised if name has not been already 
-     * provided 
+     * provided.
      */
-    public String getName() throws NotAvailableException{
-        if(!isNameAvailable()) throw new NotAvailableException();
+    public String getName() throws NotAvailableException {
+        if (!isNameAvailable()) {
+            throw new NotAvailableException();
+        }
         
         return name;
     }
@@ -106,18 +116,20 @@ public class PropertyPLY {
      * Determines if name has already been provided and is ready for retrieval.
      * @return True if name is available, false otherwise.
      */
-    public boolean isNameAvailable(){
+    public boolean isNameAvailable() {
         return (name != null);
     }
     
     /**
-     * Property type (either scalar or list)
-     * @return property type
+     * Property type (either scalar or list).
+     * @return property type.
      * @throws NotAvailableException Raised if property type has not yet been
      * provided and is not available for retrieval.
      */
-    public PropertyTypePLY getPropertyType() throws NotAvailableException{
-        if(!isPropertyTypeAvailable()) throw new NotAvailableException();
+    public PropertyTypePLY getPropertyType() throws NotAvailableException {
+        if (!isPropertyTypeAvailable()) {
+            throw new NotAvailableException();
+        }
         return type;
     }
     
@@ -126,20 +138,22 @@ public class PropertyPLY {
      * retrieval.
      * @return True if property type has been provided, false otherwise.
      */
-    public boolean isPropertyTypeAvailable(){
+    public boolean isPropertyTypeAvailable() {
         return (type != null);
     }
     
     /**
      * Returns data type of the value indicating length of the array if this is
-     * a list property
+     * a list property.
      * @return data type of the value indicating length of the array if this is
-     * a list property
+     * a list property.
      * @throws NotAvailableException raised if property type has not yet been
      * provided and is not available for retrieval.
      */
-    public DataTypePLY getLengthType() throws NotAvailableException{
-        if(!isLengthTypeAvailable()) throw new NotAvailableException();
+    public DataTypePLY getLengthType() throws NotAvailableException {
+        if (!isLengthTypeAvailable()) {
+            throw new NotAvailableException();
+        }
         return lengthType;
     }
     
@@ -148,7 +162,7 @@ public class PropertyPLY {
      * available for retrieval.
      * @return True if length property type has been provided, false otherwise.
      */
-    public boolean isLengthTypeAvailable(){
+    public boolean isLengthTypeAvailable() {
         return (lengthType != null);
     }
     
@@ -158,8 +172,10 @@ public class PropertyPLY {
      * @throws NotAvailableException raised if property type has not yet been
      * provided and is not available for retrieval.
      */
-    public DataTypePLY getValueType() throws NotAvailableException{
-        if(!isValueTypeAvailable()) throw new NotAvailableException();
+    public DataTypePLY getValueType() throws NotAvailableException {
+        if (!isValueTypeAvailable()) {
+            throw new NotAvailableException();
+        }
         return valueType;
     }
     
@@ -169,7 +185,7 @@ public class PropertyPLY {
      * @return True if data type for the value contained within this property
      * is available for retrieval, false otherwise.
      */
-    public boolean isValueTypeAvailable(){
+    public boolean isValueTypeAvailable() {
         return (valueType != null);
     }
     
@@ -178,7 +194,7 @@ public class PropertyPLY {
      * been provided.
      * @return True if property is valid, false otherwise.
      */
-    public boolean isValidProperty(){
+    public boolean isValidProperty() {
         return isNameAvailable() && isValueTypeAvailable();
     }
     
@@ -188,14 +204,16 @@ public class PropertyPLY {
      * @return String representation of this property.
      */
     @Override
-    public String toString(){
+    public String toString() {
         //if element is invalid, return empty string
-        if(!isValidProperty()) return "";
+        if (!isValidProperty()) {
+            return "";
+        }
         
         StringBuilder builder = new StringBuilder("property ");
         
-        //depending ifproperty is scalar or list
-        switch(type){
+        //depending if property is scalar or list
+        switch (type) {
             case PROPERTY_PLY_SCALAR:
                 //add value data type
                 builder.append(valueType.getValue()).append(" ");
@@ -217,15 +235,16 @@ public class PropertyPLY {
     /**
      * Returns listener to read the value of this property contained within the 
      * byte read buffer and transforms it into the appropriate data type for 
-     * this property
-     * @return listener to read the value of this property
+     * this property.
+     * @return listener to read the value of this property.
      * @throws NotAvailableException Raised if listener has not yet been 
      * provided and is not available for retrieval.
      */
     public PLYReadValueFromBufferListener getReadValueFromBufferListener() 
-            throws NotAvailableException{
-        if(!isReadValueFromBufferListenerAvailable()) 
+            throws NotAvailableException {
+        if (!isReadValueFromBufferListenerAvailable()) {
             throw new NotAvailableException();
+        }
         
         return readValueFromBufferListener;
     }
@@ -233,11 +252,11 @@ public class PropertyPLY {
     /**
      * Sets listener to read the value of this property contained within the
      * byte read buffer and transforms it into the appropriate data type for 
-     * this property
-     * @param listener listener to read the value of this property
+     * this property.
+     * @param listener listener to read the value of this property.
      */
     public void setReadValueFromBufferListener(
-            PLYReadValueFromBufferListener listener){
+            PLYReadValueFromBufferListener listener) {
         readValueFromBufferListener = listener;
     }
     
@@ -246,22 +265,23 @@ public class PropertyPLY {
      * provided and is available for retrieval or not.
      * @return True if listener is available, false otherwise.
      */
-    public boolean isReadValueFromBufferListenerAvailable(){
-        return (readValueFromBufferListener != null);
+    public boolean isReadValueFromBufferListenerAvailable() {
+        return readValueFromBufferListener != null;
     }
         
     /**
      * Returns listener to read the appropriate amount of bytes from a PLY file 
      * corresponding to this property data type. The amount of bytes read are
      * stored within the read buffer.
-     * @return listener to read the appropriate amount of bytes from a PLY file
+     * @return listener to read the appropriate amount of bytes from a PLY file.
      * @throws NotAvailableException Raised if listener has not yet been
      * provided and is not available for retrieval.
      */
     public PLYReadValueFromStreamListener getReadValueFromStreamListener()
-            throws NotAvailableException{
-        if(!isReadValueFromStreamListenerAvailable()) 
+            throws NotAvailableException {
+        if (!isReadValueFromStreamListenerAvailable()) {
             throw new NotAvailableException();
+        }
         
         return readValueFromStreamListener;
     }
@@ -274,7 +294,7 @@ public class PropertyPLY {
      * PLY file.
      */
     public void setReadValueFromStreamListener(
-            PLYReadValueFromStreamListener listener){
+            PLYReadValueFromStreamListener listener) {
         readValueFromStreamListener = listener;
     }
     
@@ -283,22 +303,23 @@ public class PropertyPLY {
      * file has been provided and is available for retrieval or not.
      * @return True if listener is available, false otherwise.
      */
-    public boolean isReadValueFromStreamListenerAvailable(){
-        return (readValueFromStreamListener != null);
+    public boolean isReadValueFromStreamListenerAvailable() {
+        return readValueFromStreamListener != null;
     }
     
     /**
      * Returns listener to read the length value of this property contained 
      * within the byte read buffer and transform it into the appropriate data 
      * type for this property.
-     * @return listener to read the length value of this property
+     * @return listener to read the length value of this property.
      * @throws NotAvailableException Raised if listener has not yet been
      * provided and is not available for retrieval.
      */
     public PLYReadValueFromBufferListener getReadLengthValueFromBufferListener()
-            throws NotAvailableException{
-        if(!isReadLengthValueFromBufferListenerAvailable())
+            throws NotAvailableException {
+        if (!isReadLengthValueFromBufferListenerAvailable()) {
             throw new NotAvailableException();
+        }
         
         return readLengthValueFromBufferListener;
     }
@@ -307,10 +328,10 @@ public class PropertyPLY {
      * Sets listener to read the length value of this property contained within 
      * the byte read buffer and transform it into the appropriate data type for 
      * this property.
-     * @param listener listener to read the length value of this property
+     * @param listener listener to read the length value of this property.
      */
     public void setReadLengthValueFromBufferListener(
-            PLYReadValueFromBufferListener listener){
+            PLYReadValueFromBufferListener listener) {
         readLengthValueFromBufferListener = listener;
     }
     
@@ -319,8 +340,8 @@ public class PropertyPLY {
      * provided and is available for retrieval or not.
      * @return True if listener is available, false otherwise.
      */
-    public boolean isReadLengthValueFromBufferListenerAvailable(){
-        return (readLengthValueFromBufferListener != null);
+    public boolean isReadLengthValueFromBufferListenerAvailable() {
+        return readLengthValueFromBufferListener != null;
     }
     
     /**
@@ -332,9 +353,10 @@ public class PropertyPLY {
      * provided and is not available for retrieval.
      */
     public PLYReadValueFromStreamListener getReadLengthValueFromStreamListener()
-            throws NotAvailableException{
-        if(!isReadLengthValueFromStreamListenerAvailable())
+            throws NotAvailableException {
+        if (!isReadLengthValueFromStreamListenerAvailable()) {
             throw new NotAvailableException();
+        }
         
         return readLengthValueFromStreamListener;
     }
@@ -347,7 +369,7 @@ public class PropertyPLY {
      * PLY file.
      */
     public void setReadLengthValueFromStreamListener(
-            PLYReadValueFromStreamListener listener){
+            PLYReadValueFromStreamListener listener) {
             readLengthValueFromStreamListener = listener;
     }
     
@@ -356,7 +378,7 @@ public class PropertyPLY {
      * file has been provided and is available for retrieval or not.
      * @return True if listener is available, false otherwise.
      */
-    public boolean isReadLengthValueFromStreamListenerAvailable(){
-        return (readLengthValueFromStreamListener != null);
+    public boolean isReadLengthValueFromStreamListenerAvailable() {
+        return readLengthValueFromStreamListener != null;
     }
 }

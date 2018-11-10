@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.io.MappedFileReaderAndWriter
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 27, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
@@ -19,34 +26,35 @@ import java.nio.channels.FileChannel;
  * This class provides methods to access file data at random positions using
  * memory mapping for faster data access.
  */
-public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
+@SuppressWarnings("WeakerAccess")
+public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**
-     * Underlying input file
+     * Underlying input file.
      */
     private RandomAccessFile randomAccessFile;
     
     /**
-     * Buffer where data is stored
+     * Buffer where data is stored.
      */
     private MappedByteBuffer buffer;
     
     /**
-     * Internal value indicating if read has been produced
+     * Internal value indicating if read has been produced.
      */
     private boolean read;
     
     /**
-     * Constructor
-     * @param f file to read from or write to
-     * @param mode file opening mode (read only or read write)
-     * @throws IOException if an I/O error occurs 
+     * Constructor.
+     * @param f file to read from or write to.
+     * @param mode file opening mode (read only or read write).
+     * @throws IOException if an I/O error occurs .
      */
     public MappedFileReaderAndWriter(File f, FileChannel.MapMode mode) 
-            throws IOException{
-        if(mode == FileChannel.MapMode.READ_ONLY){
+            throws IOException {
+        if (mode == FileChannel.MapMode.READ_ONLY) {
             this.randomAccessFile = new RandomAccessFile(f, "r");
-        }else{
+        } else {
             this.randomAccessFile = new RandomAccessFile(f, "rw");
         }
         this.buffer = randomAccessFile.getChannel().map(mode, 0, 
@@ -55,16 +63,18 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
     }
     
     /**
-     * Reads one byte at current file position and advances one position
-     * @return Next byte of data or -1 if end of file is reached
+     * Reads one byte at current file position and advances one position.
+     * @return Next byte of data or -1 if end of file is reached.
      * @throws IOException if an I/O error occurs. Not thrown if end-of-file has
-     * been reached
+     * been reached.
      */    
     @Override
     public int read() throws IOException {
-        if(isEndOfStream()) return -1;
+        if (isEndOfStream()) {
+            return -1;
+        }
         int value = buffer.get();
-        value = (int)(((value << 8) >> 8) & 0xff);
+        value = ((value << 8) >> 8) & 0xff;
         read = true;
         return value;
     }
@@ -72,21 +82,23 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
     /**
      * Reads up to b.length bytes of data from this file into an array of bytes.
      * This method blocks until at least one byte of input is available.
-     * @param b The buffer into which the data is read
+     * @param b The buffer into which the data is read.
      * @return The total number of bytes read into the buffer, or -1 if there is
-     * no more data because the end of the file has been reached
+     * no more data because the end of the file has been reached.
      * @throws IOException If the first byte cannot be read for any reason other
      * than end of file, or if the file has been closed, or if some other I/O
-     * error occurs
+     * error occurs.
      */    
     @Override
     public int read(byte[] b) throws IOException {
-        if(isEndOfStream()) return -1;
+        if (isEndOfStream()) {
+            return -1;
+        }
         int length = Math.min(buffer.remaining(), b.length);
-        if(length > 0){
-            try{
+        if (length > 0) {
+            try {
                 buffer.get(b, 0, length);
-            }catch(BufferUnderflowException ignore){}
+            } catch (BufferUnderflowException ignore) { }
         }
         read = true;
         return length;
@@ -97,9 +109,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * method blocks until at least one byte of input is available.
      * This method behaves in exactly the same way as the 
      * InputStream.read(byte[], int, int) method of InputStream.
-     * @param b the buffer into which the data is read
+     * @param b the buffer into which the data is read.
      * @param off the start offset in array b at which the data is written.
-     * @param len the maximum number of bytes read
+     * @param len the maximum number of bytes read.
      * @return the total number of bytes read into the buffer, or -1 if there is
      * no more data because the end of the file has been reached.
      * @throws IOException If the first byte cannot be read for any reason other
@@ -108,12 +120,14 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      */    
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-        if(isEndOfStream()) return -1;
+        if (isEndOfStream()) {
+            return -1;
+        }
         int length = Math.min(buffer.remaining(), len);
-        if(length > 0){
-            try{
+        if (length > 0) {
+            try {
                 buffer.get(b, off, length);
-            }catch(BufferUnderflowException ignore){}
+            } catch (BufferUnderflowException ignore) { }
         }
         read = true;
         return length;
@@ -128,11 +142,12 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * bytes skipped is returned. If n is negative, no bytes are skipped.
      * @param n the number of bytes to be skipped.
      * @return the actual number of bytes skipped.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public long skip(long n) throws IOException {
-        if(n < 0) return 0;
+    public long skip(long n) {
+        if (n < 0) {
+            return 0;
+        }
                         
         int skipped = Math.min(buffer.remaining(), (int)n);
         int newPos = buffer.position() + skipped;
@@ -144,8 +159,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
     /**
      * Writes the specified byte to this file. The write starts at the current
      * fiel pointer.
-     * @param b the byte to be written
-     * @throws IOException if an I/O error occurs
+     * @param b the byte to be written.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(int b) throws IOException {
@@ -155,9 +170,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
 
     /**
      * Writes b.length bytes from the specified byte array to this file, 
-     * starting at the current file pointer
-     * @param b the data
-     * @throws IOException if an I/O error occurs
+     * starting at the current file pointer.
+     * @param b the data.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(byte[] b) throws IOException {
@@ -187,15 +202,18 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      */    
     @Override
     public long getPosition() throws IOException {
-        if(read) return buffer.position();
-        else return randomAccessFile.getFilePointer();
+        if (read) {
+            return buffer.position();
+        } else {
+            return randomAccessFile.getFilePointer();
+        }
     }
 
     /**
      * Determines whether end of file has been reached (next read() will return 
      * -1). or not.
-     * @return True if end of file has been reached, false otherwise
-     * @throws IOException if an I/O error occurs.
+     * @return True if end of file has been reached, false otherwise.
+     * @throws IOException if an I/O error occurs..
      */    
     @Override
     public boolean isEndOfStream() throws IOException {
@@ -205,14 +223,12 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
     /**
      * Sets the file-pointer offset, measured from the beginning of this file,
      * at which the next read or write occurs. Setting the offset beyond the end
-     * of the file will raise an exception
+     * of the file will raise an exception.
      * @param pos the offset position, measured in bytes from the beginning of
      * the file, at which to set the file pointer.
-     * @throws IOException if pos is less than 0 or if an I/O error occurs or
-     * if set beyond this file length.
-     */    
+     */
     @Override
-    public void seek(long pos) throws IOException {
+    public void seek(long pos) {
         buffer.position((int)pos);
         read = true;
     }
@@ -237,10 +253,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * false. Any other value represents true. This method blocks until the byte
      * is read, the end of the stream is detected, or an exception is thrown.
      * @return the boolean value read.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public boolean readBoolean() throws IOException {
+    public boolean readBoolean() {
         read = true;
         return buffer.get() != 0;
     }
@@ -252,10 +267,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * This method blocks until the byte is read, the end of the stream is
      * detected, or an exception is thrown.
      * @return the next byte of this file is a signed eight-bit byte.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public byte readByte() throws IOException {
+    public byte readByte() {
         read = true;
         return buffer.get();
     }
@@ -268,10 +282,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * detected, or an exception is thrown.
      * @return the next byte of this file, interpreted as an unsigned eight-bit
      * number.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public short readUnsignedByte() throws IOException {
+    public short readUnsignedByte() {
         read = true;
         return (short)(((((int)buffer.get()) << 8) >> 8) & 0xff);
     }
@@ -281,15 +294,14 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * from this file, starting at the current file pointer. If the two bytes
      * read, in order, are b1 and b2, where each of the two values is between 0 
      * and 255, inclusive, then the result is equal to: (short)((b1 &lt;&lt; 8 |
-     * b2)
+     * b2).
      * This method blocks until the two bytes are read, the end of the stream is
      * detected, or an exception is thrown.
      * @return the next two bytes of this file, interpreted as a signed 16-bit 
      * number.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public short readShort() throws IOException {
+    public short readShort() {
         read = true;
         return buffer.getShort();
     }
@@ -304,10 +316,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * little endian reverses byte order.
      * @return the next two bytes of this file, interpreted as a signed 16-bit
      * number encoded in provided endian type.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public short readShort(EndianType endianType) throws IOException {
+    public short readShort(EndianType endianType) {
         read = true;
         return Util.fromEndianType(endianType, buffer.getShort());
     }
@@ -321,10 +332,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * detected, or an exception is thrown.
      * @return the next two bytes of this file, interpreted as an unsigned 
      * 16-bit integer.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public int readUnsignedShort() throws IOException {
+    public int readUnsignedShort() {
         read = true;
         short value = buffer.getShort();
         
@@ -333,10 +343,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
         int secondShortByte = 0xff & ((value << 8) >> 8);
         
         //return it as integer
-        int out = 0xffff & ((firstShortByte << 8) |
+        return 0xffff & ((firstShortByte << 8) |
                 secondShortByte);
-        
-        return out;
     }
 
     /**
@@ -350,10 +358,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * little endian reverses byte order.
      * @return the next two bytes of this file, interpreted as an unsigned 
      * 16-bit integer.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public int readUnsignedShort(EndianType endianType) throws IOException {
+    public int readUnsignedShort(EndianType endianType) {
         read = true;
         short streamValue = buffer.getShort();
         short value = Util.fromEndianType(endianType, streamValue);
@@ -363,10 +370,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
         int secondShortByte = 0xff & ((value << 8) >> 8);
         
         //return it as integer
-        int out = 0xffff & ((firstShortByte << 8) |
+        return 0xffff & ((firstShortByte << 8) |
                 secondShortByte);
-        
-        return out;
     }
 
     /**
@@ -374,14 +379,13 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * from the file, starting at the current file pointer. If the bytes read,
      * in order, are b1, b2, b3, and b4, where 0 &lt;= b1, b3, b4 &lt;= 255, then
      * the result is equal to: (b1 &lt;&lt; 24) | (b2 &lt;&lt; 16) + (b3 &lt;&lt; 8) +
-     * b4
+     * b4.
      * This method blocks until the four bytes are read, the end of the stream 
      * is detected, or an exception is thrown.
      * @return the next four bytes of this file, interpreted as an int.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public int readInt() throws IOException {
+    public int readInt() {
         read = true;
         return buffer.getInt();
     }
@@ -396,10 +400,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * @param endianType Endian type. Big endian preserves natural binary order,
      * little endian reverses byte order.
      * @return the next four bytes of this file, interpreted as an int.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public int readInt(EndianType endianType) throws IOException {
+    public int readInt(EndianType endianType) {
         read = true;
         return Util.fromEndianType(endianType, buffer.getInt());
     }
@@ -409,14 +412,13 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * bytes from the file, starting at the current file pointer. If the bytes 
      * read, in order, are b1, b2, b3, and b4, where 0 &lt;= b1, b3, b4 &lt;= 255,
      * then the result is equal to: (b1 &lt;&lt; 24) | (b2 &lt;&lt; 16) +
-     * (b3 &lt;&lt; 8) + b4
+     * (b3 &lt;&lt; 8) + b4.
      * This method blocks until the four bytes are read, the end of the stream 
      * is detected, or an exception is thrown.
      * @return the next four bytes of this file, interpreted as a long.
-     * @throws IOException if an I/O error occurs.
      */        
     @Override
-    public long readUnsignedInt() throws IOException {
+    public long readUnsignedInt() {
         read = true;
         int value = buffer.getInt();
         
@@ -427,12 +429,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
         int fourthIntByte = 0xff & ((value << 24) >> 24);
         
         //return it as integer
-        long out = 0xffffffff & ((firstIntByte << 24) |
+        return (long) (((firstIntByte << 24) |
                 (secondIntByte << 16) |
                 (thirdIntByte << 8) |
-                fourthIntByte);
-        
-        return out;
+                fourthIntByte));
     }
 
     /**
@@ -445,10 +445,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * @param endianType Endian type. Big endian preserves natural binary order,
      * little endian reverses byte order.
      * @return the next four bytes of this file, interpreted as an int.
-     * @throws IOException if an I/O error occurs.
      */        
     @Override
-    public long readUnsignedInt(EndianType endianType) throws IOException {
+    public long readUnsignedInt(EndianType endianType) {
         read = true;
         int streamValue = buffer.getInt();
         int value = Util.fromEndianType(endianType, streamValue);
@@ -460,12 +459,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
         int fourthIntByte = 0xff & ((value << 24) >> 24);
         
         //return it as integer
-        long out = 0xffffffff & ((firstIntByte << 24) |
+        return (long) ((firstIntByte << 24) |
                 (secondIntByte << 16) |
                 (thirdIntByte << 8) |
                 fourthIntByte);
-        
-        return out;
     }
 
     /**
@@ -481,10 +478,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * This method blocks until the eight bytes are read, the end of the stream
      * is detected, or an exception is thrown.
      * @return the next eight bytes of this file, interpreted as a long
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public long readLong() throws IOException {
+    public long readLong() {
         read = true;
         return buffer.getLong();
     }
@@ -499,10 +495,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * @param endianType Endian type. Big endian preserves natural binary order,
      * little endian reverses byte order.
      * @return the next eight bytes of this file, interpreted as a long
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public long readLong(EndianType endianType) throws IOException {
+    public long readLong(EndianType endianType) {
         read = true;
         return Util.fromEndianType(endianType, buffer.getLong());
     }
@@ -514,10 +509,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * This method blocks until the four bytes are read, the end of the stream 
      * is detected, or an exception is thrown.
      * @return the next four bytes of this file, interpreted as a float.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public float readFloat() throws IOException {
+    public float readFloat() {
         read = true;
         return buffer.getFloat();
     }
@@ -531,10 +525,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * @param endianType Endian type. Big endian preserves natural binary order,
      * little endian reverses byte order.
      * @return the next four bytes of this file, interpreted as a float.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public float readFloat(EndianType endianType) throws IOException {
+    public float readFloat(EndianType endianType) {
         read = true;
         return Util.fromEndianType(endianType, buffer.getFloat());
     }
@@ -547,10 +540,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * This method blocks until the eight bytes are read, the end of the stream 
      * is detected, or an exception is thrown.
      * @return the next eight bytes of this file, interpreted as a double.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public double readDouble() throws IOException {
+    public double readDouble() {
         read = true;
         return buffer.getDouble();
     }
@@ -564,10 +556,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * @param endianType Endian type. Big endian preserves natural binary order,
      * little endian reverses byte order.
      * @return the next eight bytes of this file, interpreted as a double.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public double readDouble(EndianType endianType) throws IOException {
+    public double readDouble(EndianType endianType) {
         read = true;
         return Util.fromEndianType(endianType, buffer.getDouble());
     }
@@ -589,52 +580,52 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
      * of the file is reached, or an exception is thrown.
      * @return the next line of text from this file, or null if end of file is
      * encountered before even one byte is read.
-     * @throws IOException if an I/O error occurs.
      */    
     @Override
-    public String readLine() throws IOException {
+    public String readLine() {
         read = true;
-        if(buffer.hasRemaining()) 
+        if (buffer.hasRemaining()) {
             return readUntilAnyOfTheseCharactersIsFound("\n");
-        else 
+        } else {
             return null;
+        }
     }
     
     /**
      * Sequentially reads characters starting at current file position until one
      * of the characters in provided pattern is found.
      * All characters read so far will be returned without including any of the
-     * pattern characters
-     * @param pattern Stop characters to stop reading when they are found
+     * pattern characters.
+     * @param pattern Stop characters to stop reading when they are found.
      * @return String read so far until any of the pattern characters was found
      * or an empty string if the first character is contained in provided 
-     * pattern
-     * @throws IOException if an I/O error occurs
+     * pattern.
      * @throws IllegalArgumentException if no pattern characters are provided.
      */    
     @Override
     public String readUntilAnyOfTheseCharactersIsFound(String pattern) 
-            throws IOException, IllegalArgumentException {
+            throws IllegalArgumentException {
         
-        if(pattern.length() == 0) throw new IllegalArgumentException();
+        if (pattern.length() == 0) {
+            throw new IllegalArgumentException();
+        }
         
         read = true;
-        
-        String result;
+
         StringBuilder stringBuffer = new StringBuilder();
         byte [] charBuffer = new byte[1];        
         String character;
-        for(;;){            
-            if(buffer.hasRemaining()){
+        for (;;) {
+            if (buffer.hasRemaining()) {
                 charBuffer[0] = buffer.get();
                 character = new String(charBuffer);
-                if(pattern.contains(character)){
+                if (pattern.contains(character)) {
                     //character found
                     break;
                 }
                 //add character to output buffer
                 stringBuffer.append(character);
-            }else{
+            } else {
                 //no more data available in stream
                 break;
             }
@@ -672,7 +663,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter{
     /**
      * Writes provided value in the range 0-255 as an unsigned byte. The write
      * starts at the current position of the file pointer.
-     * @param v a value to be written as an unsigned byte
+     * @param v a value to be written as an unsigned byte.
      * @throws IOException if an I/O error occurs.
      */
     @Override

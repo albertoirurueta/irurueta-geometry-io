@@ -1,24 +1,31 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.io;
 
+import org.junit.*;
+
 import java.io.File;
 import java.io.IOException;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
-/**
- *
- * @author albertoirurueta
- */
-public class LoaderSTLTest implements LoaderListener{
-    
+import static org.junit.Assert.*;
+
+public class LoaderSTLTest implements LoaderListener {
+
+    private static final double ERROR = 1e-4;
+
     private boolean startValid = true;
     private boolean endValid = true;
     private boolean progressValid = true;
@@ -27,9 +34,6 @@ public class LoaderSTLTest implements LoaderListener{
     private int startCounter = 0;
     private int endCounter = 0;
     private float previousProgress = 0.0f;
-    
-    
-    public static double ERROR = 1e-4;
     
     public LoaderSTLTest() { }
     
@@ -47,7 +51,7 @@ public class LoaderSTLTest implements LoaderListener{
     
     @Test
     public void testConstructors() throws LockedException, IOException, 
-        LoaderException{
+            LoaderException {
         
         //test constants are equal to LoaderPLY
         assertEquals(LoaderSTL.DEFAULT_MAX_VERTICES_IN_CHUNK,
@@ -64,14 +68,14 @@ public class LoaderSTLTest implements LoaderListener{
         assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_STL);
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        try{
+        try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
-        try{
+        } catch (IOException ignore) { }
+        try {
             loader.load();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
         
         //test constructor with maxVerticesInChunk
         int maxVerticesInChunk = 21423;
@@ -81,21 +85,21 @@ public class LoaderSTLTest implements LoaderListener{
         assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_STL);
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        try{
+        try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
-        try{
+        } catch (IOException ignore) { }
+        try {
             loader.load();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
         
         //Force IllegalArgumentException
         loader = null;
-        try{
+        try {
             loader = new LoaderSTL(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(loader);
         
         
@@ -118,10 +122,10 @@ public class LoaderSTLTest implements LoaderListener{
         assertFalse(badF.exists());
         
         loader = null;
-        try{
+        try {
             loader = new LoaderSTL(badF);
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
+        } catch (IOException ignore) { }
         assertNull(loader);
         
         //test constructor with file and maxVerticesInChunk
@@ -136,30 +140,30 @@ public class LoaderSTLTest implements LoaderListener{
         
         //Force IOException
         loader = null;
-        try{
+        try {
             loader = new LoaderSTL(badF, maxVerticesInChunk);
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
+        } catch (IOException ignore) { }
         assertNull(loader);
         
         //Force IllegalArgumentException
         loader = null;
-        try{
+        try {
            loader = new LoaderSTL(f, 0);
            fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(loader);
         
         //test constructor with loader listener
-        LoaderListener listener = new LoaderListener(){
+        LoaderListener listener = new LoaderListener() {
             @Override
-            public void onLoadStart(Loader loader){}
+            public void onLoadStart(Loader loader) { }
 
             @Override
-            public void onLoadEnd(Loader loader){}
+            public void onLoadEnd(Loader loader) { }
 
             @Override
-            public void onLoadProgressChange(Loader loader, float progress){}            
+            public void onLoadProgressChange(Loader loader, float progress) { }
         };
         
         loader = new LoaderSTL(listener);
@@ -170,14 +174,14 @@ public class LoaderSTLTest implements LoaderListener{
         assertFalse(loader.isLocked());
         assertEquals(loader.getListener(), listener);
         
-        try{
+        try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
-        try{
+        } catch (IOException ignore) { }
+        try {
             loader.load();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
         
         //test constructor with loader listener and maxVerticesInChunk
         loader = new LoaderSTL(listener, maxVerticesInChunk);
@@ -187,21 +191,21 @@ public class LoaderSTLTest implements LoaderListener{
         assertFalse(loader.isLocked());
         assertEquals(loader.getListener(), listener);
         
-        try{
+        try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
-        try{
+        } catch (IOException ignore) { }
+        try {
             loader.load();
             fail("NotReadyException expected but not thrown");
-        }catch(NotReadyException e){}
+        } catch (NotReadyException ignore) { }
         
         //Force IllegalArgumentException
         loader = null;
-        try{
+        try {
             loader = new LoaderSTL(listener, 0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(loader);
         
         //test constructor with file and listener
@@ -215,10 +219,10 @@ public class LoaderSTLTest implements LoaderListener{
         
         //Force IOException
         loader = null;
-        try{
+        try {
             loader = new LoaderSTL(badF, listener);
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
+        } catch (IOException ignore) { }
         assertNull(loader);
         
         //test constructor with file, listener and maxVerticesInChunk
@@ -232,23 +236,22 @@ public class LoaderSTLTest implements LoaderListener{
         
         //Force IOException
         loader = null;
-        try{
+        try {
             loader = new LoaderSTL(badF, listener, maxVerticesInChunk);
             fail("IOException expected but not thrown");
-        }catch(IOException e){}
+        } catch (IOException ignore) { }
         assertNull(loader);
         
         //Force IllegalArgumentException
-        try{
+        try {
             loader = new LoaderSTL(f, listener, 0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(loader);
     }
     
     @Test
-    public void testHasSetFileAndIsReady() 
-            throws LockedException, LoaderException, IOException{
+    public void testHasSetFileAndIsReady() throws LockedException, IOException {
         File f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         assertTrue(f.exists()); //check that file exists
         assertTrue(f.isFile());
@@ -264,19 +267,19 @@ public class LoaderSTLTest implements LoaderListener{
     }    
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         LoaderSTL loader = new LoaderSTL();
         assertNull(loader.getListener());
         
-        LoaderListener listener = new LoaderListener(){
+        LoaderListener listener = new LoaderListener() {
             @Override
-            public void onLoadStart(Loader loader){}
+            public void onLoadStart(Loader loader) { }
 
             @Override
-            public void onLoadEnd(Loader loader){}
+            public void onLoadEnd(Loader loader) { }
 
             @Override
-            public void onLoadProgressChange(Loader loader, float progress){}            
+            public void onLoadProgressChange(Loader loader, float progress) { }
         };
         
         loader.setListener(listener);
@@ -284,7 +287,7 @@ public class LoaderSTLTest implements LoaderListener{
     }    
     
     @Test
-    public void testGetSetMaxVerticesInChunk() throws LockedException{
+    public void testGetSetMaxVerticesInChunk() throws LockedException {
         LoaderSTL loader = new LoaderSTL();
         int maxVerticesInChunk = 521351;
         
@@ -297,15 +300,14 @@ public class LoaderSTLTest implements LoaderListener{
         assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
         
         //Force IllegalArgumentException
-        try{
+        try {
             loader.setMaxVerticesInChunk(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }     
     
     @Test
-    public void testIsValidFile() 
-            throws IOException, LockedException, IOException{
+    public void testIsValidFile() throws LockedException, IOException {
         File f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         assertTrue(f.exists()); //check that file exists
         assertTrue(f.isFile());
@@ -316,16 +318,15 @@ public class LoaderSTLTest implements LoaderListener{
     }   
     
     @Test
-    public void testLoad() 
-            throws IOException, LockedException, NotReadyException, 
-            IOException, LoaderException{
+    public void testLoad() throws LockedException, NotReadyException,
+            IOException, LoaderException {
         File f = new File("./src/test/java/com/irurueta/geometry/io/pitcher-bin.stl");
         assertTrue(f.exists()); //check that file exists
         assertTrue(f.isFile());
         
         LoaderSTL loader = new LoaderSTL(f);
         //loader.setListener(this);
-        LoaderIterator it = loader.load();
+        assertNotNull(loader.load());
                 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -336,33 +337,33 @@ public class LoaderSTLTest implements LoaderListener{
         loader.close(); //to free file resources
     }     
     
-    private void resetListener(){
+    private void resetListener() {
         startValid = endValid = progressValid = lockedValid = true;
         startCounter = endCounter = 0;
         previousProgress = 0.0f;
     }
     
-    private boolean isStartValid(){
+    private boolean isStartValid() {
         return startValid;
     }
     
-    private boolean isEndValid(){
+    private boolean isEndValid() {
         return endValid;
     }
     
-    private boolean isProgressValid(){
+    private boolean isProgressValid() {
         return progressValid;
     }
     
-    private boolean isLockedValid(){
+    private boolean isLockedValid() {
         return lockedValid;
     }    
     
     @Test
-    public void testLoadAndIterate() 
-            throws IllegalArgumentException, IOException, LockedException, 
+    @SuppressWarnings("Duplicates")
+    public void testLoadAndIterate() throws IllegalArgumentException, LockedException,
             NotReadyException, IOException, LoaderException, 
-            NotAvailableException{
+            NotAvailableException {
         
         int maxNumberOfVerticesInChunk = 500;        
         File fileStlBin = 
@@ -371,9 +372,9 @@ public class LoaderSTLTest implements LoaderListener{
                 new File("./src/test/java/com/irurueta/geometry/io/pitcher-ascii.stl");
         
         LoaderSTL binLoader = new LoaderSTL(fileStlBin, 
-                maxNumberOfVerticesInChunk, false); 
+                maxNumberOfVerticesInChunk);
         LoaderSTL asciiLoader = new LoaderSTL(fileStlAscii, 
-                maxNumberOfVerticesInChunk, false); //disable vertex duplicates
+                maxNumberOfVerticesInChunk);
         binLoader.setListener(this);        
         asciiLoader.setListener(this);
         
@@ -395,7 +396,7 @@ public class LoaderSTLTest implements LoaderListener{
         resetListener();                
         
         //check correctness of chunks
-        while(binIt.hasNext() && asciiIt.hasNext()){
+        while (binIt.hasNext() && asciiIt.hasNext()) {
             DataChunk binChunk = binIt.next();  
             
             assertTrue(isEndValid());
@@ -436,7 +437,7 @@ public class LoaderSTLTest implements LoaderListener{
             assertEquals(nVerticesInChunk, binVertices.length / 3);
             assertEquals(nVerticesInChunk, asciiVertices.length / 3);
             
-            for(int i = 0; i < nVerticesInChunk; i++){
+            for (int i = 0; i < nVerticesInChunk; i++) {
                 //check x coordinate
                 assertEquals(binVertices[3 * i], asciiVertices[3 * i], 
                         ERROR);
@@ -465,7 +466,7 @@ public class LoaderSTLTest implements LoaderListener{
             int nIndicesInChunk = binIndices.length;
             assertEquals(nIndicesInChunk, asciiIndices.length);
             
-            for(int i = 0; i < nIndicesInChunk; i++){
+            for (int i = 0; i < nIndicesInChunk; i++) {
                 assertTrue(binIndices[i] < nVerticesInChunk);
                 assertTrue(asciiIndices[i] < nVerticesInChunk);
                 
@@ -488,9 +489,12 @@ public class LoaderSTLTest implements LoaderListener{
             assertTrue(asciiChunk.getMinZ() <= asciiChunk.getMaxZ());  
         }
         
-        if(binIt.hasNext()) fail("Wrong number of chunks in STL");
-        if(asciiIt.hasNext()) 
+        if (binIt.hasNext()) {
+            fail("Wrong number of chunks in STL");
+        }
+        if (asciiIt.hasNext()) {
             fail("Wrong number of chunks in PLY");
+        }
     }    
     
 
@@ -519,30 +523,32 @@ public class LoaderSTLTest implements LoaderListener{
         testLocked((LoaderSTL)loader);
     }
     
-    private void testLocked(LoaderSTL loader){
-        if(!loader.isLocked()) lockedValid = false;
+    private void testLocked(LoaderSTL loader) {
+        if (!loader.isLocked()) {
+            lockedValid = false;
+        }
         
-        try{
+        try {
             loader.setListener(null);
             lockedValid = false;
-        }catch(LockedException e){
-        }catch(Throwable e){
+        } catch (LockedException ignore) {
+        } catch (Throwable e) {
             lockedValid = false;
         }
         
-        try{
+        try {
             loader.load();
             lockedValid = false;
-        }catch(LockedException e){
-        }catch(Throwable e){
+        } catch (LockedException ignore) {
+        } catch (Throwable e) {
             lockedValid = false;
         }
         
-        try{
+        try {
             loader.setMaxVerticesInChunk(1);
             lockedValid = false;
-        }catch(LockedException e){
-        }catch(Throwable e){
+        } catch (LockedException ignore) {
+        } catch (Throwable e) {
             lockedValid = false;
         }        
     }    
