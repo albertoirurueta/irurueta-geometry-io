@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Loader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">Loader.java</span></div><h1>Loader.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+
+/**
+ * Abstract class defining the interface for file loaders.
+ * Specific implementations must be done for each file format to be supported.
+ */
+@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+public abstract class Loader {
+
+    /**
+     * Default limit of bytes to keep mapped in memory.
+     */
+    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY =
+            50000000;
+
+    /**
+     * Instance in charge of reading data from file.
+     */
+    protected AbstractFileReaderAndWriter reader;
+    
+    /**
+     * Boolean indicating that this instance is locked because decoding is being
+     * done.
+     */
+    protected boolean locked;
+    
+    /**
+     * Listener in charge of notifying when the decoding starts, ends or 
+     * progress events.
+     */
+    protected LoaderListener listener;
+    
+    /**
+     * File to be read.
+     */
+    protected File file;
+    
+    /**
+     * Limit of bytes to keep mapped in memory. If provided file exceeds this
+     * value, then it is not mapped into memory.
+     */
+    private long fileSizeLimitToKeepInMemory;
+
+    /**
+     * Default Constructor.
+     */
+<span class="fc" id="L66">    public Loader() {</span>
+<span class="fc" id="L67">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L68">        reader = null;</span>
+<span class="fc" id="L69">        locked = false;</span>
+<span class="fc" id="L70">        listener = null;        </span>
+<span class="fc" id="L71">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be read.
+     * @throws IOException raised if provided file does not exist or an I/O
+     * exception occurs.
+     */
+<span class="fc" id="L79">    public Loader(File f) throws IOException {</span>
+<span class="fc" id="L80">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L81">        file = f;</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L83">            reader = new MappedFileReaderAndWriter(f, </span>
+                    FileChannel.MapMode.READ_ONLY);            
+        } else {
+<span class="nc" id="L86">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        }
+<span class="fc" id="L88">        locked = false;</span>
+<span class="fc" id="L89">        listener = null;</span>
+        
+<span class="fc" id="L91">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to notify start, end and progress events.
+     */
+<span class="fc" id="L97">    public Loader(LoaderListener listener) {</span>
+<span class="fc" id="L98">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L99">        reader = null;</span>
+<span class="fc" id="L100">        locked = false;</span>
+<span class="fc" id="L101">        this.listener = listener;</span>
+<span class="fc" id="L102">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be read.
+     * @param listener listener to notify start, end and progress events.
+     * @throws IOException raised if provided file does not exist or an I/O
+     * exception occurs.
+     */
+<span class="fc" id="L111">    public Loader(File f, LoaderListener listener) throws IOException {</span>
+<span class="fc" id="L112">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L113">        file = f;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L115">            reader = new MappedFileReaderAndWriter(f, </span>
+                    FileChannel.MapMode.READ_ONLY);            
+        } else {
+<span class="nc" id="L118">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        }
+<span class="fc" id="L120">        locked = false;</span>
+<span class="fc" id="L121">        this.listener = listener;</span>
+<span class="fc" id="L122">    }</span>
+    
+    /**
+     * Method called when an instance of Loader is garbage collected.
+     * This method is in charge of closing input file if it is already open.
+     * @throws Throwable if something fails during finalization.
+     */
+    @Override
+    protected void finalize() throws Throwable {
+<span class="fc" id="L131">        super.finalize();</span>
+        try {
+<span class="fc" id="L133">            close(); //attempt to close file resources</span>
+<span class="pc" id="L134">        } catch (Throwable ignore) { }</span>
+<span class="fc" id="L135">    }</span>
+    
+    /**
+     * Get maximum size (in bytes) to determine whether a file is completely 
+     * cached in memory (if lower than maximum size), or if it is just streamed
+     * (if greater than maximum size).
+     * @return Maximum size to determine whether file is cached in memory or not.
+     */
+    public long getFileSizeLimitToKeepInMemory() {
+<span class="fc" id="L144">        return fileSizeLimitToKeepInMemory;</span>
+    }
+    
+    /**
+     * Sets maximum size (in bytes) to determine whether a file is completely
+     * chached in memory (if lower than maximum size), or if it is just streamed
+     * (if greater than maximum size).
+     * @param fileSizeLimitToKeepInMemory maximum size to determine whether file
+     * is cached in memory or not.
+     * @throws LockedException if loader is locked because it is currently 
+     * processing a file.
+     */
+    public void setFileSizeLimitToKeepInMemoery(
+            long fileSizeLimitToKeepInMemory) throws LockedException {
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L159">            throw new LockedException();</span>
+        }
+        
+<span class="fc" id="L162">        this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;</span>
+<span class="fc" id="L163">    }</span>
+    
+    /**
+     * Indicates whether a file to be loaded has already been set.
+     * @return True if file has already been provided, false otherwise.
+     */
+    public boolean hasFile() {
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        return reader != null;</span>
+    }
+    
+    /**
+     * Sets file to be loaded.
+     * @param f file to be loaded.
+     * @throws LockedException raised if this instance is loaded because a file
+     * is already being loaded.
+     * @throws IOException raised if provided file does not exist or if an I/O
+     * exception occurs.
+     */
+    public void setFile(File f) 
+            throws LockedException, IOException {
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L184">            throw new LockedException();</span>
+        }
+<span class="fc" id="L186">        file = f;</span>
+        
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (reader != null) {</span>
+<span class="nc" id="L189">            reader.close(); //close previous file</span>
+        }
+        
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L193">            reader = new MappedFileReaderAndWriter(f, </span>
+                    FileChannel.MapMode.READ_ONLY);            
+        } else {
+<span class="nc" id="L196">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        }
+<span class="fc" id="L198">    }</span>
+    
+    /**
+     * Closes file provided to this loader.
+     * @throws IOException if an I/O error occurs.
+     */
+    public void close() throws IOException {
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (reader != null) {</span>
+<span class="fc" id="L206">            reader.close();</span>
+<span class="fc" id="L207">            reader = null;</span>
+        }
+<span class="fc" id="L209">    }</span>
+      
+    /**
+     * Determines whether this instance is locked.
+     * A loader remains locked while decoding of a file is being done.
+     * This instance will remain locked once the loading process starts until
+     * it finishes either successfully or not.
+     * While this instance remains locked no parameters can be changed, 
+     * otherwise a LockedException will be raised.
+     * @return True if instance is locked, false otherwise.
+     */
+    public synchronized boolean isLocked() {
+<span class="fc" id="L221">        return locked;</span>
+    }
+    
+    /**
+     * Sets the lock value of this instance so that no parameters cannot be 
+     * changed until this instance is unlocked.
+     * @param locked value that determines whether this instance is locked or 
+     * not.
+     */
+    protected synchronized void setLocked(boolean locked) {
+<span class="fc" id="L231">        this.locked = locked;</span>
+<span class="fc" id="L232">    }</span>
+    
+    /**
+     * Returns listener of this instance.
+     * A listener notifies of start, end and progress change events.
+     * @return listener of this instance.
+     */
+    public LoaderListener getListener(){
+<span class="fc" id="L240">        return listener;</span>
+    }
+    
+    /**
+     * Sets listener of this instance.
+     * A listener notifies of start, end and progress change events.
+     * @param listener listener of this instance.
+     * @throws LockedException Raised if this instance is already locked.
+     */
+    public void setListener(LoaderListener listener) throws LockedException {
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L251">            throw new LockedException();</span>
+        }
+<span class="fc" id="L253">        this.listener = listener;</span>
+<span class="fc" id="L254">    }</span>
+   
+    /**
+     * Determines whether enough parameters have been set so that the loading
+     * process can start.
+     * @return True if this instance is ready to start loading a file, false
+     * otherwise.
+     */
+    public abstract boolean isReady();
+    
+    /**
+     * Returns mesh format this instance is capable of loading.
+     * @return Mesh format.
+     */
+    public abstract MeshFormat getMeshFormat();
+    
+    /**
+     * Determines if provided file is a valid file that can be read by this 
+     * loader.
+     * @return true if file is valid, false otherwise.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws IOException if an I/O error occurs.
+     */
+    public abstract boolean isValidFile() throws LockedException, IOException;
+    
+    /**
+     * Starts the loading process of provided file.
+     * This method returns a LoaderIterator to start the iterative process to
+     * load a file in small chunks of data.
+     * @return a loader iterator to read the file in a step by step process.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws NotReadyException raised if this instance is not yet ready.
+     * @throws IOException if an I/O error occurs.
+     * @throws LoaderException if file is corrupted or cannot be interpreted.
+     */
+    public abstract LoaderIterator load() throws LockedException, 
+            NotReadyException, IOException, LoaderException;
+    
+    /**
+     * Internal method to reset the members of this instance.
+     */
+    private void reset() {
+<span class="nc" id="L296">        locked = false;</span>
+        try {
+<span class="nc" id="L298">            reader.close(); //attempt to close file</span>
+<span class="nc" id="L299">        } catch (Throwable ignore) { }</span>
+<span class="nc" id="L300">        reader = null;</span>
+<span class="nc" id="L301">        listener = null;</span>
+<span class="nc" id="L302">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

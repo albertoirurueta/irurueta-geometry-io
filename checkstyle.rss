@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>com.irurueta:irurueta-geometry-io - Checkstyle report</title>
+    <link>https://bitbucket.org/alberto_irurueta/irurueta-geometry-io</link>
+    <description>com.irurueta:irurueta-geometry-io - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2017 - 2018</copyright>
+    <item>
+      <title>File: 52,
+             Errors: 1302,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.BuildInfo.java">com/irurueta/geometry/io/BuildInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.PropertyTypePLY.java">com/irurueta/geometry/io/PropertyTypePLY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.InvalidTextureException.java">com/irurueta/geometry/io/InvalidTextureException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderListenerBinary.java">com/irurueta/geometry/io/LoaderListenerBinary.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.PLYStorageMode.java">com/irurueta/geometry/io/PLYStorageMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.EndianType.java">com/irurueta/geometry/io/EndianType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderOBJ.java">com/irurueta/geometry/io/LoaderOBJ.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  105
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MappedFileReaderAndWriter.java">com/irurueta/geometry/io/MappedFileReaderAndWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  89
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Material3DS.java">com/irurueta/geometry/io/Material3DS.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.DataChunk.java">com/irurueta/geometry/io/DataChunk.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.AbstractFileReaderAndWriter.java">com/irurueta/geometry/io/AbstractFileReaderAndWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Chunk3DS.java">com/irurueta/geometry/io/Chunk3DS.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  256
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.NotReadyException.java">com/irurueta/geometry/io/NotReadyException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderIterator.java">com/irurueta/geometry/io/LoaderIterator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MaterialLoaderOBJ.java">com/irurueta/geometry/io/MaterialLoaderOBJ.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderListener.java">com/irurueta/geometry/io/LoaderListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.PLYReadValueFromBufferListener.java">com/irurueta/geometry/io/PLYReadValueFromBufferListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MaterialOBJ.java">com/irurueta/geometry/io/MaterialOBJ.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MeshWriterJsonListener.java">com/irurueta/geometry/io/MeshWriterJsonListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Loader3DS.java">com/irurueta/geometry/io/Loader3DS.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  279
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderException.java">com/irurueta/geometry/io/LoaderException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LockedException.java">com/irurueta/geometry/io/LockedException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.CRCDisabledException.java">com/irurueta/geometry/io/CRCDisabledException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.VertexOBJ.java">com/irurueta/geometry/io/VertexOBJ.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.FileReaderAndWriter.java">com/irurueta/geometry/io/FileReaderAndWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  77
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.package-info.java">com/irurueta/geometry/io/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.NotAvailableException.java">com/irurueta/geometry/io/NotAvailableException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Material.java">com/irurueta/geometry/io/Material.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.ElementPLY.java">com/irurueta/geometry/io/ElementPLY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MeshWriter.java">com/irurueta/geometry/io/MeshWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MeshWriterBinary.java">com/irurueta/geometry/io/MeshWriterBinary.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  72
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.GeometryIOException.java">com/irurueta/geometry/io/GeometryIOException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderIteratorListener.java">com/irurueta/geometry/io/LoaderIteratorListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.PLYReadValueFromStreamListener.java">com/irurueta/geometry/io/PLYReadValueFromStreamListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderPLY.java">com/irurueta/geometry/io/LoaderPLY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  140
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MeshFormat.java">com/irurueta/geometry/io/MeshFormat.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.build-info.properties">com/irurueta/geometry/io/build-info.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Loader.java">com/irurueta/geometry/io/Loader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.VertexFetcherListener.java">com/irurueta/geometry/io/VertexFetcherListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MeshWriterListener.java">com/irurueta/geometry/io/MeshWriterListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.PropertyPLY.java">com/irurueta/geometry/io/PropertyPLY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderSTL.java">com/irurueta/geometry/io/LoaderSTL.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  46
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Util.java">com/irurueta/geometry/io/Util.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MaterialLoaderListener.java">com/irurueta/geometry/io/MaterialLoaderListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MaterialLoader.java">com/irurueta/geometry/io/MaterialLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Illumination.java">com/irurueta/geometry/io/Illumination.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderBinary.java">com/irurueta/geometry/io/LoaderBinary.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.MeshWriterJson.java">com/irurueta/geometry/io/MeshWriterJson.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  18
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.LoaderListenerOBJ.java">com/irurueta/geometry/io/LoaderListenerOBJ.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Texture.java">com/irurueta/geometry/io/Texture.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.HeaderPLY.java">com/irurueta/geometry/io/HeaderPLY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.DataTypePLY.java">com/irurueta/geometry/io/DataTypePLY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

@@ -1,0 +1,2700 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoaderOBJ.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">LoaderOBJ.java</span></div><h1>LoaderOBJ.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.Triangle3D;
+import com.irurueta.geometry.Triangulator3D;
+import com.irurueta.geometry.TriangulatorException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * Loads an OBJ file.
+ * If a LoaderListenerOBJ is provided, this class might also attempt to load the
+ * associated material file if available.
+ */
+@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+public class LoaderOBJ extends Loader {
+
+    /**
+     * Constant defining the default value of maximum number of vertices to keep
+     * in a chunk. This is 65535, which corresponds to the maximum value allowed
+     * by graphical layer such as OpenGL when working with Vertex Buffer Objects.
+     */
+    public static final int DEFAULT_MAX_VERTICES_IN_CHUNK = 0xffff;
+
+    /**
+     * Minimum allowed value for maximum number of vertices in chunk, which is
+     * one.
+     */
+    public static final int MIN_MAX_VERTICES_IN_CHUNK = 1;
+
+    /**
+     * Constant indicating that duplicated vertices are allowed by default,
+     * which allows faster loading.
+     */
+    public static final boolean DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK =
+            true;
+
+    /**
+     * Maximum number of stream positions to be cached by default.
+     */
+    public static final int DEFAULT_MAX_STREAM_POSITIONS = 1000000;
+
+    /**
+     * Minimum allowed number of stream positions.
+     */
+    public static final int MIN_STREAM_POSITIONS = 1;
+
+    /**
+     * Amount of progress variation (1%) used to notify progress.
+     */
+    public static final float PROGRESS_DELTA = 0.01f;
+
+    /**
+     * Indicates that loading should continue even if triangulation of some
+     * polygons fails.
+     */
+    public static final boolean DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR = true;
+
+    /**
+     * Constant below enabled periodic garbage collection. This helps to reduce
+     * memory usage, which is of special interest on mobile devices and servers.
+     */
+    public static final boolean DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION =
+            true;
+
+    /**
+     * Constant defining number of iterations to wait before starting garbage
+     * collection.
+     * The lower the value the more frequent garbage collection will be and
+     * hence the smaller the memory usage, at the expense of slower execution.
+     */
+    public static final int DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION = 10000;
+
+    /**
+     * Iterator to load OBJ file data in small chunks.
+     * Usually data is divided in chunks that can be directly loaded by
+     * graphic layers such as OpenGL.
+     */
+    private LoaderIteratorOBJ loaderIterator;
+    
+    /**
+     * Maximum number of vertices allowed in a chunk. Once this value is 
+     * exceeded when loading a file, a new chunk of data is created.
+     */
+    private int maxVerticesInChunk;
+    
+    /**
+     * To allow faster file loading, it might be allowed to repeat points in a
+     * chunk. When representing data graphically, this has no visual.
+     * consequences but chunks will take up more memory. This value represents
+     * a trade off between loading speed and memory usage.
+     */
+    private boolean allowDuplicateVerticesInChunk;
+    
+    /**
+     * Maximum number of file stream positions to be cached.
+     * This class keeps a cache of positions in the file to allow faster file 
+     * loading at the expense of larger memory usage.
+     * If the geometry of a file reuses a large number of points, keeping a 
+     * large cache will increase the speed of loading a file, otherwise the
+     * impact of this parameter will be low.
+     * The default value will work fine for most cases.
+     */
+    private long maxStreamPositions;
+    
+    /**
+     * List containing comments contained in the file.
+     */
+    private List&lt;String&gt; comments;    
+    
+    /**
+     * Collection of materials contained in the material's file associated to an
+     * OBJ file.
+     */
+    private Set&lt;Material&gt; materials;
+    
+    /**
+     * Indicates if garbage collection should be attempted from time to time
+     * to reduce memory usage. Garbage collection might slow down slightly the
+     * loading process but in memory constrained environments this setting 
+     * should be enabled.
+     * By default it is enabled.
+     */
+    private boolean periodicGarbageCollection;
+    
+    /**
+     * Number of attempts to clean memory before garbage collection is actually
+     * demanded. This only takes effect if periodic garbage collection is 
+     * enabled. By default this is set to 10000 attempts.
+     */
+    private int itersBeforeGarbageCollection;
+    
+    /**
+     * Determines if file loading should continue even if the triangulation of
+     * a polygon fails. The triangulation of a polygon might fail if the polygon
+     * is degenerate or has invalid numerical values such as NaN of infinity.
+     * If true, loading will continue but the result will lack the polygons that
+     * failed.
+     */
+    private boolean continueIfTriangulationError;
+    
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L162">    public LoaderOBJ() {</span>
+<span class="fc" id="L163">        loaderIterator = null;</span>
+<span class="fc" id="L164">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L165">        allowDuplicateVerticesInChunk = </span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L167">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L168">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L169">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L171">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L172">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L173">    }</span>
+    
+    /**
+     * Constructor.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     */
+<span class="fc" id="L183">    public LoaderOBJ(int maxVerticesInChunk) throws IllegalArgumentException {</span>
+<span class="fc" id="L184">        loaderIterator = null;</span>
+<span class="fc" id="L185">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L186">        allowDuplicateVerticesInChunk =</span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L188">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L189">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L190">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L192">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L193">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L194">    }</span>
+    
+    /**
+     * Constructor.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     */
+    public LoaderOBJ(int maxVerticesInChunk, 
+            boolean allowDuplicateVerticesInChunk) 
+<span class="fc" id="L210">            throws IllegalArgumentException {</span>
+<span class="fc" id="L211">        loaderIterator = null;</span>
+<span class="fc" id="L212">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L213">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L214">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L215">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L216">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L218">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L219">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L220">    }</span>
+    
+    /**
+     * Constructor.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @param maxStreamPositions Maximum number of file stream positions to be 
+     * cached.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     */
+    public LoaderOBJ(int maxVerticesInChunk,
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
+<span class="fc" id="L238">            throws IllegalArgumentException {</span>
+<span class="fc" id="L239">        loaderIterator = null;</span>
+<span class="fc" id="L240">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L241">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L242">        internalSetMaxStreamPositions(maxStreamPositions);</span>
+<span class="fc" id="L243">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L244">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L246">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L247">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L248">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f) throws IOException {
+<span class="fc" id="L256">        super(f);</span>
+<span class="fc" id="L257">        loaderIterator = null;</span>
+<span class="fc" id="L258">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L259">        allowDuplicateVerticesInChunk =</span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L261">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L262">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L263">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L265">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L266">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L267">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, int maxVerticesInChunk) 
+            throws IllegalArgumentException, IOException {
+<span class="fc" id="L281">        super(f);</span>
+<span class="fc" id="L282">        loaderIterator = null;</span>
+<span class="fc" id="L283">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L284">        allowDuplicateVerticesInChunk =</span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L286">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L287">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L288">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L290">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L291">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L292">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, int maxVerticesInChunk,
+            boolean allowDuplicateVerticesInChunk)
+            throws IllegalArgumentException, IOException {
+<span class="fc" id="L311">        super(f);</span>
+<span class="fc" id="L312">        loaderIterator = null;</span>
+<span class="fc" id="L313">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L314">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L315">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L316">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L317">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L319">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L320">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L321">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @param maxStreamPositions Maximum number of file stream positions to be 
+     * cached.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, int maxVerticesInChunk,
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
+            throws IllegalArgumentException, IOException {
+<span class="fc" id="L342">        super(f);</span>
+<span class="fc" id="L343">        loaderIterator = null;</span>
+<span class="fc" id="L344">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L345">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L346">        internalSetMaxStreamPositions(maxStreamPositions);</span>
+<span class="fc" id="L347">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L348">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L350">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L351">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L352">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     */
+    public LoaderOBJ(LoaderListener listener) {
+<span class="fc" id="L360">        super(listener);</span>
+<span class="fc" id="L361">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L362">        allowDuplicateVerticesInChunk = </span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L364">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L365">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L366">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L368">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L369">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L370">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     */
+    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk)
+            throws IllegalArgumentException {
+<span class="fc" id="L384">        super(listener);</span>
+<span class="fc" id="L385">        loaderIterator = null;</span>
+<span class="fc" id="L386">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L387">        allowDuplicateVerticesInChunk =</span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L389">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L390">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L391">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L393">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L394">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L395">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     */
+    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk, 
+            boolean allowDuplicateVerticesInChunk) 
+            throws IllegalArgumentException {
+<span class="fc" id="L414">        super(listener);</span>
+<span class="fc" id="L415">        loaderIterator = null;</span>
+<span class="fc" id="L416">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L417">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L418">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L419">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L420">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L422">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L423">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L424">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @param maxStreamPositions Maximum number of file stream positions to be 
+     * cached.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     */
+    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk,
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
+            throws IllegalArgumentException {
+<span class="fc" id="L445">        super(listener);</span>
+<span class="fc" id="L446">        loaderIterator = null;</span>
+<span class="fc" id="L447">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L448">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L449">        internalSetMaxStreamPositions(maxStreamPositions);</span>
+<span class="fc" id="L450">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L451">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L453">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L454">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L455">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, LoaderListener listener) throws IOException {
+<span class="fc" id="L465">        super(f, listener);</span>
+<span class="fc" id="L466">        loaderIterator = null;</span>
+<span class="fc" id="L467">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L468">        allowDuplicateVerticesInChunk =</span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L470">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L471">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L472">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L474">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L475">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L476">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk) 
+            throws IllegalArgumentException, IOException {
+<span class="fc" id="L492">        super(f, listener);</span>
+<span class="fc" id="L493">        loaderIterator = null;</span>
+<span class="fc" id="L494">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L495">        allowDuplicateVerticesInChunk =</span>
+                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+<span class="fc" id="L497">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L498">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L499">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L501">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L502">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L503">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk,
+            boolean allowDuplicateVerticesInChunk)
+            throws IllegalArgumentException, IOException {
+<span class="fc" id="L524">        super(f, listener);</span>
+<span class="fc" id="L525">        loaderIterator = null;</span>
+<span class="fc" id="L526">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L527">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L528">        maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;</span>
+<span class="fc" id="L529">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L530">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L532">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L533">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L534">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f file to be loaded.
+     * @param listener listener to be notified of loading progress and when
+     * loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
+     * chunk are allowed to provide faster file loading. When representing data 
+     * graphically, this has no visual consequences but chunks will take up more
+     * memory. 
+     * @param maxStreamPositions Maximum number of file stream positions to be 
+     * cached.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     * a chunk is lower than 1.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk,
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
+            throws IllegalArgumentException, IOException {
+<span class="fc" id="L557">        super(f, listener);</span>
+<span class="fc" id="L558">        loaderIterator = null;</span>
+<span class="fc" id="L559">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L560">        this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;</span>
+<span class="fc" id="L561">        internalSetMaxStreamPositions(maxStreamPositions);</span>
+<span class="fc" id="L562">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L563">        continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;</span>
+        
+<span class="fc" id="L565">        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;</span>
+<span class="fc" id="L566">        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        </span>
+<span class="fc" id="L567">    }    </span>
+    
+    /**
+     * Sets maximum number of vertices allowed in a chunk. 
+     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * created.
+     * @param maxVerticesInChunk maximum allowed number of vertices to be set.
+     * @throws IllegalArgumentException if provided value is lower than 1.
+     * @throws LockedException if this loader is currently loading a file.
+     */
+    public void setMaxVerticesInChunk(int maxVerticesInChunk)
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L579" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L580">            throw new LockedException();</span>
+        }
+<span class="fc" id="L582">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L583">    }</span>
+    
+    /**
+     * Returns maximum number of vertices allowed in a chunk.
+     * Once this value is exceeded when loading a file, a new chunk of data is
+     * created.
+     * @return maximum number of vertices allowed in a chunk.
+     */
+    public int getMaxVerticesInChunk() {
+<span class="fc" id="L592">        return maxVerticesInChunk;</span>
+    }
+    
+    /**
+     * Internal method to set maximum number of vertices allowed in a chunk.
+     * This method is reused both in the constructor and in the setter of
+     * maximum number of vertices allowed in a chunk.
+     * @param maxVerticesInChunk maximum allowed number of vertices to be set.
+     * @throws IllegalArgumentException  if provided value is lower than 1.
+     */
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L604" title="All 2 branches covered.">        if (maxVerticesInChunk &lt; MIN_MAX_VERTICES_IN_CHUNK) {</span>
+<span class="fc" id="L605">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L608">        this.maxVerticesInChunk = maxVerticesInChunk;</span>
+<span class="fc" id="L609">    }</span>
+    
+    /**
+     * Sets boolean indicating if repeated vertices in a chunk are allowed to 
+     * provide faster file loading. When representing data graphically, this has
+     * no visual consequences but chunks will take up more memory. 
+     * @param allow true if duplicate vertices are allowed, false otherwise.
+     * @throws LockedException if this loader is currently loading a file.
+     */
+    public void setAllowDuplicateVerticesInChunk(boolean allow)
+            throws LockedException {
+<span class="fc bfc" id="L620" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L621">            throw new LockedException();</span>
+        }
+<span class="fc" id="L623">        allowDuplicateVerticesInChunk = allow;</span>
+<span class="fc" id="L624">    }</span>
+    
+    /**
+     * Returns boolean indicating if repeated vertices in a chunk are allowed to
+     * provide faster file loading. When representing data graphically, this has
+     * no visual consequences but chunks will take up more memory.
+     * @return true if duplicate vertices are allowed, false otherwise.
+     */
+    public boolean areDuplicateVerticesInChunkAllowed() {
+<span class="fc" id="L633">        return allowDuplicateVerticesInChunk;</span>
+    }
+    
+    /**
+     * Sets maximum number of file stream positions to be cached.
+     * This class keeps a cache of positions in the file to allow faster file 
+     * loading at the expense of larger memory usage.
+     * If the geometry of a file reuses a large number of points, keeping a 
+     * large cache will increase the speed of loading a file, otherwise the
+     * impact of this parameter will be low.
+     * The default value will work fine for most cases.
+     * @param maxStreamPositions maximum number of file stream positions to be
+     * set.
+     * @throws IllegalArgumentException if provided value is lower than 1.
+     * @throws LockedException if this loader is currently loading a file.
+     */
+    public void setMaxStreamPositions(long maxStreamPositions)
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L651" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L652">            throw new LockedException();</span>
+        }
+<span class="fc" id="L654">        internalSetMaxStreamPositions(maxStreamPositions);        </span>
+<span class="fc" id="L655">    }</span>
+    
+    /**
+     * Returns maximum number of file stream positions to be cached.
+     * This class keeps a cache of positions in the file to allow faster file 
+     * loading at the expense of larger memory usage.
+     * If the geometry of a file reuses a large number of points, keeping a 
+     * large cache will increase the speed of loading a file, otherwise the
+     * impact of this parameter will be low.
+     * The default value will work fine for most cases.
+     * @return maximum number of file stream positions to be cached.
+     */
+    public long getMaxStreamPositions() {
+<span class="fc" id="L668">        return maxStreamPositions;</span>
+    }
+        
+    /**
+     * Internal method to set maximum number of file stream positions to be 
+     * cached.
+     * This method is reused both in the constructor and in the setter of
+     * maximum number stream positions.
+     * @param maxStreamPositions maximum number of file stream positions to be 
+     * cached.
+     * @throws IllegalArgumentException if provided value is lower than 1.
+     */
+    private void internalSetMaxStreamPositions(long maxStreamPositions)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L682" title="All 2 branches covered.">        if (maxStreamPositions &lt; MIN_STREAM_POSITIONS) {</span>
+<span class="fc" id="L683">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L686">        this.maxStreamPositions = maxStreamPositions;</span>
+<span class="fc" id="L687">    }</span>
+    
+    /**
+     * Returns boolean indicating if file loading should continue even if the 
+     * triangulation of a polygon fails. The triangulation of a polygon might 
+     * fail if the polygon is degenerate or has invalid numerical values such as 
+     * NaN of infinity.
+     * @return If true, loading will continue but the result will lack the 
+     * polygons that failed.
+     */
+    public boolean isContinueIfTriangulationError() {
+<span class="fc" id="L698">        return continueIfTriangulationError;</span>
+    }
+    
+    /**
+     * Sets boolean indicating if file loading should continue even if the
+     * triangulation of a polygon fails. The triangulation of a polygon might
+     * fail if the polygon is degenerate or has invalid numerical values such as
+     * NaN or infinity.
+     * @param continueIfTriangulationError if ture, loading will continue but 
+     * the result will lack the polygons that failed.
+     */
+    public void setContinueIfTriangulationError(
+            boolean continueIfTriangulationError) {
+<span class="nc" id="L711">        this.continueIfTriangulationError = continueIfTriangulationError;</span>
+<span class="nc" id="L712">    }</span>
+    
+    /**
+     * Returns a list of the comments contained in the file.
+     * @return list of the comments contained in the file.
+     */
+    public List&lt;String&gt; getComments() {
+<span class="nc" id="L719">        return Collections.unmodifiableList(comments);</span>
+    }
+
+    /**
+     * Indicates if garbage collection should be attempted from time to time
+     * to reduce memory usage. Garbage collection might slow down slightly the
+     * loading process but in memory constrained environments this setting 
+     * should be enabled. By default it is enabled.
+     * @return True if periodic garbage collection is enabled, false otherwise.
+     */
+    public boolean isPeriodicGarbageCollection() {
+<span class="nc" id="L730">        return periodicGarbageCollection;</span>
+    }
+    
+    /**
+     * Sets whether periodic garbage collection should be attempted from time to
+     * time to reduce memory usage. Garbage collection might slow down slightly
+     * the loading process but in memory constrained environments this setting
+     * should be enabled. By default it is enabled.
+     * @param periodicGarbageCollection True if periodic garbage collection must
+     * be enabled, false otherwise.
+     * @throws LockedException Raised if this instance is locked because loading
+     * is in progress.
+     */
+    public void setPeriodicGarbageCollection(boolean periodicGarbageCollection)
+            throws LockedException {
+<span class="nc bnc" id="L745" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L746">            throw new LockedException();</span>
+        }
+        
+<span class="nc" id="L749">        this.periodicGarbageCollection = periodicGarbageCollection;</span>
+<span class="nc" id="L750">    }</span>
+
+    /**
+     * Returns number of attempts to clean memory before garbage collection is 
+     * actually demanded. This only takes effect if periodic garbage collection 
+     * is  enabled. By default this is set to 10000 attempts.
+     * @return Number of attempts to clean memory before garbage collection is
+     * actually demanded.
+     */
+    public int getItersBeforeGarbageCollection() {
+<span class="nc" id="L760">        return itersBeforeGarbageCollection;</span>
+    }
+    
+    /**
+     * Sets number of attempts to clean memory before garbage collection is 
+     * actually demanded. This only takes effect if periodic garbage collection
+     * is enabled. By default this is set to 10000 attempts.
+     * @param itersBeforeGarbageCollection number of iterations before actually claiming grbage collection.
+     * @throws IllegalArgumentException if provided value is negative.
+     * @throws LockedException Raised if this instance is locked because loading
+     * is in progress.
+     */
+    public void setItersBeforeGarbageCollection(
+            int itersBeforeGarbageCollection) throws IllegalArgumentException,
+            LockedException {
+<span class="nc bnc" id="L775" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L776">            throw new LockedException();</span>
+        }
+        
+<span class="nc bnc" id="L779" title="All 2 branches missed.">        if (itersBeforeGarbageCollection &lt; 0) {</span>
+<span class="nc" id="L780">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="nc" id="L783">        this.itersBeforeGarbageCollection = itersBeforeGarbageCollection;</span>
+<span class="nc" id="L784">    }        </span>
+    
+    /**
+     * If loader is ready to start loading a file.
+     * This is true once a file has been provided.
+     * @return true if ready to start loading a file, false otherwise.
+     */    
+    @Override
+    public boolean isReady() {
+<span class="fc" id="L793">        return hasFile();</span>
+    }
+
+    /**
+     * Returns mesh format supported by this class, which is MESH_FORMAT_OBJ.
+     * @return mesh format supported by this class.
+     */    
+    @Override
+    public MeshFormat getMeshFormat() {
+<span class="fc" id="L802">        return MeshFormat.MESH_FORMAT_OBJ;</span>
+    }
+
+    /**
+     * Determines if provided file is a valid file that can be read by this 
+     * loader.
+     * @return true if file is valid, false otherwise.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws IOException if an I/O error occurs..
+     */    
+    @Override
+    public boolean isValidFile() throws LockedException, IOException {
+<span class="fc bfc" id="L814" title="All 2 branches covered.">        if (!hasFile()) {</span>
+<span class="fc" id="L815">            throw new IOException();</span>
+        }
+<span class="pc bpc" id="L817" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L818">            throw new LockedException();</span>
+        }
+<span class="fc" id="L820">        return true;</span>
+    }
+
+    /**
+     * Starts the loading process of provided file.
+     * This method returns a LoaderIterator to start the iterative process to
+     * load a file in small chunks of data.
+     * @return a loader iterator to read the file in a step by step process.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws NotReadyException raised if this instance is not yet ready.
+     * @throws IOException if an I/O error occurs.
+     * @throws LoaderException if file is corrupted or cannot be interpreted.
+     */        
+    @Override
+    public LoaderIterator load() throws LockedException, NotReadyException, 
+            IOException, LoaderException {
+        
+<span class="fc bfc" id="L837" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L838">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L840" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L841">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L844">        setLocked(true);</span>
+<span class="fc bfc" id="L845" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L846">            listener.onLoadStart(this);</span>
+        }
+        
+<span class="fc" id="L849">        loaderIterator = new LoaderIteratorOBJ(this);</span>
+<span class="fc" id="L850">        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));</span>
+<span class="fc" id="L851">        return loaderIterator;</span>
+    }
+    
+    /**
+     * Internal listener to be notified when loading process finishes.
+     * This listener is used to free resources when loading process finishes.
+     */    
+    private class LoaderIteratorListenerImpl implements LoaderIteratorListener {
+
+        /**
+         * Reference to Loader loading an OBJ file.
+         */
+        private LoaderOBJ loader;
+        
+        /**
+         * Constructor.
+         * @param loader reference to Loader.
+         */
+<span class="fc" id="L869">        public LoaderIteratorListenerImpl(LoaderOBJ loader) {</span>
+<span class="fc" id="L870">            this.loader = loader;</span>
+<span class="fc" id="L871">        }</span>
+        
+        /**
+         * Method to be notified when the loading process finishes.
+         * @param iterator iterator loading the file in chunks.
+         */        
+        @Override
+        public void onIteratorFinished(LoaderIterator iterator) {
+            //because iterator is finished, we should allow subsequent calls to 
+            //load method
+            try {
+<span class="fc" id="L882">                reader.seek(0); //attempt restart stream to initial position</span>
+<span class="pc" id="L883">            } catch (Throwable ignore) { }</span>
+
+
+            //on subsequent calls
+<span class="pc bpc" id="L887" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L888">                listener.onLoadEnd(loader);</span>
+            }
+<span class="fc" id="L890">            setLocked(false);</span>
+<span class="fc" id="L891">        }        </span>
+    }
+
+    /**
+     * Loader iterator in charge of loading file data in small chunks.
+     * Usually data is divided in chunks small enough that can be directly 
+     * loaded by graphical layers such as OpenGL (which has a limit of 65535 
+     * indices when using Vertex Buffer Objects, which increase graphical 
+     * performance).
+     */    
+    private class LoaderIteratorOBJ implements LoaderIterator {
+
+        /**
+         * Reference to loader loading OBJ file.
+         */
+        private LoaderOBJ loader;
+        
+        /**
+         * X coordinate of the latest point that has been read.
+         */
+        private float coordX;
+        
+        /**
+         * Y coordinate of the latest point that has been read.
+         */
+        private float coordY;
+        
+        /**
+         * Z coordinate of the latest point that has been read.
+         */
+        private float coordZ;
+        
+        /**
+         * U texture coordinate of the latest point that has been read.
+         * U coordinate refers to the horizontal axis in the texture image and
+         * usually is a normalized value between 0.0 and 1.0. Larger values can
+         * be used to repeat textures, negative values can be used to reverse
+         * textures.
+         */
+        private float textureU;
+        
+        /**
+         * V texture coordinate of the latest point that has been read.
+         * V coordinate refers to the vertical axis in the texture image and
+         * usually is a normalized value between 0.0 and 1.0. Larger values can
+         * be used to repeat textures, negative values can be used to reverse
+         * textures.
+         */
+        private float textureV;
+        
+        /**
+         * X coordinate of the latest point normal that has been read.
+         */
+        private float nX;
+        
+        /**
+         * Y coordinate of the latest point normal that has been read.
+         */
+        private float nY;
+        
+        /**
+         * Z coordinate of the latest point normal that has been read.
+         */
+        private float nZ;
+        
+        /**
+         * Vertex index in the file of the latest point that has been read.
+         */
+        private int vertexIndex;
+        
+        /**
+         * Texture index in the file of the latest point that has been read.
+         */
+        private int textureIndex;
+        
+        /**
+         * Normal index in the file of the latest point that has been read.
+         */
+        private int normalIndex;
+        
+        //coordinates for bounding box in a chunk
+        /**
+         * X coordinate of the minimum point forming the bounding box in a chunk
+         * of data. This value will be updated while the chunk is being filled.
+         */
+        private float minX;
+        
+        /**
+         * Y coordinate of the minimum point forming the bounding box in a chunk
+         * of data. This value will be updated while the chunk is being filled.
+         */
+        private float minY;
+        
+        /**
+         * Z coordinate of the minimum point forming the bounding box in a chunk
+         * of data. This value will be updated while the chunk is being filled.
+         */
+        private float minZ;
+        
+        /**
+         * X coordinate of the maximum point forming the bounding box in a chunk
+         * of data. This value will be updated while the chunk is being filled.
+         */
+        private float maxX;
+        
+        /**
+         * Y coordinate of the maximum point forming the bounding box in a chunk
+         * of data. This value will be updated while the chunk is being filled.
+         */
+        private float maxY;
+        
+        /**
+         * Z coordinate of the maximum point forming the bounding box in a chunk
+         * of data. This value will be updated while the chunk is being filled.
+         */
+        private float maxZ;
+        
+        /**
+         * Indicates if vertices have been loaded and must be added to current
+         * chunk being loaded.
+         */
+        private boolean verticesAvailable;
+        
+        /**
+         * Indicates if texture coordinates have been loaded and must be added
+         * to current chunk being loaded.
+         */
+        private boolean textureAvailable;
+        
+        /**
+         * Indicates if normals have been loaded and must be added to current
+         * chunk being loaded.
+         */
+        private boolean normalsAvailable;
+        
+        /**
+         * Indicates if indices have been loaded and must be added to current
+         * chunk being loaded.
+         */
+        private boolean indicesAvailable;
+        
+        /**
+         * Indicates if materials have been loaded and must be added to current
+         * chunk being loaded.
+         */
+        private boolean materialsAvailable;
+        
+        /**
+         * Number of vertices that have been loaded in current chunk.
+         */
+        private long numberOfVertices;
+        
+        /**
+         * Number of texture coordinates that have been loaded in current chunk.
+         */
+        private long numberOfTextureCoords;
+        
+        /**
+         * Number of normals that have been loaded in current chunk.
+         */
+        private long numberOfNormals;
+        
+        /**
+         * Number of faces (i.e. polygons) that have been loaded in current
+         * chunk.
+         */
+        private long numberOfFaces;
+        
+        /**
+         * Index of current face (i.e. polygon) that has been loaded.
+         */
+        private long currentFace;
+        
+        /**
+         * Position of first vertex in the file. This is stored to reduce 
+         * fetching time when parsing the OBJ file.
+         */
+        private long firstVertexStreamPosition;
+        
+        /**
+         * Indicates if first vertex position has been found.
+         */
+        private boolean firstVertexStreamPositionAvailable;
+        
+        /**
+         * Position of first texture coordinate in the file. This is stored to
+         * reduce fetching time when parsing the OBJ file.
+         */
+        private long firstTextureCoordStreamPosition;
+        
+        /**
+         * Indicates if first texture coordinate has been found.
+         */
+        private boolean firstTextureCoordStreamPositionAvailable;
+        
+        /**
+         * Position of first normal coordinate in the file. This is stored to
+         * reduce fetching time when parsing the OBJ file.
+         */
+        private long firstNormalStreamPosition;
+        
+        /**
+         * Indicates if first normal coordinate has been found.
+         */
+        private boolean firstNormalStreamPositionAvailable;
+        
+        /**
+         * Position of first face (i.e. polygon) in the file. This is stored to
+         * reduce fetching time when parsing the OBJ file.
+         */
+        private long firstFaceStreamPosition;
+        
+        /**
+         * Indicates if first face has been found.
+         */
+        private boolean firstFaceStreamPositionAvailable;
+        
+        /**
+         * Indicates location of first material in the file. This is stored to
+         * reduce fetching time when parsing the OBJ file.
+         */
+        private long firstMaterialStreamPosition;
+        
+        /**
+         * Indicates if first material has been found.
+         */
+        private boolean firstMaterialStreamPositionAvailable;
+        
+        /**
+         * Contains position where file is currently being loaded.
+         */
+        private long currentStreamPosition;
+        
+        /**
+         * Reference to the listener of this loader iterator. This listener will
+         * be notified when the loading process finishes so that resources can
+         * be freed.
+         */        
+        private LoaderIteratorListener listener;
+        
+        /**
+         * Array containing vertices coordinates to be added to current chunk
+         * of data.
+         */
+        private float[] coordsInChunkArray;
+        
+        /**
+         * Array containing texture coordinates to be added to current chunk of
+         * data.
+         */
+        private float[] textureCoordsInChunkArray;
+        
+        /**
+         * Array containing normal coordinates to be added to current chunk of
+         * data.
+         */
+        private float[] normalsInChunkArray;        
+        
+        /**
+         * Array containing indices to be added to current chunk of data. Notice
+         * that this indices are not the original indices appearing in the file.
+         * Instead, they are indices referring to data in current chunk, 
+         * accounting for duplicate points, etc. This way, indices in a chunk 
+         * can be directly used to draw the chunk of data by the graphical layer.
+         */
+        private int[] indicesInChunkArray;
+        
+        /**
+         * Array containing vertex indices as they appear in the OBJ file.
+         * These indices are only used to fetch data, they will never appear in
+         * resulting chunk of data.
+         */
+        private long[] originalVertexIndicesInChunkArray;
+        
+        /**
+         * Array containing texture indices as they appear in the OBJ file.
+         * These indices are only used to fetch data, they will never appear in
+         * resulting chunk of data.
+         */
+        private long[] originalTextureIndicesInChunkArray;
+        
+        /**
+         * Array containing normal indices as they appear in the OBJ file.
+         * These indices are only used to fetch data, they will never appear in
+         * resulting chunk of data.
+         */
+        private long[] originalNormalIndicesInChunkArray;
+        
+        /**
+         * Map to relate vertex indices in a file respect to chunk indices.
+         */
+        private TreeMap&lt;Long, Integer&gt; vertexIndicesMap;
+        
+        /**
+         * Map to relate texture coordinates indices in a file respect to chunk
+         * indices.
+         */
+        private TreeMap&lt;Long, Integer&gt; textureCoordsIndicesMap;
+        
+        /**
+         * Map to relate normals coordinates indices in a file respect to chunk
+         * indices.
+         */
+        private TreeMap&lt;Long, Integer&gt; normalsIndicesMap;
+        
+        /**
+         * Map to cache vertex positions in a file.
+         */
+        private TreeMap&lt;Long, Long&gt; verticesStreamPositionMap;
+        
+        /**
+         * Map to cache texture coordinates positions in a file.
+         */
+        private TreeMap&lt;Long, Long&gt; textureCoordsStreamPositionMap;
+        
+        /**
+         * Map to cache normals coordinates positions in a file.
+         */
+        private TreeMap&lt;Long, Long&gt; normalsStreamPositionMap;
+        
+        /**
+         * Number of vertices stored in chunk.
+         */
+        private int verticesInChunk;
+        
+        /**
+         * Number of indices stored in chunk.
+         */
+        private int indicesInChunk;
+        
+        /**
+         * Size of indices stored in chunk.
+         */
+        private int indicesInChunkSize;
+        
+        /**
+         * Vertex position in file.
+         */
+        private long vertexStreamPosition;
+        
+        /**
+         * Texture coordinate position in file.
+         */
+        private long textureCoordStreamPosition;
+        
+        /**
+         * Normal coordinate position in file.
+         */
+        private long normalStreamPosition;
+        
+        /**
+         * Name of current material of data being loaded.
+         */
+        private String currentChunkMaterialName;
+        
+        /**
+         * Reference to current material of data being loaded.
+         */
+        private MaterialOBJ currentMaterial;
+        
+        /**
+         * Reference to material loader in charge of loading the associated MTL
+         * of file to this OBJ file.
+         */
+        private MaterialLoaderOBJ materialLoader;
+        
+        /**
+         * Counter of number of times that garbage collection has been 
+         * requested. When this value exceeds the itersBeforeGarbageCollection,
+         * then an actual garbage collection is requested as long as this 
+         * feature is enabled.
+         */
+        private int gcCounter;
+        
+        /**
+         * Constructor.
+         * @param loader reference to loader loading binary file.
+         * @throws IOException if an I/O error occurs.
+         * @throws LoaderException if file data is corrupt or cannot be
+         * understood.
+         */
+        public LoaderIteratorOBJ(LoaderOBJ loader) throws IOException, 
+<span class="fc" id="L1273">                LoaderException {</span>
+<span class="fc" id="L1274">            this.loader = loader;</span>
+<span class="fc" id="L1275">            nX = nY = nZ = 1.0f;</span>
+<span class="fc" id="L1276">            vertexIndex = textureIndex = normalIndex = 0;</span>
+<span class="fc" id="L1277">            verticesAvailable = textureAvailable = normalsAvailable = </span>
+                    indicesAvailable = materialsAvailable = false;
+<span class="fc" id="L1279">            numberOfVertices = numberOfTextureCoords = numberOfNormals = </span>
+                    numberOfFaces = 0;
+<span class="fc" id="L1281">            currentFace = 0;</span>
+<span class="fc" id="L1282">            firstVertexStreamPosition = 0;</span>
+<span class="fc" id="L1283">            firstVertexStreamPositionAvailable = false;</span>
+<span class="fc" id="L1284">            firstTextureCoordStreamPosition = 0;</span>
+<span class="fc" id="L1285">            firstTextureCoordStreamPositionAvailable = false;</span>
+<span class="fc" id="L1286">            firstNormalStreamPosition = 0;</span>
+<span class="fc" id="L1287">            firstNormalStreamPositionAvailable = false;</span>
+<span class="fc" id="L1288">            firstFaceStreamPosition = 0;</span>
+<span class="fc" id="L1289">            firstFaceStreamPositionAvailable = false;</span>
+<span class="fc" id="L1290">            firstMaterialStreamPosition = 0;</span>
+<span class="fc" id="L1291">            firstMaterialStreamPositionAvailable = false;</span>
+<span class="fc" id="L1292">            currentStreamPosition = 0;</span>
+<span class="fc" id="L1293">            listener = null;</span>
+<span class="fc" id="L1294">            coordsInChunkArray = null;</span>
+<span class="fc" id="L1295">            textureCoordsInChunkArray = null;</span>
+<span class="fc" id="L1296">            normalsInChunkArray = null;</span>
+<span class="fc" id="L1297">            indicesInChunkArray = null;</span>
+            
+<span class="fc" id="L1299">            originalVertexIndicesInChunkArray = null;</span>
+<span class="fc" id="L1300">            originalTextureIndicesInChunkArray = null;</span>
+<span class="fc" id="L1301">            originalNormalIndicesInChunkArray = null;</span>
+            
+<span class="fc" id="L1303">            vertexIndicesMap = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L1304">            textureCoordsIndicesMap = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L1305">            normalsIndicesMap = new TreeMap&lt;&gt;();</span>
+            
+<span class="fc" id="L1307">            verticesStreamPositionMap = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L1308">            textureCoordsStreamPositionMap = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L1309">            normalsStreamPositionMap = new TreeMap&lt;&gt;();</span>
+                        
+<span class="fc" id="L1311">            verticesInChunk = indicesInChunk = 0;</span>
+<span class="fc" id="L1312">            indicesInChunkSize = 0;</span>
+            
+<span class="fc" id="L1314">            vertexStreamPosition = 0;</span>
+<span class="fc" id="L1315">            textureCoordStreamPosition = 0;</span>
+<span class="fc" id="L1316">            normalStreamPosition = 0;</span>
+            
+<span class="fc" id="L1318">            minX = minY = minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L1319">            maxX = maxY = maxZ = -Float.MAX_VALUE;</span>
+            
+<span class="fc" id="L1321">            currentChunkMaterialName = &quot;&quot;;</span>
+            
+<span class="fc" id="L1323">            materialLoader = null;</span>
+                    
+<span class="fc" id="L1325">            setUp();</span>
+<span class="fc" id="L1326">        }</span>
+        
+        /**
+         * Method to set listener of this loader iterator.
+         * This listener will be notified when the loading process finishes.
+         * @param listener listener of this loader iterator.
+         */        
+        public void setListener(LoaderIteratorListener listener) {
+<span class="fc" id="L1334">            this.listener = listener;</span>
+<span class="fc" id="L1335">        }</span>
+        
+        /**
+         * Returns listener of this loader iterator.
+         * This listener will be notified when the loading process finishes.
+         * @return listener of this loader iterator.
+         */        
+        public LoaderIteratorListener getListener() {
+<span class="nc" id="L1343">            return listener;</span>
+        }
+        
+        /**
+         * Attempts to clear memory.
+         * If garbage collection is enabled this method will attempt a garbage
+         * collection after being called a few times.
+         * Memory will then be released depending on system implementation.
+         */
+        @SuppressWarnings(&quot;Duplicates&quot;)
+        private void cleanMemory(){
+<span class="pc bpc" id="L1354" title="1 of 2 branches missed.">            if(loader.periodicGarbageCollection){</span>
+<span class="fc" id="L1355">                gcCounter++;</span>
+<span class="fc bfc" id="L1356" title="All 2 branches covered.">                if(gcCounter &gt; loader.itersBeforeGarbageCollection){</span>
+<span class="fc" id="L1357">                    System.gc();</span>
+<span class="fc" id="L1358">                    gcCounter = 0;</span>
+                }
+            }
+<span class="fc" id="L1361">        }</span>
+        
+        /**
+         * Indicates if there is another chunk of data to be loaded.
+         * @return true if there is another chunk of data, false otherwise.
+         */        
+        @Override
+        public boolean hasNext() {
+<span class="fc bfc" id="L1369" title="All 2 branches covered.">            return currentFace &lt; numberOfFaces;</span>
+        }
+
+        /**
+         * Loads and returns next chunk of data, if available.
+         * @return next chunk of data.
+         * @throws NotAvailableException thrown if no more data is available.
+         * @throws LoaderException if file data is corrupt or cannot be 
+         * understood.
+         * @throws IOException if an I/O error occurs.
+         */        
+        @Override
+        @SuppressWarnings(&quot;Duplicates&quot;)
+        public DataChunk next() throws NotAvailableException, LoaderException, 
+                IOException {
+            
+<span class="pc bpc" id="L1385" title="1 of 2 branches missed.">            if (reader == null) {</span>
+<span class="nc" id="L1386">                throw new IOException();</span>
+            }
+            
+<span class="pc bpc" id="L1389" title="1 of 2 branches missed.">            if (!hasNext()) {</span>
+<span class="nc" id="L1390">                throw new NotAvailableException();</span>
+            }
+            
+<span class="fc" id="L1393">            initChunkArrays();</span>
+            
+            //reset chunk bounding box values
+<span class="fc" id="L1396">            minX = minY = minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L1397">            maxX = maxY = maxZ = -Float.MAX_VALUE;</span>
+            
+            
+<span class="fc" id="L1400">            long progressStep = Math.max(</span>
+                    (long)(LoaderOBJ.PROGRESS_DELTA * numberOfFaces), 1);            
+            
+<span class="fc" id="L1403">            boolean materialChange = false;</span>
+            
+<span class="pc bpc" id="L1405" title="1 of 4 branches missed.">            while ((currentFace &lt; numberOfFaces) &amp;&amp; !materialChange) {</span>
+                
+<span class="fc" id="L1407">                long faceStreamPos = reader.getPosition();</span>
+<span class="fc" id="L1408">                String str = reader.readLine();</span>
+<span class="pc bpc" id="L1409" title="3 of 4 branches missed.">                if ((str == null) &amp;&amp; (currentFace &lt; (numberOfFaces - 1))) {</span>
+                    //unexpected end of file
+<span class="nc" id="L1411">                    throw new LoaderException();</span>
+<span class="pc bpc" id="L1412" title="1 of 2 branches missed.">                } else if (str == null) {</span>
+<span class="nc" id="L1413">                    break;</span>
+                }
+                
+                //check if line corresponds to face or material, otherwise, 
+                //ignore
+<span class="fc bfc" id="L1418" title="All 2 branches covered.">                if (str.startsWith(&quot;usemtl &quot;)) {</span>
+                    
+<span class="fc bfc" id="L1420" title="All 2 branches covered.">                    if (currentChunkMaterialName.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L1421">                        currentChunkMaterialName = str.substring(</span>
+<span class="fc" id="L1422">                                &quot;usemtl &quot;.length()).trim();</span>
+                        //search current material on material library
+<span class="fc" id="L1424">                        currentMaterial = null;</span>
+<span class="fc bfc" id="L1425" title="All 2 branches covered.">                        if (materialLoader != null) {</span>
+<span class="fc" id="L1426">                           currentMaterial = materialLoader.getMaterialByName(</span>
+                                   currentChunkMaterialName);
+                        }                        
+                    } else {
+                        //stop reading this chunk and reset position to 
+                        //beginning of line so that usemtl is read again                        
+<span class="fc" id="L1432">                        materialChange = true;</span>
+<span class="fc" id="L1433">                        reader.seek(faceStreamPos);                        </span>
+<span class="fc" id="L1434">                        break;</span>
+                    }
+                    
+<span class="fc bfc" id="L1437" title="All 2 branches covered.">                } else if (str.startsWith(&quot;f &quot;)) {</span>
+                    
+                    //line is a face, so we keep data after &quot;f&quot;
+<span class="fc" id="L1440">                    str = str.substring(&quot;f &quot;.length()).trim();</span>
+                    //retrieve words in data
+<span class="fc" id="L1442">                    String [] valuesTemp = str.split(&quot; &quot;);</span>
+<span class="fc" id="L1443">                    Set&lt;String []&gt; valuesSet = new HashSet&lt;&gt;();</span>
+                    
+                    //check that each face contains three elements to define a
+                    //triangle only
+<span class="fc bfc" id="L1447" title="All 2 branches covered.">                    if (valuesTemp.length == 3) {</span>
+<span class="fc" id="L1448">                        valuesSet.add(valuesTemp);</span>
+                        
+<span class="pc bpc" id="L1450" title="1 of 2 branches missed.">                    } else if (valuesTemp.length &gt; 3) {</span>
+                        //if instead of a triangle we have a polygon then we
+                        //to divide valuesTemp into a set of values forming 
+                        //triangles
+<span class="fc" id="L1454">                        List&lt;VertexOBJ&gt; verticesList = </span>
+<span class="fc" id="L1455">                                getFaceValues(valuesTemp);</span>
+                        try {
+<span class="fc" id="L1457">                            valuesSet.addAll(buildTriangulatedIndices(</span>
+                                    verticesList));
+<span class="nc" id="L1459">                        } catch (TriangulatorException e) {</span>
+                            //triangulation failed for some reason, but
+                            //file reading continues if configured like that
+                            //(by default it is)
+<span class="nc bnc" id="L1463" title="All 2 branches missed.">                            if (!continueIfTriangulationError) {</span>
+<span class="nc" id="L1464">                                throw new LoaderException(e);</span>
+                            }
+<span class="fc" id="L1466">                        }</span>
+<span class="fc" id="L1467">                    } else {</span>
+<span class="nc" id="L1468">                        throw new LoaderException();</span>
+                    }
+                    
+                    
+                    //each word corresponds to a vertex/texture/normal index,
+                    //so we check if such number of indices can be added into
+                    //this chunk
+<span class="fc" id="L1475">                    if ((verticesInChunk + valuesSet.size() * 3) &gt;</span>
+<span class="fc bfc" id="L1476" title="All 2 branches covered.">                            loader.maxVerticesInChunk) { //values.length</span>
+                        //no more vertices can be added to chunk so we reset 
+                        //stream to start on current face
+<span class="fc" id="L1479">                        reader.seek(faceStreamPos);</span>
+<span class="fc" id="L1480">                        break;</span>
+                    }
+
+                    //keep current stream position for next face
+<span class="fc" id="L1484">                    currentStreamPosition = reader.getPosition();</span>
+
+<span class="fc bfc" id="L1486" title="All 2 branches covered.">                    for (String [] values: valuesSet) {</span>
+                    
+                        //otherwise values can be added into chunk, so we read
+                        //vertex index, texture index and normal index
+<span class="fc bfc" id="L1490" title="All 2 branches covered.">                        for (String value : values) {</span>
+                            //vslue can be of the form v/vt/vn, where v stands 
+                            //for vertex index, vt for texture index and vn for 
+                            //normal index, and where vt and vn are optional
+<span class="fc" id="L1494">                            String[] indices = value.split(&quot;/&quot;);</span>
+<span class="fc" id="L1495">                            boolean addExistingVertexCoords = false;</span>
+<span class="fc" id="L1496">                            boolean addExistingTextureCoords = false;</span>
+<span class="fc" id="L1497">                            boolean addExistingNormal = false;</span>
+<span class="fc" id="L1498">                            int vertexCoordsChunkIndex = -1;</span>
+<span class="fc" id="L1499">                            int textureCoordsChunkIndex = -1;</span>
+<span class="fc" id="L1500">                            int normalChunkIndex = -1;</span>
+
+                            boolean addExisting;
+<span class="fc" id="L1503">                            int chunkIndex = 0;</span>
+
+                            //first check if vertex has to be added as new or 
+                            //not
+<span class="pc bpc" id="L1507" title="1 of 2 branches missed.">                            if (indices.length &gt;= 1 &amp;&amp;</span>
+<span class="pc bpc" id="L1508" title="1 of 2 branches missed.">                                    (indices[0].length() != 0)) {</span>
+<span class="fc" id="L1509">                                indicesAvailable = true;</span>
+                                //indices start at 1 in OBJ
+<span class="fc" id="L1511">                                vertexIndex = Integer.valueOf(indices[0]) - 1;</span>
+
+                                //determine if vertex coordinates have to be 
+                                //added as new or they can be reused from an 
+                                //existing vertex
+<span class="fc bfc" id="L1516" title="All 2 branches covered.">                                addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk &amp;&amp;</span>
+<span class="fc bfc" id="L1517" title="All 2 branches covered.">                                        (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) &gt;= 0;</span>
+                            }
+<span class="pc bpc" id="L1519" title="1 of 2 branches missed.">                            if (indices.length &gt;= 2 &amp;&amp;</span>
+<span class="fc bfc" id="L1520" title="All 2 branches covered.">                                    (indices[1].length() != 0)) {</span>
+<span class="fc" id="L1521">                                textureAvailable = true;</span>
+                                //indices start at 1 in OBJ
+<span class="fc" id="L1523">                                textureIndex = Integer.valueOf(indices[1]) - 1;</span>
+
+                                //determine if texture coordinates have to be 
+                                //added as new or they can be reused from an 
+                                //existing vertex
+<span class="pc bpc" id="L1528" title="1 of 2 branches missed.">                                addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk &amp;&amp;</span>
+<span class="pc bnc" id="L1529" title="All 2 branches missed.">                                        (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) &gt;= 0;</span>
+                            }
+<span class="pc bpc" id="L1531" title="2 of 4 branches missed.">                            if (indices.length &gt;= 3 &amp;&amp; (indices[2].length() != 0)) {</span>
+<span class="fc" id="L1532">                                normalsAvailable = true;</span>
+                                //indices start at 1 in OBJ
+<span class="fc" id="L1534">                                normalIndex = Integer.valueOf(indices[2]) - 1;</span>
+
+                                //determine if normal coordinates have to be 
+                                //added as new or they can be reused from an 
+                                //existing vertex
+<span class="fc bfc" id="L1539" title="All 2 branches covered.">                                addExistingNormal = !loader.allowDuplicateVerticesInChunk &amp;&amp;</span>
+<span class="fc bfc" id="L1540" title="All 2 branches covered.">                                        (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) &gt;= 0;</span>
+                            }
+
+                            //if either vertex coordinates, texture coordinates 
+                            //or normal indicate that a new vertex needs to be 
+                            //added, then do so, only if all three use an 
+                            //existing vertex into chunk use that existing 
+                            //vertex. Also, in case that existing vertex is 
+                            //added, if chunk indices of existing vertex, 
+                            //texture and normal are not the same add as a new 
+                            //vertex into chunk
+
+                            //if some chunk index is found, set add existing to 
+                            //true
+<span class="pc bpc" id="L1554" title="2 of 6 branches missed.">                            addExisting = (vertexCoordsChunkIndex &gt;= 0) ||</span>
+                                    (textureCoordsChunkIndex &gt;= 0) ||
+                                    (normalChunkIndex &gt;= 0);
+                            //ensure that if index is present an existing vertex 
+                            //in chunk exists
+<span class="pc bpc" id="L1559" title="1 of 2 branches missed.">                            if (indices.length &gt;= 1 &amp;&amp;</span>
+<span class="pc bpc" id="L1560" title="1 of 2 branches missed.">                                    (indices[0].length() != 0)) {</span>
+<span class="fc" id="L1561">                                addExisting &amp;= addExistingVertexCoords;</span>
+                            }
+<span class="pc bpc" id="L1563" title="1 of 2 branches missed.">                            if (indices.length &gt;= 2 &amp;&amp;</span>
+<span class="fc bfc" id="L1564" title="All 2 branches covered.">                                    (indices[1].length() != 0)) {</span>
+<span class="fc" id="L1565">                                addExisting &amp;= addExistingTextureCoords;</span>
+                            }
+<span class="pc bpc" id="L1567" title="1 of 2 branches missed.">                            if (indices.length &gt;= 3 &amp;&amp;</span>
+<span class="pc bpc" id="L1568" title="1 of 2 branches missed.">                                    (indices[2].length() != 0)) {</span>
+<span class="fc" id="L1569">                                addExisting &amp;= addExistingNormal;</span>
+                            }
+
+<span class="fc bfc" id="L1572" title="All 2 branches covered.">                            if (addExisting) {</span>
+                                //if finally an existing vertex is added, set 
+                                //chunk index
+<span class="pc bpc" id="L1575" title="1 of 2 branches missed.">                                if (vertexCoordsChunkIndex &gt;= 0) {</span>
+<span class="fc" id="L1576">                                    chunkIndex = vertexCoordsChunkIndex;</span>
+                                }
+<span class="pc bpc" id="L1578" title="1 of 2 branches missed.">                                if (textureCoordsChunkIndex &gt;= 0) {</span>
+<span class="nc" id="L1579">                                    chunkIndex = textureCoordsChunkIndex;</span>
+                                }
+<span class="pc bpc" id="L1581" title="1 of 2 branches missed.">                                if (normalChunkIndex &gt;= 0) {</span>
+<span class="fc" id="L1582">                                    chunkIndex = normalChunkIndex;</span>
+                                }
+                            }
+
+
+<span class="pc bpc" id="L1587" title="1 of 2 branches missed.">                            if (indices.length &gt;= 1 &amp;&amp;</span>
+<span class="pc bpc" id="L1588" title="1 of 2 branches missed.">                                    (indices[0].length() != 0)) {</span>
+<span class="fc bfc" id="L1589" title="All 2 branches covered.">                                if (!addExistingVertexCoords) {</span>
+                                    //new vertex needs to be added into chunk, 
+                                    //so we need to read vertex data
+
+                                    //fetch vertex data position
+<span class="fc" id="L1594">                                    fetchVertex(vertexIndex);</span>
+<span class="fc" id="L1595">                                    vertexStreamPosition = reader.getPosition();</span>
+
+                                    //read all vertex data
+<span class="fc" id="L1598">                                    String vertexLine = reader.readLine();</span>
+<span class="pc bpc" id="L1599" title="1 of 2 branches missed.">                                    if (!vertexLine.startsWith(&quot;v &quot;)) {</span>
+<span class="nc" id="L1600">                                        throw new LoaderException();</span>
+                                    }
+<span class="fc" id="L1602">                                    vertexLine = vertexLine.substring(</span>
+<span class="fc" id="L1603">                                            &quot;v &quot;.length()).trim();</span>
+                                    //retrieve words in vertexLine, which contain
+                                    //vertex coordinates either as x, y, z or x,
+                                    //y, z, w
+<span class="fc" id="L1607">                                    String[] vertexCoordinates =</span>
+<span class="fc" id="L1608">                                            vertexLine.split(&quot; &quot;);</span>
+<span class="pc bpc" id="L1609" title="1 of 2 branches missed.">                                    if (vertexCoordinates.length == 4) {</span>
+                                        //homogeneous coordinates x, y, z, w
+
+                                        //check that values are valid
+<span class="nc bnc" id="L1613" title="All 2 branches missed.">                                        if (vertexCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1614">                                            throw new LoaderException();</span>
+                                        }
+<span class="nc bnc" id="L1616" title="All 2 branches missed.">                                        if (vertexCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1617">                                            throw new LoaderException();</span>
+                                        }
+<span class="nc bnc" id="L1619" title="All 2 branches missed.">                                        if (vertexCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L1620">                                            throw new LoaderException();</span>
+                                        }
+<span class="nc bnc" id="L1622" title="All 2 branches missed.">                                        if (vertexCoordinates[3].length() == 0) {</span>
+<span class="nc" id="L1623">                                            throw new LoaderException();</span>
+                                        }
+
+<span class="nc" id="L1626">                                        float w = Float.valueOf(</span>
+                                                vertexCoordinates[3]);
+<span class="nc" id="L1628">                                        coordX = Float.valueOf(</span>
+                                                vertexCoordinates[0]) / w;
+<span class="nc" id="L1630">                                        coordY = Float.valueOf(</span>
+                                                vertexCoordinates[1]) / w;
+<span class="nc" id="L1632">                                        coordZ = Float.valueOf(</span>
+                                                vertexCoordinates[2]) / w;
+
+<span class="pc bpc" id="L1635" title="1 of 2 branches missed.">                                    } else if (vertexCoordinates.length &gt;= 3) {</span>
+                                        //inhomogeneous coordinates x, y, z
+
+                                        //check that values are valid
+<span class="pc bpc" id="L1639" title="1 of 2 branches missed.">                                        if (vertexCoordinates[0].length() == 0)</span>
+<span class="nc" id="L1640">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1641" title="1 of 2 branches missed.">                                        if (vertexCoordinates[1].length() == 0)</span>
+<span class="nc" id="L1642">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1643" title="1 of 2 branches missed.">                                        if (vertexCoordinates[2].length() == 0)</span>
+<span class="nc" id="L1644">                                            throw new LoaderException();</span>
+
+<span class="fc" id="L1646">                                        coordX = Float.valueOf(</span>
+                                                vertexCoordinates[0]);
+<span class="fc" id="L1648">                                        coordY = Float.valueOf(</span>
+                                                vertexCoordinates[1]);
+<span class="fc" id="L1650">                                        coordZ = Float.valueOf(</span>
+                                                vertexCoordinates[2]);
+
+<span class="nc" id="L1653">                                    } else throw new LoaderException(); //unsupported length</span>
+
+<span class="fc" id="L1655">                                    addExisting = false;</span>
+                                }
+                            }
+<span class="pc bpc" id="L1658" title="1 of 2 branches missed.">                            if (indices.length &gt;= 2 &amp;&amp;</span>
+<span class="fc bfc" id="L1659" title="All 2 branches covered.">                                    (indices[1].length() != 0)) {</span>
+<span class="pc bpc" id="L1660" title="1 of 2 branches missed.">                                if (!addExistingTextureCoords) {</span>
+                                    //new texture values need to be added into 
+                                    //chunk, so we need to read texture 
+                                    //coordinates data
+
+                                    //fetch texture data position
+<span class="fc" id="L1666">                                    fetchTexture(textureIndex);</span>
+<span class="fc" id="L1667">                                    textureCoordStreamPosition =</span>
+<span class="fc" id="L1668">                                            reader.getPosition();</span>
+
+                                    //read all texture data
+<span class="fc" id="L1671">                                    String textureLine = reader.readLine();</span>
+<span class="pc bpc" id="L1672" title="1 of 2 branches missed.">                                    if (!textureLine.startsWith(&quot;vt &quot;)) {</span>
+<span class="nc" id="L1673">                                        throw new LoaderException();</span>
+                                    }
+<span class="fc" id="L1675">                                    textureLine = textureLine.substring(</span>
+<span class="fc" id="L1676">                                            &quot;vt &quot;.length()).trim();</span>
+                                    //retrieve words in textureLine, which contain
+                                    //texture coordinates either as u, w or u, v, w
+<span class="fc" id="L1679">                                    String[] textureCoordinates =</span>
+<span class="fc" id="L1680">                                            textureLine.split(&quot; &quot;);</span>
+<span class="fc bfc" id="L1681" title="All 2 branches covered.">                                    if (textureCoordinates.length == 3) {</span>
+                                        //homogeneous coordinates u, v, w
+
+                                        //check that values are valid
+<span class="pc bpc" id="L1685" title="1 of 2 branches missed.">                                        if (textureCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1686">                                            throw new LoaderException();</span>
+                                        }
+<span class="pc bpc" id="L1688" title="1 of 2 branches missed.">                                        if (textureCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1689">                                            throw new LoaderException();</span>
+                                        }
+<span class="pc bpc" id="L1691" title="1 of 2 branches missed.">                                        if (textureCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L1692">                                            throw new LoaderException();</span>
+                                        }
+
+<span class="fc" id="L1695">                                        float w = Float.valueOf(</span>
+                                                textureCoordinates[2]);
+
+<span class="fc" id="L1698">                                        textureU = Float.valueOf(</span>
+                                                textureCoordinates[0]) / w;
+<span class="fc" id="L1700">                                        textureV = Float.valueOf(</span>
+                                                textureCoordinates[1]) / w;
+<span class="fc bfc" id="L1702" title="All 2 branches covered.">                                        if (Math.abs(w) &lt; Float.MIN_VALUE ||</span>
+<span class="pc bpc" id="L1703" title="1 of 2 branches missed.">                                                Float.isInfinite(textureU) ||</span>
+<span class="pc bpc" id="L1704" title="1 of 2 branches missed.">                                                Float.isNaN(textureU) ||</span>
+<span class="pc bpc" id="L1705" title="1 of 2 branches missed.">                                                Float.isInfinite(textureV) ||</span>
+<span class="pc bpc" id="L1706" title="1 of 2 branches missed.">                                                Float.isNaN(textureV)) {</span>
+<span class="fc" id="L1707">                                            textureU = Float.valueOf(</span>
+                                                    textureCoordinates[0]);
+<span class="fc" id="L1709">                                            textureV = Float.valueOf(</span>
+                                                    textureCoordinates[1]);
+                                        }
+
+<span class="pc bpc" id="L1713" title="1 of 2 branches missed.">                                    } else if (textureCoordinates.length &gt;= 2) {</span>
+                                        //inhomogeneous coordinates u, v
+
+                                        //check that values are valid
+<span class="pc bpc" id="L1717" title="1 of 2 branches missed.">                                        if (textureCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1718">                                            throw new LoaderException();</span>
+                                        }
+<span class="pc bpc" id="L1720" title="1 of 2 branches missed.">                                        if (textureCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1721">                                            throw new LoaderException();</span>
+                                        }
+
+<span class="fc" id="L1724">                                        textureU = Float.valueOf(</span>
+                                                textureCoordinates[0]);
+<span class="fc" id="L1726">                                        textureV = Float.valueOf(</span>
+                                                textureCoordinates[1]);
+                                    } else {
+<span class="nc" id="L1729">                                        throw new LoaderException(); //unsupported length</span>
+                                    }
+
+<span class="fc" id="L1732">                                    addExisting = false;</span>
+                                }
+                            }
+<span class="pc bpc" id="L1735" title="1 of 2 branches missed.">                            if (indices.length &gt;= 3 &amp;&amp;</span>
+<span class="pc bpc" id="L1736" title="1 of 2 branches missed.">                                    (indices[2].length() != 0)) {</span>
+<span class="fc bfc" id="L1737" title="All 2 branches covered.">                                if (!addExistingNormal) {</span>
+                                    //new normal needs to be added into chunk, 
+                                    //so we need to read vertex data
+
+                                    //fetch normal data position
+<span class="fc" id="L1742">                                    fetchNormal(normalIndex);</span>
+<span class="fc" id="L1743">                                    normalStreamPosition = reader.getPosition();</span>
+
+                                    //read all normal data
+<span class="fc" id="L1746">                                    String normalLine = reader.readLine();</span>
+<span class="pc bpc" id="L1747" title="1 of 2 branches missed.">                                    if (!normalLine.startsWith(&quot;vn &quot;)) {</span>
+<span class="nc" id="L1748">                                        throw new LoaderException();</span>
+                                    }
+<span class="fc" id="L1750">                                    normalLine = normalLine.substring(</span>
+<span class="fc" id="L1751">                                            &quot;vn &quot;.length()).trim();</span>
+                                    //retrieve words in normalLine, which must 
+                                    //contain normal coordinates as x, y, z
+<span class="fc" id="L1754">                                    String[] normalCoordinates =</span>
+<span class="fc" id="L1755">                                            normalLine.split(&quot; &quot;);</span>
+<span class="pc bpc" id="L1756" title="1 of 2 branches missed.">                                    if (normalCoordinates.length == 3) {</span>
+                                        //normal coordinates x, y, z
+
+                                        //check that values are valid
+<span class="pc bpc" id="L1760" title="1 of 2 branches missed.">                                        if (normalCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1761">                                            throw new LoaderException();</span>
+                                        }
+<span class="pc bpc" id="L1763" title="1 of 2 branches missed.">                                        if (normalCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1764">                                            throw new LoaderException();</span>
+                                        }
+<span class="pc bpc" id="L1766" title="1 of 2 branches missed.">                                        if (normalCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L1767">                                            throw new LoaderException();</span>
+                                        }
+
+<span class="fc" id="L1770">                                        nX = Float.valueOf(</span>
+                                                normalCoordinates[0]);
+<span class="fc" id="L1772">                                        nY = Float.valueOf(</span>
+                                                normalCoordinates[1]);
+<span class="fc" id="L1774">                                        nZ = Float.valueOf(</span>
+                                                normalCoordinates[2]);
+                                    } else {
+<span class="nc" id="L1777">                                        throw new LoaderException(); //unsupported length</span>
+                                    }
+
+<span class="fc" id="L1780">                                    addExisting = false;</span>
+                                }
+                            }
+
+<span class="fc bfc" id="L1784" title="All 2 branches covered.">                            if (addExisting) {</span>
+<span class="fc" id="L1785">                                addExistingVertexToChunk(chunkIndex);</span>
+                            } else {
+<span class="fc" id="L1787">                                addNewVertexDataToChunk();</span>
+                            }
+                        }
+<span class="fc" id="L1790">                    }</span>
+                    //reset face stream position
+<span class="fc" id="L1792">                    reader.seek(currentStreamPosition);</span>
+<span class="fc" id="L1793">                    currentFace++;</span>
+                    
+                    //to reduce memory consumption and delete listIndices
+                    //attempt to clean memory
+<span class="fc" id="L1797">                    cleanMemory();                        </span>
+                }
+                
+                //compute progress
+<span class="pc bpc" id="L1801" title="1 of 2 branches missed.">                if (loader.listener != null) {</span>
+<span class="fc bfc" id="L1802" title="All 2 branches covered.">                    if ((currentFace % progressStep) == 0) {</span>
+<span class="fc" id="L1803">                        loader.listener.onLoadProgressChange(loader, </span>
+                                (float)(currentFace) / (float)(numberOfFaces));
+                    }
+                }
+<span class="fc" id="L1807">            }</span>
+            
+            //trim arrays to store only needed data
+<span class="fc" id="L1810">            trimArrays();</span>
+            
+            //Instantiate DataChunk with chunk arrays
+<span class="fc" id="L1813">            DataChunk dataChunk = new DataChunk();</span>
+            
+<span class="pc bpc" id="L1815" title="1 of 2 branches missed.">            if (verticesAvailable) {</span>
+<span class="fc" id="L1816">                dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
+<span class="fc" id="L1817">                dataChunk.setMinX(minX);</span>
+<span class="fc" id="L1818">                dataChunk.setMinY(minY);</span>
+<span class="fc" id="L1819">                dataChunk.setMinZ(minZ);</span>
+<span class="fc" id="L1820">                dataChunk.setMaxX(maxX);</span>
+<span class="fc" id="L1821">                dataChunk.setMaxY(maxY);</span>
+<span class="fc" id="L1822">                dataChunk.setMaxZ(maxZ);</span>
+            } else {
+<span class="nc" id="L1824">                coordsInChunkArray = null; //so it can be garbage collected</span>
+            }
+            
+<span class="fc bfc" id="L1827" title="All 2 branches covered.">            if (textureAvailable) {</span>
+<span class="fc" id="L1828">                dataChunk.setTextureCoordinatesData(textureCoordsInChunkArray);</span>
+            } else {
+<span class="fc" id="L1830">                textureCoordsInChunkArray = null; //so it can be garbage collected</span>
+            }
+                        
+<span class="fc bfc" id="L1833" title="All 2 branches covered.">            if (currentMaterial != null) {</span>
+<span class="fc" id="L1834">                dataChunk.setMaterial(currentMaterial);</span>
+            }
+           
+<span class="fc bfc" id="L1837" title="All 2 branches covered.">            if (materialChange) {</span>
+<span class="fc" id="L1838">                currentChunkMaterialName = &quot;&quot;;</span>
+<span class="fc" id="L1839">                currentMaterial = null;</span>
+            }
+            
+<span class="pc bpc" id="L1842" title="1 of 2 branches missed.">            if (indicesAvailable) {</span>
+<span class="fc" id="L1843">                dataChunk.setIndicesData(indicesInChunkArray);</span>
+            } else {
+<span class="nc" id="L1845">                indicesInChunkArray = null; //so it can be garbage collected</span>
+            }
+            
+<span class="pc bpc" id="L1848" title="1 of 2 branches missed.">            if (normalsAvailable) {</span>
+<span class="fc" id="L1849">                dataChunk.setNormalsData(normalsInChunkArray);</span>
+            } else {
+<span class="nc" id="L1851">                normalsInChunkArray = null; //so it can be garbage collected</span>
+            }
+            
+<span class="fc bfc" id="L1854" title="All 2 branches covered.">            if (!hasNext()) {</span>
+                //notify iterator finished
+<span class="pc bpc" id="L1856" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L1857">                    listener.onIteratorFinished(this);</span>
+                }
+            }
+            
+            //if no more chunks are available, then close input reader
+<span class="fc bfc" id="L1862" title="All 2 branches covered.">            if (!hasNext()) {</span>
+<span class="fc" id="L1863">                reader.close();</span>
+            }
+            
+<span class="fc" id="L1866">            cleanMemory(); // to reduce memory consumption            </span>
+<span class="fc" id="L1867">            return dataChunk;</span>
+        }
+        
+        /**
+         * Internal method to decompose a an array of vertices forming a polygon
+         * in a set of arrays of vertices corresponding to triangles after
+         * triangulation of the polygon. This method is used to triangulate
+         * polygons with more than 3 vertices contained in the file.
+         * @param vertices list of vertices forming a polygon to be triangulated.
+         * @return a set containing arrays of indices of vertices (in string 
+         * format) corresponding to the triangles forming the polygon after the
+         * triangulation.
+         * @throws TriangulatorException if triangulation fails (because polygon
+         * is degenerate or contains invalid values such as NaN or infinity).
+         */
+        private Set&lt;String []&gt; buildTriangulatedIndices(
+                List&lt;VertexOBJ&gt; vertices) throws TriangulatorException{
+<span class="fc" id="L1884">            List&lt;Point3D&gt; polygonVertices = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L1885">                    vertices.size());</span>
+<span class="fc bfc" id="L1886" title="All 2 branches covered.">            for (VertexOBJ v : vertices) {</span>
+<span class="pc bpc" id="L1887" title="1 of 2 branches missed.">                if(v.getVertex() == null) throw new TriangulatorException();</span>
+<span class="fc" id="L1888">                polygonVertices.add(v.getVertex());</span>
+<span class="fc" id="L1889">            }</span>
+<span class="fc" id="L1890">            List&lt;int[]&gt; indices = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1891">            Triangulator3D triangulator = Triangulator3D.create();</span>
+<span class="fc" id="L1892">            List&lt;Triangle3D&gt; triangles = triangulator.triangulate(</span>
+                    polygonVertices, indices);
+            
+<span class="fc" id="L1895">            Set&lt;String[]&gt; result = new HashSet&lt;&gt;();</span>
+            String[] face;
+<span class="fc" id="L1897">            int counter = 0;</span>
+            int[] triangleIndices;
+            int index;
+            VertexOBJ vertex;
+            String tmp;
+<span class="fc bfc" id="L1902" title="All 2 branches covered.">            for (Triangle3D ignored : triangles) {</span>
+<span class="fc" id="L1903">                triangleIndices = indices.get(counter);</span>
+<span class="fc" id="L1904">                face = new String[Triangle3D.NUM_VERTICES];</span>
+<span class="fc bfc" id="L1905" title="All 2 branches covered.">                for (int i = 0; i &lt; Triangle3D.NUM_VERTICES; i++) {</span>
+<span class="fc" id="L1906">                    index = triangleIndices[i];</span>
+<span class="fc" id="L1907">                    vertex = vertices.get(index);</span>
+<span class="fc" id="L1908">                    tmp = &quot;&quot;;</span>
+<span class="pc bpc" id="L1909" title="1 of 2 branches missed.">                    if (vertex.isVertexIndexAvailable()) {</span>
+<span class="fc" id="L1910">                        tmp += vertex.getVertexIndex();</span>
+                    }
+<span class="pc bpc" id="L1912" title="1 of 2 branches missed.">                    if (vertex.isTextureIndexAvailable() ||</span>
+<span class="nc bnc" id="L1913" title="All 2 branches missed.">                            vertex.isNormalIndexAvailable()) {</span>
+<span class="fc" id="L1914">                        tmp += &quot;/&quot;;</span>
+<span class="pc bpc" id="L1915" title="1 of 2 branches missed.">                        if (vertex.isTextureIndexAvailable()) {</span>
+<span class="fc" id="L1916">                            tmp += vertex.getTextureIndex();</span>
+                        }
+<span class="pc bpc" id="L1918" title="1 of 2 branches missed.">                        if (vertex.isNormalIndexAvailable()) {</span>
+<span class="fc" id="L1919">                            tmp += &quot;/&quot; + vertex.getNormalIndex();</span>
+                        }
+                    }
+                    
+<span class="fc" id="L1923">                    face[i] = tmp;</span>
+                }
+<span class="fc" id="L1925">                counter++;</span>
+<span class="fc" id="L1926">                result.add(face);</span>
+<span class="fc" id="L1927">            }            </span>
+            
+<span class="fc" id="L1929">            return result;</span>
+        }
+        
+        /**
+         * This method reads a line containing face (i.e. polygon) indices of
+         * vertices and fetches those vertices coordinates and associated data
+         * such as texture coordinates or normal coordinates.
+         * @param values a string containing vertex indices forming a polygon.
+         * Note that indices refer to the values contained in OBJ file, not the
+         * indices in the chunk of data.
+         * @return a list of vertices forming a face (i.e, polygon).
+         * @throws IOException if an I/O error occurs.
+         * @throws LoaderException if loading fails because data is corrupted or
+         * cannot be interpreted.
+         */
+        private List&lt;VertexOBJ&gt; getFaceValues(String [] values) 
+                throws IOException, LoaderException {
+
+            VertexOBJ tmpVertex;
+            Point3D point;
+<span class="fc" id="L1949">            List&lt;VertexOBJ&gt; vertices = new ArrayList&lt;&gt;(values.length);</span>
+            
+            //keep current stream position for next face
+<span class="fc" id="L1952">            long tempPosition = reader.getPosition();</span>
+
+<span class="fc bfc" id="L1954" title="All 2 branches covered.">            for (String value : values) {</span>
+
+<span class="fc" id="L1956">                tmpVertex = new VertexOBJ();</span>
+<span class="fc" id="L1957">                point = Point3D.create();</span>
+<span class="fc" id="L1958">                tmpVertex.setVertex(point);</span>
+
+<span class="fc" id="L1960">                String[] indices = value.split(&quot;/&quot;);</span>
+
+<span class="pc bpc" id="L1962" title="2 of 4 branches missed.">                if (indices.length &gt;= 1 &amp;&amp; (indices[0].length() != 0)) {</span>
+<span class="fc" id="L1963">                    vertexIndex = Integer.valueOf(indices[0]) - 1;</span>
+<span class="fc" id="L1964">                    tmpVertex.setVertexIndex(vertexIndex + 1);</span>
+<span class="fc" id="L1965">                    fetchVertex(vertexIndex);</span>
+<span class="fc" id="L1966">                    vertexStreamPosition = reader.getPosition();</span>
+
+<span class="fc" id="L1968">                    String vertexLine = reader.readLine();</span>
+<span class="pc bpc" id="L1969" title="1 of 2 branches missed.">                    if (!vertexLine.startsWith(&quot;v &quot;)) {</span>
+<span class="nc" id="L1970">                        throw new LoaderException();</span>
+                    }
+<span class="fc" id="L1972">                    vertexLine = vertexLine.substring(&quot;v &quot;.length()).trim();</span>
+<span class="fc" id="L1973">                    String[] vertexCoordinates = vertexLine.split(&quot; &quot;);</span>
+
+<span class="pc bpc" id="L1975" title="1 of 2 branches missed.">                    if (vertexCoordinates.length == 4) {</span>
+                        //homogeneous coordinates x, y, z, w
+                        //ensure that vertex coordinates are not empty
+<span class="nc bnc" id="L1978" title="All 2 branches missed.">                        if (vertexCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1979">                            throw new LoaderException();</span>
+                        }
+<span class="nc bnc" id="L1981" title="All 2 branches missed.">                        if (vertexCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1982">                            throw new LoaderException();</span>
+                        }
+<span class="nc bnc" id="L1984" title="All 2 branches missed.">                        if (vertexCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L1985">                            throw new LoaderException();</span>
+                        }
+<span class="nc bnc" id="L1987" title="All 2 branches missed.">                        if (vertexCoordinates[3].length() == 0) {</span>
+<span class="nc" id="L1988">                            throw new LoaderException();</span>
+                        }
+
+                        try {
+<span class="nc" id="L1992">                            point.setHomogeneousCoordinates(</span>
+<span class="nc" id="L1993">                                    Double.valueOf(vertexCoordinates[0]),</span>
+<span class="nc" id="L1994">                                    Double.valueOf(vertexCoordinates[1]),</span>
+<span class="nc" id="L1995">                                    Double.valueOf(vertexCoordinates[2]),</span>
+<span class="nc" id="L1996">                                    Double.valueOf(vertexCoordinates[3]));</span>
+<span class="nc" id="L1997">                        } catch (NumberFormatException e) {</span>
+                            //some vertex coordinate value could not be parsed
+<span class="nc" id="L1999">                            throw new LoaderException(e);</span>
+<span class="nc" id="L2000">                        }</span>
+<span class="pc bpc" id="L2001" title="1 of 2 branches missed.">                    } else if (vertexCoordinates.length &gt;= 3) {</span>
+                        //inhomogeneous coordinates x, y, z
+                        //ensure that vertex coordinate are not empty
+<span class="pc bpc" id="L2004" title="1 of 2 branches missed.">                        if (vertexCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L2005">                            throw new LoaderException();</span>
+                        }
+<span class="pc bpc" id="L2007" title="1 of 2 branches missed.">                        if (vertexCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L2008">                            throw new LoaderException();</span>
+                        }
+<span class="pc bpc" id="L2010" title="1 of 2 branches missed.">                        if (vertexCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L2011">                            throw new LoaderException();</span>
+                        }
+
+                        try {
+<span class="fc" id="L2015">                            point.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L2016">                                    Double.valueOf(vertexCoordinates[0]),</span>
+<span class="fc" id="L2017">                                    Double.valueOf(vertexCoordinates[1]),</span>
+<span class="fc" id="L2018">                                    Double.valueOf(vertexCoordinates[2]));</span>
+<span class="nc" id="L2019">                        } catch (NumberFormatException e) {</span>
+                            //some vertex coordinate value could not be parsed
+<span class="nc" id="L2021">                            throw new LoaderException(e);</span>
+<span class="fc" id="L2022">                        }</span>
+                    } else {
+<span class="nc" id="L2024">                        throw new LoaderException(); //unsupported length</span>
+                    }
+                }
+<span class="pc bpc" id="L2027" title="2 of 4 branches missed.">                if (indices.length &gt;= 2 &amp;&amp; (indices[1].length() != 0)) {</span>
+<span class="fc" id="L2028">                    tmpVertex.setTextureIndex(</span>
+<span class="fc" id="L2029">                            Integer.valueOf(indices[1]));</span>
+                }
+<span class="pc bpc" id="L2031" title="2 of 4 branches missed.">                if (indices.length &gt;= 3 &amp;&amp; (indices[2].length() != 0)) {</span>
+<span class="fc" id="L2032">                    tmpVertex.setNormalIndex(</span>
+<span class="fc" id="L2033">                            Integer.valueOf(indices[2]));</span>
+                }
+
+<span class="fc" id="L2036">                vertices.add(tmpVertex);</span>
+            }
+            
+<span class="fc" id="L2039">            reader.seek(tempPosition);</span>
+<span class="fc" id="L2040">            return vertices;</span>
+        }
+        
+        /**
+         * Initializes arrays forming current chunk of data.
+         */
+        private void initChunkArrays() {
+<span class="fc" id="L2047">            coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];</span>
+<span class="fc" id="L2048">            textureCoordsInChunkArray = </span>
+<span class="fc" id="L2049">                    new float[loader.maxVerticesInChunk * 2];</span>
+<span class="fc" id="L2050">            normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];</span>
+<span class="fc" id="L2051">            indicesInChunkArray = new int[loader.maxVerticesInChunk];           </span>
+            
+<span class="fc" id="L2053">            originalVertexIndicesInChunkArray = </span>
+<span class="fc" id="L2054">                    new long[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2055">            originalTextureIndicesInChunkArray = </span>
+<span class="fc" id="L2056">                    new long[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2057">            originalNormalIndicesInChunkArray = </span>
+<span class="fc" id="L2058">                    new long[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2059">            verticesInChunk = 0;</span>
+<span class="fc" id="L2060">            indicesInChunk = 0;</span>
+<span class="fc" id="L2061">            indicesInChunkSize = loader.maxVerticesInChunk;            </span>
+            
+<span class="fc" id="L2063">            vertexIndicesMap.clear();</span>
+<span class="fc" id="L2064">            textureCoordsIndicesMap.clear();</span>
+<span class="fc" id="L2065">            normalsIndicesMap.clear();             </span>
+<span class="fc" id="L2066">        }</span>
+        
+        /**
+         * Searches vertex index in current chunk of data by using the index
+         * used in the OBJ file.
+         * This method searches within the cached indices which relate indices
+         * in the chunk of data respect to indices in the OBJ file.
+         * @param originalIndex vertex index used in the OBJ file.
+         * @return vertex index used in current chunk of data or -1 if not found.
+         */
+        private int searchVertexIndexInChunk(long originalIndex){
+            //returns chunk index array position where index is found
+<span class="fc" id="L2078">            Integer chunkIndex = vertexIndicesMap.get(originalIndex);</span>
+            
+<span class="fc bfc" id="L2080" title="All 2 branches covered.">            if (chunkIndex == null) {</span>
+<span class="fc" id="L2081">                return -1;</span>
+            }
+            
+            //returns index of vertex in chunk
+<span class="fc" id="L2085">            return indicesInChunkArray[chunkIndex];</span>
+        }
+        
+        /**
+         * Searches texture index in current chunk of data by using the index
+         * used in the OBJ file.
+         * This method searches within the cached indices which relate indices
+         * in the chunk of data respect to indices in the OBJ file.
+         * @param originalIndex texture index used in the OBJ file.
+         * @return texture index used in current chunk of data or -1 if not 
+         * found.
+         */
+        private int searchTextureCoordIndexInChunk(long originalIndex){
+            //returns chunk index array position where index is found
+<span class="nc" id="L2099">            Integer chunkIndex = vertexIndicesMap.get(originalIndex);</span>
+            
+<span class="nc bnc" id="L2101" title="All 2 branches missed.">            if (chunkIndex == null) {</span>
+<span class="nc" id="L2102">                return -1;</span>
+            }
+            
+            //returns index of texture coordinate in chunk
+<span class="nc" id="L2106">            return indicesInChunkArray[chunkIndex];</span>
+        }
+        
+        /**
+         * Searches normal index in current chunk of data by using the index
+         * used in the OBJ file.
+         * This method searches within the cached indices which relate indices
+         * in the chunk of data respect to indices in the OBJ file.
+         * @param originalIndex normal index used in the OBJ file.
+         * @return normal index used in current chunk of data or -1 if not found.
+         */
+        private int searchNormalIndexInChunk(long originalIndex) {
+            //returns chunk index array position where index is found
+<span class="fc" id="L2119">            Integer chunkIndex = vertexIndicesMap.get(originalIndex);</span>
+            
+<span class="fc bfc" id="L2121" title="All 2 branches covered.">            if (chunkIndex == null) {</span>
+<span class="fc" id="L2122">                return -1;</span>
+            }
+            
+            //returns index of texture coordinate in chunk
+<span class="fc" id="L2126">            return indicesInChunkArray[chunkIndex];</span>
+        }
+        
+        /**
+         * Add vertex position to cache of file positions.
+         * @param originalIndex vertex index used in OBJ file.
+         * @param streamPosition stream position where vertex is located.
+         */
+        private void addVertexPositionToMap(long originalIndex, 
+                long streamPosition) {
+<span class="pc bpc" id="L2136" title="1 of 2 branches missed.">            if (verticesStreamPositionMap.size() &gt; loader.maxStreamPositions) {</span>
+                //Map is full. Remove 1st item before adding a new one
+<span class="nc" id="L2138">                Long origIndex = verticesStreamPositionMap.firstKey();</span>
+<span class="nc" id="L2139">                verticesStreamPositionMap.remove(origIndex);</span>
+            }
+            //add new item
+<span class="fc" id="L2142">            verticesStreamPositionMap.put(originalIndex,</span>
+<span class="fc" id="L2143">                    streamPosition);</span>
+<span class="fc" id="L2144">        }</span>
+        
+        /**
+         * Add texture coordinate position to cache of file positions.
+         * @param originalIndex texture coordinate index used in OBJ file.
+         * @param streamPosition stream position where texture coordinate is 
+         * located.
+         */
+        private void addTextureCoordPositionToMap(long originalIndex,
+                long streamPosition) {
+<span class="fc" id="L2154">            if (textureCoordsStreamPositionMap.size() &gt;</span>
+<span class="pc bpc" id="L2155" title="1 of 2 branches missed.">                    loader.maxStreamPositions) {</span>
+                //Map is full. Remove 1st item before adding a new one
+<span class="nc" id="L2157">                Long origIndex = textureCoordsStreamPositionMap.firstKey();</span>
+<span class="nc" id="L2158">                textureCoordsStreamPositionMap.remove(origIndex);</span>
+            }
+            //add new item
+<span class="fc" id="L2161">            textureCoordsStreamPositionMap.put(originalIndex,</span>
+<span class="fc" id="L2162">                    streamPosition);</span>
+<span class="fc" id="L2163">        }</span>
+        
+        /**
+         * Add normal coordinate to cache of file positions.
+         * @param originalIndex normal coordinate index used in OBJ file.
+         * @param streamPosition stream position where normal coordinate is
+         * located.
+         */
+        private void addNormalPositionToMap(long originalIndex,
+                long streamPosition) {
+<span class="pc bpc" id="L2173" title="1 of 2 branches missed.">            if (normalsStreamPositionMap.size() &gt; loader.maxStreamPositions) {</span>
+                //Map is full. Remove 1st item before adding a new one
+<span class="nc" id="L2175">                Long origIndex = normalsStreamPositionMap.firstKey();</span>
+<span class="nc" id="L2176">                normalsStreamPositionMap.remove(origIndex);</span>
+            }
+            //add new item
+<span class="fc" id="L2179">            normalsStreamPositionMap.put(originalIndex,</span>
+<span class="fc" id="L2180">                    streamPosition);</span>
+<span class="fc" id="L2181">        }</span>
+        
+        /**
+         * Adds data of last vertex being loaded to current chunk of data as a
+         * new vertex.
+         */
+        private void addNewVertexDataToChunk() {
+<span class="fc" id="L2188">            int pos = 3 * verticesInChunk;</span>
+<span class="fc" id="L2189">            int textPos = 2 * verticesInChunk;</span>
+            
+<span class="fc" id="L2191">            coordsInChunkArray[pos] = coordX;</span>
+<span class="fc" id="L2192">            normalsInChunkArray[pos] = nX;</span>
+<span class="fc" id="L2193">            textureCoordsInChunkArray[textPos] = textureU;</span>
+            
+<span class="fc" id="L2195">            pos++;</span>
+<span class="fc" id="L2196">            textPos++;</span>
+            
+<span class="fc" id="L2198">            coordsInChunkArray[pos] = coordY;</span>
+<span class="fc" id="L2199">            normalsInChunkArray[pos] = nY;</span>
+<span class="fc" id="L2200">            textureCoordsInChunkArray[textPos] = textureV;</span>
+            
+<span class="fc" id="L2202">            pos++;</span>
+            
+<span class="fc" id="L2204">            coordsInChunkArray[pos] = coordZ;</span>
+<span class="fc" id="L2205">            normalsInChunkArray[pos] = nZ;</span>
+            
+            //update bounding box values
+<span class="fc bfc" id="L2208" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
+<span class="fc" id="L2209">                minX = coordX;</span>
+            }
+<span class="fc bfc" id="L2211" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
+<span class="fc" id="L2212">                minY = coordY;</span>
+            }
+<span class="fc bfc" id="L2214" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
+<span class="fc" id="L2215">                minZ = coordZ;</span>
+            }
+            
+<span class="fc bfc" id="L2218" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
+<span class="fc" id="L2219">                maxX = coordX;</span>
+            }
+<span class="fc bfc" id="L2221" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
+<span class="fc" id="L2222">                maxY = coordY;</span>
+            }
+<span class="fc bfc" id="L2224" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
+<span class="fc" id="L2225">                maxZ = coordZ;</span>
+            }
+            
+            //if arrays of indices become full, we need to resize them
+<span class="fc bfc" id="L2229" title="All 2 branches covered.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
+<span class="fc" id="L2230">                increaseIndicesArraySize();</span>
+            }
+<span class="fc" id="L2232">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
+<span class="fc" id="L2233">            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;</span>
+<span class="fc" id="L2234">            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;            </span>
+<span class="fc" id="L2235">            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;</span>
+            //store original indices in maps so we can search chunk index by
+            //original indices of vertices, texture or normal
+<span class="fc" id="L2238">            vertexIndicesMap.put((long) vertexIndex,</span>
+<span class="fc" id="L2239">                    indicesInChunk);</span>
+<span class="fc" id="L2240">            textureCoordsIndicesMap.put((long) textureIndex,</span>
+<span class="fc" id="L2241">                    indicesInChunk);</span>
+<span class="fc" id="L2242">            normalsIndicesMap.put((long) normalIndex,</span>
+<span class="fc" id="L2243">                    indicesInChunk);</span>
+            
+            //store vertex, texture and normal stream positions
+<span class="fc" id="L2246">            addVertexPositionToMap(vertexIndex, vertexStreamPosition);</span>
+<span class="fc" id="L2247">            addTextureCoordPositionToMap(textureIndex, </span>
+                    textureCoordStreamPosition);
+<span class="fc" id="L2249">            addNormalPositionToMap(normalIndex, normalStreamPosition);</span>
+            
+<span class="fc" id="L2251">            verticesInChunk++;</span>
+<span class="fc" id="L2252">            indicesInChunk++;</span>
+<span class="fc" id="L2253">        }</span>
+        
+        /**
+         * Adds index to current chunk of data referring to a previously 
+         * existing vertex in the chunk.
+         * @param existingIndex index of vertex that already exists in the chunk.
+         */
+        private void addExistingVertexToChunk(int existingIndex) {
+            //if arrays of indices become full, we need to resize them
+<span class="fc bfc" id="L2262" title="All 2 branches covered.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
+<span class="fc" id="L2263">                increaseIndicesArraySize();</span>
+            }
+<span class="fc" id="L2265">            indicesInChunkArray[indicesInChunk] = existingIndex;</span>
+<span class="fc" id="L2266">            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;</span>
+<span class="fc" id="L2267">            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;            </span>
+<span class="fc" id="L2268">            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;</span>
+            
+<span class="fc" id="L2270">            indicesInChunk++;</span>
+<span class="fc" id="L2271">        }</span>
+        
+        /**
+         * Increases size of arrays of data. This method is called when needed.
+         */
+        private void increaseIndicesArraySize() {
+<span class="fc" id="L2277">            int newIndicesInChunkSize = indicesInChunkSize +</span>
+<span class="fc" id="L2278">                    loader.maxVerticesInChunk;</span>
+<span class="fc" id="L2279">            int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
+<span class="fc" id="L2280">            long[] newOriginalVertexIndicesInChunkArray = </span>
+                    new long[newIndicesInChunkSize];
+<span class="fc" id="L2282">            long[] newOriginalTextureIndicesInChunkArray =</span>
+                    new long[newIndicesInChunkSize];
+<span class="fc" id="L2284">            long[] newOriginalNormalIndicesInChunkArray =</span>
+                    new long[newIndicesInChunkSize];
+            
+            //copy contents of old array
+<span class="fc" id="L2288">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, </span>
+                    indicesInChunkSize);
+<span class="fc" id="L2290">            System.arraycopy(originalVertexIndicesInChunkArray, 0, </span>
+                    newOriginalVertexIndicesInChunkArray, 0, 
+                    indicesInChunkSize);
+<span class="fc" id="L2293">            System.arraycopy(originalTextureIndicesInChunkArray, 0, </span>
+                    newOriginalTextureIndicesInChunkArray, 0, 
+                    indicesInChunkSize);
+<span class="fc" id="L2296">            System.arraycopy(originalNormalIndicesInChunkArray, 0, </span>
+                    newOriginalNormalIndicesInChunkArray, 0, 
+                    indicesInChunkSize);
+            
+            //set new arrays and new size
+<span class="fc" id="L2301">            indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="fc" id="L2302">            originalVertexIndicesInChunkArray = </span>
+                    newOriginalVertexIndicesInChunkArray;
+<span class="fc" id="L2304">            originalTextureIndicesInChunkArray =</span>
+                    newOriginalTextureIndicesInChunkArray;
+<span class="fc" id="L2306">            originalNormalIndicesInChunkArray =</span>
+                    newOriginalNormalIndicesInChunkArray;
+<span class="fc" id="L2308">            indicesInChunkSize = newIndicesInChunkSize;</span>
+            
+<span class="fc" id="L2310">            cleanMemory(); //to reduce memory consumption            </span>
+<span class="fc" id="L2311">        }        </span>
+        
+        /**
+         * Trims arrays of data to reduce size of arrays to fit chunk data. This 
+         * method is loaded just before copying data to chunk being returned.
+         */
+        private void trimArrays() {
+<span class="pc bpc" id="L2318" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
+<span class="fc" id="L2319">                int elems = verticesInChunk * 3;</span>
+<span class="fc" id="L2320">                int textElems = verticesInChunk * 2;</span>
+                
+<span class="fc" id="L2322">                float[] newCoordsInChunkArray = new float[elems];</span>
+<span class="fc" id="L2323">                float[] newTextureCoordsInChunkArray = new float[elems];</span>
+<span class="fc" id="L2324">                float[] newNormalsInChunkArray = new float[elems];</span>
+                
+                //copy contents of old arrays
+<span class="fc" id="L2327">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
+                        0, elems);
+<span class="fc" id="L2329">                System.arraycopy(textureCoordsInChunkArray, 0, </span>
+                        newTextureCoordsInChunkArray, 0, textElems);
+<span class="fc" id="L2331">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray, </span>
+                        0, elems);
+                
+                //set new arrays
+<span class="fc" id="L2335">                coordsInChunkArray = newCoordsInChunkArray;</span>
+<span class="fc" id="L2336">                textureCoordsInChunkArray = newTextureCoordsInChunkArray;</span>
+<span class="fc" id="L2337">                normalsInChunkArray = newNormalsInChunkArray;</span>
+<span class="fc" id="L2338">            } else {</span>
+                //allow garbage collection
+<span class="nc" id="L2340">                coordsInChunkArray = null;</span>
+<span class="nc" id="L2341">                textureCoordsInChunkArray = null;</span>
+<span class="nc" id="L2342">                normalsInChunkArray = null;</span>
+            }
+            
+<span class="pc bpc" id="L2345" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
+<span class="fc" id="L2346">                int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
+<span class="fc" id="L2347">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
+                        0, indicesInChunk);
+                
+                //set new array
+<span class="fc" id="L2351">                indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="fc" id="L2352">            } else {</span>
+                //allow garbage collection
+<span class="nc" id="L2354">                indicesInChunkArray = null;</span>
+<span class="nc" id="L2355">                originalVertexIndicesInChunkArray = null;</span>
+<span class="nc" id="L2356">                originalTextureIndicesInChunkArray = null;</span>
+<span class="nc" id="L2357">                originalNormalIndicesInChunkArray = null;</span>
+            }
+            
+<span class="fc" id="L2360">            cleanMemory(); //to reduce memory consumption            </span>
+<span class="fc" id="L2361">        }</span>
+        
+        /**
+         * Set ups loader iterator. This method is called when constructing
+         * this iterator.
+         * @throws IOException if an I/O error occurs.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         */
+        private void setUp() throws IOException, LoaderException {
+            String str;
+            long streamPosition;
+<span class="fc" id="L2372">            numberOfVertices = numberOfTextureCoords = numberOfNormals = </span>
+                    numberOfFaces = 0;
+            
+            do {
+<span class="fc" id="L2376">                streamPosition = reader.getPosition();</span>
+<span class="fc" id="L2377">                str = reader.readLine();</span>
+<span class="fc bfc" id="L2378" title="All 2 branches covered.">                if (str == null) {</span>
+<span class="fc" id="L2379">                    break;</span>
+                }
+                
+<span class="fc bfc" id="L2382" title="All 2 branches covered.">                if (str.startsWith(&quot;#&quot;)) {</span>
+                    //line is a comment, so we should add it to the list of
+                    //comments
+<span class="fc" id="L2385">                    loader.comments.add(str.substring(&quot;#&quot;.length()).trim());</span>
+<span class="fc bfc" id="L2386" title="All 2 branches covered.">                } else if (str.startsWith(&quot;vt &quot;)) {</span>
+                    //line contains texture coordinates, so we keep its stream
+                    //position and indicate that chunks will contain texture
+                    //coordinates
+<span class="fc bfc" id="L2390" title="All 2 branches covered.">                    if (!firstTextureCoordStreamPositionAvailable) {</span>
+<span class="fc" id="L2391">                        firstTextureCoordStreamPosition = streamPosition;</span>
+<span class="fc" id="L2392">                        firstTextureCoordStreamPositionAvailable = true;</span>
+<span class="fc" id="L2393">                        textureAvailable = true;</span>
+                    }
+<span class="fc" id="L2395">                    numberOfTextureCoords++;</span>
+<span class="fc bfc" id="L2396" title="All 2 branches covered.">                } else if (str.startsWith(&quot;vn &quot;)) {</span>
+                    //line contains normal, so we keep its stream position and
+                    //indicate that chunks will contain normals
+<span class="fc bfc" id="L2399" title="All 2 branches covered.">                    if (!firstNormalStreamPositionAvailable) {</span>
+<span class="fc" id="L2400">                        firstNormalStreamPosition = streamPosition;</span>
+<span class="fc" id="L2401">                        firstNormalStreamPositionAvailable = true;</span>
+<span class="fc" id="L2402">                        normalsAvailable = true;</span>
+                    }
+<span class="fc" id="L2404">                    numberOfNormals++;                    </span>
+<span class="fc bfc" id="L2405" title="All 2 branches covered.">                } else if (str.startsWith(&quot;v &quot;)) {</span>
+                    //line contains vertex coordinates, so we keep its stream
+                    //position and indicate that chunks will contain vertex
+                    //coordinates
+<span class="fc bfc" id="L2409" title="All 2 branches covered.">                    if (!firstVertexStreamPositionAvailable) {</span>
+<span class="fc" id="L2410">                        firstVertexStreamPosition = streamPosition;</span>
+<span class="fc" id="L2411">                        firstVertexStreamPositionAvailable = true;</span>
+<span class="fc" id="L2412">                        verticesAvailable = true;</span>
+                    }
+<span class="fc" id="L2414">                    numberOfVertices++;</span>
+<span class="fc bfc" id="L2415" title="All 2 branches covered.">                } else if (str.startsWith(&quot;f &quot;)) {</span>
+                    //line contains face definition, so we keep its stream
+                    //position and indicate that chunks will contain indices
+<span class="fc bfc" id="L2418" title="All 2 branches covered.">                    if (!firstFaceStreamPositionAvailable) {</span>
+<span class="fc" id="L2419">                        firstFaceStreamPosition = streamPosition;</span>
+<span class="fc" id="L2420">                        firstFaceStreamPositionAvailable = true;</span>
+<span class="fc" id="L2421">                        indicesAvailable = true;</span>
+                    }
+                    
+<span class="fc" id="L2424">                    numberOfFaces++;</span>
+                    
+<span class="fc bfc" id="L2426" title="All 2 branches covered.">                } else if (str.startsWith(&quot;mtllib &quot;)) {</span>
+                    //a material library is found
+<span class="fc" id="L2428">                    String path = str.substring(&quot;mtllib &quot;.length()).trim();</span>
+<span class="pc bpc" id="L2429" title="1 of 2 branches missed.">                    if (loader.listener instanceof LoaderListenerOBJ) {</span>
+<span class="fc" id="L2430">                        LoaderListenerOBJ loaderListener = </span>
+                                (LoaderListenerOBJ)loader.listener;                        
+<span class="fc" id="L2432">                        materialLoader = </span>
+<span class="fc" id="L2433">                                loaderListener.onMaterialLoaderRequested(loader,</span>
+                                path);                        
+<span class="fc" id="L2435">                    } else {</span>
+<span class="nc" id="L2436">                        materialLoader = new MaterialLoaderOBJ(new File(path));</span>
+                    }
+                    
+                    //now load library of materials
+                    try {
+<span class="fc bfc" id="L2441" title="All 2 branches covered.">                        if (materialLoader != null) {</span>
+<span class="fc" id="L2442">                            loader.materials = materialLoader.load();</span>
+<span class="fc" id="L2443">                            materialLoader.close(); //to release file resources</span>
+                        }
+<span class="nc" id="L2445">                    } catch(LoaderException e) {</span>
+<span class="nc" id="L2446">                        throw e;</span>
+<span class="nc" id="L2447">                    } catch(Throwable t) {</span>
+<span class="nc" id="L2448">                        throw new LoaderException(t);</span>
+<span class="fc" id="L2449">                    }</span>
+                    
+<span class="fc bfc" id="L2451" title="All 2 branches covered.">                } else if (str.startsWith(&quot;usemtl &quot;)) {</span>
+<span class="fc bfc" id="L2452" title="All 2 branches covered.">                    if (!firstMaterialStreamPositionAvailable) {</span>
+<span class="fc" id="L2453">                        firstMaterialStreamPositionAvailable = true;</span>
+<span class="fc" id="L2454">                        firstMaterialStreamPosition = streamPosition;                        </span>
+<span class="fc" id="L2455">                        materialsAvailable = true;</span>
+                    }
+                }
+                    
+                //ignore any other line
+            } while (true); //read until end of file when str == null
+            
+            //move to first face tream position
+<span class="pc bpc" id="L2463" title="1 of 2 branches missed.">            if (!firstFaceStreamPositionAvailable) {</span>
+<span class="nc" id="L2464">                throw new LoaderException();</span>
+            }
+            
+<span class="pc bpc" id="L2467" title="1 of 4 branches missed.">            if (materialsAvailable &amp;&amp;</span>
+                    firstMaterialStreamPosition &lt; firstFaceStreamPosition) {
+<span class="fc" id="L2469">                reader.seek(firstMaterialStreamPosition);</span>
+            } else {
+<span class="fc" id="L2471">                reader.seek(firstFaceStreamPosition);</span>
+            }
+<span class="fc" id="L2473">        }</span>
+        
+        /**
+         * Fetches vertex data in the file using provided index. Index refers
+         * to indices contained in OBJ file.
+         * @param index index corresponding to vertex being fetched.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         * @throws IOException if an I/O error occurs.
+         */
+        @SuppressWarnings(&quot;Duplicates&quot;)
+        public void fetchVertex(long index) throws LoaderException, IOException {
+<span class="pc bpc" id="L2484" title="1 of 2 branches missed.">            if (index &gt; numberOfVertices) {</span>
+<span class="nc" id="L2485">                throw new LoaderException();</span>
+            }
+            
+<span class="fc" id="L2488">            long startStreamPos = firstVertexStreamPosition;</span>
+<span class="fc" id="L2489">            long startIndex = 0;</span>
+            
+<span class="fc bfc" id="L2491" title="All 2 branches covered.">            if (verticesStreamPositionMap.size() &gt; 0) {</span>
+                //with floorEntry, we will pick element immediately
+                //before or equal to index if any exists
+<span class="fc" id="L2494">                Map.Entry&lt;Long, Long&gt; entry =</span>
+<span class="fc" id="L2495">                        verticesStreamPositionMap.floorEntry(index);</span>
+<span class="pc bpc" id="L2496" title="1 of 2 branches missed.">                if (entry != null) {</span>
+<span class="fc" id="L2497">                    long origIndex = entry.getKey();</span>
+<span class="fc" id="L2498">                    long pos = entry.getValue();</span>
+<span class="pc bpc" id="L2499" title="2 of 4 branches missed.">                    if((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)){</span>
+<span class="fc" id="L2500">                        startIndex = origIndex;</span>
+<span class="fc" id="L2501">                        startStreamPos = pos;</span>
+                    }
+                }
+            }
+                
+            //if we need to read next vertex, don't do anything, otherwise
+            //move to next vertex location if reading some vertex located
+            //further on the stream. For previous vertex indices, start
+            //from beginning
+<span class="fc bfc" id="L2510" title="All 2 branches covered.">            if (reader.getPosition() != startStreamPos) {</span>
+<span class="fc" id="L2511">                reader.seek(startStreamPos);</span>
+            }
+                
+            //read from stream until start of data of desired vertex
+<span class="fc" id="L2515">            long streamPosition = 0;            </span>
+<span class="fc bfc" id="L2516" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
+                    
+                //when traversing stream of data until reaching desired
+                //index, we add all vertex, texture and normal positions 
+                //into maps
+                String str;
+<span class="fc" id="L2522">                boolean end = false;</span>
+                do {
+<span class="fc" id="L2524">                    streamPosition = reader.getPosition();</span>
+<span class="fc" id="L2525">                    str = reader.readLine();</span>
+<span class="pc bpc" id="L2526" title="1 of 2 branches missed.">                    if (str == null) {</span>
+<span class="nc" id="L2527">                        end = true;</span>
+<span class="nc" id="L2528">                        break;</span>
+                    }
+                     
+<span class="fc bfc" id="L2531" title="All 2 branches covered.">                    if (str.startsWith(&quot;v &quot;)) {</span>
+                        //line contains vertex coordinates, so we store 
+                        //stream position into corresponding map and exit
+                        //while loop
+<span class="fc" id="L2535">                        addVertexPositionToMap(i, streamPosition);</span>
+<span class="fc" id="L2536">                        break;</span>
+                    }
+                } while (true); //read until end of file when str == null
+                    
+                //unexpected end
+<span class="pc bpc" id="L2541" title="1 of 2 branches missed.">                if (end) {</span>
+<span class="nc" id="L2542">                    throw new LoaderException();</span>
+                }
+            }
+            
+            //seek to last streamPosition which contains the desired data
+<span class="fc" id="L2547">            reader.seek(streamPosition);</span>
+<span class="fc" id="L2548">        }</span>
+        
+        /**
+         * Fetches texture data in the file using provided index. Index refers
+         * to indices contained in OBJ file.
+         * @param index index corresponding to texture being fetched.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         * @throws IOException if an I/O error occurs.
+         */
+        @SuppressWarnings(&quot;Duplicates&quot;)
+        public void fetchTexture(long index) throws LoaderException, 
+                IOException {
+<span class="pc bpc" id="L2560" title="1 of 2 branches missed.">            if (index &gt; numberOfTextureCoords) {</span>
+<span class="nc" id="L2561">                throw new LoaderException();</span>
+            }
+            
+<span class="fc" id="L2564">            long startStreamPos = firstTextureCoordStreamPosition;</span>
+<span class="fc" id="L2565">            long startIndex = 0;</span>
+            
+<span class="fc bfc" id="L2567" title="All 2 branches covered.">            if (textureCoordsStreamPositionMap.size() &gt; 0) {</span>
+                //with floorEntry, we will pick element immediately
+                //before or equal to index if any exists
+<span class="fc" id="L2570">                Map.Entry&lt;Long, Long&gt; entry =</span>
+<span class="fc" id="L2571">                        textureCoordsStreamPositionMap.floorEntry(index);</span>
+<span class="pc bpc" id="L2572" title="1 of 2 branches missed.">                if (entry != null) {</span>
+<span class="fc" id="L2573">                    long origIndex = entry.getKey();</span>
+<span class="fc" id="L2574">                    long pos = entry.getValue();</span>
+<span class="pc bpc" id="L2575" title="2 of 4 branches missed.">                    if((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)){</span>
+<span class="fc" id="L2576">                        startIndex = origIndex;</span>
+<span class="fc" id="L2577">                        startStreamPos = pos;</span>
+                    }
+                }
+            }
+                
+            //if we need to read next texture vertex, don't do anything, 
+            //otherwise move to next texture vertex located further on the
+            //stream. For previous texture vertex indices, start from
+            //beginning
+<span class="pc bpc" id="L2586" title="1 of 2 branches missed.">            if (reader.getPosition() != startStreamPos) {</span>
+<span class="fc" id="L2587">                reader.seek(startStreamPos);</span>
+            }
+                
+            //read from stream until start of data of desired texture vertex
+<span class="fc" id="L2591">            long streamPosition = 0;            </span>
+<span class="fc bfc" id="L2592" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
+                    
+                //when traversing stream of data until reaching desired
+                //index, we add all vertex, texture and normal positions
+                //into maps                
+                String str;
+<span class="fc" id="L2598">                boolean end = false;</span>
+                do {
+<span class="fc" id="L2600">                    streamPosition = reader.getPosition();</span>
+<span class="fc" id="L2601">                    str = reader.readLine();</span>
+<span class="pc bpc" id="L2602" title="1 of 2 branches missed.">                    if (str == null) {</span>
+<span class="nc" id="L2603">                        end = true;</span>
+<span class="nc" id="L2604">                        break;</span>
+                    }
+                     
+<span class="fc bfc" id="L2607" title="All 2 branches covered.">                    if (str.startsWith(&quot;vt &quot;)) {</span>
+                        //line contains texture coordinates, so we store
+                        //stream position into corresponding map and exit
+                        //while loop
+<span class="fc" id="L2611">                        addTextureCoordPositionToMap(i, streamPosition);</span>
+<span class="fc" id="L2612">                        break;</span>
+                    }
+                } while (true); //read until end of file when str == null
+                    
+                //unexpected end
+<span class="pc bpc" id="L2617" title="1 of 2 branches missed.">                if (end) {</span>
+<span class="nc" id="L2618">                    throw new LoaderException();</span>
+                }
+            }
+            
+            //seek to last streamPosition which contains the desired data
+<span class="fc" id="L2623">            reader.seek(streamPosition);            </span>
+<span class="fc" id="L2624">        }</span>
+        
+        /**
+         * Fetches normal data in the file using provided index. Index refers
+         * to indices contained in OBJ file.
+         * @param index index corresponding to normal being fetched.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         * @throws IOException if an I/O error occurs.
+         */
+        @SuppressWarnings(&quot;Duplicates&quot;)
+        public void fetchNormal(long index) throws LoaderException, IOException {
+<span class="pc bpc" id="L2635" title="1 of 2 branches missed.">            if (index &gt; numberOfNormals) {</span>
+<span class="nc" id="L2636">                throw new LoaderException();</span>
+            }
+            
+<span class="fc" id="L2639">            long startStreamPos = firstNormalStreamPosition;</span>
+<span class="fc" id="L2640">            long startIndex = 0;</span>
+            
+<span class="fc bfc" id="L2642" title="All 2 branches covered.">            if (normalsStreamPositionMap.size() &gt; 0) {</span>
+                //with floorEntry, we will pick element immediately before or
+                //equal to index if any exists
+<span class="fc" id="L2645">                Map.Entry&lt;Long, Long&gt; entry =</span>
+<span class="fc" id="L2646">                        normalsStreamPositionMap.floorEntry(index);</span>
+<span class="pc bpc" id="L2647" title="1 of 2 branches missed.">                if (entry != null) {</span>
+<span class="fc" id="L2648">                    long origIndex = entry.getKey();</span>
+<span class="fc" id="L2649">                    long pos = entry.getValue();</span>
+<span class="pc bpc" id="L2650" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
+<span class="fc" id="L2651">                        startIndex = origIndex;</span>
+<span class="fc" id="L2652">                        startStreamPos = pos;</span>
+                    }
+                }
+            }
+                
+            //if we need to read next normal, don't do anything, otherwise
+            //move to next normal located further on the stream.
+            //For previous normals indices, start from beginning
+<span class="pc bpc" id="L2660" title="1 of 2 branches missed.">            if (reader.getPosition() != startStreamPos) {</span>
+<span class="fc" id="L2661">                reader.seek(startStreamPos);</span>
+            }
+                
+            //read from stream until start of data of desired normal
+<span class="fc" id="L2665">            long streamPosition = 0;</span>
+<span class="fc bfc" id="L2666" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
+                
+                //when traversing stream of data until reaching desired
+                //index, we add all vertex, texture and normal positions
+                //into maps                
+                String str;
+<span class="fc" id="L2672">                boolean end = false;</span>
+                do {
+<span class="fc" id="L2674">                    streamPosition = reader.getPosition();</span>
+<span class="fc" id="L2675">                    str = reader.readLine();</span>
+<span class="pc bpc" id="L2676" title="1 of 2 branches missed.">                    if (str == null) {</span>
+<span class="nc" id="L2677">                        end = true;</span>
+<span class="nc" id="L2678">                        break;</span>
+                    }
+                    
+<span class="fc bfc" id="L2681" title="All 2 branches covered.">                    if (str.startsWith(&quot;vn &quot;)) {</span>
+                        //line contains normal, so we store stream position
+                        //into corresponding map and exit while loop
+<span class="fc" id="L2684">                        addNormalPositionToMap(i, streamPosition);</span>
+<span class="fc" id="L2685">                        break;</span>
+                    }
+                } while (true); //read until end of file when str == null
+                
+                //unexpected end
+<span class="pc bpc" id="L2690" title="1 of 2 branches missed.">                if (end) {</span>
+<span class="nc" id="L2691">                    throw new LoaderException();</span>
+                }
+            }
+            
+            //seek to last streamPosition which contains the desired data
+<span class="fc" id="L2696">            reader.seek(streamPosition);                        </span>
+<span class="fc" id="L2697">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MaterialLoaderOBJ.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">MaterialLoaderOBJ.java</span></div><h1>MaterialLoaderOBJ.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+/**
+ * MaterialLoader implementation for OBJ files, which is capable of reading its
+ * associated MTL file.
+ */
+@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+public class MaterialLoaderOBJ extends MaterialLoader {
+
+    /**
+     * Maximum allowed color value.
+     */
+    public static final short MAX_COLOR_VALUE = 255;
+
+    /**
+     * Set of materials loaded in MTL file.
+     */
+<span class="fc" id="L39">    private Set&lt;Material&gt; materials = new HashSet&lt;&gt;();</span>
+    
+    /**
+     * Current material being loaded.
+     */
+<span class="fc" id="L44">    private MaterialOBJ currentMaterial = null;    </span>
+    
+    /**
+     * Number of textures that have been found in MTL file.
+     */
+    private int textureCounter;
+
+    /**
+     * Default Constructor.
+     */
+    public MaterialLoaderOBJ() {
+<span class="fc" id="L55">        super();</span>
+<span class="fc" id="L56">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f material file to be read.
+     * @throws IOException raised if provided file does not exist or an I/O
+     * exception occurs.
+     */
+    public MaterialLoaderOBJ(File f) throws IOException {
+<span class="fc" id="L65">        super(f);</span>
+<span class="fc" id="L66">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener material listener to notify start, end and progress 
+     * events.
+     */
+    public MaterialLoaderOBJ(MaterialLoaderListener listener) {
+<span class="fc" id="L74">        super(listener);</span>
+<span class="fc" id="L75">    }</span>
+    
+    /**
+     * Constructor.
+     * @param f material file to be read.
+     * @param listener material listener to notify start, end and progress 
+     * events.
+     * @throws IOException raised if provided file does not exist or an I/O
+     * exception occurs.
+     */
+    public MaterialLoaderOBJ(File f, MaterialLoaderListener listener) 
+            throws IOException {
+<span class="fc" id="L87">        super(f, listener);</span>
+<span class="fc" id="L88">    }</span>
+        
+    /**
+     * Indicates if material loader is ready to be used because a file has
+     * already been provided.
+     * @return true if material loader is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc" id="L97">        return hasFile();</span>
+    }
+    
+    /**
+     * Starts the loading process of provided file.
+     * This method returns a set containing all the materials that have been
+     * loaded.
+     * @return a set containing all the materials that have been loaded.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws NotReadyException raised if this instance is not yet ready.
+     * @throws IOException if an I/O error occurs.
+     * @throws LoaderException if file is corrupted or cannot be interpreted.
+     */
+    @Override
+    public Set&lt;Material&gt; load() throws LockedException, 
+            NotReadyException, IOException, LoaderException {
+
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L115">            throw new NotReadyException();</span>
+        }
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L118">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L121">        setLocked(true);</span>
+        
+<span class="fc" id="L123">        materials.clear();</span>
+<span class="fc" id="L124">        textureCounter = 0;</span>
+        
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L127">            listener.onLoadStart(this);</span>
+        }
+        
+        String line;        
+        do {
+<span class="fc" id="L132">            line = reader.readLine();</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            if (line != null) {</span>
+<span class="fc" id="L134">                parseLine(line);</span>
+            }
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        } while (line != null);</span>
+        
+<span class="fc" id="L138">        currentMaterial.setId(materials.size());</span>
+<span class="fc" id="L139">        materials.add(currentMaterial);</span>
+        
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L142">            listener.onLoadEnd(this);</span>
+        }
+        
+<span class="fc" id="L145">        setLocked(false);</span>
+        
+<span class="fc" id="L147">        return materials;        </span>
+    }
+    
+    /**
+     * Parses a line in a MTL file.
+     * @param line line being parsed.
+     * @throws LoaderException if line cannot be interpreted.
+     */
+    private void parseLine(String line) throws LoaderException {
+        
+<span class="pc bpc" id="L157" title="1 of 4 branches missed.">        if (line == null || line.isEmpty()) {</span>
+<span class="fc" id="L158">            return;</span>
+        }
+        
+        try {
+<span class="fc" id="L162">            StringTokenizer tokenizer = new StringTokenizer(line);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            if (!tokenizer.hasMoreTokens()) {</span>
+<span class="fc" id="L164">                return; //empty line or simply</span>
+                        //containing separators (tabs, line feeds, etc)
+            }
+
+<span class="fc" id="L168">            String command = tokenizer.nextToken();</span>
+            
+            //search for command position
+<span class="fc" id="L171">            int commandPos = line.indexOf(command);</span>
+        
+
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (command.equalsIgnoreCase(&quot;newmtl&quot;)) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">                if (currentMaterial != null) {</span>
+<span class="fc" id="L176">                    currentMaterial.setId(materials.size());</span>
+<span class="fc" id="L177">                    materials.add(currentMaterial);</span>
+                }             
+<span class="fc" id="L179">                String name = line.substring(</span>
+<span class="fc" id="L180">                        commandPos + command.length()).trim();</span>
+<span class="fc" id="L181">                currentMaterial = new MaterialOBJ(name);                        </span>
+        
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;ka&quot;)) {</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">                if (currentMaterial == null) {</span>
+<span class="nc" id="L185">                    throw new LoaderException();</span>
+                }
+<span class="fc" id="L187">                currentMaterial.setAmbientColor( </span>
+<span class="fc" id="L188">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE),
+<span class="fc" id="L190">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE),
+<span class="fc" id="L192">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE));
+        
+<span class="fc bfc" id="L195" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;kd&quot;)) {</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">                if (currentMaterial == null) {</span>
+<span class="nc" id="L197">                    throw new LoaderException();</span>
+                }
+<span class="fc" id="L199">                currentMaterial.setDiffuseColor( </span>
+<span class="fc" id="L200">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE),
+<span class="fc" id="L202">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE),
+<span class="fc" id="L204">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE));
+        
+<span class="fc bfc" id="L207" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;Ks&quot;)) {</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">                if (currentMaterial == null) {</span>
+<span class="nc" id="L209">                    throw new LoaderException();</span>
+                }
+<span class="fc" id="L211">                currentMaterial.setSpecularColor(</span>
+<span class="fc" id="L212">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE),
+<span class="fc" id="L214">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE),
+<span class="fc" id="L216">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE));
+        
+<span class="fc bfc" id="L219" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;Ns&quot;) ||</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">                    command.equalsIgnoreCase(&quot;Ni&quot;)) {</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">                if (currentMaterial == null) {</span>
+<span class="nc" id="L222">                    throw new LoaderException();</span>
+                }
+<span class="fc" id="L224">                currentMaterial.setSpecularCoefficient(</span>
+<span class="fc" id="L225">                        Float.valueOf(tokenizer.nextToken()));            </span>
+        
+<span class="fc bfc" id="L227" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;d&quot;) ||</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">                    command.equalsIgnoreCase(&quot;Tr&quot;)){</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">                if (currentMaterial == null) {</span>
+<span class="nc" id="L230">                    throw new LoaderException();</span>
+                }
+<span class="fc" id="L232">                currentMaterial.setTransparency( </span>
+<span class="fc" id="L233">                        (short)(Float.valueOf(tokenizer.nextToken()) * </span>
+                        MAX_COLOR_VALUE));            
+        
+<span class="fc bfc" id="L236" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;illum&quot;)) {</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">                if (currentMaterial == null) {</span>
+<span class="nc" id="L238">                    throw new LoaderException();</span>
+                }
+<span class="fc" id="L240">                currentMaterial.setIllumination( </span>
+<span class="fc" id="L241">                        Illumination.forValue(</span>
+<span class="fc" id="L242">                                Integer.valueOf(tokenizer.nextToken())));</span>
+        
+<span class="fc bfc" id="L244" title="All 2 branches covered.">            }else if (command.equalsIgnoreCase(&quot;map_Kd&quot;)) {</span>
+<span class="fc" id="L245">                String textureName = line.substring(</span>
+<span class="fc" id="L246">                        commandPos + command.length()).trim();</span>
+<span class="fc" id="L247">                Texture tex = new Texture(textureName, textureCounter);</span>
+<span class="fc" id="L248">                textureCounter++;</span>
+                
+<span class="fc" id="L250">                boolean valid = true;</span>
+<span class="pc bpc" id="L251" title="1 of 4 branches missed.">                if (textureValidationEnabled &amp;&amp; listener != null) {</span>
+<span class="fc" id="L252">                    valid = listener.onValidateTexture(this, tex);</span>
+                }
+<span class="fc bfc" id="L254" title="All 2 branches covered.">                if (!valid) {</span>
+<span class="fc" id="L255">                    throw new InvalidTextureException();</span>
+                }
+                
+<span class="fc" id="L258">                currentMaterial.setDiffuseTextureMap(tex);</span>
+            
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            } else if (command.equalsIgnoreCase(&quot;map_Ka&quot;)) {</span>
+<span class="fc" id="L261">                String textureName = line.substring(</span>
+<span class="fc" id="L262">                        commandPos + command.length()).trim();</span>
+<span class="fc" id="L263">                Texture tex = new Texture(textureName, textureCounter);</span>
+<span class="fc" id="L264">                textureCounter++;</span>
+                
+<span class="fc" id="L266">                boolean valid = true;</span>
+<span class="pc bpc" id="L267" title="2 of 4 branches missed.">                if (textureValidationEnabled &amp;&amp; listener != null) {</span>
+<span class="fc" id="L268">                    valid = listener.onValidateTexture(this, tex);</span>
+                }
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">                if(!valid) throw new InvalidTextureException();</span>
+                
+<span class="fc" id="L272">                currentMaterial.setAmbientTextureMap(tex);</span>
+            
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            } else if (command.equalsIgnoreCase(&quot;map_Ks&quot;)) {</span>
+<span class="nc" id="L275">                String textureName = line.substring(</span>
+<span class="nc" id="L276">                        commandPos + command.length()).trim();</span>
+<span class="nc" id="L277">                Texture tex = new Texture(textureName, textureCounter);</span>
+<span class="nc" id="L278">                textureCounter++;</span>
+                
+<span class="nc" id="L280">                boolean valid = true;</span>
+<span class="nc bnc" id="L281" title="All 4 branches missed.">                if (textureValidationEnabled &amp;&amp; listener != null) {</span>
+<span class="nc" id="L282">                    valid = listener.onValidateTexture(this, tex);</span>
+                }
+<span class="nc bnc" id="L284" title="All 2 branches missed.">                if (!valid) {</span>
+<span class="nc" id="L285">                    throw new InvalidTextureException();</span>
+                }
+                
+<span class="nc" id="L288">                currentMaterial.setSpecularTextureMap(tex);</span>
+            
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">            } else if (command.equalsIgnoreCase(&quot;map_d&quot;)) {</span>
+<span class="nc" id="L291">                String textureName = line.substring(</span>
+<span class="nc" id="L292">                        commandPos + command.length()).trim();</span>
+<span class="nc" id="L293">                Texture tex = new Texture(textureName, textureCounter);</span>
+<span class="nc" id="L294">                textureCounter++;</span>
+                
+<span class="nc" id="L296">                boolean valid = true;</span>
+<span class="nc bnc" id="L297" title="All 4 branches missed.">                if (textureValidationEnabled &amp;&amp; listener != null) {</span>
+<span class="nc" id="L298">                    valid = listener.onValidateTexture(this, tex);</span>
+                }
+<span class="nc bnc" id="L300" title="All 2 branches missed.">                if (!valid) {</span>
+<span class="nc" id="L301">                    throw new InvalidTextureException();</span>
+                }
+                
+<span class="nc" id="L304">                currentMaterial.setAlphaTextureMap(tex);</span>
+            
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">            } else if (command.equalsIgnoreCase(&quot;map_bump&quot;) ||</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">                    command.equalsIgnoreCase(&quot;bump&quot;)) {</span>
+<span class="nc" id="L308">                String textureName = line.substring(</span>
+<span class="nc" id="L309">                        commandPos + command.length()).trim();</span>
+<span class="nc" id="L310">                Texture tex = new Texture(textureName, textureCounter);</span>
+<span class="nc" id="L311">                textureCounter++;</span>
+                
+<span class="nc" id="L313">                boolean valid = true;</span>
+<span class="nc bnc" id="L314" title="All 4 branches missed.">                if (textureValidationEnabled &amp;&amp; listener != null) {</span>
+<span class="nc" id="L315">                    valid = listener.onValidateTexture(this, tex);</span>
+                }
+<span class="nc bnc" id="L317" title="All 2 branches missed.">                if (!valid) {</span>
+<span class="nc" id="L318">                    throw new InvalidTextureException();</span>
+                }
+                
+<span class="nc" id="L321">                currentMaterial.setBumpTextureMap(tex);</span>
+            }
+<span class="fc" id="L323">        } catch (LoaderException e) {</span>
+<span class="fc" id="L324">            throw e;</span>
+<span class="nc" id="L325">        } catch (Throwable t) {</span>
+<span class="nc" id="L326">            throw new LoaderException(t);</span>
+<span class="fc" id="L327">        }</span>
+<span class="fc" id="L328">    }</span>
+    
+    /**
+     * Indicates if any material has been loaded already.
+     * @return true if materials have been loaded, false otherwise.
+     */
+    public boolean areMaterialsAvailable() {
+<span class="pc bpc" id="L335" title="1 of 4 branches missed.">        return materials != null &amp;&amp; materials.size() &gt; 0;</span>
+    }
+
+    /**
+     * Returns set of materials that have been read.
+     * @return set of materials that have been read.
+     */
+    public Set&lt;Material&gt; getMaterials() {
+<span class="fc" id="L343">        return materials;</span>
+    }
+
+    /**
+     * Gets a material by its name, or null if material is not found.
+     * @param name name of material to be found.
+     * @return a material having provided name or null if none is found.
+     */
+    public MaterialOBJ getMaterialByName(String name) {
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">        if (name == null) {</span>
+<span class="nc" id="L353">            return null;</span>
+        }
+        
+<span class="fc bfc" id="L356" title="All 2 branches covered.">        for (Material m: this.materials) {</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">            if (m instanceof MaterialOBJ) {</span>
+<span class="fc" id="L358">                MaterialOBJ m2 = (MaterialOBJ)m;</span>
+                
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">                if (m2.getMaterialName() == null) {</span>
+<span class="nc" id="L361">                    continue;</span>
+                }
+                
+<span class="fc bfc" id="L364" title="All 2 branches covered.">                if (m2.getMaterialName().equals(name)) {</span>
+<span class="fc" id="L365">                    return m2;</span>
+                }
+            }
+<span class="fc" id="L368">        }</span>
+<span class="fc" id="L369">        return null;</span>
+    }
+    
+    /**
+     * Indicates if material having provided name has been loaded or not.
+     * @param name name to search material by.
+     * @return true if material having provided name exists, false otherwise.
+     */
+    public boolean containsMaterial(String name) {
+<span class="fc bfc" id="L378" title="All 2 branches covered.">        return getMaterialByName(name) != null;</span>
+    }
+    
+    /**
+     * Returns material by texture name.
+     * @param name name of texture.
+     * @return texture that has been found or null if none has been found.
+     */
+    public Material getMaterialByTextureMapName(String name) {
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">        if (name == null) {</span>
+<span class="nc" id="L388">            return null;</span>
+        }
+        
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        for (Material m: this.materials) {</span>
+<span class="pc bpc" id="L392" title="1 of 2 branches missed.">            if (m.getAlphaTextureMap() != null &amp;&amp;</span>
+<span class="nc bnc" id="L393" title="All 2 branches missed.">                    m.getAlphaTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="nc bnc" id="L394" title="All 2 branches missed.">                    m.getAlphaTextureMap().getFileName().equals(name)) {</span>
+<span class="nc" id="L395">                return m;</span>
+            }
+        
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">            if (m.getAmbientTextureMap() != null &amp;&amp;</span>
+<span class="nc bnc" id="L399" title="All 2 branches missed.">                    m.getAmbientTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="nc bnc" id="L400" title="All 2 branches missed.">                    m.getAmbientTextureMap().getFileName().equals(name)) {</span>
+<span class="nc" id="L401">                return m;</span>
+            }
+            
+<span class="pc bpc" id="L404" title="1 of 2 branches missed.">            if (m.getDiffuseTextureMap() != null &amp;&amp;</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">                    m.getDiffuseTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="fc bfc" id="L406" title="All 2 branches covered.">                    m.getDiffuseTextureMap().getFileName().equals(name)) {</span>
+<span class="fc" id="L407">                return m;</span>
+            }
+            
+<span class="pc bpc" id="L410" title="1 of 2 branches missed.">            if (m.getSpecularTextureMap() != null &amp;&amp;</span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">                    m.getSpecularTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="nc bnc" id="L412" title="All 2 branches missed.">                    m.getSpecularTextureMap().getFileName().equals(name)) {</span>
+<span class="nc" id="L413">                return m;</span>
+            }
+<span class="fc" id="L415">        }</span>
+<span class="fc" id="L416">        return null;</span>
+    }        
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
