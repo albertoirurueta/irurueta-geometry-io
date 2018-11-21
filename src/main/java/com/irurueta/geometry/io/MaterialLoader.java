@@ -24,7 +24,7 @@ import java.util.Set;
  * Abstract class defining the interface for classes in charge of loading 
  * materials.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public abstract class MaterialLoader {
 
     /**

@@ -29,7 +29,7 @@ import java.util.*;
  * If a LoaderListenerOBJ is provided, this class might also attempt to load the
  * associated material file if available.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LoaderOBJ extends Loader {
 
     /**

@@ -18,7 +18,7 @@ package com.irurueta.geometry.io;
 import java.io.File;
 import java.io.IOException;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LoaderSTL extends Loader {
     /**
      * Constant defining the default value of maximum number of vertices to keep

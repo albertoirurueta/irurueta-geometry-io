@@ -27,7 +27,7 @@ import java.nio.FloatBuffer;
  * The binary format has been created to keep 3D data in a more compact way than
  * other formats.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LoaderBinary extends Loader {
 
     /**

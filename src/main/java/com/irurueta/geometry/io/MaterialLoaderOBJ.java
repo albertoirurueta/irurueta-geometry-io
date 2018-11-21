@@ -25,7 +25,7 @@ import java.util.StringTokenizer;
  * MaterialLoader implementation for OBJ files, which is capable of reading its
  * associated MTL file.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class MaterialLoaderOBJ extends MaterialLoader {
 
     /**

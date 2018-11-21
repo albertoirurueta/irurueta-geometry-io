@@ -42,5 +42,5 @@ public enum MeshFormat {
     /**
      * Binary v2 format.
      */
-    MESH_FORMAT_BINARY2;
+    MESH_FORMAT_BINARY2
 }

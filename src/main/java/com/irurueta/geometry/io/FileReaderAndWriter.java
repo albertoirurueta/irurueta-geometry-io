@@ -23,7 +23,7 @@ import java.nio.channels.FileChannel;
 /**
  * This class provides methods to access file data at random positions.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**

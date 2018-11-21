@@ -23,7 +23,7 @@ import java.nio.channels.FileChannel;
  * Abstract class defining the interface for file loaders.
  * Specific implementations must be done for each file format to be supported.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public abstract class Loader {
 
     /**

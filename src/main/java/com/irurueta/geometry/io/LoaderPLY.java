@@ -38,7 +38,7 @@ import java.util.TreeMap;
  * This class is based in the work of:
  * http://w3.impa.br/~diego/software/rply/
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LoaderPLY extends Loader {
     /**
      * Size of internal buffer where bytes from stream of data read into.

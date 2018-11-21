@@ -26,7 +26,7 @@ import java.nio.channels.FileChannel;
  * This class provides methods to access file data at random positions using
  * memory mapping for faster data access.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**

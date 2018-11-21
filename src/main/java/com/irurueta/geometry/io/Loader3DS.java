@@ -23,6 +23,7 @@ import java.util.Set;
  * Loads 3D Studio Max files.
  * NOTE: implementation is not yet finished.
  */
+@SuppressWarnings("WeakerAccess")
 public class Loader3DS extends Loader {
 
     public static final int ID_MAIN_CHUNK = 0x4D4D;
