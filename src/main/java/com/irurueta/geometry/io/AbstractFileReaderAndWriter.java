@@ -21,20 +21,7 @@ import java.io.IOException;
  * Abstract class that provides methods to access file data at random positions.
  */
 public abstract class AbstractFileReaderAndWriter {
-    
-    /**
-     * Method to be called when this instance is garbage collected.
-     * @throws Throwable if anything fails.
-     */
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        try {
-            close(); //attempt to close file resources
-        } catch (Throwable ignore) { }
-    }
-    
-    
+
     /**
      * Reads one byte at current file position and advances one position.
      * @return Next byte of data or -1 if end of file is reached.
@@ -421,7 +408,7 @@ public abstract class AbstractFileReaderAndWriter {
      * @throws IllegalArgumentException if no pattern characters are provided.
      */
     public abstract String readUntilAnyOfTheseCharactersIsFound(String pattern) 
-            throws IOException, IllegalArgumentException;    
+            throws IOException;
     
     /**
      * Writes a boolean to the file as a one-byte value. The value true is 

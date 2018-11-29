@@ -120,20 +120,7 @@ public abstract class Loader {
         locked = false;
         this.listener = listener;
     }
-    
-    /**
-     * Method called when an instance of Loader is garbage collected.
-     * This method is in charge of closing input file if it is already open.
-     * @throws Throwable if something fails during finalization.
-     */
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        try {
-            close(); //attempt to close file resources
-        } catch (Throwable ignore) { }
-    }
-    
+
     /**
      * Get maximum size (in bytes) to determine whether a file is completely 
      * cached in memory (if lower than maximum size), or if it is just streamed
@@ -288,16 +275,4 @@ public abstract class Loader {
      */
     public abstract LoaderIterator load() throws LockedException, 
             NotReadyException, IOException, LoaderException;
-    
-    /**
-     * Internal method to reset the members of this instance.
-     */
-    private void reset() {
-        locked = false;
-        try {
-            reader.close(); //attempt to close file
-        } catch (Throwable ignore) { }
-        reader = null;
-        listener = null;
-    }
 }

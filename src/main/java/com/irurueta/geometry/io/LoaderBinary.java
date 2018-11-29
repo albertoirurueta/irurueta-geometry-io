@@ -213,25 +213,25 @@ public class LoaderBinary extends Loader {
                 if (texFile != null) {
                     //write texture data at provided file
                     byte[] buffer = new byte[BUFFER_SIZE];
-                    
-                    OutputStream outStream = new FileOutputStream(texFile);
-                    int counter = 0, n;
-                    int len = BUFFER_SIZE;
-                    while (counter < texLength) {
-                        if (counter + len > texLength) {
-                            len = (int) texLength - counter;
+
+                    int counter = 0;
+                    try (OutputStream outStream = new FileOutputStream(texFile)) {
+                        int n;
+                        int len = BUFFER_SIZE;
+                        while (counter < texLength) {
+                            if (counter + len > texLength) {
+                                len = (int) texLength - counter;
+                            }
+                            n = reader.read(buffer, 0, len);
+                            outStream.write(buffer, 0, n);
+                            if (n > 0) {
+                                counter += n;
+                            } else break;
                         }
-                        n = reader.read(buffer, 0, len);
-                        outStream.write(buffer, 0, n);
-                        if (n > 0) {
-                            counter += n;
-                        }
-                        else break;
+
+                        outStream.flush();
                     }
-                    
-                    outStream.flush();
-                    outStream.close();
-                    
+
                     if (counter != texLength) {
                         throw new LoaderException();
                     }
@@ -566,8 +566,6 @@ public class LoaderBinary extends Loader {
                 }
             }
             
-            System.gc(); //to reduce memory consumption
-            
             
             //----- COLORS ------
             
@@ -611,9 +609,7 @@ public class LoaderBinary extends Loader {
                             (float)(reader.getPosition()) / 
                             (float)(file.length()));
                 }                
-            }            
-            
-            System.gc(); //to reduce memory consumption
+            }
             
             //------ INDICES ------
             
@@ -645,7 +641,8 @@ public class LoaderBinary extends Loader {
                 int[] indices = new int[indicesLength];
                 byte [] bytes = new byte[indicesSizeInBytes];
                 reader.read(bytes);
-                int firstByte, secondByte;      
+                int firstByte;
+                int secondByte;
                 int counter = 0;
                 for (int i = 0; i < indicesLength; i++) {
                     firstByte = ((int)bytes[counter]) & 0x000000ff;
@@ -663,8 +660,6 @@ public class LoaderBinary extends Loader {
                             (float)(file.length()));
                 }                
             }
-            
-            System.gc(); //to reduce memory consumption
             
             //-------- TEXTURE COORDS --------
             
@@ -709,8 +704,6 @@ public class LoaderBinary extends Loader {
                             (float)(file.length()));
                 }   
             }
-
-            System.gc(); //to reduce memory consumption
             
             
             //-------- NORMALS --------
@@ -757,8 +750,6 @@ public class LoaderBinary extends Loader {
                 }                
             }
             
-            System.gc(); //to reduce memory consumption
-            
             //read bounding box for chunk (min/max x, y, z)
             
             //we need to load 6 floats, so position + 6 * Float.SIZE / 8 bytes 
@@ -780,17 +771,15 @@ public class LoaderBinary extends Loader {
             chunk.setMaxY(floatBuffer.get());
             chunk.setMaxZ(floatBuffer.get());
             
-            System.gc();
-            
             //compute progress
             if (loader.listener != null) {
                 loader.listener.onLoadProgressChange(loader, 
                         (float)(reader.getPosition()) / (float)(file.length()));
             }
             
-            if (!hasNext()) {
+            if (!hasNext() && listener != null) {
                 //notify iterator finished
-                if(listener != null) listener.onIteratorFinished(this);
+                listener.onIteratorFinished(this);
             }
             
             return chunk;

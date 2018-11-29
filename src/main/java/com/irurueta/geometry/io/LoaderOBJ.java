@@ -74,19 +74,9 @@ public class LoaderOBJ extends Loader {
     public static final boolean DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR = true;
 
     /**
-     * Constant below enabled periodic garbage collection. This helps to reduce
-     * memory usage, which is of special interest on mobile devices and servers.
+     * Identifies materials.
      */
-    public static final boolean DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION =
-            true;
-
-    /**
-     * Constant defining number of iterations to wait before starting garbage
-     * collection.
-     * The lower the value the more frequent garbage collection will be and
-     * hence the smaller the memory usage, at the expense of slower execution.
-     */
-    public static final int DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION = 10000;
+    private static final String USEMTL = "usemtl ";
 
     /**
      * Iterator to load OBJ file data in small chunks.
@@ -130,23 +120,7 @@ public class LoaderOBJ extends Loader {
      * OBJ file.
      */
     private Set<Material> materials;
-    
-    /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled.
-     * By default it is enabled.
-     */
-    private boolean periodicGarbageCollection;
-    
-    /**
-     * Number of attempts to clean memory before garbage collection is actually
-     * demanded. This only takes effect if periodic garbage collection is 
-     * enabled. By default this is set to 10000 attempts.
-     */
-    private int itersBeforeGarbageCollection;
-    
+
     /**
      * Determines if file loading should continue even if the triangulation of
      * a polygon fails. The triangulation of a polygon might fail if the polygon
@@ -167,9 +141,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -180,7 +151,7 @@ public class LoaderOBJ extends Loader {
      * @throws IllegalArgumentException if maximum number of vertices allowed in
      * a chunk is lower than 1.
      */
-    public LoaderOBJ(int maxVerticesInChunk) throws IllegalArgumentException {
+    public LoaderOBJ(int maxVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         allowDuplicateVerticesInChunk =
@@ -188,9 +159,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -206,17 +174,13 @@ public class LoaderOBJ extends Loader {
      * a chunk is lower than 1.
      */
     public LoaderOBJ(int maxVerticesInChunk, 
-            boolean allowDuplicateVerticesInChunk) 
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -234,17 +198,13 @@ public class LoaderOBJ extends Loader {
      * a chunk is lower than 1.
      */
     public LoaderOBJ(int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;
         internalSetMaxStreamPositions(maxStreamPositions);
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -261,9 +221,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -277,7 +234,7 @@ public class LoaderOBJ extends Loader {
      * @throws IOException if an I/O error occurs.
      */
     public LoaderOBJ(File f, int maxVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -286,9 +243,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -307,7 +261,7 @@ public class LoaderOBJ extends Loader {
      */
     public LoaderOBJ(File f, int maxVerticesInChunk,
             boolean allowDuplicateVerticesInChunk)
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -315,9 +269,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -338,7 +289,7 @@ public class LoaderOBJ extends Loader {
      */
     public LoaderOBJ(File f, int maxVerticesInChunk,
             boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -346,9 +297,6 @@ public class LoaderOBJ extends Loader {
         internalSetMaxStreamPositions(maxStreamPositions);
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -364,9 +312,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -379,8 +324,7 @@ public class LoaderOBJ extends Loader {
      * @throws IllegalArgumentException if maximum number of vertices allowed in
      * a chunk is lower than 1.
      */
-    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk)
-            throws IllegalArgumentException {
+    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -389,9 +333,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -409,8 +350,7 @@ public class LoaderOBJ extends Loader {
      * a chunk is lower than 1.
      */
     public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk, 
-            boolean allowDuplicateVerticesInChunk) 
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -418,9 +358,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -440,8 +377,7 @@ public class LoaderOBJ extends Loader {
      * a chunk is lower than 1.
      */
     public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -449,9 +385,6 @@ public class LoaderOBJ extends Loader {
         internalSetMaxStreamPositions(maxStreamPositions);
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -470,9 +403,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -488,7 +418,7 @@ public class LoaderOBJ extends Loader {
      * @throws IOException if an I/O error occurs.
      */
     public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -497,9 +427,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -520,7 +447,7 @@ public class LoaderOBJ extends Loader {
      */
     public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk,
             boolean allowDuplicateVerticesInChunk)
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -528,9 +455,6 @@ public class LoaderOBJ extends Loader {
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -553,7 +477,7 @@ public class LoaderOBJ extends Loader {
      */
     public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk,
             boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -561,10 +485,7 @@ public class LoaderOBJ extends Loader {
         internalSetMaxStreamPositions(maxStreamPositions);
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
-    }    
+    }
     
     /**
      * Sets maximum number of vertices allowed in a chunk. 
@@ -575,7 +496,7 @@ public class LoaderOBJ extends Loader {
      * @throws LockedException if this loader is currently loading a file.
      */
     public void setMaxVerticesInChunk(int maxVerticesInChunk)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -599,8 +520,7 @@ public class LoaderOBJ extends Loader {
      * @param maxVerticesInChunk maximum allowed number of vertices to be set.
      * @throws IllegalArgumentException  if provided value is lower than 1.
      */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk)
-            throws IllegalArgumentException {
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
         if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
             throw new IllegalArgumentException();
         }
@@ -647,7 +567,7 @@ public class LoaderOBJ extends Loader {
      * @throws LockedException if this loader is currently loading a file.
      */
     public void setMaxStreamPositions(long maxStreamPositions)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -667,25 +587,7 @@ public class LoaderOBJ extends Loader {
     public long getMaxStreamPositions() {
         return maxStreamPositions;
     }
-        
-    /**
-     * Internal method to set maximum number of file stream positions to be 
-     * cached.
-     * This method is reused both in the constructor and in the setter of
-     * maximum number stream positions.
-     * @param maxStreamPositions maximum number of file stream positions to be 
-     * cached.
-     * @throws IllegalArgumentException if provided value is lower than 1.
-     */
-    private void internalSetMaxStreamPositions(long maxStreamPositions)
-            throws IllegalArgumentException {
-        if (maxStreamPositions < MIN_STREAM_POSITIONS) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.maxStreamPositions = maxStreamPositions;
-    }
-    
+
     /**
      * Returns boolean indicating if file loading should continue even if the 
      * triangulation of a polygon fails. The triangulation of a polygon might 
@@ -720,69 +622,14 @@ public class LoaderOBJ extends Loader {
     }
 
     /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled. By default it is enabled.
-     * @return True if periodic garbage collection is enabled, false otherwise.
+     * Gets collection of materials contained in the materials file associated to an
+     * OBJ file.
+     * @return collection of material.
      */
-    public boolean isPeriodicGarbageCollection() {
-        return periodicGarbageCollection;
-    }
-    
-    /**
-     * Sets whether periodic garbage collection should be attempted from time to
-     * time to reduce memory usage. Garbage collection might slow down slightly
-     * the loading process but in memory constrained environments this setting
-     * should be enabled. By default it is enabled.
-     * @param periodicGarbageCollection True if periodic garbage collection must
-     * be enabled, false otherwise.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setPeriodicGarbageCollection(boolean periodicGarbageCollection)
-            throws LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        this.periodicGarbageCollection = periodicGarbageCollection;
+    public Set<Material> getMaterials() {
+        return materials;
     }
 
-    /**
-     * Returns number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection 
-     * is  enabled. By default this is set to 10000 attempts.
-     * @return Number of attempts to clean memory before garbage collection is
-     * actually demanded.
-     */
-    public int getItersBeforeGarbageCollection() {
-        return itersBeforeGarbageCollection;
-    }
-    
-    /**
-     * Sets number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection
-     * is enabled. By default this is set to 10000 attempts.
-     * @param itersBeforeGarbageCollection number of iterations before actually claiming grbage collection.
-     * @throws IllegalArgumentException if provided value is negative.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setItersBeforeGarbageCollection(
-            int itersBeforeGarbageCollection) throws IllegalArgumentException,
-            LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        if (itersBeforeGarbageCollection < 0) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.itersBeforeGarbageCollection = itersBeforeGarbageCollection;
-    }        
-    
     /**
      * If loader is ready to start loading a file.
      * This is true once a file has been provided.
@@ -850,7 +697,24 @@ public class LoaderOBJ extends Loader {
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
-    
+
+    /**
+     * Internal method to set maximum number of file stream positions to be
+     * cached.
+     * This method is reused both in the constructor and in the setter of
+     * maximum number stream positions.
+     * @param maxStreamPositions maximum number of file stream positions to be
+     * cached.
+     * @throws IllegalArgumentException if provided value is lower than 1.
+     */
+    private void internalSetMaxStreamPositions(long maxStreamPositions) {
+        if (maxStreamPositions < MIN_STREAM_POSITIONS) {
+            throw new IllegalArgumentException();
+        }
+
+        this.maxStreamPositions = maxStreamPositions;
+    }
+
     /**
      * Internal listener to be notified when loading process finishes.
      * This listener is used to free resources when loading process finishes.
@@ -880,7 +744,9 @@ public class LoaderOBJ extends Loader {
             //load method
             try {
                 reader.seek(0); //attempt restart stream to initial position
-            } catch (Throwable ignore) { }
+            } catch (Exception ignore) {
+                //this is a best effort operation, if it fails it is ignored
+            }
 
 
             //on subsequent calls
@@ -1253,15 +1119,7 @@ public class LoaderOBJ extends Loader {
          * of file to this OBJ file.
          */
         private MaterialLoaderOBJ materialLoader;
-        
-        /**
-         * Counter of number of times that garbage collection has been 
-         * requested. When this value exceeds the itersBeforeGarbageCollection,
-         * then an actual garbage collection is requested as long as this 
-         * feature is enabled.
-         */
-        private int gcCounter;
-        
+
         /**
          * Constructor.
          * @param loader reference to loader loading binary file.
@@ -1342,24 +1200,7 @@ public class LoaderOBJ extends Loader {
         public LoaderIteratorListener getListener() {
             return listener;
         }
-        
-        /**
-         * Attempts to clear memory.
-         * If garbage collection is enabled this method will attempt a garbage
-         * collection after being called a few times.
-         * Memory will then be released depending on system implementation.
-         */
-        @SuppressWarnings("Duplicates")
-        private void cleanMemory(){
-            if(loader.periodicGarbageCollection){
-                gcCounter++;
-                if(gcCounter > loader.itersBeforeGarbageCollection){
-                    System.gc();
-                    gcCounter = 0;
-                }
-            }
-        }
-        
+
         /**
          * Indicates if there is another chunk of data to be loaded.
          * @return true if there is another chunk of data, false otherwise.
@@ -1415,11 +1256,11 @@ public class LoaderOBJ extends Loader {
                 
                 //check if line corresponds to face or material, otherwise, 
                 //ignore
-                if (str.startsWith("usemtl ")) {
+                if (str.startsWith(USEMTL)) {
                     
                     if (currentChunkMaterialName.equals("")) {
                         currentChunkMaterialName = str.substring(
-                                "usemtl ".length()).trim();
+                                USEMTL.length()).trim();
                         //search current material on material library
                         currentMaterial = null;
                         if (materialLoader != null) {
@@ -1733,52 +1574,50 @@ public class LoaderOBJ extends Loader {
                                 }
                             }
                             if (indices.length >= 3 &&
-                                    (indices[2].length() != 0)) {
-                                if (!addExistingNormal) {
-                                    //new normal needs to be added into chunk, 
-                                    //so we need to read vertex data
+                                    (indices[2].length() != 0) && !addExistingNormal) {
+                                //new normal needs to be added into chunk,
+                                //so we need to read vertex data
 
-                                    //fetch normal data position
-                                    fetchNormal(normalIndex);
-                                    normalStreamPosition = reader.getPosition();
+                                //fetch normal data position
+                                fetchNormal(normalIndex);
+                                normalStreamPosition = reader.getPosition();
 
-                                    //read all normal data
-                                    String normalLine = reader.readLine();
-                                    if (!normalLine.startsWith("vn ")) {
+                                //read all normal data
+                                String normalLine = reader.readLine();
+                                if (!normalLine.startsWith("vn ")) {
+                                    throw new LoaderException();
+                                }
+                                normalLine = normalLine.substring(
+                                        "vn ".length()).trim();
+                                //retrieve words in normalLine, which must
+                                //contain normal coordinates as x, y, z
+                                String[] normalCoordinates =
+                                        normalLine.split(" ");
+                                if (normalCoordinates.length == 3) {
+                                    //normal coordinates x, y, z
+
+                                    //check that values are valid
+                                    if (normalCoordinates[0].length() == 0) {
                                         throw new LoaderException();
                                     }
-                                    normalLine = normalLine.substring(
-                                            "vn ".length()).trim();
-                                    //retrieve words in normalLine, which must 
-                                    //contain normal coordinates as x, y, z
-                                    String[] normalCoordinates =
-                                            normalLine.split(" ");
-                                    if (normalCoordinates.length == 3) {
-                                        //normal coordinates x, y, z
-
-                                        //check that values are valid
-                                        if (normalCoordinates[0].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (normalCoordinates[1].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (normalCoordinates[2].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-
-                                        nX = Float.valueOf(
-                                                normalCoordinates[0]);
-                                        nY = Float.valueOf(
-                                                normalCoordinates[1]);
-                                        nZ = Float.valueOf(
-                                                normalCoordinates[2]);
-                                    } else {
-                                        throw new LoaderException(); //unsupported length
+                                    if (normalCoordinates[1].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (normalCoordinates[2].length() == 0) {
+                                        throw new LoaderException();
                                     }
 
-                                    addExisting = false;
+                                    nX = Float.valueOf(
+                                            normalCoordinates[0]);
+                                    nY = Float.valueOf(
+                                            normalCoordinates[1]);
+                                    nZ = Float.valueOf(
+                                            normalCoordinates[2]);
+                                } else {
+                                    throw new LoaderException(); //unsupported length
                                 }
+
+                                addExisting = false;
                             }
 
                             if (addExisting) {
@@ -1791,10 +1630,6 @@ public class LoaderOBJ extends Loader {
                     //reset face stream position
                     reader.seek(currentStreamPosition);
                     currentFace++;
-                    
-                    //to reduce memory consumption and delete listIndices
-                    //attempt to clean memory
-                    cleanMemory();                        
                 }
                 
                 //compute progress
@@ -1862,8 +1697,7 @@ public class LoaderOBJ extends Loader {
             if (!hasNext()) {
                 reader.close();
             }
-            
-            cleanMemory(); // to reduce memory consumption            
+
             return dataChunk;
         }
         
@@ -2306,8 +2140,6 @@ public class LoaderOBJ extends Loader {
             originalNormalIndicesInChunkArray =
                     newOriginalNormalIndicesInChunkArray;
             indicesInChunkSize = newIndicesInChunkSize;
-            
-            cleanMemory(); //to reduce memory consumption            
         }        
         
         /**
@@ -2356,8 +2188,6 @@ public class LoaderOBJ extends Loader {
                 originalTextureIndicesInChunkArray = null;
                 originalNormalIndicesInChunkArray = null;
             }
-            
-            cleanMemory(); //to reduce memory consumption            
         }
         
         /**
@@ -2448,7 +2278,7 @@ public class LoaderOBJ extends Loader {
                         throw new LoaderException(t);
                     }
                     
-                } else if (str.startsWith("usemtl ")) {
+                } else if (str.startsWith(USEMTL)) {
                     if (!firstMaterialStreamPositionAvailable) {
                         firstMaterialStreamPositionAvailable = true;
                         firstMaterialStreamPosition = streamPosition;                        

@@ -399,10 +399,10 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
         int fourthIntByte = 0xff & ((value << 24) >> 24);
         
         //return it as integer
-        return (long) (((firstIntByte << 24) |
+        return (long) ((firstIntByte << 24) |
                 (secondIntByte << 16) |
                 (thirdIntByte << 8) |
-                fourthIntByte));
+                fourthIntByte);
     }
     
     /**
@@ -591,7 +591,7 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public String readUntilAnyOfTheseCharactersIsFound(String pattern) 
-            throws IOException, IllegalArgumentException {
+            throws IOException {
         
         if (pattern.length() == 0) {
             throw new IllegalArgumentException();
@@ -600,21 +600,16 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
         StringBuilder buffer = new StringBuilder();
         byte [] charBuffer = new byte[1];        
         String character;
-        for(;;) {
-            if (randomAccessFile.read(charBuffer) == 1) {
-                character = new String(charBuffer);
-                if (pattern.contains(character)) {
-                    //character found
-                    break;
-                }
-                //add character to output buffer
-                buffer.append(character);
-            } else {
-                //no more data available in stream
+        while(randomAccessFile.read(charBuffer) == 1) {
+            character = new String(charBuffer);
+            if (pattern.contains(character)) {
+                //character found
                 break;
             }
+            //add character to output buffer
+            buffer.append(character);
         }
-        
+
         return buffer.toString();
     }
     

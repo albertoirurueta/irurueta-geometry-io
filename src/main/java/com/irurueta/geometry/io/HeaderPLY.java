@@ -104,18 +104,20 @@ public class HeaderPLY {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("ply\n");
-        
-        builder.append("format ");
-        switch (storageMode) {
-            case PLY_ASCII:
-                builder.append("ascii ");
-                break;
-            case PLY_LITTLE_ENDIAN:
-                builder.append("binary_little_endian ");
-                break;
-            case PLY_BIG_ENDIAN:
-                builder.append("binary_big_endian ");
-                break;
+
+        if (storageMode != null) {
+            builder.append("format ");
+            switch (storageMode) {
+                case PLY_ASCII:
+                    builder.append("ascii ");
+                    break;
+                case PLY_LITTLE_ENDIAN:
+                    builder.append("binary_little_endian ");
+                    break;
+                case PLY_BIG_ENDIAN:
+                    builder.append("binary_big_endian ");
+                    break;
+            }
         }
         
         //add version

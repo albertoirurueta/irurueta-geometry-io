@@ -24,6 +24,17 @@ package com.irurueta.geometry.io;
 @SuppressWarnings("WeakerAccess")
 public class DataChunk {
     /**
+     * Constant defining minimum number of color components, which is 1 for
+     * grayscale.
+     */
+    public static final int MIN_COLOR_COMPONENTS = 1;
+
+    /**
+     * Constant defining default number of color components for RGB
+     */
+    public static final int DEFAULT_COLOR_COMPONENTS = 3;
+
+    /**
      * Array containing 3D coordinates for all points in a chunk in consecutive
      * order, that is, array will contain values x0, y0, z0, x1, y1, z1, ...
      * and so on.
@@ -115,18 +126,7 @@ public class DataChunk {
      * textures etc for this chunk.
      */
     private Material material;
-    
-    /**
-     * Constant defining minimum number of color components, which is 1 for
-     * grayscale.
-     */
-    public static int MIN_COLOR_COMPONENTS = 1;
-    
-    /**
-     * Constant defining default number of color components for RGB
-     */
-    public static int DEFAULT_COLOR_COMPONENTS = 3;
-    
+
     /**
      * Default Constructor
      */
@@ -325,8 +325,7 @@ public class DataChunk {
      * @throws IllegalArgumentException Raised if provided color components is
      * negative.
      */
-    public void setColorComponents(int colorComponents) 
-            throws IllegalArgumentException {
+    public void setColorComponents(int colorComponents) {
         if (colorComponents < MIN_COLOR_COMPONENTS) {
             throw new IllegalArgumentException();
         }

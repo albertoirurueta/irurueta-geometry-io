@@ -64,14 +64,16 @@ public class Loader3DS extends Loader {
     public static final long DEFAULT_MESH_VERSION = 0;
     public static final float DEFAULT_MASTER_SCALE = 1.0f;
     public static final int CONSTRUCTION_PLANE_COORDS = 3;        
-    public static final float[] DEFAULT_CONSTRUCTION_PLANE = 
-            new float[]{0.0f, 0.0f, 1.0f};    
     public static final short DEFAULT_COLOR = 150;
     public static final short DEFAULT_SPECULAR_COLOR = 229;
     public static final short MAX_COLOR_VALUE = 255;
-    public static final short[] DEFAULT_AMBIENT_COLOR =
+
+    protected static final float[] DEFAULT_CONSTRUCTION_PLANE =
+            new float[]{0.0f, 0.0f, 1.0f};
+    protected static final short[] DEFAULT_AMBIENT_COLOR =
             new short[]{DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR};
-    
+
+
     private long meshVersion = DEFAULT_MESH_VERSION;
     private float masterScale = DEFAULT_MASTER_SCALE;
     private float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;
@@ -155,7 +157,8 @@ public class Loader3DS extends Loader {
         long fileLength = file.length();
         boolean endReached = false;
         
-        Chunk3DS chunk, nextChunk;
+        Chunk3DS chunk;
+        Chunk3DS nextChunk;
         do{
             chunk = Chunk3DS.load(reader);
             switch(chunk.getChunkId()){
@@ -644,14 +647,11 @@ public class Loader3DS extends Loader {
         Chunk3DS nextChunk;        
         do{
             nextChunk = Chunk3DS.load(reader);
-            
-            switch(nextChunk.getChunkId()){
-                case Chunk3DS.INT_PERCENTAGE:
-                    return (double)reader.readShort(
-                            EndianType.LITTLE_ENDIAN_TYPE) / 100.0;
-                default:
-                    //ignore unknown chunk
-                    break;
+
+            //ignore unknown chunk
+            if (nextChunk.getChunkId() == Chunk3DS.INT_PERCENTAGE) {
+                return (double) reader.readShort(
+                        EndianType.LITTLE_ENDIAN_TYPE) / 100.0;
             }
             
             if(reader.getPosition() >= chunk.getEndStreamPosition())
@@ -666,7 +666,7 @@ public class Loader3DS extends Loader {
     }
     
     private void readNamedObject(Chunk3DS chunk){
-        
+        //TODO: for future releases
     }
     
 }
