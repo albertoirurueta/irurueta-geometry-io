@@ -68,43 +68,43 @@ com.irurueta:irurueta-geometry-io
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1435">1435</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1434">1434</a></td></tr>
 <tr class="a">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1799">1799</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1798">1798</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
-<pre>                                    fetchVertex(vertexIndex);
-                                    vertexStreamPosition = reader.getPosition();
+<pre>                                fetchVertex(vertexIndex);
+                                vertexStreamPosition = reader.getPosition();
 
-                                    //read all vertex data
-                                    String vertexLine = reader.readLine();
-                                    if (!vertexLine.startsWith(&quot;v &quot;)) {
+                                //read all vertex data
+                                String vertexLine = reader.readLine();
+                                if (!vertexLine.startsWith(&quot;v &quot;)) {
+                                    throw new LoaderException();
+                                }
+                                vertexLine = vertexLine.substring(
+                                        &quot;v &quot;.length()).trim();
+                                //retrieve words in vertexLine, which contain
+                                //vertex coordinates either as x, y, z or x,
+                                //y, z, w
+                                String[] vertexCoordinates =
+                                        vertexLine.split(&quot; &quot;);
+                                if (vertexCoordinates.length == 4) {
+                                    //homogeneous coordinates x, y, z, w
+
+                                    //check that values are valid
+                                    if (vertexCoordinates[0].length() == 0) {
                                         throw new LoaderException();
                                     }
-                                    vertexLine = vertexLine.substring(
-                                            &quot;v &quot;.length()).trim();
-                                    //retrieve words in vertexLine, which contain
-                                    //vertex coordinates either as x, y, z or x,
-                                    //y, z, w
-                                    String[] vertexCoordinates =
-                                            vertexLine.split(&quot; &quot;);
-                                    if (vertexCoordinates.length == 4) {
-                                        //homogeneous coordinates x, y, z, w
-
-                                        //check that values are valid
-                                        if (vertexCoordinates[0].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (vertexCoordinates[1].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (vertexCoordinates[2].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (vertexCoordinates[3].length() == 0) {
-                                            throw new LoaderException();
-                                        }</pre></div></td></tr></table>
+                                    if (vertexCoordinates[1].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (vertexCoordinates[2].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (vertexCoordinates[3].length() == 0) {
+                                        throw new LoaderException();
+                                    }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -155,13 +155,13 @@ com.irurueta:irurueta-geometry-io
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2325">2325</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2304">2304</a></td></tr>
 <tr class="a">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2401">2401</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2380">2380</a></td></tr>
 <tr class="b">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2476">2476</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2455">2455</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>                        verticesStreamPositionMap.floorEntry(index);

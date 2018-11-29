@@ -116,33 +116,35 @@ public class HeaderPLY {
 <span class="nc" id="L116">                    break;</span>
                 case PLY_BIG_ENDIAN:
 <span class="nc" id="L118">                    builder.append(&quot;binary_big_endian &quot;);</span>
+<span class="nc" id="L119">                    break;</span>
+                default:
                     break;
             }
         }
         
         //add version
-<span class="fc" id="L124">        builder.append(&quot;1.0\n&quot;);</span>
+<span class="fc" id="L126">        builder.append(&quot;1.0\n&quot;);</span>
         
         //add comments
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        for (String comment : comments) {</span>
-<span class="nc" id="L128">            builder.append(&quot;comment &quot;).append(comment).append(&quot;\n&quot;);</span>
-<span class="nc" id="L129">        }</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        for (String comment : comments) {</span>
+<span class="nc" id="L130">            builder.append(&quot;comment &quot;).append(comment).append(&quot;\n&quot;);</span>
+<span class="nc" id="L131">        }</span>
         
         //add obj_infos
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        for (String objInfo : objInfos) {</span>
-<span class="nc" id="L133">            builder.append(&quot;obj_info &quot;).append(objInfo).append(&quot;\n&quot;);</span>
-<span class="nc" id="L134">        }</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        for (String objInfo : objInfos) {</span>
+<span class="nc" id="L135">            builder.append(&quot;obj_info &quot;).append(objInfo).append(&quot;\n&quot;);</span>
+<span class="nc" id="L136">        }</span>
         
         //add elements
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        for (ElementPLY element : elements) {</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (ElementPLY element : elements) {</span>
             //NOTE: elements already contain carrier return on their textual
             //representation
-<span class="fc" id="L140">            builder.append(element.toString());</span>
-<span class="fc" id="L141">        }</span>
+<span class="fc" id="L142">            builder.append(element.toString());</span>
+<span class="fc" id="L143">        }</span>
         
-<span class="fc" id="L143">        builder.append(&quot;end_header\n&quot;);</span>
+<span class="fc" id="L145">        builder.append(&quot;end_header\n&quot;);</span>
         
-<span class="fc" id="L145">        return builder.toString();</span>
+<span class="fc" id="L147">        return builder.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
