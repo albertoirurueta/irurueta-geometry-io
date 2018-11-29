@@ -21,20 +21,7 @@ import java.io.IOException;
  * Abstract class that provides methods to access file data at random positions.
  */
 <span class="fc" id="L23">public abstract class AbstractFileReaderAndWriter {</span>
-    
-    /**
-     * Method to be called when this instance is garbage collected.
-     * @throws Throwable if anything fails.
-     */
-    @Override
-    protected void finalize() throws Throwable {
-<span class="fc" id="L31">        super.finalize();</span>
-        try {
-<span class="fc" id="L33">            close(); //attempt to close file resources</span>
-<span class="fc" id="L34">        } catch (Throwable ignore) { }</span>
-<span class="fc" id="L35">    }</span>
-    
-    
+
     /**
      * Reads one byte at current file position and advances one position.
      * @return Next byte of data or -1 if end of file is reached.
@@ -406,8 +393,8 @@ import java.io.IOException;
     @SuppressWarnings(&quot;WeakerAccess&quot;)
     public String readWord() throws IOException{
         //reads until space, line feed, carriage return or tab is found
-<span class="fc bfc" id="L409" title="All 2 branches covered.">        if(isEndOfStream()) return null;</span>
-<span class="fc" id="L410">        else return readUntilAnyOfTheseCharactersIsFound(&quot; \r\n\t&quot;);        </span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        if(isEndOfStream()) return null;</span>
+<span class="fc" id="L397">        else return readUntilAnyOfTheseCharactersIsFound(&quot; \r\n\t&quot;);        </span>
     }
         
     /**
@@ -421,7 +408,7 @@ import java.io.IOException;
      * @throws IllegalArgumentException if no pattern characters are provided.
      */
     public abstract String readUntilAnyOfTheseCharactersIsFound(String pattern) 
-            throws IOException, IllegalArgumentException;    
+            throws IOException;
     
     /**
      * Writes a boolean to the file as a one-byte value. The value true is 

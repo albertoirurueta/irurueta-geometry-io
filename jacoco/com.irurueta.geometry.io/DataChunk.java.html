@@ -24,6 +24,17 @@ package com.irurueta.geometry.io;
 @SuppressWarnings(&quot;WeakerAccess&quot;)
 public class DataChunk {
     /**
+     * Constant defining minimum number of color components, which is 1 for
+     * grayscale.
+     */
+    public static final int MIN_COLOR_COMPONENTS = 1;
+
+    /**
+     * Constant defining default number of color components for RGB
+     */
+    public static final int DEFAULT_COLOR_COMPONENTS = 3;
+
+    /**
      * Array containing 3D coordinates for all points in a chunk in consecutive
      * order, that is, array will contain values x0, y0, z0, x1, y1, z1, ...
      * and so on.
@@ -115,18 +126,7 @@ public class DataChunk {
      * textures etc for this chunk.
      */
     private Material material;
-    
-    /**
-     * Constant defining minimum number of color components, which is 1 for
-     * grayscale.
-     */
-<span class="fc" id="L123">    public static int MIN_COLOR_COMPONENTS = 1;</span>
-    
-    /**
-     * Constant defining default number of color components for RGB
-     */
-<span class="fc" id="L128">    public static int DEFAULT_COLOR_COMPONENTS = 3;</span>
-    
+
     /**
      * Default Constructor
      */
@@ -325,14 +325,13 @@ public class DataChunk {
      * @throws IllegalArgumentException Raised if provided color components is
      * negative.
      */
-    public void setColorComponents(int colorComponents) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (colorComponents &lt; MIN_COLOR_COMPONENTS) {</span>
-<span class="fc" id="L331">            throw new IllegalArgumentException();</span>
+    public void setColorComponents(int colorComponents) {
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        if (colorComponents &lt; MIN_COLOR_COMPONENTS) {</span>
+<span class="fc" id="L330">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L334">        this.colorComponents = colorComponents;</span>
-<span class="fc" id="L335">    }</span>
+<span class="fc" id="L333">        this.colorComponents = colorComponents;</span>
+<span class="fc" id="L334">    }</span>
 
     /**
      * Returns X minimum coordinate of the bounding box containing all the data 
@@ -340,7 +339,7 @@ public class DataChunk {
      * @return X minimum coordinate of the bounding box.
      */
     public float getMinX() {
-<span class="fc" id="L343">        return minX;</span>
+<span class="fc" id="L342">        return minX;</span>
     }
     
     /**
@@ -349,8 +348,8 @@ public class DataChunk {
      * @param minX X minimum coordinate of the bounding box.
      */
     public void setMinX(float minX) {
-<span class="fc" id="L352">        this.minX = minX;</span>
-<span class="fc" id="L353">    }</span>
+<span class="fc" id="L351">        this.minX = minX;</span>
+<span class="fc" id="L352">    }</span>
     
     /**
      * Returns Y minimum coordinate of the bounding box containing all the data 
@@ -358,7 +357,7 @@ public class DataChunk {
      * @return Y minimum coordinate of the bounding box.
      */
     public float getMinY() {
-<span class="fc" id="L361">        return minY;</span>
+<span class="fc" id="L360">        return minY;</span>
     }
 
     /**
@@ -367,8 +366,8 @@ public class DataChunk {
      * @param minY Y minimum coordinate of the bounding box.
      */    
     public void setMinY(float minY) {
-<span class="fc" id="L370">        this.minY = minY;</span>
-<span class="fc" id="L371">    }</span>
+<span class="fc" id="L369">        this.minY = minY;</span>
+<span class="fc" id="L370">    }</span>
     
     /**
      * Returns Z minimum coordinate of the bounding box containing all the data 
@@ -376,7 +375,7 @@ public class DataChunk {
      * @return Z minimum coordinate of the bounding box.
      */    
     public float getMinZ() {
-<span class="fc" id="L379">        return minZ;</span>
+<span class="fc" id="L378">        return minZ;</span>
     }
     
     /**
@@ -385,8 +384,8 @@ public class DataChunk {
      * @param minZ Z minimum coordinate of the bounding box.
      */        
     public void setMinZ(float minZ) {
-<span class="fc" id="L388">        this.minZ = minZ;</span>
-<span class="fc" id="L389">    }</span>
+<span class="fc" id="L387">        this.minZ = minZ;</span>
+<span class="fc" id="L388">    }</span>
     
     /**
      * Returns X maximum coordinate of the bounding box containing all the data 
@@ -394,7 +393,7 @@ public class DataChunk {
      * @return X maximum coordinate of the bounding box.
      */    
     public float getMaxX() {
-<span class="fc" id="L397">        return maxX;</span>
+<span class="fc" id="L396">        return maxX;</span>
     }
 
     /**
@@ -403,8 +402,8 @@ public class DataChunk {
      * @param maxX X maximum coordinate of the bounding box.
      */    
     public void setMaxX(float maxX) {
-<span class="fc" id="L406">        this.maxX = maxX;</span>
-<span class="fc" id="L407">    }</span>
+<span class="fc" id="L405">        this.maxX = maxX;</span>
+<span class="fc" id="L406">    }</span>
     
     /**
      * Returns Y maximum coordinate of the bounding box containing all the data 
@@ -412,7 +411,7 @@ public class DataChunk {
      * @return Y maximum coordinate of the bounding box.
      */        
     public float getMaxY() {
-<span class="fc" id="L415">        return maxY;</span>
+<span class="fc" id="L414">        return maxY;</span>
     }
 
     /**
@@ -421,8 +420,8 @@ public class DataChunk {
      * @param maxY Y maximum coordinate of the bounding box.
      */        
     public void setMaxY(float maxY) {
-<span class="fc" id="L424">        this.maxY = maxY;</span>
-<span class="fc" id="L425">    }</span>
+<span class="fc" id="L423">        this.maxY = maxY;</span>
+<span class="fc" id="L424">    }</span>
 
     /**
      * Returns Z maximum coordinate of the bounding box containing all the data 
@@ -430,7 +429,7 @@ public class DataChunk {
      * @return Z maximum coordinate of the bounding box.
      */            
     public float getMaxZ() {
-<span class="fc" id="L433">        return maxZ;</span>
+<span class="fc" id="L432">        return maxZ;</span>
     }
     
     /**
@@ -439,8 +438,8 @@ public class DataChunk {
      * @param maxZ Z maximum coordinate of the bounding box.
      */            
     public void setMaxZ(float maxZ) {
-<span class="fc" id="L442">        this.maxZ = maxZ;</span>
-<span class="fc" id="L443">    }</span>
+<span class="fc" id="L441">        this.maxZ = maxZ;</span>
+<span class="fc" id="L442">    }</span>
     
     /**
      * Returns material of this chunk. This will be used to define ambient 
@@ -448,7 +447,7 @@ public class DataChunk {
      * @return Materials of this chunk.
      */
     public Material getMaterial() {
-<span class="fc" id="L451">        return material;</span>
+<span class="fc" id="L450">        return material;</span>
     }
     
     /**
@@ -457,8 +456,8 @@ public class DataChunk {
      * @param material Material of this chunk.
      */
     public void setMaterial(Material material) {
-<span class="fc" id="L460">        this.material = material;</span>
-<span class="fc" id="L461">    }</span>
+<span class="fc" id="L459">        this.material = material;</span>
+<span class="fc" id="L460">    }</span>
     
     /**
      * Returns boolean indicating whether a material has been provided for this
@@ -466,7 +465,7 @@ public class DataChunk {
      * @return True if material is available, false otherwise.
      */
     public boolean isMaterialAvailable() {
-<span class="fc bfc" id="L469" title="All 2 branches covered.">        return material != null;</span>
+<span class="fc bfc" id="L468" title="All 2 branches covered.">        return material != null;</span>
     }
 
     //TODO: create class to compute DataChunk statistics: bounding box, vertex

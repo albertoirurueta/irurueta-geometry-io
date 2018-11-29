@@ -64,17 +64,19 @@ public class Loader3DS extends Loader {
     public static final long DEFAULT_MESH_VERSION = 0;
     public static final float DEFAULT_MASTER_SCALE = 1.0f;
     public static final int CONSTRUCTION_PLANE_COORDS = 3;        
-<span class="nc" id="L67">    public static final float[] DEFAULT_CONSTRUCTION_PLANE = </span>
-            new float[]{0.0f, 0.0f, 1.0f};    
     public static final short DEFAULT_COLOR = 150;
     public static final short DEFAULT_SPECULAR_COLOR = 229;
     public static final short MAX_COLOR_VALUE = 255;
-<span class="nc" id="L72">    public static final short[] DEFAULT_AMBIENT_COLOR =</span>
+
+<span class="nc" id="L71">    protected static final float[] DEFAULT_CONSTRUCTION_PLANE =</span>
+            new float[]{0.0f, 0.0f, 1.0f};
+<span class="nc" id="L73">    protected static final short[] DEFAULT_AMBIENT_COLOR =</span>
             new short[]{DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR};
-    
-<span class="nc" id="L75">    private long meshVersion = DEFAULT_MESH_VERSION;</span>
-<span class="nc" id="L76">    private float masterScale = DEFAULT_MASTER_SCALE;</span>
-<span class="nc" id="L77">    private float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;</span>
+
+
+<span class="nc" id="L77">    private long meshVersion = DEFAULT_MESH_VERSION;</span>
+<span class="nc" id="L78">    private float masterScale = DEFAULT_MASTER_SCALE;</span>
+<span class="nc" id="L79">    private float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;</span>
     private int keyfRevision;
     private String name;
     private int frames;
@@ -82,65 +84,65 @@ public class Loader3DS extends Loader {
     private int segmentTo;
     private int currentFrame;
     
-<span class="nc" id="L85">    private short[] ambientColor = DEFAULT_AMBIENT_COLOR;</span>
+<span class="nc" id="L87">    private short[] ambientColor = DEFAULT_AMBIENT_COLOR;</span>
     private Set&lt;Material&gt; materials;
     
     //TODO: to be modified when implementation is finished
-<span class="nc" id="L89">    private Loader3DS(){}</span>
+<span class="nc" id="L91">    private Loader3DS(){}</span>
     
     public long getMeshVersion(){
-<span class="nc" id="L92">        return meshVersion;</span>
+<span class="nc" id="L94">        return meshVersion;</span>
     }
     
     public float getMasterScale(){
-<span class="nc" id="L96">        return masterScale;</span>
+<span class="nc" id="L98">        return masterScale;</span>
     }
     
     public float[] getConstructionPlane(){
-<span class="nc" id="L100">        return constructionPlane;</span>
+<span class="nc" id="L102">        return constructionPlane;</span>
     }
     
     public int getKeyfRevision(){
-<span class="nc" id="L104">        return keyfRevision;</span>
+<span class="nc" id="L106">        return keyfRevision;</span>
     }
     
     public String getName(){
-<span class="nc" id="L108">        return name;</span>
+<span class="nc" id="L110">        return name;</span>
     }
     
     public int getFrames(){
-<span class="nc" id="L112">        return frames;</span>
+<span class="nc" id="L114">        return frames;</span>
     }
     
     public int getSegmentFrom(){
-<span class="nc" id="L116">        return segmentFrom;</span>
+<span class="nc" id="L118">        return segmentFrom;</span>
     }
     
     public int getSegmentTo(){
-<span class="nc" id="L120">        return segmentTo;</span>
+<span class="nc" id="L122">        return segmentTo;</span>
     }
     
     public int getCurrentFrame(){
-<span class="nc" id="L124">        return currentFrame;</span>
+<span class="nc" id="L126">        return currentFrame;</span>
     }
     
     public short[] getAmbientColor(){
-<span class="nc" id="L128">        return ambientColor;</span>
+<span class="nc" id="L130">        return ambientColor;</span>
     }
     
     @Override
     public boolean isReady() {
-<span class="nc" id="L133">        return hasFile();</span>
+<span class="nc" id="L135">        return hasFile();</span>
     }
 
     @Override
     public MeshFormat getMeshFormat() {
-<span class="nc" id="L138">        return MeshFormat.MESH_FORMAT_3DS;</span>
+<span class="nc" id="L140">        return MeshFormat.MESH_FORMAT_3DS;</span>
     }
 
     @Override
     public boolean isValidFile() throws LockedException, IOException {
-<span class="nc" id="L143">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L145">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
@@ -148,91 +150,92 @@ public class Loader3DS extends Loader {
         IOException, LoaderException {
         
         //load first chunk and ensure it is the start chunk
-<span class="nc" id="L151">        setLocked(true);</span>
+<span class="nc" id="L153">        setLocked(true);</span>
         
         //set reader to start of file
-<span class="nc" id="L154">        reader.seek(0);</span>
-<span class="nc" id="L155">        long fileLength = file.length();</span>
-<span class="nc" id="L156">        boolean endReached = false;</span>
+<span class="nc" id="L156">        reader.seek(0);</span>
+<span class="nc" id="L157">        long fileLength = file.length();</span>
+<span class="nc" id="L158">        boolean endReached = false;</span>
         
-        Chunk3DS chunk, nextChunk;
+        Chunk3DS chunk;
+        Chunk3DS nextChunk;
         do{
-<span class="nc" id="L160">            chunk = Chunk3DS.load(reader);</span>
-<span class="nc bnc" id="L161" title="All 3 branches missed.">            switch(chunk.getChunkId()){</span>
+<span class="nc" id="L163">            chunk = Chunk3DS.load(reader);</span>
+<span class="nc bnc" id="L164" title="All 3 branches missed.">            switch(chunk.getChunkId()){</span>
                 case Chunk3DS.MDATA:
                     //read mdata
-<span class="nc" id="L164">                    readMData(chunk);</span>
-<span class="nc" id="L165">                    break;</span>
+<span class="nc" id="L167">                    readMData(chunk);</span>
+<span class="nc" id="L168">                    break;</span>
                 case Chunk3DS.M3DMAGIC:
                 case Chunk3DS.MLIBMAGIC:
                 case Chunk3DS.CMAGIC:
                     do{
-<span class="nc" id="L170">                        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L171">                        nextChunk = Chunk3DS.load(reader);</span>
-<span class="nc bnc" id="L172" title="All 4 branches missed.">                        switch(nextChunk.getChunkId()){</span>
+<span class="nc" id="L173">                        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L174">                        nextChunk = Chunk3DS.load(reader);</span>
+<span class="nc bnc" id="L175" title="All 4 branches missed.">                        switch(nextChunk.getChunkId()){</span>
                             case Chunk3DS.M3D_VERSION:
                                 //read file version
-<span class="nc" id="L175">                                meshVersion = reader.readUnsignedInt(</span>
+<span class="nc" id="L178">                                meshVersion = reader.readUnsignedInt(</span>
                                         EndianType.LITTLE_ENDIAN_TYPE);
-<span class="nc" id="L177">                                break;</span>
+<span class="nc" id="L180">                                break;</span>
                             case Chunk3DS.MDATA:
                                 //read mdata
-<span class="nc" id="L180">                                readMData(nextChunk);</span>
-<span class="nc" id="L181">                                break;</span>
+<span class="nc" id="L183">                                readMData(nextChunk);</span>
+<span class="nc" id="L184">                                break;</span>
                             case Chunk3DS.KFDATA:
                                 //read kfdata
-<span class="nc" id="L184">                                readKfData(nextChunk);</span>
-<span class="nc" id="L185">                                break;</span>
+<span class="nc" id="L187">                                readKfData(nextChunk);</span>
+<span class="nc" id="L188">                                break;</span>
                             default:
                                 //ignore unknown chunks
                                 break;
                         }                        
-<span class="nc bnc" id="L190" title="All 2 branches missed.">                        if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
-<span class="nc" id="L191">                            endReached = true;</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                        if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
+<span class="nc" id="L194">                            endReached = true;</span>
                         
                         //advance to next chunk
-<span class="nc" id="L194">                        reader.seek(nextChunk.getEndStreamPosition());</span>
-<span class="nc bnc" id="L195" title="All 4 branches missed.">                    }while(!reader.isEndOfStream() &amp;&amp; !endReached);</span>
-<span class="nc" id="L196">                    break;</span>
+<span class="nc" id="L197">                        reader.seek(nextChunk.getEndStreamPosition());</span>
+<span class="nc bnc" id="L198" title="All 4 branches missed.">                    }while(!reader.isEndOfStream() &amp;&amp; !endReached);</span>
+<span class="nc" id="L199">                    break;</span>
                 default:
                     //ignore unknown chunks
                     break;
             }
-<span class="nc bnc" id="L201" title="All 2 branches missed.">            if(chunk.getEndStreamPosition() &gt;= fileLength) endReached = true;</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            if(chunk.getEndStreamPosition() &gt;= fileLength) endReached = true;</span>
             
             //advance to next chunk
-<span class="nc" id="L204">            reader.seek(chunk.getEndStreamPosition());</span>
-<span class="nc bnc" id="L205" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);</span>
+<span class="nc" id="L207">            reader.seek(chunk.getEndStreamPosition());</span>
+<span class="nc bnc" id="L208" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);</span>
         
         //file ended unexpectedly
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        if(!endReached) throw new LoaderException();</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        if(!endReached) throw new LoaderException();</span>
         
         //TODO: finish
-<span class="nc" id="L211">        return null;</span>
+<span class="nc" id="L214">        return null;</span>
     }
     
     
     private void readMData(Chunk3DS chunk) throws IOException, LoaderException{
-<span class="nc bnc" id="L216" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.MDATA) throw new LoaderException();</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.MDATA) throw new LoaderException();</span>
         
         //read next chunks
-<span class="nc" id="L219">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L220">        boolean endReached = false;</span>
+<span class="nc" id="L222">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L223">        boolean endReached = false;</span>
         Chunk3DS nextChunk;        
         do{
-<span class="nc" id="L223">            nextChunk = Chunk3DS.load(reader);</span>
+<span class="nc" id="L226">            nextChunk = Chunk3DS.load(reader);</span>
             
-<span class="nc bnc" id="L225" title="All 11 branches missed.">            switch(nextChunk.getChunkId()){</span>
+<span class="nc bnc" id="L228" title="All 11 branches missed.">            switch(nextChunk.getChunkId()){</span>
                 case Chunk3DS.MESH_VERSION:
                     //read file version
-<span class="nc" id="L228">                    meshVersion = reader.readUnsignedInt(</span>
+<span class="nc" id="L231">                    meshVersion = reader.readUnsignedInt(</span>
                             EndianType.LITTLE_ENDIAN_TYPE);
-<span class="nc" id="L230">                    break;</span>
+<span class="nc" id="L233">                    break;</span>
                 case Chunk3DS.MASTER_SCALE:
                     //read master scale
-<span class="nc" id="L233">                    masterScale = reader.readFloat(</span>
+<span class="nc" id="L236">                    masterScale = reader.readFloat(</span>
                             EndianType.LITTLE_ENDIAN_TYPE);
-<span class="nc" id="L235">                    break;</span>
+<span class="nc" id="L238">                    break;</span>
                 case Chunk3DS.SHADOW_MAP_SIZE:
                 case Chunk3DS.LO_SHADOW_BIAS:
                 case Chunk3DS.HI_SHADOW_BIAS:
@@ -241,22 +244,22 @@ public class Loader3DS extends Loader {
                 case Chunk3DS.SHADOW_FILTER:
                 case Chunk3DS.RAY_BIAS:
                     //TODO: read shadow (for future releases)
-<span class="nc" id="L244">                    break;</span>
+<span class="nc" id="L247">                    break;</span>
                 case Chunk3DS.VIEWPORT_LAYOUT:
                 case Chunk3DS.DEFAULT_VIEW:
                     //TODO: read viewport (for future releases)
-<span class="nc" id="L248">                    break;</span>
+<span class="nc" id="L251">                    break;</span>
                 case Chunk3DS.O_CONSTS:
                     //read construction plane
-<span class="nc bnc" id="L251" title="All 2 branches missed.">                    for(int i = 0; i &lt; CONSTRUCTION_PLANE_COORDS; i++){</span>
-<span class="nc" id="L252">                        constructionPlane[i] = reader.readFloat(</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">                    for(int i = 0; i &lt; CONSTRUCTION_PLANE_COORDS; i++){</span>
+<span class="nc" id="L255">                        constructionPlane[i] = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
                     }
-<span class="nc" id="L255">                    break;</span>
+<span class="nc" id="L258">                    break;</span>
                 case Chunk3DS.AMBIENT_LIGHT:
                     //read ambient light
-<span class="nc" id="L258">                    readAmbient(nextChunk);</span>
-<span class="nc" id="L259">                    break;</span>
+<span class="nc" id="L261">                    readAmbient(nextChunk);</span>
+<span class="nc" id="L262">                    break;</span>
                 case Chunk3DS.BIT_MAP:
                 case Chunk3DS.SOLID_BGND:
                 case Chunk3DS.V_GRADIENT:
@@ -264,7 +267,7 @@ public class Loader3DS extends Loader {
                 case Chunk3DS.USE_SOLID_BGND:
                 case Chunk3DS.USE_V_GRADIENT:
                     //TODO: read background (for future releases)
-<span class="nc" id="L267">                    break;</span>
+<span class="nc" id="L270">                    break;</span>
                 case Chunk3DS.FOG:
                 case Chunk3DS.LAYER_FOG:
                 case Chunk3DS.DISTANCE_CUE:
@@ -272,123 +275,123 @@ public class Loader3DS extends Loader {
                 case Chunk3DS.USE_LAYER_FOG:
                 case Chunk3DS.USE_DISTANCE_CUE:
                     //TODO: read atmosphere (for future releases)
-<span class="nc" id="L275">                    break;</span>
+<span class="nc" id="L278">                    break;</span>
                 case Chunk3DS.MAT_ENTRY:
                     //read material
-<span class="nc" id="L278">                    readMaterial(nextChunk);</span>
-<span class="nc" id="L279">                    break;</span>
+<span class="nc" id="L281">                    readMaterial(nextChunk);</span>
+<span class="nc" id="L282">                    break;</span>
                 case Chunk3DS.NAMED_OBJECT:
                     //TODO: read named object
-<span class="nc" id="L282">                    readNamedObject(nextChunk);</span>
-<span class="nc" id="L283">                    break;</span>
+<span class="nc" id="L285">                    readNamedObject(nextChunk);</span>
+<span class="nc" id="L286">                    break;</span>
                 default:
                     //ignore unknown chunk
             }
             
-<span class="nc bnc" id="L288" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
-<span class="nc" id="L289">                endReached = true;</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
+<span class="nc" id="L292">                endReached = true;</span>
                         
             //advance to next chunk
-<span class="nc" id="L292">            reader.seek(nextChunk.getEndStreamPosition());            </span>
-<span class="nc bnc" id="L293" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);        </span>
-<span class="nc" id="L294">    }</span>
+<span class="nc" id="L295">            reader.seek(nextChunk.getEndStreamPosition());            </span>
+<span class="nc bnc" id="L296" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);        </span>
+<span class="nc" id="L297">    }</span>
     
     private void readKfData(Chunk3DS chunk) throws IOException, LoaderException{
-<span class="nc bnc" id="L297" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.KFDATA) throw new LoaderException();</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.KFDATA) throw new LoaderException();</span>
         
         //read next chunks
-<span class="nc" id="L300">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L301">        boolean endReached = false;</span>
+<span class="nc" id="L303">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L304">        boolean endReached = false;</span>
         Chunk3DS nextChunk;        
         do{
-<span class="nc" id="L304">            nextChunk = Chunk3DS.load(reader);</span>
+<span class="nc" id="L307">            nextChunk = Chunk3DS.load(reader);</span>
             
-<span class="nc bnc" id="L306" title="All 11 branches missed.">            switch(nextChunk.getChunkId()){</span>
+<span class="nc bnc" id="L309" title="All 11 branches missed.">            switch(nextChunk.getChunkId()){</span>
                 case Chunk3DS.KFHDR:
                     //Read keyf revision, file name and frames
-<span class="nc" id="L309">                    keyfRevision = reader.readUnsignedShort(</span>
+<span class="nc" id="L312">                    keyfRevision = reader.readUnsignedShort(</span>
                             EndianType.LITTLE_ENDIAN_TYPE);
-<span class="nc" id="L311">                    byte[] buffer = new byte[12 + 1];</span>
+<span class="nc" id="L314">                    byte[] buffer = new byte[12 + 1];</span>
                     byte b;
-<span class="nc bnc" id="L313" title="All 2 branches missed.">                    for(int i = 0; i &lt; buffer.length; i++){</span>
-<span class="nc" id="L314">                        b = reader.readByte();</span>
-<span class="nc" id="L315">                        buffer[i] = b;</span>
-<span class="nc bnc" id="L316" title="All 2 branches missed.">                        if(b == 0) break;</span>
+<span class="nc bnc" id="L316" title="All 2 branches missed.">                    for(int i = 0; i &lt; buffer.length; i++){</span>
+<span class="nc" id="L317">                        b = reader.readByte();</span>
+<span class="nc" id="L318">                        buffer[i] = b;</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">                        if(b == 0) break;</span>
                     }
-<span class="nc" id="L318">                    name = new String(buffer, Charset.forName(&quot;ISO-8859-1 &quot;));</span>
-<span class="nc" id="L319">                    frames = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);</span>
-<span class="nc" id="L320">                    break;</span>
+<span class="nc" id="L321">                    name = new String(buffer, Charset.forName(&quot;ISO-8859-1 &quot;));</span>
+<span class="nc" id="L322">                    frames = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);</span>
+<span class="nc" id="L323">                    break;</span>
                 case Chunk3DS.KFSEG:
                     //read segment from &amp; to
-<span class="nc" id="L323">                    segmentFrom = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);</span>
-<span class="nc" id="L324">                    segmentTo = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);</span>
-<span class="nc" id="L325">                    break;</span>
+<span class="nc" id="L326">                    segmentFrom = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);</span>
+<span class="nc" id="L327">                    segmentTo = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);</span>
+<span class="nc" id="L328">                    break;</span>
                 case Chunk3DS.KFCURTIME:
                     //read current frame
-<span class="nc" id="L328">                    currentFrame = reader.readInt(</span>
+<span class="nc" id="L331">                    currentFrame = reader.readInt(</span>
                             EndianType.LITTLE_ENDIAN_TYPE);
-<span class="nc" id="L330">                    break;</span>
+<span class="nc" id="L333">                    break;</span>
                 case Chunk3DS.VIEWPORT_LAYOUT:
                 case Chunk3DS.DEFAULT_VIEW:
                     //TODO: read viewport (for future releases)
-<span class="nc" id="L334">                    break;</span>
+<span class="nc" id="L337">                    break;</span>
                 case Chunk3DS.AMBIENT_NODE_TAG:
                     //TODO: read ambient node (for future releases)
-<span class="nc" id="L337">                    break;</span>
+<span class="nc" id="L340">                    break;</span>
                 case Chunk3DS.OBJECT_NODE_TAG:
                     //TODO: read ambient node (for future releases)
-<span class="nc" id="L340">                    break;</span>
+<span class="nc" id="L343">                    break;</span>
                 case Chunk3DS.CAMERA_NODE_TAG:
                     //TODO: read camera node (for future releases)
-<span class="nc" id="L343">                    break;</span>
+<span class="nc" id="L346">                    break;</span>
                 case Chunk3DS.TARGET_NODE_TAG:
                     //TODO: read target node (for future releases)
-<span class="nc" id="L346">                    break;</span>
+<span class="nc" id="L349">                    break;</span>
                 case Chunk3DS.LIGHT_NODE_TAG:
                 case Chunk3DS.SPOTLIGHT_NODE_TAG:
                     //TODO: read light (for future releases)
-<span class="nc" id="L350">                    break;</span>
+<span class="nc" id="L353">                    break;</span>
                 case Chunk3DS.L_TARGET_NODE_TAG:
                     //TODO: read spot node (for future releases)
-<span class="nc" id="L353">                    break;</span>
+<span class="nc" id="L356">                    break;</span>
                 default:
                     //ignore unknown chunks
             }
             
-<span class="nc bnc" id="L358" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
-<span class="nc" id="L359">                endReached = true;</span>
+<span class="nc bnc" id="L361" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
+<span class="nc" id="L362">                endReached = true;</span>
                         
             //advance to next chunk
-<span class="nc" id="L362">            reader.seek(nextChunk.getEndStreamPosition());            </span>
+<span class="nc" id="L365">            reader.seek(nextChunk.getEndStreamPosition());            </span>
             
-<span class="nc bnc" id="L364" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);        </span>
-<span class="nc" id="L365">    }    </span>
+<span class="nc bnc" id="L367" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);        </span>
+<span class="nc" id="L368">    }    </span>
     
     private void readAmbient(Chunk3DS chunk) throws IOException, LoaderException{
-<span class="nc bnc" id="L368" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.AMBIENT_LIGHT) throw new LoaderException();</span>
+<span class="nc bnc" id="L371" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.AMBIENT_LIGHT) throw new LoaderException();</span>
         
         //read next chunks
-<span class="nc" id="L371">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L372">        boolean endReached = false;</span>
+<span class="nc" id="L374">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L375">        boolean endReached = false;</span>
         Chunk3DS nextChunk;        
-<span class="nc" id="L374">        boolean haveLin = false;</span>
+<span class="nc" id="L377">        boolean haveLin = false;</span>
         do{
-<span class="nc" id="L376">            nextChunk = Chunk3DS.load(reader);</span>
+<span class="nc" id="L379">            nextChunk = Chunk3DS.load(reader);</span>
             
-<span class="nc bnc" id="L378" title="All 3 branches missed.">            switch(nextChunk.getChunkId()){</span>
+<span class="nc bnc" id="L381" title="All 3 branches missed.">            switch(nextChunk.getChunkId()){</span>
                 case Chunk3DS.LIN_COLOR_F:
-<span class="nc bnc" id="L380" title="All 2 branches missed.">                    for(int i = 0; i &lt; 3; i++){</span>
-<span class="nc" id="L381">                        ambientColor[i] = (short)(reader.readFloat(</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                    for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L384">                        ambientColor[i] = (short)(reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE) * 255);
                     }
-<span class="nc" id="L384">                    haveLin = true;</span>
-<span class="nc" id="L385">                    break;</span>
+<span class="nc" id="L387">                    haveLin = true;</span>
+<span class="nc" id="L388">                    break;</span>
                 case Chunk3DS.COLOR_F:
                     //gamma corrected color chunk replaved in 3ds R3 by
                     //LIN_COLOR_24
-<span class="nc bnc" id="L389" title="All 2 branches missed.">                    if(!haveLin){</span>
-<span class="nc bnc" id="L390" title="All 2 branches missed.">                        for(int i = 0; i &lt; 3; i++){</span>
-<span class="nc" id="L391">                            ambientColor[i] = (short)(reader.readFloat(</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">                    if(!haveLin){</span>
+<span class="nc bnc" id="L393" title="All 2 branches missed.">                        for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L394">                            ambientColor[i] = (short)(reader.readFloat(</span>
                                     EndianType.LITTLE_ENDIAN_TYPE) * 255);
                         }
                     }
@@ -398,228 +401,228 @@ public class Loader3DS extends Loader {
                     break;
             }
             
-<span class="nc bnc" id="L401" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
-<span class="nc" id="L402">                endReached = true;</span>
+<span class="nc bnc" id="L404" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
+<span class="nc" id="L405">                endReached = true;</span>
                         
             //advance to next chunk
-<span class="nc" id="L405">            reader.seek(nextChunk.getEndStreamPosition());            </span>
+<span class="nc" id="L408">            reader.seek(nextChunk.getEndStreamPosition());            </span>
             
-<span class="nc bnc" id="L407" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached); </span>
-<span class="nc" id="L408">    }</span>
+<span class="nc bnc" id="L410" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached); </span>
+<span class="nc" id="L411">    }</span>
     
     private void readMaterial(Chunk3DS chunk) throws LoaderException, 
             IOException{
         
-<span class="nc bnc" id="L413" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.MAT_ENTRY) </span>
-<span class="nc" id="L414">            throw new LoaderException();</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">        if(chunk.getChunkId() != Chunk3DS.MAT_ENTRY) </span>
+<span class="nc" id="L417">            throw new LoaderException();</span>
         
-<span class="nc" id="L416">        Material3DS material = new Material3DS();</span>
+<span class="nc" id="L419">        Material3DS material = new Material3DS();</span>
         
         //set default values
-<span class="nc" id="L419">        material.setId(materials.size());        </span>
-<span class="nc" id="L420">        material.setAmbientColor(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR);</span>
-<span class="nc" id="L421">        material.setDiffuseColor(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR);</span>
-<span class="nc" id="L422">        material.setSpecularColor(DEFAULT_SPECULAR_COLOR, </span>
+<span class="nc" id="L422">        material.setId(materials.size());        </span>
+<span class="nc" id="L423">        material.setAmbientColor(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR);</span>
+<span class="nc" id="L424">        material.setDiffuseColor(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR);</span>
+<span class="nc" id="L425">        material.setSpecularColor(DEFAULT_SPECULAR_COLOR, </span>
                 DEFAULT_SPECULAR_COLOR, DEFAULT_SPECULAR_COLOR);
         
         
-<span class="nc" id="L426">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L427">        boolean endReached = false;</span>
+<span class="nc" id="L429">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L430">        boolean endReached = false;</span>
         Chunk3DS nextChunk;        
-<span class="nc" id="L429">        short[] rgba = new short[4];</span>
+<span class="nc" id="L432">        short[] rgba = new short[4];</span>
         do{
-<span class="nc" id="L431">            nextChunk = Chunk3DS.load(reader);</span>
+<span class="nc" id="L434">            nextChunk = Chunk3DS.load(reader);</span>
             
-<span class="nc bnc" id="L433" title="All 40 branches missed.">            switch(nextChunk.getChunkId()){</span>
+<span class="nc bnc" id="L436" title="All 40 branches missed.">            switch(nextChunk.getChunkId()){</span>
                 case Chunk3DS.MAT_NAME:
-<span class="nc" id="L435">                    byte[] buffer = new byte[64 + 1];</span>
+<span class="nc" id="L438">                    byte[] buffer = new byte[64 + 1];</span>
                     byte b;
-<span class="nc bnc" id="L437" title="All 2 branches missed.">                    for(int i = 0; i &lt; buffer.length; i++){</span>
-<span class="nc" id="L438">                        b = reader.readByte();</span>
-<span class="nc" id="L439">                        buffer[i] = b;</span>
-<span class="nc bnc" id="L440" title="All 2 branches missed.">                        if(b == 0) break;</span>
+<span class="nc bnc" id="L440" title="All 2 branches missed.">                    for(int i = 0; i &lt; buffer.length; i++){</span>
+<span class="nc" id="L441">                        b = reader.readByte();</span>
+<span class="nc" id="L442">                        buffer[i] = b;</span>
+<span class="nc bnc" id="L443" title="All 2 branches missed.">                        if(b == 0) break;</span>
                     }
-<span class="nc" id="L442">                    String materialName = new String(buffer, </span>
-<span class="nc" id="L443">                            Charset.forName(&quot;ISO-8859-1 &quot;));</span>
-<span class="nc" id="L444">                    material.setMaterialName(materialName);                    </span>
-<span class="nc" id="L445">                    break;</span>
+<span class="nc" id="L445">                    String materialName = new String(buffer, </span>
+<span class="nc" id="L446">                            Charset.forName(&quot;ISO-8859-1 &quot;));</span>
+<span class="nc" id="L447">                    material.setMaterialName(materialName);                    </span>
+<span class="nc" id="L448">                    break;</span>
                     
                 case Chunk3DS.MAT_AMBIENT:
-<span class="nc" id="L448">                    readColor(nextChunk, rgba);</span>
-<span class="nc" id="L449">                    material.setAmbientColor(rgba[0], rgba[1], rgba[2]);</span>
-<span class="nc" id="L450">                    break;</span>
+<span class="nc" id="L451">                    readColor(nextChunk, rgba);</span>
+<span class="nc" id="L452">                    material.setAmbientColor(rgba[0], rgba[1], rgba[2]);</span>
+<span class="nc" id="L453">                    break;</span>
                 case Chunk3DS.MAT_DIFFUSE:
-<span class="nc" id="L452">                    readColor(nextChunk, rgba);</span>
-<span class="nc" id="L453">                    material.setDiffuseColor(rgba[0], rgba[1], rgba[2]);</span>
-<span class="nc" id="L454">                    break;</span>
+<span class="nc" id="L455">                    readColor(nextChunk, rgba);</span>
+<span class="nc" id="L456">                    material.setDiffuseColor(rgba[0], rgba[1], rgba[2]);</span>
+<span class="nc" id="L457">                    break;</span>
                 case Chunk3DS.MAT_SPECULAR:
-<span class="nc" id="L456">                    readColor(nextChunk, rgba);</span>
-<span class="nc" id="L457">                    material.setSpecularColor(rgba[0], rgba[1], rgba[2]);                    </span>
-<span class="nc" id="L458">                    break;</span>
+<span class="nc" id="L459">                    readColor(nextChunk, rgba);</span>
+<span class="nc" id="L460">                    material.setSpecularColor(rgba[0], rgba[1], rgba[2]);                    </span>
+<span class="nc" id="L461">                    break;</span>
                 case Chunk3DS.MAT_SHININESS:
                     //TODO: shininess is ignored (for future releases)
-<span class="nc" id="L461">                    break;</span>
+<span class="nc" id="L464">                    break;</span>
                 case Chunk3DS.MAT_SHIN2PCT:
                     //TODO: for future releases
-<span class="nc" id="L464">                    break;</span>
+<span class="nc" id="L467">                    break;</span>
                 case Chunk3DS.MAT_TRANSPARENCY:
-<span class="nc" id="L466">                    material.setTransparency((short)(readPercentage(nextChunk) * </span>
+<span class="nc" id="L469">                    material.setTransparency((short)(readPercentage(nextChunk) * </span>
                             (double)MAX_COLOR_VALUE));                    
-<span class="nc" id="L468">                    break;</span>
+<span class="nc" id="L471">                    break;</span>
                 case Chunk3DS.MAT_XPFALL:
                     //TODO: for future releases
-<span class="nc" id="L471">                    break;</span>
+<span class="nc" id="L474">                    break;</span>
                 case Chunk3DS.MAT_SELF_ILPCT:
                     //TODO: for future releases
-<span class="nc" id="L474">                    break;</span>
+<span class="nc" id="L477">                    break;</span>
                 case Chunk3DS.MAT_USE_XPFALL:
                     //TODO: for future releases
-<span class="nc" id="L477">                    break;</span>
+<span class="nc" id="L480">                    break;</span>
                 case Chunk3DS.MAT_REFBLUR:
                     //TODO: for future releases
-<span class="nc" id="L480">                    break;</span>
+<span class="nc" id="L483">                    break;</span>
                 case Chunk3DS.MAT_USE_REFBLUR:
                     //TODO: for future releases
-<span class="nc" id="L483">                    break;</span>
+<span class="nc" id="L486">                    break;</span>
                 case Chunk3DS.MAT_SHADING:
                     //TODO: for future releases
-<span class="nc" id="L486">                    break;</span>
+<span class="nc" id="L489">                    break;</span>
                 case Chunk3DS.MAT_SELF_ILLUM:
                     //TODO: for future releases
-<span class="nc" id="L489">                    break;</span>
+<span class="nc" id="L492">                    break;</span>
                 case Chunk3DS.MAT_TWO_SIDE:
                     //TODO: for future releases
-<span class="nc" id="L492">                    break;</span>
+<span class="nc" id="L495">                    break;</span>
                 case Chunk3DS.MAT_DECAL:
                     //TODO: for future releases
-<span class="nc" id="L495">                    break;</span>
+<span class="nc" id="L498">                    break;</span>
                 case Chunk3DS.MAT_ADDITIVE:
                     //TODO: for future releases
-<span class="nc" id="L498">                    break;</span>
+<span class="nc" id="L501">                    break;</span>
                 case Chunk3DS.MAT_FACEMAP:
                     //TODO: for future releases
-<span class="nc" id="L501">                    break;</span>
+<span class="nc" id="L504">                    break;</span>
                 case Chunk3DS.MAT_PHONGSOFT:
                     //TODO: for future releases
-<span class="nc" id="L504">                    break;</span>
+<span class="nc" id="L507">                    break;</span>
                 case Chunk3DS.MAT_WIRE:
                     //TODO: for future releases
-<span class="nc" id="L507">                    break;</span>
+<span class="nc" id="L510">                    break;</span>
                 case Chunk3DS.MAT_WIREABS:
                     //TODO: for future releases
-<span class="nc" id="L510">                    break;</span>
+<span class="nc" id="L513">                    break;</span>
                 case Chunk3DS.MAT_WIRE_SIZE:
                     //TODO: for future releases
-<span class="nc" id="L513">                    break;</span>
+<span class="nc" id="L516">                    break;</span>
                 case Chunk3DS.MAT_TEXMAP:
                     //TODO: for future releases
-<span class="nc" id="L516">                    break;</span>
+<span class="nc" id="L519">                    break;</span>
                 case Chunk3DS.MAT_TEXMASK:
                     //TODO: for future releases
-<span class="nc" id="L519">                    break;</span>
+<span class="nc" id="L522">                    break;</span>
                 case Chunk3DS.MAT_TEX2MAP:
                     //TODO: for future releases
-<span class="nc" id="L522">                    break;</span>
+<span class="nc" id="L525">                    break;</span>
                 case Chunk3DS.MAT_TEX2MASK:
                     //TODO: for future releases
-<span class="nc" id="L525">                    break;</span>
+<span class="nc" id="L528">                    break;</span>
                 case Chunk3DS.MAT_OPACMAP:
                     //TODO: for future releases
-<span class="nc" id="L528">                    break;</span>
+<span class="nc" id="L531">                    break;</span>
                 case Chunk3DS.MAT_OPACMASK:
                     //TODO: for future releases
-<span class="nc" id="L531">                    break;</span>
+<span class="nc" id="L534">                    break;</span>
                 case Chunk3DS.MAT_BUMPMAP:
                     //TODO: for future releases
-<span class="nc" id="L534">                    break;</span>
+<span class="nc" id="L537">                    break;</span>
                 case Chunk3DS.MAT_BUMPMASK:
                     //TODO: for future releases
-<span class="nc" id="L537">                    break;</span>
+<span class="nc" id="L540">                    break;</span>
                 case Chunk3DS.MAT_SPECMAP:
                     //TODO: for future releases
-<span class="nc" id="L540">                    break;</span>
+<span class="nc" id="L543">                    break;</span>
                 case Chunk3DS.MAT_SPECMASK:
                     //TODO: for future releases
-<span class="nc" id="L543">                    break;</span>
+<span class="nc" id="L546">                    break;</span>
                 case Chunk3DS.MAT_SHINMAP:
                     //TODO: for future releases
-<span class="nc" id="L546">                    break;</span>
+<span class="nc" id="L549">                    break;</span>
                 case Chunk3DS.MAT_SHINMASK:
                     //TODO: for future releases
-<span class="nc" id="L549">                    break;</span>
+<span class="nc" id="L552">                    break;</span>
                 case Chunk3DS.MAT_SELFIMAP:
                     //TODO: for future releases
-<span class="nc" id="L552">                    break;</span>
+<span class="nc" id="L555">                    break;</span>
                 case Chunk3DS.MAT_SELFIMASK:
                     //TODO: for future releases
-<span class="nc" id="L555">                    break;</span>
+<span class="nc" id="L558">                    break;</span>
                 case Chunk3DS.MAT_REFLMAP:
                     //TODO: for future releases
-<span class="nc" id="L558">                    break;</span>
+<span class="nc" id="L561">                    break;</span>
                 case Chunk3DS.MAT_REFLMASK:
                     //TODO: for future releases
-<span class="nc" id="L561">                    break;</span>
+<span class="nc" id="L564">                    break;</span>
                 case Chunk3DS.MAT_ACUBIC:
                     //TODO: for future releases
-<span class="nc" id="L564">                    break;</span>
+<span class="nc" id="L567">                    break;</span>
                 default:
                     //ignore unknown chunks
                     break;
             }
             
-<span class="nc bnc" id="L570" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
-<span class="nc" id="L571">                endReached = true;</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
+<span class="nc" id="L574">                endReached = true;</span>
                         
             //advance to next chunk
-<span class="nc" id="L574">            reader.seek(nextChunk.getEndStreamPosition());</span>
+<span class="nc" id="L577">            reader.seek(nextChunk.getEndStreamPosition());</span>
             
-<span class="nc bnc" id="L576" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);         </span>
-<span class="nc" id="L577">        materials.add(material);</span>
-<span class="nc" id="L578">    }</span>
+<span class="nc bnc" id="L579" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);         </span>
+<span class="nc" id="L580">        materials.add(material);</span>
+<span class="nc" id="L581">    }</span>
     
     private void readColor(Chunk3DS chunk, short[] rgba) throws IOException{
         
         //read next chunks
-<span class="nc" id="L583">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L584">        boolean endReached = false;</span>
+<span class="nc" id="L586">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L587">        boolean endReached = false;</span>
         Chunk3DS nextChunk;        
-<span class="nc" id="L586">        boolean haveLin = false;</span>
+<span class="nc" id="L589">        boolean haveLin = false;</span>
         do{
-<span class="nc" id="L588">            nextChunk = Chunk3DS.load(reader);</span>
+<span class="nc" id="L591">            nextChunk = Chunk3DS.load(reader);</span>
             
-<span class="nc bnc" id="L590" title="All 5 branches missed.">            switch(nextChunk.getChunkId()){</span>
+<span class="nc bnc" id="L593" title="All 5 branches missed.">            switch(nextChunk.getChunkId()){</span>
                 case Chunk3DS.LIN_COLOR_24:
-<span class="nc bnc" id="L592" title="All 2 branches missed.">                    for(int i = 0; i &lt; 3; i++){</span>
-<span class="nc" id="L593">                        rgba[i] = reader.readUnsignedByte();</span>
+<span class="nc bnc" id="L595" title="All 2 branches missed.">                    for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L596">                        rgba[i] = reader.readUnsignedByte();</span>
                     }
-<span class="nc" id="L595">                    rgba[3] = 255;</span>
-<span class="nc" id="L596">                    haveLin = true;</span>
-<span class="nc" id="L597">                    break;</span>
+<span class="nc" id="L598">                    rgba[3] = 255;</span>
+<span class="nc" id="L599">                    haveLin = true;</span>
+<span class="nc" id="L600">                    break;</span>
                 case Chunk3DS.COLOR_24:
                     //gamma corrected color chunk replaved in 3ds R3 by
                     //LIN_COLOR_24
-<span class="nc bnc" id="L601" title="All 2 branches missed.">                    if(!haveLin){</span>
-<span class="nc bnc" id="L602" title="All 2 branches missed.">                        for(int i = 0; i &lt; 3; i++){</span>
-<span class="nc" id="L603">                            rgba[i] = reader.readUnsignedByte();</span>
+<span class="nc bnc" id="L604" title="All 2 branches missed.">                    if(!haveLin){</span>
+<span class="nc bnc" id="L605" title="All 2 branches missed.">                        for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L606">                            rgba[i] = reader.readUnsignedByte();</span>
                         }
-<span class="nc" id="L605">                        rgba[3] = 255;</span>
+<span class="nc" id="L608">                        rgba[3] = 255;</span>
                     }
                     break;
                 case Chunk3DS.LIN_COLOR_F:
-<span class="nc bnc" id="L609" title="All 2 branches missed.">                    for(int i = 0; i &lt; 3; i++){</span>
-<span class="nc" id="L610">                        rgba[i] = (short)(reader.readFloat(</span>
+<span class="nc bnc" id="L612" title="All 2 branches missed.">                    for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L613">                        rgba[i] = (short)(reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE) * 255.0f);
                     }
-<span class="nc" id="L613">                    rgba[3] = 255;</span>
-<span class="nc" id="L614">                    haveLin = true;</span>
-<span class="nc" id="L615">                    break;</span>
+<span class="nc" id="L616">                    rgba[3] = 255;</span>
+<span class="nc" id="L617">                    haveLin = true;</span>
+<span class="nc" id="L618">                    break;</span>
                 case Chunk3DS.COLOR_F:
-<span class="nc bnc" id="L617" title="All 2 branches missed.">                    if(!haveLin){</span>
-<span class="nc bnc" id="L618" title="All 2 branches missed.">                        for(int i = 0; i &lt; 3; i++){</span>
-<span class="nc" id="L619">                            rgba[i] = (short)(reader.readFloat(</span>
+<span class="nc bnc" id="L620" title="All 2 branches missed.">                    if(!haveLin){</span>
+<span class="nc bnc" id="L621" title="All 2 branches missed.">                        for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L622">                            rgba[i] = (short)(reader.readFloat(</span>
                                     EndianType.LITTLE_ENDIAN_TYPE) * 255.0f);
                         }
-<span class="nc" id="L622">                        rgba[3] = 255;</span>
+<span class="nc" id="L625">                        rgba[3] = 255;</span>
                     }
                     break;
                 default:
@@ -627,31 +630,28 @@ public class Loader3DS extends Loader {
                     break;
             }
             
-<span class="nc bnc" id="L630" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
-<span class="nc" id="L631">                endReached = true;</span>
+<span class="nc bnc" id="L633" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
+<span class="nc" id="L634">                endReached = true;</span>
                         
             //advance to next chunk
-<span class="nc" id="L634">            reader.seek(nextChunk.getEndStreamPosition());            </span>
+<span class="nc" id="L637">            reader.seek(nextChunk.getEndStreamPosition());            </span>
             
-<span class="nc bnc" id="L636" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);         </span>
-<span class="nc" id="L637">    }</span>
+<span class="nc bnc" id="L639" title="All 4 branches missed.">        }while(!reader.isEndOfStream() &amp;&amp; !endReached);         </span>
+<span class="nc" id="L640">    }</span>
     
     private double readPercentage(Chunk3DS chunk) throws IOException{
         
         //read next chunks
-<span class="nc" id="L642">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
-<span class="nc" id="L643">        boolean endReached = false;</span>
+<span class="nc" id="L645">        reader.seek(chunk.getStartStreamPosition() + 6);</span>
+<span class="nc" id="L646">        boolean endReached = false;</span>
         Chunk3DS nextChunk;        
         do{
-<span class="nc" id="L646">            nextChunk = Chunk3DS.load(reader);</span>
-            
-<span class="nc bnc" id="L648" title="All 2 branches missed.">            switch(nextChunk.getChunkId()){</span>
-                case Chunk3DS.INT_PERCENTAGE:
-<span class="nc" id="L650">                    return (double)reader.readShort(</span>
-                            EndianType.LITTLE_ENDIAN_TYPE) / 100.0;
-                default:
-                    //ignore unknown chunk
-                    break;
+<span class="nc" id="L649">            nextChunk = Chunk3DS.load(reader);</span>
+
+            //ignore unknown chunk
+<span class="nc bnc" id="L652" title="All 2 branches missed.">            if (nextChunk.getChunkId() == Chunk3DS.INT_PERCENTAGE) {</span>
+<span class="nc" id="L653">                return (double) reader.readShort(</span>
+                        EndianType.LITTLE_ENDIAN_TYPE) / 100.0;
             }
             
 <span class="nc bnc" id="L657" title="All 2 branches missed.">            if(reader.getPosition() &gt;= chunk.getEndStreamPosition())</span>
@@ -666,7 +666,7 @@ public class Loader3DS extends Loader {
     }
     
     private void readNamedObject(Chunk3DS chunk){
-        
+        //TODO: for future releases
 <span class="nc" id="L670">    }</span>
     
 }

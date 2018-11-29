@@ -104,43 +104,45 @@ public class HeaderPLY {
     @Override
     public String toString() {
 <span class="fc" id="L106">        StringBuilder builder = new StringBuilder(&quot;ply\n&quot;);</span>
-        
-<span class="fc" id="L108">        builder.append(&quot;format &quot;);</span>
-<span class="pc bpc" id="L109" title="3 of 4 branches missed.">        switch (storageMode) {</span>
-            case PLY_ASCII:
-<span class="fc" id="L111">                builder.append(&quot;ascii &quot;);</span>
-<span class="fc" id="L112">                break;</span>
-            case PLY_LITTLE_ENDIAN:
-<span class="nc" id="L114">                builder.append(&quot;binary_little_endian &quot;);</span>
-<span class="nc" id="L115">                break;</span>
-            case PLY_BIG_ENDIAN:
-<span class="nc" id="L117">                builder.append(&quot;binary_big_endian &quot;);</span>
-                break;
+
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (storageMode != null) {</span>
+<span class="fc" id="L109">            builder.append(&quot;format &quot;);</span>
+<span class="pc bpc" id="L110" title="3 of 4 branches missed.">            switch (storageMode) {</span>
+                case PLY_ASCII:
+<span class="fc" id="L112">                    builder.append(&quot;ascii &quot;);</span>
+<span class="fc" id="L113">                    break;</span>
+                case PLY_LITTLE_ENDIAN:
+<span class="nc" id="L115">                    builder.append(&quot;binary_little_endian &quot;);</span>
+<span class="nc" id="L116">                    break;</span>
+                case PLY_BIG_ENDIAN:
+<span class="nc" id="L118">                    builder.append(&quot;binary_big_endian &quot;);</span>
+                    break;
+            }
         }
         
         //add version
-<span class="fc" id="L122">        builder.append(&quot;1.0\n&quot;);</span>
+<span class="fc" id="L124">        builder.append(&quot;1.0\n&quot;);</span>
         
         //add comments
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        for (String comment : comments) {</span>
-<span class="nc" id="L126">            builder.append(&quot;comment &quot;).append(comment).append(&quot;\n&quot;);</span>
-<span class="nc" id="L127">        }</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        for (String comment : comments) {</span>
+<span class="nc" id="L128">            builder.append(&quot;comment &quot;).append(comment).append(&quot;\n&quot;);</span>
+<span class="nc" id="L129">        }</span>
         
         //add obj_infos
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        for (String objInfo : objInfos) {</span>
-<span class="nc" id="L131">            builder.append(&quot;obj_info &quot;).append(objInfo).append(&quot;\n&quot;);</span>
-<span class="nc" id="L132">        }</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        for (String objInfo : objInfos) {</span>
+<span class="nc" id="L133">            builder.append(&quot;obj_info &quot;).append(objInfo).append(&quot;\n&quot;);</span>
+<span class="nc" id="L134">        }</span>
         
         //add elements
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (ElementPLY element : elements) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        for (ElementPLY element : elements) {</span>
             //NOTE: elements already contain carrier return on their textual
             //representation
-<span class="fc" id="L138">            builder.append(element.toString());</span>
-<span class="fc" id="L139">        }</span>
+<span class="fc" id="L140">            builder.append(element.toString());</span>
+<span class="fc" id="L141">        }</span>
         
-<span class="fc" id="L141">        builder.append(&quot;end_header\n&quot;);</span>
+<span class="fc" id="L143">        builder.append(&quot;end_header\n&quot;);</span>
         
-<span class="fc" id="L143">        return builder.toString();</span>
+<span class="fc" id="L145">        return builder.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

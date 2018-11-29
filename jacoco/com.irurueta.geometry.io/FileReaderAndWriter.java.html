@@ -399,10 +399,10 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
 <span class="fc" id="L399">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
         
         //return it as integer
-<span class="fc" id="L402">        return (long) (((firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L402">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
-                fourthIntByte));
+                fourthIntByte);
     }
     
     /**
@@ -591,7 +591,7 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public String readUntilAnyOfTheseCharactersIsFound(String pattern) 
-            throws IOException, IllegalArgumentException {
+            throws IOException {
         
 <span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (pattern.length() == 0) {</span>
 <span class="nc" id="L597">            throw new IllegalArgumentException();</span>
@@ -600,22 +600,17 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
 <span class="fc" id="L600">        StringBuilder buffer = new StringBuilder();</span>
 <span class="fc" id="L601">        byte [] charBuffer = new byte[1];        </span>
         String character;
-        for(;;) {
-<span class="fc bfc" id="L604" title="All 2 branches covered.">            if (randomAccessFile.read(charBuffer) == 1) {</span>
-<span class="fc" id="L605">                character = new String(charBuffer);</span>
-<span class="fc bfc" id="L606" title="All 2 branches covered.">                if (pattern.contains(character)) {</span>
-                    //character found
-<span class="fc" id="L608">                    break;</span>
-                }
-                //add character to output buffer
-<span class="fc" id="L611">                buffer.append(character);</span>
-            } else {
-                //no more data available in stream
-                break;
+<span class="fc bfc" id="L603" title="All 2 branches covered.">        while(randomAccessFile.read(charBuffer) == 1) {</span>
+<span class="fc" id="L604">            character = new String(charBuffer);</span>
+<span class="fc bfc" id="L605" title="All 2 branches covered.">            if (pattern.contains(character)) {</span>
+                //character found
+<span class="fc" id="L607">                break;</span>
             }
+            //add character to output buffer
+<span class="fc" id="L610">            buffer.append(character);</span>
         }
-        
-<span class="fc" id="L618">        return buffer.toString();</span>
+
+<span class="fc" id="L613">        return buffer.toString();</span>
     }
     
     /**
@@ -628,8 +623,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeBoolean(boolean v) throws IOException {
-<span class="fc" id="L631">        randomAccessFile.writeBoolean(v);</span>
-<span class="fc" id="L632">    }</span>
+<span class="fc" id="L626">        randomAccessFile.writeBoolean(v);</span>
+<span class="fc" id="L627">    }</span>
     
     /**
      * Writes a byte to the file as a one-byte value. The write starts at the
@@ -639,8 +634,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeByte(byte v) throws IOException {
-<span class="fc" id="L642">        randomAccessFile.writeByte(v);</span>
-<span class="fc" id="L643">    }</span>
+<span class="fc" id="L637">        randomAccessFile.writeByte(v);</span>
+<span class="fc" id="L638">    }</span>
     
     /**
      * Writes provided value in the range 0-255 as an unsigned byte. The write
@@ -650,9 +645,9 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedByte(short v) throws IOException {
-<span class="fc" id="L653">        byte data = (byte)(0xff &amp; v);</span>
-<span class="fc" id="L654">        randomAccessFile.writeByte(data);</span>
-<span class="fc" id="L655">    }</span>
+<span class="fc" id="L648">        byte data = (byte)(0xff &amp; v);</span>
+<span class="fc" id="L649">        randomAccessFile.writeByte(data);</span>
+<span class="fc" id="L650">    }</span>
     
     /**
      * Writes a short to the file as two bytes, high byte first. The write 
@@ -662,8 +657,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeShort(short v) throws IOException {
-<span class="fc" id="L665">        randomAccessFile.writeShort(v);</span>
-<span class="fc" id="L666">    }</span>
+<span class="fc" id="L660">        randomAccessFile.writeShort(v);</span>
+<span class="fc" id="L661">    }</span>
     
     /**
      * Writes a short to the file as two bytes using provided endian type.
@@ -677,9 +672,9 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeShort(short v, EndianType endianType) throws IOException {
-<span class="fc" id="L680">        short value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L681">        randomAccessFile.writeShort(value);</span>
-<span class="fc" id="L682">    }</span>
+<span class="fc" id="L675">        short value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L676">        randomAccessFile.writeShort(value);</span>
+<span class="fc" id="L677">    }</span>
     
     /**
      * Writes an unsigned short to the file as two bytes, high byte first. 
@@ -692,14 +687,14 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedShort(int v) throws IOException {
-<span class="fc" id="L695">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
-<span class="fc" id="L696">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
+<span class="fc" id="L690">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
+<span class="fc" id="L691">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
         
-<span class="fc" id="L698">        short value = (short)((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L693">        short value = (short)((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
         
-<span class="fc" id="L701">        randomAccessFile.writeShort(value);        </span>
-<span class="fc" id="L702">    }</span>
+<span class="fc" id="L696">        randomAccessFile.writeShort(value);        </span>
+<span class="fc" id="L697">    }</span>
     
     /**
      * Writes an unsigned short to the file as two bytes, using provided endian
@@ -719,15 +714,15 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public void writeUnsignedShort(int v, EndianType endianType) 
             throws IOException {
-<span class="fc" id="L722">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
-<span class="fc" id="L723">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
+<span class="fc" id="L717">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
+<span class="fc" id="L718">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
         
-<span class="fc" id="L725">        short machineValue = (short)((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L720">        short machineValue = (short)((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
-<span class="fc" id="L727">        short value = Util.toEndianType(endianType, machineValue);</span>
+<span class="fc" id="L722">        short value = Util.toEndianType(endianType, machineValue);</span>
         
-<span class="fc" id="L729">        randomAccessFile.writeShort(value);        </span>
-<span class="fc" id="L730">    }</span>
+<span class="fc" id="L724">        randomAccessFile.writeShort(value);        </span>
+<span class="fc" id="L725">    }</span>
     
     /**
      * Writes an int to the file as four bytes, high byte first. The write 
@@ -737,8 +732,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeInt(int v) throws IOException {
-<span class="fc" id="L740">        randomAccessFile.writeInt(v);</span>
-<span class="fc" id="L741">    }</span>
+<span class="fc" id="L735">        randomAccessFile.writeInt(v);</span>
+<span class="fc" id="L736">    }</span>
     
     /**
      * Writes an int to the file as four bytes, using provided endian type.
@@ -753,9 +748,9 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeInt(int v, EndianType endianType) throws IOException {
-<span class="fc" id="L756">        int value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L757">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L758">    }</span>
+<span class="fc" id="L751">        int value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L752">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L753">    }</span>
 
     /**
      * Writes an unsigned int to the file as four bytes, high byte first. 
@@ -768,18 +763,18 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public void writeUnsignedInt(long v) throws IOException {
-<span class="fc" id="L771">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
-<span class="fc" id="L772">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
-<span class="fc" id="L773">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
-<span class="fc" id="L774">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
+<span class="fc" id="L766">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
+<span class="fc" id="L767">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
+<span class="fc" id="L768">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
+<span class="fc" id="L769">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
         
-<span class="fc" id="L776">        int value = (firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L771">        int value = (firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte;
         
-<span class="fc" id="L781">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L782">    }</span>
+<span class="fc" id="L776">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L777">    }</span>
     
     /**
      * Writes an unsigned int to the file as four bytes, using provided endian
@@ -799,19 +794,19 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public void writeUnsignedInt(long v, EndianType endianType) 
             throws IOException {
-<span class="fc" id="L802">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
-<span class="fc" id="L803">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
-<span class="fc" id="L804">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
-<span class="fc" id="L805">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
+<span class="fc" id="L797">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
+<span class="fc" id="L798">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
+<span class="fc" id="L799">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
+<span class="fc" id="L800">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
         
-<span class="fc" id="L807">        int machineValue = (firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L802">        int machineValue = (firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte;
-<span class="fc" id="L811">        int value = Util.toEndianType(endianType, machineValue);</span>
+<span class="fc" id="L806">        int value = Util.toEndianType(endianType, machineValue);</span>
         
-<span class="fc" id="L813">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L814">    }</span>
+<span class="fc" id="L808">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L809">    }</span>
     
     /**
      * Writes a long to the file as eight bytes, high byte first. The write 
@@ -821,8 +816,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeLong(long v) throws IOException {
-<span class="fc" id="L824">        randomAccessFile.writeLong(v);</span>
-<span class="fc" id="L825">    }</span>
+<span class="fc" id="L819">        randomAccessFile.writeLong(v);</span>
+<span class="fc" id="L820">    }</span>
     
     /**
      * Writes a long to the file as eight bytes, using provided endian type. 
@@ -837,9 +832,9 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeLong(long v, EndianType endianType) throws IOException {
-<span class="fc" id="L840">        long value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L841">        randomAccessFile.writeLong(value);</span>
-<span class="fc" id="L842">    }</span>
+<span class="fc" id="L835">        long value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L836">        randomAccessFile.writeLong(value);</span>
+<span class="fc" id="L837">    }</span>
     
     /**
      * Converts the float argument to an int using the floatToIntBits method in
@@ -851,8 +846,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeFloat(float v) throws IOException {
-<span class="fc" id="L854">        randomAccessFile.writeFloat(v);</span>
-<span class="fc" id="L855">    }</span>
+<span class="fc" id="L849">        randomAccessFile.writeFloat(v);</span>
+<span class="fc" id="L850">    }</span>
     
     /**
      * Converts the float argument to an int using the floatToIntBits method in
@@ -869,9 +864,9 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeFloat(float v, EndianType endianType) throws IOException {
-<span class="fc" id="L872">        float value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L873">        randomAccessFile.writeFloat(value);</span>
-<span class="fc" id="L874">    }</span>
+<span class="fc" id="L867">        float value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L868">        randomAccessFile.writeFloat(value);</span>
+<span class="fc" id="L869">    }</span>
     
     /**
      * Converts the double argument to a long using the doubleToLongBits method
@@ -883,8 +878,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeDouble(double v) throws IOException {
-<span class="fc" id="L886">        randomAccessFile.writeDouble(v);</span>
-<span class="fc" id="L887">    }</span>
+<span class="fc" id="L881">        randomAccessFile.writeDouble(v);</span>
+<span class="fc" id="L882">    }</span>
     
     /**
      * Converts the double argument to a long using the doubleToLongBits method
@@ -901,9 +896,9 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeDouble(double v, EndianType endianType) throws IOException {
-<span class="fc" id="L904">        double value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L905">        randomAccessFile.writeDouble(value);</span>
-<span class="fc" id="L906">    }</span>
+<span class="fc" id="L899">        double value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L900">        randomAccessFile.writeDouble(value);</span>
+<span class="fc" id="L901">    }</span>
     
     /**
      * Writes the string to the file as a sequence of bytes. Each character in
@@ -914,8 +909,8 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeASCII(String s) throws IOException {
-<span class="fc" id="L917">        randomAccessFile.writeBytes(s);</span>
-<span class="fc" id="L918">    }</span>
+<span class="fc" id="L912">        randomAccessFile.writeBytes(s);</span>
+<span class="fc" id="L913">    }</span>
     
     /**
      * Writes a string to the file using modified UTF-8 encoding in a machine-
@@ -930,7 +925,7 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     public void writeUTF(String str) throws IOException {
-<span class="fc" id="L933">        randomAccessFile.writeUTF(str);</span>
-<span class="fc" id="L934">    }</span>
+<span class="fc" id="L928">        randomAccessFile.writeUTF(str);</span>
+<span class="fc" id="L929">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
