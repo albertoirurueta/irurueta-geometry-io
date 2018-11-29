@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2326f7cd-cae4-4b0e-b5e9-6299f4c81c95" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java" afterDir="false" />
     </list>
@@ -18,37 +17,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="1650" column="7" lean-forward="true" selection-start-line="1650" selection-start-column="7" selection-end-line="1650" selection-end-column="7" />
-              <folding>
-                <element signature="e#23104#23105#0" expanded="true" />
-                <element signature="e#23156#23157#0" expanded="true" />
-                <element signature="e#24709#24710#0" expanded="true" />
-                <element signature="e#24750#24751#0" expanded="true" />
-                <element signature="e#25190#25191#0" expanded="true" />
-                <element signature="e#25241#25242#0" expanded="true" />
-                <element signature="e#26015#26016#0" expanded="true" />
-                <element signature="e#26076#26077#0" expanded="true" />
-                <element signature="e#26276#26277#0" expanded="true" />
-                <element signature="e#26308#26309#0" expanded="true" />
-                <element signature="e#26547#26548#0" expanded="true" />
-                <element signature="e#26579#26580#0" expanded="true" />
-                <element signature="e#26784#26785#0" expanded="true" />
-                <element signature="e#26833#26834#0" expanded="true" />
-                <element signature="e#83303#83304#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="272">
+              <caret line="8374" column="54" selection-start-line="8374" selection-start-column="54" selection-end-line="8374" selection-end-column="54" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/LoaderIteratorPLYTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="1197" column="67" selection-start-line="1197" selection-start-column="67" selection-end-line="1197" selection-end-column="67" />
+            <state relative-caret-position="302">
+              <caret line="1220" column="8" lean-forward="true" selection-start-line="1220" selection-start-column="8" selection-end-line="1220" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -64,6 +46,8 @@
       <find>&quot;usemtl &quot;</find>
       <find>valueOf</find>
       <find>parse</find>
+      <find>TriangulatorExc</find>
+      <find>Throwable</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -338,7 +322,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543530361730" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543534139816" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -565,32 +549,11 @@
       <workItem from="1543308166254" duration="30000" />
       <workItem from="1543446390999" duration="4202000" />
       <workItem from="1543503572355" duration="2543000" />
-      <workItem from="1543528585305" duration="1754000" />
+      <workItem from="1543528585305" duration="3868000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="FileReaderAndWriterTest_testReadFullyWriteArrayOfBytesWithOffsetAndLength - 2018.11.09 at 12h 13m 14s.xml">
-      <configuration name="FileReaderAndWriterTest.testReadFullyWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LoaderBinaryTest - 2018.11.09 at 17h 55m 34s.xml">
-      <configuration name="LoaderBinaryTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LoaderIteratorPLYTest - 2018.11.09 at 18h 34m 25s.xml">
-      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="MappedFileReaderAndWriterTest_testReadWriteArrayOfBytesWithOffsetAndLength - 2018.11.10 at 15h 29m 01s.xml">
-      <configuration name="MappedFileReaderAndWriterTest.testReadWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="com_irurueta_geometry_io_in_irurueta-geometry-io - 2018.11.21 at 18h 59m 34s.xml">
-      <configuration name="com.irurueta.geometry.io in irurueta-geometry-io" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="com_irurueta_geometry_io_in_irurueta-geometry-io - 2018.11.29 at 00h 30m 59s.xml">
-      <configuration name="com.irurueta.geometry.io in irurueta-geometry-io" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="LoaderOBJTest - 2018.11.29 at 01h 11m 37s.xml">
-      <configuration name="LoaderOBJTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="LoaderOBJTest - 2018.11.29 at 01h 16m 53s.xml">
       <configuration name="LoaderOBJTest" configurationId="JUnit" />
     </history-entry>
@@ -600,15 +563,36 @@
     <history-entry file="LoaderOBJTest - 2018.11.29 at 23h 19m 34s.xml">
       <configuration name="LoaderOBJTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.29 at 23h 26m 19s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 06m 05s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 06m 33s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 09m 04s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 10m 30s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 16m 17s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 24m 58s.xml">
+      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49056000" />
+    <option name="totallyTimeSpent" value="51170000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="71" y="23" width="1261" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2780968" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2780968" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Nl-Palette" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -618,7 +602,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3299363" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32866243" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32866243" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -650,16 +634,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/LockedExceptionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="17" column="7" lean-forward="true" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/MappedFileReaderAndWriterTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -1034,8 +1008,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="1650" column="7" lean-forward="true" selection-start-line="1650" selection-start-column="7" selection-end-line="1650" selection-end-column="7" />
+        <state relative-caret-position="241">
+          <caret line="1650" column="30" selection-start-line="1650" selection-start-column="30" selection-end-line="1650" selection-end-column="30" />
           <folding>
             <element signature="e#23104#23105#0" expanded="true" />
             <element signature="e#23156#23157#0" expanded="true" />
@@ -1051,15 +1025,22 @@
             <element signature="e#26579#26580#0" expanded="true" />
             <element signature="e#26784#26785#0" expanded="true" />
             <element signature="e#26833#26834#0" expanded="true" />
-            <element signature="e#83303#83304#0" expanded="true" />
+            <element signature="e#83345#83346#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/LoaderIteratorPLYTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="1220" column="8" lean-forward="true" selection-start-line="1220" selection-start-column="8" selection-end-line="1220" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="1197" column="67" selection-start-line="1197" selection-start-column="67" selection-end-line="1197" selection-end-column="67" />
+        <state relative-caret-position="272">
+          <caret line="8374" column="54" selection-start-line="8374" selection-start-column="54" selection-end-line="8374" selection-end-column="54" />
         </state>
       </provider>
     </entry>

@@ -1716,11 +1716,13 @@ public class LoaderOBJ extends Loader {
          * is degenerate or contains invalid values such as NaN or infinity).
          */
         private Set<String []> buildTriangulatedIndices(
-                List<VertexOBJ> vertices) throws TriangulatorException{
+                List<VertexOBJ> vertices) throws TriangulatorException {
             List<Point3D> polygonVertices = new ArrayList<>(
                     vertices.size());
             for (VertexOBJ v : vertices) {
-                if(v.getVertex() == null) throw new TriangulatorException();
+                if (v.getVertex() == null) {
+                    throw new TriangulatorException();
+                }
                 polygonVertices.add(v.getVertex());
             }
             List<int[]> indices = new ArrayList<>();

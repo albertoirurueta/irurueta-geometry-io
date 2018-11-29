@@ -99,21 +99,6 @@ public class LoaderPLY extends Loader {
     public static final float PROGRESS_DELTA = 0.01f;
 
     /**
-     * Constant below enabled periodic garbage collection. This helps to reduce
-     * memory usage, which is of special interest on mobile devices and servers.
-     */
-    public static final boolean DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION =
-            true;
-
-    /**
-     * Constant defining number of iterations to wait before starting garbage
-     * collection.
-     * The lower the value the more frequent garbage collection will be and
-     * hence the smaller the memory usage, at the expense of slower execution.
-     */
-    public static final int DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION = 10000;
-
-    /**
      * Keeps PLY header data.
      */
     private HeaderPLY header;
@@ -163,22 +148,6 @@ public class LoaderPLY extends Loader {
     private long maxStreamPositions;
 
     /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled.
-     * By default it is enabled.
-     */
-    private boolean periodicGarbageCollection;
-    
-    /**
-     * Number of attempts to clean memory before garbage collection is actually
-     * demanded. This only takes effect if periodic garbage collection is 
-     * enabled. By default this is set to 10000 attempts.
-     */
-    private int itersBeforeGarbageCollection;
-
-    /**
      * Constructor.
      */
     public LoaderPLY() {
@@ -191,9 +160,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;
     }
     
     /**
@@ -213,9 +179,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -237,9 +200,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;
     }
     
     /**
@@ -264,9 +224,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         internalSetMaxStreamPositions(maxStreamPositions);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -284,9 +241,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS; 
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -309,9 +263,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -336,9 +287,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -366,9 +314,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         internalSetMaxStreamPositions(maxStreamPositions);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
 
     /**
@@ -386,9 +331,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -410,9 +352,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -436,9 +375,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -465,9 +401,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         internalSetMaxStreamPositions(maxStreamPositions);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -486,9 +419,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;   
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -512,9 +442,6 @@ public class LoaderPLY extends Loader {
         allowDuplicateVerticesInChunk = 
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -540,9 +467,6 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
 
     /**
@@ -571,10 +495,7 @@ public class LoaderPLY extends Loader {
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         internalSetMaxStreamPositions(maxStreamPositions);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
-    }    
+    }
     
     /**
      * Sets maximum number of vertices to keep in a chunk of data.
@@ -719,69 +640,6 @@ public class LoaderPLY extends Loader {
         this.maxStreamPositions = maxStreamPositions;
     }
 
-    /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled. By default it is enabled.
-     * @return True if periodic garbage collection is enabled, false otherwise.
-     */
-    public boolean isPeriodicGarbageCollection() {
-        return periodicGarbageCollection;
-    }
-    
-    /**
-     * Sets whether periodic garbage collection should be attempted from time to
-     * time to reduce memory usage. Garbage collection might slow down slightly
-     * the loading process but in memory constrained environments this setting
-     * should be enabled. By default it is enabled.
-     * @param periodicGarbageCollection True if periodic garbage collection must
-     * be enabled, false otherwise.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setPeriodicGarbageCollection(boolean periodicGarbageCollection)
-            throws LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        this.periodicGarbageCollection = periodicGarbageCollection;
-    }
-
-    /**
-     * Returns number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection 
-     * is  enabled. By default this is set to 10000 attempts.
-     * @return Number of attempts to clean memory before garbage collection is
-     * actually demanded.
-     */
-    public int getItersBeforeGarbageCollection() {
-        return itersBeforeGarbageCollection;
-    }
-    
-    /**
-     * Sets number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection
-     * is enabled. By default this is set to 10000 attempts.
-     * @param itersBeforeGarbageCollection number of iterations before actually claiming garbage collection.
-     * @throws IllegalArgumentException if provided value is negative.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setItersBeforeGarbageCollection(
-            int itersBeforeGarbageCollection) throws LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        if (itersBeforeGarbageCollection < 0) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.itersBeforeGarbageCollection = itersBeforeGarbageCollection;
-    }    
-        
     /**
      * Indicates it this loader has enough parameters to start the loading 
      * process.
@@ -1027,7 +885,8 @@ public class LoaderPLY extends Loader {
                 
                 if (str.equals("list")) {
                     //property is a list
-                    DataTypePLY lengthDataType, valueDataType;
+                    DataTypePLY lengthDataType;
+                    DataTypePLY valueDataType;
                     try {
                         //read length data type
                         do{
@@ -1110,12 +969,6 @@ public class LoaderPLY extends Loader {
             } else if (str.equals("end_header")) {
                 //end of header has been found
                 endOfHeader = true;
-            } else //noinspection StatementWithEmptyBody
-                if (str.length() == 0) {
-                //skip this (probably a duplicate space or carriage return)
-            } else if (reader.isEndOfStream()) {
-                validStream = false;
-                throw new LoaderException();
             } else {
                 //something else that cannot be understood
                 validStream = false;
@@ -1485,14 +1338,6 @@ public class LoaderPLY extends Loader {
         private long vertexStreamPosition;
         
         /**
-         * Counter of number of times that garbage collection has been 
-         * requested. When this value exceeds the itersBeforeGarbageCollection,
-         * then an actual garbage collection is requested as long as this 
-         * feature is enabled.
-         */
-        private int gcCounter;
-        
-        /**
          * Map containing relations between original indices of the stream (key)
          * and their corresponding index in the chunk (value).
          */
@@ -1547,8 +1392,6 @@ public class LoaderPLY extends Loader {
             minX = minY = minZ = Float.MAX_VALUE;
             maxX = maxY = maxZ = -Float.MAX_VALUE;
             
-            gcCounter = 0;
-            
             setUp();
         }        
         
@@ -1571,24 +1414,7 @@ public class LoaderPLY extends Loader {
         public LoaderIteratorListener getListener() {
             return listener;
         }
-        
-        /**
-         * Attempts to clear memory.
-         * If garbage collection is enabled this method will attempt a garbage
-         * collection after being called a few times.
-         * Memory will then be released depending on system implementation.
-         */
-        @SuppressWarnings("Duplicates")
-        private void cleanMemory() {
-            if(loader.periodicGarbageCollection){
-                gcCounter++;
-                if(gcCounter > loader.itersBeforeGarbageCollection){
-                    System.gc();
-                    gcCounter = 0;
-                }
-            }
-        }
-        
+
         /**
          * Indicates if there are still more chunks of data to be read on this
          * PLY file.
@@ -1771,12 +1597,6 @@ public class LoaderPLY extends Loader {
                         } catch (TriangulatorException e) {
                             //reset face stream position
                             reader.seek(currentStreamPosition);
-                            
-                            //to reduce memory consumption
-                            if (previousListElems != listElems) {
-                                //attempt to clean memory
-                                cleanMemory();                        
-                            }                            
                             continue;
                         }
                     }
@@ -1832,9 +1652,6 @@ public class LoaderPLY extends Loader {
                         
                         //update previousListElems
                         previousListElems = listElems;
-                                
-                        //attempt to clean memory
-                        cleanMemory();                        
                     }
                 }    
                 
@@ -1898,8 +1715,7 @@ public class LoaderPLY extends Loader {
             if (!hasNext()) {
                 reader.close();
             }
-            
-            cleanMemory(); // to reduce memory consumption
+
             return dataChunk;
         }
         
@@ -2105,8 +1921,6 @@ public class LoaderPLY extends Loader {
             indicesInChunkArray = newIndicesInChunkArray;
             originalIndicesInChunkArray = newOriginalIndicesInChunkArray;
             indicesInChunkSize = newIndicesInChunkSize;
-            
-            cleanMemory(); //to reduce memory consumption
         }
         
         /**
@@ -2154,8 +1968,6 @@ public class LoaderPLY extends Loader {
                 indicesInChunkArray = null;
                 originalIndicesInChunkArray = null;
             }
-            
-            cleanMemory(); //to reduce memory consumption
         }                
         
         /**
@@ -2264,6 +2076,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new XdoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "y":
@@ -2333,6 +2147,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new YdoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "z":
@@ -2402,6 +2218,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new ZdoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "nx":
@@ -2471,6 +2289,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new NXdoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "ny":
@@ -2540,6 +2360,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new NYdoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "nz":
@@ -2609,6 +2431,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new NZdoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "red":
@@ -2679,6 +2503,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new RedDoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "green":
@@ -2749,6 +2575,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new GreenDoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw  new LoaderException();
                                     }
                                     break;
                                 case "blue":
@@ -2819,6 +2647,8 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new BlueDoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
                                 case "alpha":
@@ -2889,8 +2719,13 @@ public class LoaderPLY extends Loader {
                                             property.setReadValueFromBufferListener(
                                                     new AlphaDoubleReadValueFromBufferListener());
                                             break;
+                                        default:
+                                            throw new LoaderException();
                                     }
                                     break;
+                                 default:
+                                     //not recognized properties are ignored
+                                     break;
                             }
                             
                             //update vertex data size
@@ -2995,6 +2830,8 @@ public class LoaderPLY extends Loader {
                                     property.setReadValueFromBufferListener(
                                             new FaceDoubleReadValueFromBufferListener());
                                     break;
+                                default:
+                                    throw new LoaderException();
                             }
                         }
                         
@@ -3093,7 +2930,8 @@ public class LoaderPLY extends Loader {
             
             ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
             
-            long nElems, counter = 0;
+            long nElems;
+            long counter = 0;
             
             //iterate over elements in header
             for (ElementPLY element : loader.header.getElements()) {
@@ -8533,6 +8371,8 @@ public class LoaderPLY extends Loader {
                     property.setReadLengthValueFromBufferListener(
                             new FaceDoubleReadLengthValueFromBufferListener());
                     break;
+                default:
+                    throw new NotAvailableException();
             }
         }        
     }
