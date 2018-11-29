@@ -117,6 +117,8 @@ public class HeaderPLY {
                 case PLY_BIG_ENDIAN:
                     builder.append("binary_big_endian ");
                     break;
+                default:
+                    break;
             }
         }
         

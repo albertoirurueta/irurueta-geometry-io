@@ -1349,7 +1349,7 @@ public class LoaderOBJ extends Loader {
                                     (indices[0].length() != 0)) {
                                 indicesAvailable = true;
                                 //indices start at 1 in OBJ
-                                vertexIndex = Integer.valueOf(indices[0]) - 1;
+                                vertexIndex = Integer.parseInt(indices[0]) - 1;
 
                                 //determine if vertex coordinates have to be 
                                 //added as new or they can be reused from an 
@@ -1361,7 +1361,7 @@ public class LoaderOBJ extends Loader {
                                     (indices[1].length() != 0)) {
                                 textureAvailable = true;
                                 //indices start at 1 in OBJ
-                                textureIndex = Integer.valueOf(indices[1]) - 1;
+                                textureIndex = Integer.parseInt(indices[1]) - 1;
 
                                 //determine if texture coordinates have to be 
                                 //added as new or they can be reused from an 
@@ -1372,7 +1372,7 @@ public class LoaderOBJ extends Loader {
                             if (indices.length >= 3 && (indices[2].length() != 0)) {
                                 normalsAvailable = true;
                                 //indices start at 1 in OBJ
-                                normalIndex = Integer.valueOf(indices[2]) - 1;
+                                normalIndex = Integer.parseInt(indices[2]) - 1;
 
                                 //determine if normal coordinates have to be 
                                 //added as new or they can be reused from an 
@@ -1426,152 +1426,153 @@ public class LoaderOBJ extends Loader {
 
 
                             if (indices.length >= 1 &&
-                                    (indices[0].length() != 0)) {
-                                if (!addExistingVertexCoords) {
-                                    //new vertex needs to be added into chunk, 
-                                    //so we need to read vertex data
+                                    (indices[0].length() != 0) && !addExistingVertexCoords) {
+                                //new vertex needs to be added into chunk,
+                                //so we need to read vertex data
 
-                                    //fetch vertex data position
-                                    fetchVertex(vertexIndex);
-                                    vertexStreamPosition = reader.getPosition();
+                                //fetch vertex data position
+                                fetchVertex(vertexIndex);
+                                vertexStreamPosition = reader.getPosition();
 
-                                    //read all vertex data
-                                    String vertexLine = reader.readLine();
-                                    if (!vertexLine.startsWith("v ")) {
+                                //read all vertex data
+                                String vertexLine = reader.readLine();
+                                if (!vertexLine.startsWith("v ")) {
+                                    throw new LoaderException();
+                                }
+                                vertexLine = vertexLine.substring(
+                                        "v ".length()).trim();
+                                //retrieve words in vertexLine, which contain
+                                //vertex coordinates either as x, y, z or x,
+                                //y, z, w
+                                String[] vertexCoordinates =
+                                        vertexLine.split(" ");
+                                if (vertexCoordinates.length == 4) {
+                                    //homogeneous coordinates x, y, z, w
+
+                                    //check that values are valid
+                                    if (vertexCoordinates[0].length() == 0) {
                                         throw new LoaderException();
                                     }
-                                    vertexLine = vertexLine.substring(
-                                            "v ".length()).trim();
-                                    //retrieve words in vertexLine, which contain
-                                    //vertex coordinates either as x, y, z or x,
-                                    //y, z, w
-                                    String[] vertexCoordinates =
-                                            vertexLine.split(" ");
-                                    if (vertexCoordinates.length == 4) {
-                                        //homogeneous coordinates x, y, z, w
+                                    if (vertexCoordinates[1].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (vertexCoordinates[2].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (vertexCoordinates[3].length() == 0) {
+                                        throw new LoaderException();
+                                    }
 
-                                        //check that values are valid
-                                        if (vertexCoordinates[0].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (vertexCoordinates[1].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (vertexCoordinates[2].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (vertexCoordinates[3].length() == 0) {
-                                            throw new LoaderException();
-                                        }
+                                    float w = Float.parseFloat(
+                                            vertexCoordinates[3]);
+                                    coordX = Float.parseFloat(
+                                            vertexCoordinates[0]) / w;
+                                    coordY = Float.parseFloat(
+                                            vertexCoordinates[1]) / w;
+                                    coordZ = Float.parseFloat(
+                                            vertexCoordinates[2]) / w;
 
-                                        float w = Float.valueOf(
-                                                vertexCoordinates[3]);
-                                        coordX = Float.valueOf(
-                                                vertexCoordinates[0]) / w;
-                                        coordY = Float.valueOf(
-                                                vertexCoordinates[1]) / w;
-                                        coordZ = Float.valueOf(
-                                                vertexCoordinates[2]) / w;
+                                } else if (vertexCoordinates.length >= 3) {
+                                    //inhomogeneous coordinates x, y, z
 
-                                    } else if (vertexCoordinates.length >= 3) {
-                                        //inhomogeneous coordinates x, y, z
+                                    //check that values are valid
+                                    if (vertexCoordinates[0].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (vertexCoordinates[1].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (vertexCoordinates[2].length() == 0) {
+                                        throw new LoaderException();
+                                    }
 
-                                        //check that values are valid
-                                        if (vertexCoordinates[0].length() == 0)
-                                            throw new LoaderException();
-                                        if (vertexCoordinates[1].length() == 0)
-                                            throw new LoaderException();
-                                        if (vertexCoordinates[2].length() == 0)
-                                            throw new LoaderException();
+                                    coordX = Float.parseFloat(
+                                            vertexCoordinates[0]);
+                                    coordY = Float.parseFloat(
+                                            vertexCoordinates[1]);
+                                    coordZ = Float.parseFloat(
+                                            vertexCoordinates[2]);
 
-                                        coordX = Float.valueOf(
-                                                vertexCoordinates[0]);
-                                        coordY = Float.valueOf(
-                                                vertexCoordinates[1]);
-                                        coordZ = Float.valueOf(
-                                                vertexCoordinates[2]);
-
-                                    } else throw new LoaderException(); //unsupported length
-
-                                    addExisting = false;
+                                } else {
+                                    throw new LoaderException(); //unsupported length
                                 }
+
+                                addExisting = false;
                             }
                             if (indices.length >= 2 &&
-                                    (indices[1].length() != 0)) {
-                                if (!addExistingTextureCoords) {
-                                    //new texture values need to be added into 
-                                    //chunk, so we need to read texture 
-                                    //coordinates data
+                                    (indices[1].length() != 0) && !addExistingTextureCoords) {
+                                //new texture values need to be added into
+                                //chunk, so we need to read texture
+                                //coordinates data
 
-                                    //fetch texture data position
-                                    fetchTexture(textureIndex);
-                                    textureCoordStreamPosition =
-                                            reader.getPosition();
+                                //fetch texture data position
+                                fetchTexture(textureIndex);
+                                textureCoordStreamPosition =
+                                        reader.getPosition();
 
-                                    //read all texture data
-                                    String textureLine = reader.readLine();
-                                    if (!textureLine.startsWith("vt ")) {
+                                //read all texture data
+                                String textureLine = reader.readLine();
+                                if (!textureLine.startsWith("vt ")) {
+                                    throw new LoaderException();
+                                }
+                                textureLine = textureLine.substring(
+                                        "vt ".length()).trim();
+                                //retrieve words in textureLine, which contain
+                                //texture coordinates either as u, w or u, v, w
+                                String[] textureCoordinates =
+                                        textureLine.split(" ");
+                                if (textureCoordinates.length == 3) {
+                                    //homogeneous coordinates u, v, w
+
+                                    //check that values are valid
+                                    if (textureCoordinates[0].length() == 0) {
                                         throw new LoaderException();
                                     }
-                                    textureLine = textureLine.substring(
-                                            "vt ".length()).trim();
-                                    //retrieve words in textureLine, which contain
-                                    //texture coordinates either as u, w or u, v, w
-                                    String[] textureCoordinates =
-                                            textureLine.split(" ");
-                                    if (textureCoordinates.length == 3) {
-                                        //homogeneous coordinates u, v, w
-
-                                        //check that values are valid
-                                        if (textureCoordinates[0].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (textureCoordinates[1].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (textureCoordinates[2].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-
-                                        float w = Float.valueOf(
-                                                textureCoordinates[2]);
-
-                                        textureU = Float.valueOf(
-                                                textureCoordinates[0]) / w;
-                                        textureV = Float.valueOf(
-                                                textureCoordinates[1]) / w;
-                                        if (Math.abs(w) < Float.MIN_VALUE ||
-                                                Float.isInfinite(textureU) ||
-                                                Float.isNaN(textureU) ||
-                                                Float.isInfinite(textureV) ||
-                                                Float.isNaN(textureV)) {
-                                            textureU = Float.valueOf(
-                                                    textureCoordinates[0]);
-                                            textureV = Float.valueOf(
-                                                    textureCoordinates[1]);
-                                        }
-
-                                    } else if (textureCoordinates.length >= 2) {
-                                        //inhomogeneous coordinates u, v
-
-                                        //check that values are valid
-                                        if (textureCoordinates[0].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-                                        if (textureCoordinates[1].length() == 0) {
-                                            throw new LoaderException();
-                                        }
-
-                                        textureU = Float.valueOf(
-                                                textureCoordinates[0]);
-                                        textureV = Float.valueOf(
-                                                textureCoordinates[1]);
-                                    } else {
-                                        throw new LoaderException(); //unsupported length
+                                    if (textureCoordinates[1].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (textureCoordinates[2].length() == 0) {
+                                        throw new LoaderException();
                                     }
 
-                                    addExisting = false;
+                                    float w = Float.parseFloat(
+                                            textureCoordinates[2]);
+
+                                    textureU = Float.parseFloat(
+                                            textureCoordinates[0]) / w;
+                                    textureV = Float.parseFloat(
+                                            textureCoordinates[1]) / w;
+                                    if (Math.abs(w) < Float.MIN_VALUE ||
+                                            Float.isInfinite(textureU) ||
+                                            Float.isNaN(textureU) ||
+                                            Float.isInfinite(textureV) ||
+                                            Float.isNaN(textureV)) {
+                                        textureU = Float.parseFloat(
+                                                textureCoordinates[0]);
+                                        textureV = Float.parseFloat(
+                                                textureCoordinates[1]);
+                                    }
+
+                                } else if (textureCoordinates.length >= 2) {
+                                    //inhomogeneous coordinates u, v
+
+                                    //check that values are valid
+                                    if (textureCoordinates[0].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+                                    if (textureCoordinates[1].length() == 0) {
+                                        throw new LoaderException();
+                                    }
+
+                                    textureU = Float.parseFloat(
+                                            textureCoordinates[0]);
+                                    textureV = Float.parseFloat(
+                                            textureCoordinates[1]);
+                                } else {
+                                    throw new LoaderException(); //unsupported length
                                 }
+
+                                addExisting = false;
                             }
                             if (indices.length >= 3 &&
                                     (indices[2].length() != 0) && !addExistingNormal) {
@@ -1607,11 +1608,11 @@ public class LoaderOBJ extends Loader {
                                         throw new LoaderException();
                                     }
 
-                                    nX = Float.valueOf(
+                                    nX = Float.parseFloat(
                                             normalCoordinates[0]);
-                                    nY = Float.valueOf(
+                                    nY = Float.parseFloat(
                                             normalCoordinates[1]);
-                                    nZ = Float.valueOf(
+                                    nZ = Float.parseFloat(
                                             normalCoordinates[2]);
                                 } else {
                                     throw new LoaderException(); //unsupported length
@@ -1633,11 +1634,10 @@ public class LoaderOBJ extends Loader {
                 }
                 
                 //compute progress
-                if (loader.listener != null) {
-                    if ((currentFace % progressStep) == 0) {
-                        loader.listener.onLoadProgressChange(loader, 
-                                (float)(currentFace) / (float)(numberOfFaces));
-                    }
+                if (loader.listener != null &&
+                        (currentFace % progressStep) == 0) {
+                    loader.listener.onLoadProgressChange(loader,
+                            (float)(currentFace) / (float)(numberOfFaces));
                 }
             }
             
@@ -1686,11 +1686,9 @@ public class LoaderOBJ extends Loader {
                 normalsInChunkArray = null; //so it can be garbage collected
             }
             
-            if (!hasNext()) {
+            if (!hasNext() && listener != null) {
                 //notify iterator finished
-                if (listener != null) {
-                    listener.onIteratorFinished(this);
-                }
+                listener.onIteratorFinished(this);
             }
             
             //if no more chunks are available, then close input reader
@@ -1732,29 +1730,30 @@ public class LoaderOBJ extends Loader {
             int[] triangleIndices;
             int index;
             VertexOBJ vertex;
-            String tmp;
+            StringBuilder builder;
             for (Triangle3D ignored : triangles) {
                 triangleIndices = indices.get(counter);
                 face = new String[Triangle3D.NUM_VERTICES];
                 for (int i = 0; i < Triangle3D.NUM_VERTICES; i++) {
                     index = triangleIndices[i];
                     vertex = vertices.get(index);
-                    tmp = "";
+                    builder = new StringBuilder();
                     if (vertex.isVertexIndexAvailable()) {
-                        tmp += vertex.getVertexIndex();
+                        builder.append(vertex.getVertexIndex());
                     }
                     if (vertex.isTextureIndexAvailable() ||
                             vertex.isNormalIndexAvailable()) {
-                        tmp += "/";
+                        builder.append("/");
                         if (vertex.isTextureIndexAvailable()) {
-                            tmp += vertex.getTextureIndex();
+                            builder.append(vertex.getTextureIndex());
                         }
                         if (vertex.isNormalIndexAvailable()) {
-                            tmp += "/" + vertex.getNormalIndex();
+                            builder.append("/");
+                            builder.append(vertex.getNormalIndex());
                         }
                     }
                     
-                    face[i] = tmp;
+                    face[i] = builder.toString();
                 }
                 counter++;
                 result.add(face);
@@ -1794,7 +1793,7 @@ public class LoaderOBJ extends Loader {
                 String[] indices = value.split("/");
 
                 if (indices.length >= 1 && (indices[0].length() != 0)) {
-                    vertexIndex = Integer.valueOf(indices[0]) - 1;
+                    vertexIndex = Integer.parseInt(indices[0]) - 1;
                     tmpVertex.setVertexIndex(vertexIndex + 1);
                     fetchVertex(vertexIndex);
                     vertexStreamPosition = reader.getPosition();
@@ -1824,10 +1823,10 @@ public class LoaderOBJ extends Loader {
 
                         try {
                             point.setHomogeneousCoordinates(
-                                    Double.valueOf(vertexCoordinates[0]),
-                                    Double.valueOf(vertexCoordinates[1]),
-                                    Double.valueOf(vertexCoordinates[2]),
-                                    Double.valueOf(vertexCoordinates[3]));
+                                    Double.parseDouble(vertexCoordinates[0]),
+                                    Double.parseDouble(vertexCoordinates[1]),
+                                    Double.parseDouble(vertexCoordinates[2]),
+                                    Double.parseDouble(vertexCoordinates[3]));
                         } catch (NumberFormatException e) {
                             //some vertex coordinate value could not be parsed
                             throw new LoaderException(e);
@@ -1847,9 +1846,9 @@ public class LoaderOBJ extends Loader {
 
                         try {
                             point.setInhomogeneousCoordinates(
-                                    Double.valueOf(vertexCoordinates[0]),
-                                    Double.valueOf(vertexCoordinates[1]),
-                                    Double.valueOf(vertexCoordinates[2]));
+                                    Double.parseDouble(vertexCoordinates[0]),
+                                    Double.parseDouble(vertexCoordinates[1]),
+                                    Double.parseDouble(vertexCoordinates[2]));
                         } catch (NumberFormatException e) {
                             //some vertex coordinate value could not be parsed
                             throw new LoaderException(e);
@@ -1860,11 +1859,11 @@ public class LoaderOBJ extends Loader {
                 }
                 if (indices.length >= 2 && (indices[1].length() != 0)) {
                     tmpVertex.setTextureIndex(
-                            Integer.valueOf(indices[1]));
+                            Integer.parseInt(indices[1]));
                 }
                 if (indices.length >= 3 && (indices[2].length() != 0)) {
                     tmpVertex.setNormalIndex(
-                            Integer.valueOf(indices[2]));
+                            Integer.parseInt(indices[2]));
                 }
 
                 vertices.add(tmpVertex);
@@ -1907,7 +1906,7 @@ public class LoaderOBJ extends Loader {
          * @param originalIndex vertex index used in the OBJ file.
          * @return vertex index used in current chunk of data or -1 if not found.
          */
-        private int searchVertexIndexInChunk(long originalIndex){
+        private int searchVertexIndexInChunk(long originalIndex) {
             //returns chunk index array position where index is found
             Integer chunkIndex = vertexIndicesMap.get(originalIndex);
             
@@ -1928,16 +1927,8 @@ public class LoaderOBJ extends Loader {
          * @return texture index used in current chunk of data or -1 if not 
          * found.
          */
-        private int searchTextureCoordIndexInChunk(long originalIndex){
-            //returns chunk index array position where index is found
-            Integer chunkIndex = vertexIndicesMap.get(originalIndex);
-            
-            if (chunkIndex == null) {
-                return -1;
-            }
-            
-            //returns index of texture coordinate in chunk
-            return indicesInChunkArray[chunkIndex];
+        private int searchTextureCoordIndexInChunk(long originalIndex) {
+            return searchVertexIndexInChunk(originalIndex);
         }
         
         /**
@@ -1949,15 +1940,7 @@ public class LoaderOBJ extends Loader {
          * @return normal index used in current chunk of data or -1 if not found.
          */
         private int searchNormalIndexInChunk(long originalIndex) {
-            //returns chunk index array position where index is found
-            Integer chunkIndex = vertexIndicesMap.get(originalIndex);
-            
-            if (chunkIndex == null) {
-                return -1;
-            }
-            
-            //returns index of texture coordinate in chunk
-            return indicesInChunkArray[chunkIndex];
+            return searchVertexIndexInChunk(originalIndex);
         }
         
         /**
@@ -2272,18 +2255,14 @@ public class LoaderOBJ extends Loader {
                             loader.materials = materialLoader.load();
                             materialLoader.close(); //to release file resources
                         }
-                    } catch(LoaderException e) {
-                        throw e;
-                    } catch(Throwable t) {
-                        throw new LoaderException(t);
+                    } catch(Exception e) {
+                        throw new LoaderException(e);
                     }
                     
-                } else if (str.startsWith(USEMTL)) {
-                    if (!firstMaterialStreamPositionAvailable) {
-                        firstMaterialStreamPositionAvailable = true;
-                        firstMaterialStreamPosition = streamPosition;                        
-                        materialsAvailable = true;
-                    }
+                } else if (str.startsWith(USEMTL) && !firstMaterialStreamPositionAvailable) {
+                    firstMaterialStreamPositionAvailable = true;
+                    firstMaterialStreamPosition = streamPosition;
+                    materialsAvailable = true;
                 }
                     
                 //ignore any other line

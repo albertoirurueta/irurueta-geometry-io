@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2326f7cd-cae4-4b0e-b5e9-6299f4c81c95" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/AbstractFileReaderAndWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/AbstractFileReaderAndWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/BuildInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/BuildInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/DataChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/DataChunk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/FileReaderAndWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/FileReaderAndWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader3DS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader3DS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderBinary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderBinary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -27,27 +21,26 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="1619" column="52" selection-start-line="1619" selection-start-column="52" selection-end-line="1619" selection-end-column="52" />
+            <state relative-caret-position="340">
+              <caret line="2264" column="46" selection-start-line="2264" selection-start-column="46" selection-end-line="2264" selection-end-column="46" />
               <folding>
-                <element signature="e#25842#25843#0" expanded="true" />
-                <element signature="e#25883#25884#0" expanded="true" />
-                <element signature="e#27584#27585#0" expanded="true" />
-                <element signature="e#27636#27637#0" expanded="true" />
-                <element signature="e#29215#29216#0" expanded="true" />
-                <element signature="e#29256#29257#0" expanded="true" />
-                <element signature="e#30405#30406#0" expanded="true" />
-                <element signature="e#30456#30457#0" expanded="true" />
-                <element signature="e#31230#31231#0" expanded="true" />
-                <element signature="e#31291#31292#0" expanded="true" />
-                <element signature="e#31334#31335#0" expanded="true" />
-                <element signature="e#31366#31367#0" expanded="true" />
-                <element signature="e#36759#36760#0" expanded="true" />
-                <element signature="e#36803#36804#0" expanded="true" />
-                <element signature="e#52599#52600#0" expanded="true" />
-                <element signature="e#52647#52648#0" expanded="true" />
-                <element signature="e#52925#52926#0" expanded="true" />
-                <element signature="e#52964#52965#0" expanded="true" />
+                <element signature="e#23104#23105#0" expanded="true" />
+                <element signature="e#23156#23157#0" expanded="true" />
+                <element signature="e#24709#24710#0" expanded="true" />
+                <element signature="e#24750#24751#0" expanded="true" />
+                <element signature="e#25190#25191#0" expanded="true" />
+                <element signature="e#25241#25242#0" expanded="true" />
+                <element signature="e#26015#26016#0" expanded="true" />
+                <element signature="e#26076#26077#0" expanded="true" />
+                <element signature="e#26276#26277#0" expanded="true" />
+                <element signature="e#26308#26309#0" expanded="true" />
+                <element signature="e#26547#26548#0" expanded="true" />
+                <element signature="e#26579#26580#0" expanded="true" />
+                <element signature="e#26784#26785#0" expanded="true" />
+                <element signature="e#26833#26834#0" expanded="true" />
+                <element signature="e#46347#46378#0" expanded="true" />
+                <element signature="e#82025#82026#0" expanded="true" />
+                <element signature="e#82095#82096#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -62,6 +55,7 @@
       <find>Import</find>
       <find>gcCounter</find>
       <find>&quot;usemtl &quot;</find>
+      <find>valueOf</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -116,10 +110,10 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/BuildInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/DataChunk.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/FileReaderAndWriter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader3DS.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderBinary.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" />
       </list>
     </option>
@@ -138,7 +132,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="179" />
+    <option name="x" value="138" />
     <option name="y" value="23" />
     <option name="width" value="1261" />
     <option name="height" value="877" />
@@ -148,6 +142,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -266,7 +261,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -336,7 +330,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543450606882" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543507960454" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -561,17 +555,12 @@
       <workItem from="1542821685449" duration="2493000" />
       <workItem from="1542841955107" duration="637000" />
       <workItem from="1543308166254" duration="30000" />
-      <workItem from="1543446390999" duration="4127000" />
+      <workItem from="1543446390999" duration="4202000" />
+      <workItem from="1543503572355" duration="2217000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="FileReaderAndWriterTest_testReadWriteArrayOfBytesWithOffsetAndLength - 2018.11.09 at 12h 10m 30s.xml">
-      <configuration name="FileReaderAndWriterTest.testReadWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="FileReaderAndWriterTest_testReadWriteArrayOfBytesWithOffsetAndLength - 2018.11.09 at 12h 11m 36s.xml">
-      <configuration name="FileReaderAndWriterTest.testReadWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="FileReaderAndWriterTest_testReadWriteArrayOfBytesWithOffsetAndLength - 2018.11.09 at 12h 12m 15s.xml">
       <configuration name="FileReaderAndWriterTest.testReadWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
     </history-entry>
@@ -596,15 +585,21 @@
     <history-entry file="LoaderOBJTest - 2018.11.29 at 01h 11m 37s.xml">
       <configuration name="LoaderOBJTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="LoaderOBJTest - 2018.11.29 at 01h 16m 53s.xml">
+      <configuration name="LoaderOBJTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="LoaderOBJTest - 2018.11.29 at 16h 58m 48s.xml">
+      <configuration name="LoaderOBJTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44684000" />
+    <option name="totallyTimeSpent" value="46976000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="179" y="23" width="1261" height="877" extended-state="0" />
+    <frame x="138" y="23" width="1261" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26989335" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27399507" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Nl-Palette" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -614,7 +609,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3299363" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32866243" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32866243" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -646,16 +641,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/LoaderSTLTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="17" column="7" lean-forward="true" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/LockedExceptionTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -951,13 +936,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="111" column="45" lean-forward="true" selection-start-line="111" selection-start-column="45" selection-end-line="111" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Loader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1038,29 +1016,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="120" column="26" selection-start-line="120" selection-start-column="26" selection-end-line="120" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/StringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="445" column="18" selection-start-line="445" selection-start-column="18" selection-end-line="445" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="1619" column="52" selection-start-line="1619" selection-start-column="52" selection-end-line="1619" selection-end-column="52" />
+        <state relative-caret-position="340">
+          <caret line="2264" column="46" selection-start-line="2264" selection-start-column="46" selection-end-line="2264" selection-end-column="46" />
           <folding>
-            <element signature="e#25842#25843#0" expanded="true" />
-            <element signature="e#25883#25884#0" expanded="true" />
-            <element signature="e#27584#27585#0" expanded="true" />
-            <element signature="e#27636#27637#0" expanded="true" />
-            <element signature="e#29215#29216#0" expanded="true" />
-            <element signature="e#29256#29257#0" expanded="true" />
-            <element signature="e#30405#30406#0" expanded="true" />
-            <element signature="e#30456#30457#0" expanded="true" />
-            <element signature="e#31230#31231#0" expanded="true" />
-            <element signature="e#31291#31292#0" expanded="true" />
-            <element signature="e#31334#31335#0" expanded="true" />
-            <element signature="e#31366#31367#0" expanded="true" />
-            <element signature="e#36759#36760#0" expanded="true" />
-            <element signature="e#36803#36804#0" expanded="true" />
-            <element signature="e#52599#52600#0" expanded="true" />
-            <element signature="e#52647#52648#0" expanded="true" />
-            <element signature="e#52925#52926#0" expanded="true" />
-            <element signature="e#52964#52965#0" expanded="true" />
+            <element signature="e#23104#23105#0" expanded="true" />
+            <element signature="e#23156#23157#0" expanded="true" />
+            <element signature="e#24709#24710#0" expanded="true" />
+            <element signature="e#24750#24751#0" expanded="true" />
+            <element signature="e#25190#25191#0" expanded="true" />
+            <element signature="e#25241#25242#0" expanded="true" />
+            <element signature="e#26015#26016#0" expanded="true" />
+            <element signature="e#26076#26077#0" expanded="true" />
+            <element signature="e#26276#26277#0" expanded="true" />
+            <element signature="e#26308#26309#0" expanded="true" />
+            <element signature="e#26547#26548#0" expanded="true" />
+            <element signature="e#26579#26580#0" expanded="true" />
+            <element signature="e#26784#26785#0" expanded="true" />
+            <element signature="e#26833#26834#0" expanded="true" />
+            <element signature="e#46347#46378#0" expanded="true" />
+            <element signature="e#82025#82026#0" expanded="true" />
+            <element signature="e#82095#82096#0" expanded="true" />
           </folding>
         </state>
       </provider>
