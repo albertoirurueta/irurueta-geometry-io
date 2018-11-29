@@ -1242,403 +1242,407 @@ public class LoaderOBJ extends Loader {
                     (long)(LoaderOBJ.PROGRESS_DELTA * numberOfFaces), 1);            
             
             boolean materialChange = false;
-            
-            while ((currentFace < numberOfFaces) && !materialChange) {
-                
-                long faceStreamPos = reader.getPosition();
-                String str = reader.readLine();
-                if ((str == null) && (currentFace < (numberOfFaces - 1))) {
-                    //unexpected end of file
-                    throw new LoaderException();
-                } else if (str == null) {
-                    break;
-                }
-                
-                //check if line corresponds to face or material, otherwise, 
-                //ignore
-                if (str.startsWith(USEMTL)) {
-                    
-                    if (currentChunkMaterialName.equals("")) {
-                        currentChunkMaterialName = str.substring(
-                                USEMTL.length()).trim();
-                        //search current material on material library
-                        currentMaterial = null;
-                        if (materialLoader != null) {
-                           currentMaterial = materialLoader.getMaterialByName(
-                                   currentChunkMaterialName);
-                        }                        
-                    } else {
-                        //stop reading this chunk and reset position to 
-                        //beginning of line so that usemtl is read again                        
-                        materialChange = true;
-                        reader.seek(faceStreamPos);                        
-                        break;
-                    }
-                    
-                } else if (str.startsWith("f ")) {
-                    
-                    //line is a face, so we keep data after "f"
-                    str = str.substring("f ".length()).trim();
-                    //retrieve words in data
-                    String [] valuesTemp = str.split(" ");
-                    Set<String []> valuesSet = new HashSet<>();
-                    
-                    //check that each face contains three elements to define a
-                    //triangle only
-                    if (valuesTemp.length == 3) {
-                        valuesSet.add(valuesTemp);
-                        
-                    } else if (valuesTemp.length > 3) {
-                        //if instead of a triangle we have a polygon then we
-                        //to divide valuesTemp into a set of values forming 
-                        //triangles
-                        List<VertexOBJ> verticesList = 
-                                getFaceValues(valuesTemp);
-                        try {
-                            valuesSet.addAll(buildTriangulatedIndices(
-                                    verticesList));
-                        } catch (TriangulatorException e) {
-                            //triangulation failed for some reason, but
-                            //file reading continues if configured like that
-                            //(by default it is)
-                            if (!continueIfTriangulationError) {
-                                throw new LoaderException(e);
-                            }
-                        }
-                    } else {
+
+            try {
+                while ((currentFace < numberOfFaces) && !materialChange) {
+
+                    long faceStreamPos = reader.getPosition();
+                    String str = reader.readLine();
+                    if ((str == null) && (currentFace < (numberOfFaces - 1))) {
+                        //unexpected end of file
                         throw new LoaderException();
-                    }
-                    
-                    
-                    //each word corresponds to a vertex/texture/normal index,
-                    //so we check if such number of indices can be added into
-                    //this chunk
-                    if ((verticesInChunk + valuesSet.size() * 3) >
-                            loader.maxVerticesInChunk) { //values.length
-                        //no more vertices can be added to chunk so we reset 
-                        //stream to start on current face
-                        reader.seek(faceStreamPos);
+                    } else if (str == null) {
                         break;
                     }
 
-                    //keep current stream position for next face
-                    currentStreamPosition = reader.getPosition();
+                    //check if line corresponds to face or material, otherwise,
+                    //ignore
+                    if (str.startsWith(USEMTL)) {
 
-                    for (String [] values: valuesSet) {
-                    
-                        //otherwise values can be added into chunk, so we read
-                        //vertex index, texture index and normal index
-                        for (String value : values) {
-                            //vslue can be of the form v/vt/vn, where v stands 
-                            //for vertex index, vt for texture index and vn for 
-                            //normal index, and where vt and vn are optional
-                            String[] indices = value.split("/");
-                            boolean addExistingVertexCoords = false;
-                            boolean addExistingTextureCoords = false;
-                            boolean addExistingNormal = false;
-                            int vertexCoordsChunkIndex = -1;
-                            int textureCoordsChunkIndex = -1;
-                            int normalChunkIndex = -1;
-
-                            boolean addExisting;
-                            int chunkIndex = 0;
-
-                            //first check if vertex has to be added as new or 
-                            //not
-                            if (indices.length >= 1 &&
-                                    (indices[0].length() != 0)) {
-                                indicesAvailable = true;
-                                //indices start at 1 in OBJ
-                                vertexIndex = Integer.parseInt(indices[0]) - 1;
-
-                                //determine if vertex coordinates have to be 
-                                //added as new or they can be reused from an 
-                                //existing vertex
-                                addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk &&
-                                        (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) >= 0;
+                        if (currentChunkMaterialName.equals("")) {
+                            currentChunkMaterialName = str.substring(
+                                    USEMTL.length()).trim();
+                            //search current material on material library
+                            currentMaterial = null;
+                            if (materialLoader != null) {
+                                currentMaterial = materialLoader.getMaterialByName(
+                                        currentChunkMaterialName);
                             }
-                            if (indices.length >= 2 &&
-                                    (indices[1].length() != 0)) {
-                                textureAvailable = true;
-                                //indices start at 1 in OBJ
-                                textureIndex = Integer.parseInt(indices[1]) - 1;
+                        } else {
+                            //stop reading this chunk and reset position to
+                            //beginning of line so that usemtl is read again
+                            materialChange = true;
+                            reader.seek(faceStreamPos);
+                            break;
+                        }
 
-                                //determine if texture coordinates have to be 
-                                //added as new or they can be reused from an 
-                                //existing vertex
-                                addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk &&
-                                        (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) >= 0;
-                            }
-                            if (indices.length >= 3 && (indices[2].length() != 0)) {
-                                normalsAvailable = true;
-                                //indices start at 1 in OBJ
-                                normalIndex = Integer.parseInt(indices[2]) - 1;
+                    } else if (str.startsWith("f ")) {
 
-                                //determine if normal coordinates have to be 
-                                //added as new or they can be reused from an 
-                                //existing vertex
-                                addExistingNormal = !loader.allowDuplicateVerticesInChunk &&
-                                        (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) >= 0;
-                            }
+                        //line is a face, so we keep data after "f"
+                        str = str.substring("f ".length()).trim();
+                        //retrieve words in data
+                        String[] valuesTemp = str.split(" ");
+                        Set<String[]> valuesSet = new HashSet<>();
 
-                            //if either vertex coordinates, texture coordinates 
-                            //or normal indicate that a new vertex needs to be 
-                            //added, then do so, only if all three use an 
-                            //existing vertex into chunk use that existing 
-                            //vertex. Also, in case that existing vertex is 
-                            //added, if chunk indices of existing vertex, 
-                            //texture and normal are not the same add as a new 
-                            //vertex into chunk
+                        //check that each face contains three elements to define a
+                        //triangle only
+                        if (valuesTemp.length == 3) {
+                            valuesSet.add(valuesTemp);
 
-                            //if some chunk index is found, set add existing to 
-                            //true
-                            addExisting = (vertexCoordsChunkIndex >= 0) ||
-                                    (textureCoordsChunkIndex >= 0) ||
-                                    (normalChunkIndex >= 0);
-                            //ensure that if index is present an existing vertex 
-                            //in chunk exists
-                            if (indices.length >= 1 &&
-                                    (indices[0].length() != 0)) {
-                                addExisting &= addExistingVertexCoords;
-                            }
-                            if (indices.length >= 2 &&
-                                    (indices[1].length() != 0)) {
-                                addExisting &= addExistingTextureCoords;
-                            }
-                            if (indices.length >= 3 &&
-                                    (indices[2].length() != 0)) {
-                                addExisting &= addExistingNormal;
-                            }
-
-                            if (addExisting) {
-                                //if finally an existing vertex is added, set 
-                                //chunk index
-                                if (vertexCoordsChunkIndex >= 0) {
-                                    chunkIndex = vertexCoordsChunkIndex;
-                                }
-                                if (textureCoordsChunkIndex >= 0) {
-                                    chunkIndex = textureCoordsChunkIndex;
-                                }
-                                if (normalChunkIndex >= 0) {
-                                    chunkIndex = normalChunkIndex;
+                        } else if (valuesTemp.length > 3) {
+                            //if instead of a triangle we have a polygon then we
+                            //to divide valuesTemp into a set of values forming
+                            //triangles
+                            List<VertexOBJ> verticesList =
+                                    getFaceValues(valuesTemp);
+                            try {
+                                valuesSet.addAll(buildTriangulatedIndices(
+                                        verticesList));
+                            } catch (TriangulatorException e) {
+                                //triangulation failed for some reason, but
+                                //file reading continues if configured like that
+                                //(by default it is)
+                                if (!continueIfTriangulationError) {
+                                    throw new LoaderException(e);
                                 }
                             }
+                        } else {
+                            throw new LoaderException();
+                        }
 
 
-                            if (indices.length >= 1 &&
-                                    (indices[0].length() != 0) && !addExistingVertexCoords) {
-                                //new vertex needs to be added into chunk,
-                                //so we need to read vertex data
+                        //each word corresponds to a vertex/texture/normal index,
+                        //so we check if such number of indices can be added into
+                        //this chunk
+                        if ((verticesInChunk + valuesSet.size() * 3) >
+                                loader.maxVerticesInChunk) { //values.length
+                            //no more vertices can be added to chunk so we reset
+                            //stream to start on current face
+                            reader.seek(faceStreamPos);
+                            break;
+                        }
 
-                                //fetch vertex data position
-                                fetchVertex(vertexIndex);
-                                vertexStreamPosition = reader.getPosition();
+                        //keep current stream position for next face
+                        currentStreamPosition = reader.getPosition();
 
-                                //read all vertex data
-                                String vertexLine = reader.readLine();
-                                if (!vertexLine.startsWith("v ")) {
-                                    throw new LoaderException();
+                        for (String[] values : valuesSet) {
+
+                            //otherwise values can be added into chunk, so we read
+                            //vertex index, texture index and normal index
+                            for (String value : values) {
+                                //vslue can be of the form v/vt/vn, where v stands
+                                //for vertex index, vt for texture index and vn for
+                                //normal index, and where vt and vn are optional
+                                String[] indices = value.split("/");
+                                boolean addExistingVertexCoords = false;
+                                boolean addExistingTextureCoords = false;
+                                boolean addExistingNormal = false;
+                                int vertexCoordsChunkIndex = -1;
+                                int textureCoordsChunkIndex = -1;
+                                int normalChunkIndex = -1;
+
+                                boolean addExisting;
+                                int chunkIndex = 0;
+
+                                //first check if vertex has to be added as new or
+                                //not
+                                if (indices.length >= 1 &&
+                                        (indices[0].length() != 0)) {
+                                    indicesAvailable = true;
+                                    //indices start at 1 in OBJ
+                                    vertexIndex = Integer.parseInt(indices[0]) - 1;
+
+                                    //determine if vertex coordinates have to be
+                                    //added as new or they can be reused from an
+                                    //existing vertex
+                                    addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk &&
+                                            (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) >= 0;
                                 }
-                                vertexLine = vertexLine.substring(
-                                        "v ".length()).trim();
-                                //retrieve words in vertexLine, which contain
-                                //vertex coordinates either as x, y, z or x,
-                                //y, z, w
-                                String[] vertexCoordinates =
-                                        vertexLine.split(" ");
-                                if (vertexCoordinates.length == 4) {
-                                    //homogeneous coordinates x, y, z, w
+                                if (indices.length >= 2 &&
+                                        (indices[1].length() != 0)) {
+                                    textureAvailable = true;
+                                    //indices start at 1 in OBJ
+                                    textureIndex = Integer.parseInt(indices[1]) - 1;
 
-                                    //check that values are valid
-                                    if (vertexCoordinates[0].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[1].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[2].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[3].length() == 0) {
-                                        throw new LoaderException();
-                                    }
+                                    //determine if texture coordinates have to be
+                                    //added as new or they can be reused from an
+                                    //existing vertex
+                                    addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk &&
+                                            (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) >= 0;
+                                }
+                                if (indices.length >= 3 && (indices[2].length() != 0)) {
+                                    normalsAvailable = true;
+                                    //indices start at 1 in OBJ
+                                    normalIndex = Integer.parseInt(indices[2]) - 1;
 
-                                    float w = Float.parseFloat(
-                                            vertexCoordinates[3]);
-                                    coordX = Float.parseFloat(
-                                            vertexCoordinates[0]) / w;
-                                    coordY = Float.parseFloat(
-                                            vertexCoordinates[1]) / w;
-                                    coordZ = Float.parseFloat(
-                                            vertexCoordinates[2]) / w;
-
-                                } else if (vertexCoordinates.length >= 3) {
-                                    //inhomogeneous coordinates x, y, z
-
-                                    //check that values are valid
-                                    if (vertexCoordinates[0].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[1].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[2].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-
-                                    coordX = Float.parseFloat(
-                                            vertexCoordinates[0]);
-                                    coordY = Float.parseFloat(
-                                            vertexCoordinates[1]);
-                                    coordZ = Float.parseFloat(
-                                            vertexCoordinates[2]);
-
-                                } else {
-                                    throw new LoaderException(); //unsupported length
+                                    //determine if normal coordinates have to be
+                                    //added as new or they can be reused from an
+                                    //existing vertex
+                                    addExistingNormal = !loader.allowDuplicateVerticesInChunk &&
+                                            (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) >= 0;
                                 }
 
-                                addExisting = false;
-                            }
-                            if (indices.length >= 2 &&
-                                    (indices[1].length() != 0) && !addExistingTextureCoords) {
-                                //new texture values need to be added into
-                                //chunk, so we need to read texture
-                                //coordinates data
+                                //if either vertex coordinates, texture coordinates
+                                //or normal indicate that a new vertex needs to be
+                                //added, then do so, only if all three use an
+                                //existing vertex into chunk use that existing
+                                //vertex. Also, in case that existing vertex is
+                                //added, if chunk indices of existing vertex,
+                                //texture and normal are not the same add as a new
+                                //vertex into chunk
 
-                                //fetch texture data position
-                                fetchTexture(textureIndex);
-                                textureCoordStreamPosition =
-                                        reader.getPosition();
-
-                                //read all texture data
-                                String textureLine = reader.readLine();
-                                if (!textureLine.startsWith("vt ")) {
-                                    throw new LoaderException();
+                                //if some chunk index is found, set add existing to
+                                //true
+                                addExisting = (vertexCoordsChunkIndex >= 0) ||
+                                        (textureCoordsChunkIndex >= 0) ||
+                                        (normalChunkIndex >= 0);
+                                //ensure that if index is present an existing vertex
+                                //in chunk exists
+                                if (indices.length >= 1 &&
+                                        (indices[0].length() != 0)) {
+                                    addExisting &= addExistingVertexCoords;
                                 }
-                                textureLine = textureLine.substring(
-                                        "vt ".length()).trim();
-                                //retrieve words in textureLine, which contain
-                                //texture coordinates either as u, w or u, v, w
-                                String[] textureCoordinates =
-                                        textureLine.split(" ");
-                                if (textureCoordinates.length == 3) {
-                                    //homogeneous coordinates u, v, w
+                                if (indices.length >= 2 &&
+                                        (indices[1].length() != 0)) {
+                                    addExisting &= addExistingTextureCoords;
+                                }
+                                if (indices.length >= 3 &&
+                                        (indices[2].length() != 0)) {
+                                    addExisting &= addExistingNormal;
+                                }
 
-                                    //check that values are valid
-                                    if (textureCoordinates[0].length() == 0) {
+                                if (addExisting) {
+                                    //if finally an existing vertex is added, set
+                                    //chunk index
+                                    if (vertexCoordsChunkIndex >= 0) {
+                                        chunkIndex = vertexCoordsChunkIndex;
+                                    }
+                                    if (textureCoordsChunkIndex >= 0) {
+                                        chunkIndex = textureCoordsChunkIndex;
+                                    }
+                                    if (normalChunkIndex >= 0) {
+                                        chunkIndex = normalChunkIndex;
+                                    }
+                                }
+
+
+                                if (indices.length >= 1 &&
+                                        (indices[0].length() != 0) && !addExistingVertexCoords) {
+                                    //new vertex needs to be added into chunk,
+                                    //so we need to read vertex data
+
+                                    //fetch vertex data position
+                                    fetchVertex(vertexIndex);
+                                    vertexStreamPosition = reader.getPosition();
+
+                                    //read all vertex data
+                                    String vertexLine = reader.readLine();
+                                    if (!vertexLine.startsWith("v ")) {
                                         throw new LoaderException();
                                     }
-                                    if (textureCoordinates[1].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (textureCoordinates[2].length() == 0) {
-                                        throw new LoaderException();
+                                    vertexLine = vertexLine.substring(
+                                            "v ".length()).trim();
+                                    //retrieve words in vertexLine, which contain
+                                    //vertex coordinates either as x, y, z or x,
+                                    //y, z, w
+                                    String[] vertexCoordinates =
+                                            vertexLine.split(" ");
+                                    if (vertexCoordinates.length == 4) {
+                                        //homogeneous coordinates x, y, z, w
+
+                                        //check that values are valid
+                                        if (vertexCoordinates[0].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[1].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[2].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[3].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+
+                                        float w = Float.parseFloat(
+                                                vertexCoordinates[3]);
+                                        coordX = Float.parseFloat(
+                                                vertexCoordinates[0]) / w;
+                                        coordY = Float.parseFloat(
+                                                vertexCoordinates[1]) / w;
+                                        coordZ = Float.parseFloat(
+                                                vertexCoordinates[2]) / w;
+
+                                    } else if (vertexCoordinates.length >= 3) {
+                                        //inhomogeneous coordinates x, y, z
+
+                                        //check that values are valid
+                                        if (vertexCoordinates[0].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[1].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[2].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+
+                                        coordX = Float.parseFloat(
+                                                vertexCoordinates[0]);
+                                        coordY = Float.parseFloat(
+                                                vertexCoordinates[1]);
+                                        coordZ = Float.parseFloat(
+                                                vertexCoordinates[2]);
+
+                                    } else {
+                                        throw new LoaderException(); //unsupported length
                                     }
 
-                                    float w = Float.parseFloat(
-                                            textureCoordinates[2]);
+                                    addExisting = false;
+                                }
+                                if (indices.length >= 2 &&
+                                        (indices[1].length() != 0) && !addExistingTextureCoords) {
+                                    //new texture values need to be added into
+                                    //chunk, so we need to read texture
+                                    //coordinates data
 
-                                    textureU = Float.parseFloat(
-                                            textureCoordinates[0]) / w;
-                                    textureV = Float.parseFloat(
-                                            textureCoordinates[1]) / w;
-                                    if (Math.abs(w) < Float.MIN_VALUE ||
-                                            Float.isInfinite(textureU) ||
-                                            Float.isNaN(textureU) ||
-                                            Float.isInfinite(textureV) ||
-                                            Float.isNaN(textureV)) {
+                                    //fetch texture data position
+                                    fetchTexture(textureIndex);
+                                    textureCoordStreamPosition =
+                                            reader.getPosition();
+
+                                    //read all texture data
+                                    String textureLine = reader.readLine();
+                                    if (!textureLine.startsWith("vt ")) {
+                                        throw new LoaderException();
+                                    }
+                                    textureLine = textureLine.substring(
+                                            "vt ".length()).trim();
+                                    //retrieve words in textureLine, which contain
+                                    //texture coordinates either as u, w or u, v, w
+                                    String[] textureCoordinates =
+                                            textureLine.split(" ");
+                                    if (textureCoordinates.length == 3) {
+                                        //homogeneous coordinates u, v, w
+
+                                        //check that values are valid
+                                        if (textureCoordinates[0].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (textureCoordinates[1].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (textureCoordinates[2].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+
+                                        float w = Float.parseFloat(
+                                                textureCoordinates[2]);
+
+                                        textureU = Float.parseFloat(
+                                                textureCoordinates[0]) / w;
+                                        textureV = Float.parseFloat(
+                                                textureCoordinates[1]) / w;
+                                        if (Math.abs(w) < Float.MIN_VALUE ||
+                                                Float.isInfinite(textureU) ||
+                                                Float.isNaN(textureU) ||
+                                                Float.isInfinite(textureV) ||
+                                                Float.isNaN(textureV)) {
+                                            textureU = Float.parseFloat(
+                                                    textureCoordinates[0]);
+                                            textureV = Float.parseFloat(
+                                                    textureCoordinates[1]);
+                                        }
+
+                                    } else if (textureCoordinates.length >= 2) {
+                                        //inhomogeneous coordinates u, v
+
+                                        //check that values are valid
+                                        if (textureCoordinates[0].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (textureCoordinates[1].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+
                                         textureU = Float.parseFloat(
                                                 textureCoordinates[0]);
                                         textureV = Float.parseFloat(
                                                 textureCoordinates[1]);
+                                    } else {
+                                        throw new LoaderException(); //unsupported length
                                     }
 
-                                } else if (textureCoordinates.length >= 2) {
-                                    //inhomogeneous coordinates u, v
+                                    addExisting = false;
+                                }
+                                if (indices.length >= 3 &&
+                                        (indices[2].length() != 0) && !addExistingNormal) {
+                                    //new normal needs to be added into chunk,
+                                    //so we need to read vertex data
 
-                                    //check that values are valid
-                                    if (textureCoordinates[0].length() == 0) {
+                                    //fetch normal data position
+                                    fetchNormal(normalIndex);
+                                    normalStreamPosition = reader.getPosition();
+
+                                    //read all normal data
+                                    String normalLine = reader.readLine();
+                                    if (!normalLine.startsWith("vn ")) {
                                         throw new LoaderException();
                                     }
-                                    if (textureCoordinates[1].length() == 0) {
-                                        throw new LoaderException();
+                                    normalLine = normalLine.substring(
+                                            "vn ".length()).trim();
+                                    //retrieve words in normalLine, which must
+                                    //contain normal coordinates as x, y, z
+                                    String[] normalCoordinates =
+                                            normalLine.split(" ");
+                                    if (normalCoordinates.length == 3) {
+                                        //normal coordinates x, y, z
+
+                                        //check that values are valid
+                                        if (normalCoordinates[0].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (normalCoordinates[1].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (normalCoordinates[2].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+
+                                        nX = Float.parseFloat(
+                                                normalCoordinates[0]);
+                                        nY = Float.parseFloat(
+                                                normalCoordinates[1]);
+                                        nZ = Float.parseFloat(
+                                                normalCoordinates[2]);
+                                    } else {
+                                        throw new LoaderException(); //unsupported length
                                     }
 
-                                    textureU = Float.parseFloat(
-                                            textureCoordinates[0]);
-                                    textureV = Float.parseFloat(
-                                            textureCoordinates[1]);
+                                    addExisting = false;
+                                }
+
+                                if (addExisting) {
+                                    addExistingVertexToChunk(chunkIndex);
                                 } else {
-                                    throw new LoaderException(); //unsupported length
+                                    addNewVertexDataToChunk();
                                 }
-
-                                addExisting = false;
-                            }
-                            if (indices.length >= 3 &&
-                                    (indices[2].length() != 0) && !addExistingNormal) {
-                                //new normal needs to be added into chunk,
-                                //so we need to read vertex data
-
-                                //fetch normal data position
-                                fetchNormal(normalIndex);
-                                normalStreamPosition = reader.getPosition();
-
-                                //read all normal data
-                                String normalLine = reader.readLine();
-                                if (!normalLine.startsWith("vn ")) {
-                                    throw new LoaderException();
-                                }
-                                normalLine = normalLine.substring(
-                                        "vn ".length()).trim();
-                                //retrieve words in normalLine, which must
-                                //contain normal coordinates as x, y, z
-                                String[] normalCoordinates =
-                                        normalLine.split(" ");
-                                if (normalCoordinates.length == 3) {
-                                    //normal coordinates x, y, z
-
-                                    //check that values are valid
-                                    if (normalCoordinates[0].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (normalCoordinates[1].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (normalCoordinates[2].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-
-                                    nX = Float.parseFloat(
-                                            normalCoordinates[0]);
-                                    nY = Float.parseFloat(
-                                            normalCoordinates[1]);
-                                    nZ = Float.parseFloat(
-                                            normalCoordinates[2]);
-                                } else {
-                                    throw new LoaderException(); //unsupported length
-                                }
-
-                                addExisting = false;
-                            }
-
-                            if (addExisting) {
-                                addExistingVertexToChunk(chunkIndex);
-                            } else {
-                                addNewVertexDataToChunk();
                             }
                         }
+                        //reset face stream position
+                        reader.seek(currentStreamPosition);
+                        currentFace++;
                     }
-                    //reset face stream position
-                    reader.seek(currentStreamPosition);
-                    currentFace++;
+
+                    //compute progress
+                    if (loader.listener != null &&
+                            (currentFace % progressStep) == 0) {
+                        loader.listener.onLoadProgressChange(loader,
+                                (float) (currentFace) / (float) (numberOfFaces));
+                    }
                 }
-                
-                //compute progress
-                if (loader.listener != null &&
-                        (currentFace % progressStep) == 0) {
-                    loader.listener.onLoadProgressChange(loader,
-                            (float)(currentFace) / (float)(numberOfFaces));
-                }
+            } catch (NumberFormatException e) {
+                throw new LoaderException(e);
             }
             
             //trim arrays to store only needed data

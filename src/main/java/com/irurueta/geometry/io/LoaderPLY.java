@@ -203,7 +203,7 @@ public class LoaderPLY extends Loader {
      * @throws IllegalArgumentException Raised if maximum number of vertices is
      * smaller than MIN_MAX_VERTICES_IN_CHUNK.
      */
-    public LoaderPLY(int maxVerticesInChunk) throws IllegalArgumentException {
+    public LoaderPLY(int maxVerticesInChunk) {
         reader = null;
         header = null;
         validStream = false;
@@ -228,8 +228,7 @@ public class LoaderPLY extends Loader {
      * smaller than MIN_MAX_VERTICES_IN_CHUNK.
      */
     public LoaderPLY(int maxVerticesInChunk, 
-            boolean allowDuplicateVerticesInChunk) 
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk) {
         reader = null;
         header = null;
         validStream = false;
@@ -256,8 +255,7 @@ public class LoaderPLY extends Loader {
      * smaller than MIN_STREAM_POSITIONS.
      */
     public LoaderPLY(int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
         reader = null;
         header = null;
         validStream = false;
@@ -301,7 +299,7 @@ public class LoaderPLY extends Loader {
      * @throws IOException if file does not exist or cannot be loaded.
      */
     public LoaderPLY(File f, int maxVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         header = null;
         validStream = false;
@@ -329,7 +327,7 @@ public class LoaderPLY extends Loader {
      */
     public LoaderPLY(File f, int maxVerticesInChunk, 
             boolean allowDuplicateVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         header = null;
         validStream = false;
@@ -359,7 +357,7 @@ public class LoaderPLY extends Loader {
      */
     public LoaderPLY(File f, int maxVerticesInChunk,
             boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         header = null;
         validStream = false;
@@ -401,8 +399,7 @@ public class LoaderPLY extends Loader {
      * @throws IllegalArgumentException Raised if maximum number of vertices is
      * smaller than MIN_MAX_VERTICES_IN_CHUNK.
      */
-    public LoaderPLY(LoaderListener listener, int maxVerticesInChunk) 
-            throws IllegalArgumentException {
+    public LoaderPLY(LoaderListener listener, int maxVerticesInChunk) {
         super(listener);
         reader = null;
         header = null;
@@ -429,8 +426,7 @@ public class LoaderPLY extends Loader {
      * smaller than MIN_MAX_VERTICES_IN_CHUNK.
      */
     public LoaderPLY(LoaderListener listener, int maxVerticesInChunk, 
-            boolean allowDuplicateVerticesInChunk) 
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk) {
         super(listener);
         reader = null;
         header = null;
@@ -459,8 +455,7 @@ public class LoaderPLY extends Loader {
      * smaller than MIN_STREAM_POSITIONS.
      */
     public LoaderPLY(LoaderListener listener, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IllegalArgumentException {
+            boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
         super(listener);
         reader = null;
         header = null;
@@ -507,8 +502,7 @@ public class LoaderPLY extends Loader {
      * @throws IOException if file does not exist or cannot be loaded.
      */
     public LoaderPLY(File f, LoaderListener listener, 
-            int maxVerticesInChunk) throws IllegalArgumentException, 
-            IOException {
+            int maxVerticesInChunk) throws IOException {
         super(f, listener);
         header = null;
         validStream = false;
@@ -537,7 +531,7 @@ public class LoaderPLY extends Loader {
      */
     public LoaderPLY(File f, LoaderListener listener, 
             int maxVerticesInChunk, boolean allowDuplicateVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f, listener);
         header = null;
         validStream = false;
@@ -568,8 +562,7 @@ public class LoaderPLY extends Loader {
      */
     public LoaderPLY(File f, LoaderListener listener,
             int maxVerticesInChunk, boolean allowDuplicateVerticesInChunk, 
-            long maxStreamPositions) throws IllegalArgumentException, 
-            IOException {
+            long maxStreamPositions) throws IOException {
         super(f, listener);
         header = null;
         validStream = false;
@@ -593,7 +586,7 @@ public class LoaderPLY extends Loader {
      * is in progress.
      */
     public void setMaxVerticesInChunk(int maxVerticesInChunk) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -620,8 +613,7 @@ public class LoaderPLY extends Loader {
      * @throws IllegalArgumentException Raised if maximum number of vertices is
      * smaller than MIN_MAX_VERTICES_IN_CHUNK.
      */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk)
-            throws IllegalArgumentException {
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
         if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
             throw new IllegalArgumentException();
         }
@@ -686,7 +678,7 @@ public class LoaderPLY extends Loader {
      * is in progress.
      */
     public void setMaxStreamPositions(long maxStreamPositions) 
-            throws IllegalArgumentException, LockedException{
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -719,8 +711,7 @@ public class LoaderPLY extends Loader {
      * @throws IllegalArgumentException Raised if provided value is lower than
      * DEFAULT_MAX_STREAM_POSITIONS.
      */    
-    private void internalSetMaxStreamPositions(long maxStreamPositions)
-            throws IllegalArgumentException {
+    private void internalSetMaxStreamPositions(long maxStreamPositions) {
         if (maxStreamPositions < MIN_STREAM_POSITIONS) {
             throw new IllegalArgumentException();
         }
@@ -750,7 +741,7 @@ public class LoaderPLY extends Loader {
      * is in progress.
      */
     public void setPeriodicGarbageCollection(boolean periodicGarbageCollection)
-            throws LockedException{
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -779,8 +770,7 @@ public class LoaderPLY extends Loader {
      * is in progress.
      */
     public void setItersBeforeGarbageCollection(
-            int itersBeforeGarbageCollection) throws IllegalArgumentException,
-            LockedException {
+            int itersBeforeGarbageCollection) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -1001,8 +991,13 @@ public class LoaderPLY extends Loader {
                     validStream = false;
                     throw new LoaderException();
                 }
-                
-                long elementInstances = Long.valueOf(str);
+
+                long elementInstances;
+                try {
+                    elementInstances = Long.parseLong(str);
+                } catch (NumberFormatException e) {
+                    throw new IOException(e);
+                }
                 
                 //instantiate element
                 lastElement = new ElementPLY(elementName, elementInstances);
@@ -1199,7 +1194,9 @@ public class LoaderPLY extends Loader {
             //load method
             try {
                 reader.seek(0); //attempt restart stream to current position
-            } catch (Throwable ignore) { }
+            } catch (Exception ignore) {
+                //operation is attempted, if it fails it is ignored
+            }
 
             //on subsequent calls
             validityChecked = false; //reset in case we want to read more data
@@ -6690,7 +6687,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    byte value = Byte.valueOf(str);
+                    byte value = Byte.parseByte(str);
                 
                     //save to buffer
                     buffer.put(0, value);
@@ -6726,7 +6723,7 @@ public class LoaderPLY extends Loader {
                 //Because Java doesn't support unsigned types we use the next type
                 //capable of holding all values
                 try {
-                    short value = Short.valueOf(str);
+                    short value = Short.parseShort(str);
                 
                     //save to buffer
                     buffer.putShort(0, value);
@@ -6761,7 +6758,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    short value = Short.valueOf(str);
+                    short value = Short.parseShort(str);
                 
                     //save to buffer
                     buffer.putShort(0, value);
@@ -6797,7 +6794,7 @@ public class LoaderPLY extends Loader {
                 //Because Java doesn't support unsigned types we use the next type
                 //capable of holding all values
                 try {
-                    int value = Integer.valueOf(str);
+                    int value = Integer.parseInt(str);
                 
                     //save to buffer
                     buffer.putInt(0, value);
@@ -6832,7 +6829,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    int value = Integer.valueOf(str);
+                    int value = Integer.parseInt(str);
                 
                     //save to buffer
                     buffer.putInt(0, value);
@@ -6868,7 +6865,7 @@ public class LoaderPLY extends Loader {
                 //Because Java doesn't support unsigned types we use the next type
                 //capable of holding all values
                 try {
-                    long value = Long.valueOf(str);
+                    long value = Long.parseLong(str);
                 
                     //save to buffer
                     buffer.putLong(0, value);
@@ -6903,7 +6900,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    float value = Float.valueOf(str);
+                    float value = Float.parseFloat(str);
                 
                     //save to buffer
                     buffer.putFloat(0, value);
@@ -6938,7 +6935,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    double value = Double.valueOf(str);
+                    double value = Double.parseDouble(str);
                 
                     //save to buffer
                     buffer.putDouble(0, value);
@@ -6973,7 +6970,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    byte value = Byte.valueOf(str);
+                    byte value = Byte.parseByte(str);
                     
                     //save to buffer
                     buffer.put(0, value);
@@ -7009,7 +7006,7 @@ public class LoaderPLY extends Loader {
                 //Because Java doesn't support unsigned types we use the next type
                 //capable of holding all values
                 try {
-                    short value = Short.valueOf(str);
+                    short value = Short.parseShort(str);
                     
                     //save to buffer
                     buffer.putShort(0, value);
@@ -7044,7 +7041,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    short value = Short.valueOf(str);
+                    short value = Short.parseShort(str);
                 
                     //save to buffer
                     buffer.putShort(0, value);
@@ -7080,7 +7077,7 @@ public class LoaderPLY extends Loader {
                 //Because Java doesn't support unsigned types we use the next type
                 //capable of holding all values
                 try {
-                    int value = Integer.valueOf(str);
+                    int value = Integer.parseInt(str);
                 
                     //save to buffer
                     buffer.putInt(0, value);
@@ -7115,7 +7112,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    int value = Integer.valueOf(str);
+                    int value = Integer.parseInt(str);
                 
                     //save to buffer
                     buffer.putInt(0, value);
@@ -7151,7 +7148,7 @@ public class LoaderPLY extends Loader {
                 //Because Java doesn't support unsigned types we use the next type
                 //capable of holding all values
                 try {
-                    long value = Long.valueOf(str);
+                    long value = Long.parseLong(str);
                 
                     //save to buffer
                     buffer.putLong(0, value);
@@ -7186,7 +7183,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    float value = Float.valueOf(str);
+                    float value = Float.parseFloat(str);
                 
                     //save to buffer
                     buffer.putFloat(0, value);
@@ -7221,7 +7218,7 @@ public class LoaderPLY extends Loader {
                 
                 //retrieve word value
                 try {
-                    double value = Double.valueOf(str);
+                    double value = Double.parseDouble(str);
                 
                     //save to buffer
                     buffer.putDouble(0, value);

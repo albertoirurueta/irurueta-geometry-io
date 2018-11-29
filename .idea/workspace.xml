@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2326f7cd-cae4-4b0e-b5e9-6299f4c81c95" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="2264" column="46" selection-start-line="2264" selection-start-column="46" selection-end-line="2264" selection-end-column="46" />
+            <state relative-caret-position="75">
+              <caret line="1650" column="7" lean-forward="true" selection-start-line="1650" selection-start-column="7" selection-end-line="1650" selection-end-column="7" />
               <folding>
                 <element signature="e#23104#23105#0" expanded="true" />
                 <element signature="e#23156#23157#0" expanded="true" />
@@ -38,10 +38,17 @@
                 <element signature="e#26579#26580#0" expanded="true" />
                 <element signature="e#26784#26785#0" expanded="true" />
                 <element signature="e#26833#26834#0" expanded="true" />
-                <element signature="e#46347#46378#0" expanded="true" />
-                <element signature="e#82025#82026#0" expanded="true" />
-                <element signature="e#82095#82096#0" expanded="true" />
+                <element signature="e#83303#83304#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="1197" column="67" selection-start-line="1197" selection-start-column="67" selection-end-line="1197" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -56,6 +63,7 @@
       <find>gcCounter</find>
       <find>&quot;usemtl &quot;</find>
       <find>valueOf</find>
+      <find>parse</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -93,7 +101,6 @@
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/VertexOBJTest.java" />
         <option value="$PROJECT_DIR$/checkstyle.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/ElementPLY.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MappedFileReaderAndWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MaterialLoader.java" />
@@ -115,6 +122,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderBinary.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/HeaderPLY.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java" />
       </list>
     </option>
   </component>
@@ -132,7 +140,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="138" />
+    <option name="x" value="71" />
     <option name="y" value="23" />
     <option name="width" value="1261" />
     <option name="height" value="877" />
@@ -330,7 +338,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543507960454" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543530361730" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -350,7 +358,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.LoaderOBJTest">
+  <component name="RunManager" selected="JUnit.LoaderIteratorPLYTest">
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -533,10 +541,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.LoaderIteratorPLYTest" />
         <item itemvalue="JUnit.LoaderOBJTest" />
         <item itemvalue="JUnit.com.irurueta.geometry.io in irurueta-geometry-io" />
         <item itemvalue="JUnit.MappedFileReaderAndWriterTest.testReadWriteArrayOfBytesWithOffsetAndLength" />
-        <item itemvalue="JUnit.LoaderIteratorPLYTest" />
         <item itemvalue="JUnit.LoaderBinaryTest" />
       </list>
     </recent_temporary>
@@ -556,14 +564,12 @@
       <workItem from="1542841955107" duration="637000" />
       <workItem from="1543308166254" duration="30000" />
       <workItem from="1543446390999" duration="4202000" />
-      <workItem from="1543503572355" duration="2217000" />
+      <workItem from="1543503572355" duration="2543000" />
+      <workItem from="1543528585305" duration="1754000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="FileReaderAndWriterTest_testReadWriteArrayOfBytesWithOffsetAndLength - 2018.11.09 at 12h 12m 15s.xml">
-      <configuration name="FileReaderAndWriterTest.testReadWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="FileReaderAndWriterTest_testReadFullyWriteArrayOfBytesWithOffsetAndLength - 2018.11.09 at 12h 13m 14s.xml">
       <configuration name="FileReaderAndWriterTest.testReadFullyWriteArrayOfBytesWithOffsetAndLength" configurationId="JUnit" />
     </history-entry>
@@ -591,15 +597,18 @@
     <history-entry file="LoaderOBJTest - 2018.11.29 at 16h 58m 48s.xml">
       <configuration name="LoaderOBJTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="LoaderOBJTest - 2018.11.29 at 23h 19m 34s.xml">
+      <configuration name="LoaderOBJTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46976000" />
+    <option name="totallyTimeSpent" value="49056000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="138" y="23" width="1261" height="877" extended-state="0" />
+    <frame x="71" y="23" width="1261" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27399507" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2780968" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Nl-Palette" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -950,13 +959,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderBinary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="785" column="9" lean-forward="true" selection-start-line="785" selection-start-column="9" selection-end-line="785" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -999,13 +1001,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/io/LoaderOBJTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
@@ -1030,10 +1025,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderBinary.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="79" column="11" selection-start-line="79" selection-start-column="11" selection-end-line="79" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="2264" column="46" selection-start-line="2264" selection-start-column="46" selection-end-line="2264" selection-end-column="46" />
+        <state relative-caret-position="75">
+          <caret line="1650" column="7" lean-forward="true" selection-start-line="1650" selection-start-column="7" selection-end-line="1650" selection-end-column="7" />
           <folding>
             <element signature="e#23104#23105#0" expanded="true" />
             <element signature="e#23156#23157#0" expanded="true" />
@@ -1049,10 +1051,15 @@
             <element signature="e#26579#26580#0" expanded="true" />
             <element signature="e#26784#26785#0" expanded="true" />
             <element signature="e#26833#26834#0" expanded="true" />
-            <element signature="e#46347#46378#0" expanded="true" />
-            <element signature="e#82025#82026#0" expanded="true" />
-            <element signature="e#82095#82096#0" expanded="true" />
+            <element signature="e#83303#83304#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="1197" column="67" selection-start-line="1197" selection-start-column="67" selection-end-line="1197" selection-end-column="67" />
         </state>
       </provider>
     </entry>
