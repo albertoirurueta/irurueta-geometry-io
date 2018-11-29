@@ -68,43 +68,43 @@ com.irurueta:irurueta-geometry-io
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1434">1434</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1435">1435</a></td></tr>
 <tr class="a">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1798">1798</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L1802">1802</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
-<pre>                                fetchVertex(vertexIndex);
-                                vertexStreamPosition = reader.getPosition();
+<pre>                                    fetchVertex(vertexIndex);
+                                    vertexStreamPosition = reader.getPosition();
 
-                                //read all vertex data
-                                String vertexLine = reader.readLine();
-                                if (!vertexLine.startsWith(&quot;v &quot;)) {
-                                    throw new LoaderException();
-                                }
-                                vertexLine = vertexLine.substring(
-                                        &quot;v &quot;.length()).trim();
-                                //retrieve words in vertexLine, which contain
-                                //vertex coordinates either as x, y, z or x,
-                                //y, z, w
-                                String[] vertexCoordinates =
-                                        vertexLine.split(&quot; &quot;);
-                                if (vertexCoordinates.length == 4) {
-                                    //homogeneous coordinates x, y, z, w
+                                    //read all vertex data
+                                    String vertexLine = reader.readLine();
+                                    if (!vertexLine.startsWith(&quot;v &quot;)) {
+                                        throw new LoaderException();
+                                    }
+                                    vertexLine = vertexLine.substring(
+                                            &quot;v &quot;.length()).trim();
+                                    //retrieve words in vertexLine, which contain
+                                    //vertex coordinates either as x, y, z or x,
+                                    //y, z, w
+                                    String[] vertexCoordinates =
+                                            vertexLine.split(&quot; &quot;);
+                                    if (vertexCoordinates.length == 4) {
+                                        //homogeneous coordinates x, y, z, w
 
-                                    //check that values are valid
-                                    if (vertexCoordinates[0].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[1].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[2].length() == 0) {
-                                        throw new LoaderException();
-                                    }
-                                    if (vertexCoordinates[3].length() == 0) {
-                                        throw new LoaderException();
-                                    }</pre></div></td></tr></table>
+                                        //check that values are valid
+                                        if (vertexCoordinates[0].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[1].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[2].length() == 0) {
+                                            throw new LoaderException();
+                                        }
+                                        if (vertexCoordinates[3].length() == 0) {
+                                            throw new LoaderException();
+                                        }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -155,13 +155,13 @@ com.irurueta:irurueta-geometry-io
 <th>Line</th></tr>
 <tr class="b">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2304">2304</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2308">2308</a></td></tr>
 <tr class="a">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2380">2380</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2384">2384</a></td></tr>
 <tr class="b">
 <td>com/irurueta/geometry/io/LoaderOBJ.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2455">2455</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/io/LoaderOBJ.html#L2459">2459</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>                        verticesStreamPositionMap.floorEntry(index);
@@ -237,101 +237,6 @@ com.irurueta:irurueta-geometry-io
                 fourthIntByte;
         
         randomAccessFile.writeInt(value);</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/geometry/io/LoaderPLY.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderPLY.html#L729">729</a></td></tr>
-<tr class="b">
-<td>com/irurueta/geometry/io/LoaderSTL.java</td>
-<td><a href="./xref/com/irurueta/geometry/io/LoaderSTL.html#L248">248</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>    }
-
-    /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled. By default it is enabled.
-     * @return True if periodic garbage collection is enabled, false otherwise.
-     */
-    public boolean isPeriodicGarbageCollection() {
-        return periodicGarbageCollection;
-    }
-    
-    /**
-     * Sets whether periodic garbage collection should be attempted from time to
-     * time to reduce memory usage. Garbage collection might slow down slightly
-     * the loading process but in memory constrained environments this setting
-     * should be enabled. By default it is enabled.
-     * @param periodicGarbageCollection True if periodic garbage collection must
-     * be enabled, false otherwise.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setPeriodicGarbageCollection(boolean periodicGarbageCollection)
-            throws LockedException{
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        this.periodicGarbageCollection = periodicGarbageCollection;
-    }
-
-    /**
-     * Returns number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection 
-     * is  enabled. By default this is set to 10000 attempts.
-     * @return Number of attempts to clean memory before garbage collection is
-     * actually demanded.
-     */
-    public int getItersBeforeGarbageCollection() {
-        return itersBeforeGarbageCollection;
-    }
-    
-    /**
-     * Sets number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection
-     * is enabled. By default this is set to 10000 attempts.
-     * @param itersBeforeGarbageCollection number of iterations before actually claiming garbage collection.
-     * @throws IllegalArgumentException if provided value is negative.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setItersBeforeGarbageCollection(
-            int itersBeforeGarbageCollection) throws IllegalArgumentException,
-            LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        if (itersBeforeGarbageCollection &lt; 0) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.itersBeforeGarbageCollection = itersBeforeGarbageCollection;
-    }    
-        
-    /**
-     * Indicates it this loader has enough parameters to start the loading 
-     * process.
-     * @return True if ready, false otherwise.
-     */
-    @Override
-    public boolean isReady() {
-        return hasFile();
-    }
-
-    /**
-     * Returns mesh format supported by this loader, which is PLY_MESH_FORMAT.
-     * @return Format supported by this loader, which is PLY_MESH_FORMAT.
-     */
-    @Override
-    public MeshFormat getMeshFormat() {
-        return MeshFormat.MESH_FORMAT_PLY;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
