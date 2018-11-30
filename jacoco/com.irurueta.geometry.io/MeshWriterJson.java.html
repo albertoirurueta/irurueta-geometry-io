@@ -250,227 +250,229 @@ public class MeshWriterJson extends MeshWriter {
             
             try {
 <span class="fc" id="L252">                loader.setListener(this.internalListeners);</span>
-<span class="pc" id="L253">            } catch (LockedException ignore) { }</span>
+<span class="nc" id="L253">            } catch (LockedException ignore) {</span>
+                //never happens
+<span class="fc" id="L255">            }</span>
 
                         
-<span class="fc" id="L256">            writer.write(&quot;{\&quot;textures\&quot;:[&quot;);</span>
-<span class="fc" id="L257">            LoaderIterator iter = loader.load();</span>
+<span class="fc" id="L258">            writer.write(&quot;{\&quot;textures\&quot;:[&quot;);</span>
+<span class="fc" id="L259">            LoaderIterator iter = loader.load();</span>
             
-<span class="fc" id="L259">            float minX = Float.MAX_VALUE;</span>
-<span class="fc" id="L260">            float minY = Float.MAX_VALUE;</span>
-<span class="fc" id="L261">            float minZ = Float.MAX_VALUE;</span>
-<span class="fc" id="L262">            float maxX = -Float.MAX_VALUE;</span>
-<span class="fc" id="L263">            float maxY = -Float.MAX_VALUE;</span>
-<span class="fc" id="L264">            float maxZ = -Float.MAX_VALUE;</span>
+<span class="fc" id="L261">            float minX = Float.MAX_VALUE;</span>
+<span class="fc" id="L262">            float minY = Float.MAX_VALUE;</span>
+<span class="fc" id="L263">            float minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L264">            float maxX = -Float.MAX_VALUE;</span>
+<span class="fc" id="L265">            float maxY = -Float.MAX_VALUE;</span>
+<span class="fc" id="L266">            float maxZ = -Float.MAX_VALUE;</span>
             
             //write array opening
-<span class="fc" id="L267">            writer.write(&quot;],\&quot;chunks\&quot;:[&quot;);   </span>
+<span class="fc" id="L269">            writer.write(&quot;],\&quot;chunks\&quot;:[&quot;);   </span>
             //indicate that no more textures can follow
-<span class="fc" id="L269">            ignoreTextureValidation = true;</span>
-<span class="fc bfc" id="L270" title="All 2 branches covered.">            while (iter.hasNext()) {</span>
-<span class="fc" id="L271">                DataChunk chunk = iter.next();</span>
-<span class="fc" id="L272">                float[] coords = chunk.getVerticesCoordinatesData();</span>
-<span class="fc" id="L273">                short[] colors = chunk.getColorData();</span>
-<span class="fc" id="L274">                int[] indices = chunk.getIndicesData();</span>
-<span class="fc" id="L275">                float[] textureCoords = chunk.getTextureCoordiantesData();</span>
-<span class="fc" id="L276">                float[] normals = chunk.getNormalsData();</span>
+<span class="fc" id="L271">            ignoreTextureValidation = true;</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">            while (iter.hasNext()) {</span>
+<span class="fc" id="L273">                DataChunk chunk = iter.next();</span>
+<span class="fc" id="L274">                float[] coords = chunk.getVerticesCoordinatesData();</span>
+<span class="fc" id="L275">                short[] colors = chunk.getColorData();</span>
+<span class="fc" id="L276">                int[] indices = chunk.getIndicesData();</span>
+<span class="fc" id="L277">                float[] textureCoords = chunk.getTextureCoordiantesData();</span>
+<span class="fc" id="L278">                float[] normals = chunk.getNormalsData();</span>
                 
-<span class="fc" id="L278">                Material material = chunk.getMaterial();</span>
+<span class="fc" id="L280">                Material material = chunk.getMaterial();</span>
                         
-<span class="pc bpc" id="L280" title="1 of 2 branches missed.">                boolean coordsAvailable = (coords != null);</span>
-<span class="fc bfc" id="L281" title="All 2 branches covered.">                boolean colorsAvailable = (colors != null);</span>
-<span class="pc bpc" id="L282" title="1 of 2 branches missed.">                boolean indicesAvailable = (indices != null);</span>
-<span class="fc bfc" id="L283" title="All 2 branches covered.">                boolean textureCoordsAvailable = (textureCoords != null);</span>
-<span class="fc bfc" id="L284" title="All 2 branches covered.">                boolean normalsAvailable = (normals != null);</span>
-<span class="fc" id="L285">                boolean hasPreviousContent = false;</span>
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">                boolean coordsAvailable = (coords != null);</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">                boolean colorsAvailable = (colors != null);</span>
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                boolean indicesAvailable = (indices != null);</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">                boolean textureCoordsAvailable = (textureCoords != null);</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">                boolean normalsAvailable = (normals != null);</span>
+<span class="fc" id="L287">                boolean hasPreviousContent = false;</span>
                         
-<span class="fc bfc" id="L287" title="All 2 branches covered.">                if (chunk.getMinX() &lt; minX) {</span>
-<span class="fc" id="L288">                    minX = chunk.getMinX();</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">                if (chunk.getMinX() &lt; minX) {</span>
+<span class="fc" id="L290">                    minX = chunk.getMinX();</span>
                 }
-<span class="fc bfc" id="L290" title="All 2 branches covered.">                if (chunk.getMinY() &lt; minY) {</span>
-<span class="fc" id="L291">                    minY = chunk.getMinY();</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                if (chunk.getMinY() &lt; minY) {</span>
+<span class="fc" id="L293">                    minY = chunk.getMinY();</span>
                 }
-<span class="fc bfc" id="L293" title="All 2 branches covered.">                if (chunk.getMinZ() &lt; minZ) {</span>
-<span class="fc" id="L294">                    minZ = chunk.getMinZ();</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">                if (chunk.getMinZ() &lt; minZ) {</span>
+<span class="fc" id="L296">                    minZ = chunk.getMinZ();</span>
                 }
                 
-<span class="fc bfc" id="L297" title="All 2 branches covered.">                if (chunk.getMaxX() &gt; maxX) {</span>
-<span class="fc" id="L298">                    maxX = chunk.getMaxX();</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">                if (chunk.getMaxX() &gt; maxX) {</span>
+<span class="fc" id="L300">                    maxX = chunk.getMaxX();</span>
                 }
-<span class="fc bfc" id="L300" title="All 2 branches covered.">                if (chunk.getMaxY() &gt; maxY) {</span>
-<span class="fc" id="L301">                    maxY = chunk.getMaxY();</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">                if (chunk.getMaxY() &gt; maxY) {</span>
+<span class="fc" id="L303">                    maxY = chunk.getMaxY();</span>
                 }
-<span class="fc bfc" id="L303" title="All 2 branches covered.">                if (chunk.getMaxZ() &gt; maxZ) {</span>
-<span class="fc" id="L304">                    maxZ = chunk.getMaxZ();</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">                if (chunk.getMaxZ() &gt; maxZ) {</span>
+<span class="fc" id="L306">                    maxZ = chunk.getMaxZ();</span>
                 }
                 
                 //write chunk opening
-<span class="fc" id="L308">                writer.write(&quot;{&quot;);</span>
+<span class="fc" id="L310">                writer.write(&quot;{&quot;);</span>
                 
                 //CHUNK CONTENTS
-<span class="fc bfc" id="L311" title="All 2 branches covered.">                if (material != null) {</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">                if (material != null) {</span>
                     //write material
-<span class="fc" id="L313">                    writeMaterial(material);</span>
-<span class="fc" id="L314">                    hasPreviousContent = true;</span>
+<span class="fc" id="L315">                    writeMaterial(material);</span>
+<span class="fc" id="L316">                    hasPreviousContent = true;</span>
                 }
-<span class="pc bpc" id="L316" title="1 of 2 branches missed.">                if (indicesAvailable) {</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">                if (indicesAvailable) {</span>
                     //write separator for next piece of data
-<span class="fc bfc" id="L318" title="All 2 branches covered.">                    if (hasPreviousContent) writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">                    if (hasPreviousContent) writer.write(&quot;,&quot;);</span>
 
                     //write indices opening
-<span class="fc" id="L321">                    writer.write(&quot;\&quot;indices\&quot;:[&quot;);</span>
-<span class="fc bfc" id="L322" title="All 2 branches covered.">                    for (int i = 0; i &lt; indices.length; i++) {</span>
-<span class="fc" id="L323">                        writer.write(Integer.toString(indices[i]));</span>
+<span class="fc" id="L323">                    writer.write(&quot;\&quot;indices\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">                    for (int i = 0; i &lt; indices.length; i++) {</span>
+<span class="fc" id="L325">                        writer.write(Integer.toString(indices[i]));</span>
                         //write separator if more elements in array
-<span class="fc bfc" id="L325" title="All 2 branches covered.">                        if(i &lt; (indices.length - 1)) writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">                        if(i &lt; (indices.length - 1)) writer.write(&quot;,&quot;);</span>
                     }
                     //write indices closing
-<span class="fc" id="L328">                    writer.write(&quot;]&quot;);</span>
-<span class="fc" id="L329">                    hasPreviousContent = true;</span>
+<span class="fc" id="L330">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L331">                    hasPreviousContent = true;</span>
                 }
-<span class="fc bfc" id="L331" title="All 2 branches covered.">                if (normalsAvailable) {</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">                if (normalsAvailable) {</span>
                     //write separator for next piece of data
-<span class="pc bpc" id="L333" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
-<span class="fc" id="L334">                        writer.write(&quot;,&quot;);</span>
+<span class="pc bpc" id="L335" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L336">                        writer.write(&quot;,&quot;);</span>
                     }
                     
                     //write normals opening
-<span class="fc" id="L338">                    writer.write(&quot;\&quot;vertexNormals\&quot;:[&quot;);</span>
-<span class="fc bfc" id="L339" title="All 2 branches covered.">                    for (int i = 0; i &lt; normals.length; i++) {</span>
-<span class="pc bpc" id="L340" title="1 of 2 branches missed.">                        if (Float.isInfinite(normals[i]) ||</span>
-<span class="pc bpc" id="L341" title="1 of 2 branches missed.">                                Float.isNaN(normals[i])) {</span>
-<span class="nc" id="L342">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
+<span class="fc" id="L340">                    writer.write(&quot;\&quot;vertexNormals\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">                    for (int i = 0; i &lt; normals.length; i++) {</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">                        if (Float.isInfinite(normals[i]) ||</span>
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">                                Float.isNaN(normals[i])) {</span>
+<span class="nc" id="L344">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
                         } else {
-<span class="fc" id="L344">                            writer.write(Float.toString(normals[i]));</span>
+<span class="fc" id="L346">                            writer.write(Float.toString(normals[i]));</span>
                         }
                         //write separator if more elements in array
-<span class="fc bfc" id="L347" title="All 2 branches covered.">                        if (i &lt; (normals.length - 1)) {</span>
-<span class="fc" id="L348">                            writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">                        if (i &lt; (normals.length - 1)) {</span>
+<span class="fc" id="L350">                            writer.write(&quot;,&quot;);</span>
                         }
                     }
                     //write normals closing
-<span class="fc" id="L352">                    writer.write(&quot;]&quot;);</span>
-<span class="fc" id="L353">                    hasPreviousContent = true;</span>
+<span class="fc" id="L354">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L355">                    hasPreviousContent = true;</span>
                 }
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
                     //write separator for next piece of data
-<span class="pc bpc" id="L357" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
-<span class="fc" id="L358">                        writer.write(&quot;,&quot;);</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L360">                        writer.write(&quot;,&quot;);</span>
                     }
                     
                     //write coords opening
-<span class="fc" id="L362">                    writer.write(&quot;\&quot;vertexPositions\&quot;:[&quot;);</span>
-<span class="fc bfc" id="L363" title="All 2 branches covered.">                    for (int i = 0; i &lt; coords.length; i++) {</span>
-<span class="pc bpc" id="L364" title="1 of 2 branches missed.">                        if (Float.isInfinite(coords[i]) ||</span>
-<span class="pc bpc" id="L365" title="1 of 2 branches missed.">                                Float.isNaN(coords[i])) {</span>
-<span class="nc" id="L366">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
+<span class="fc" id="L364">                    writer.write(&quot;\&quot;vertexPositions\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                    for (int i = 0; i &lt; coords.length; i++) {</span>
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">                        if (Float.isInfinite(coords[i]) ||</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">                                Float.isNaN(coords[i])) {</span>
+<span class="nc" id="L368">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
                         } else {
-<span class="fc" id="L368">                            writer.write(Float.toString(coords[i]));</span>
+<span class="fc" id="L370">                            writer.write(Float.toString(coords[i]));</span>
                         }
                         //write separator if more elements in array
-<span class="fc bfc" id="L371" title="All 2 branches covered.">                        if (i &lt; (coords.length - 1)) {</span>
-<span class="fc" id="L372">                            writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L373" title="All 2 branches covered.">                        if (i &lt; (coords.length - 1)) {</span>
+<span class="fc" id="L374">                            writer.write(&quot;,&quot;);</span>
                         }
                     }
                     //write coords closing
-<span class="fc" id="L376">                    writer.write(&quot;]&quot;);</span>
-<span class="fc" id="L377">                    hasPreviousContent = true;</span>
+<span class="fc" id="L378">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L379">                    hasPreviousContent = true;</span>
                 }
-<span class="fc bfc" id="L379" title="All 2 branches covered.">                if (textureCoordsAvailable) {</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">                if (textureCoordsAvailable) {</span>
                     //write separator for next piece of data
-<span class="pc bpc" id="L381" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
-<span class="fc" id="L382">                        writer.write(&quot;,&quot;);</span>
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L384">                        writer.write(&quot;,&quot;);</span>
                     }
                     
                     //write texture coords opening
-<span class="fc" id="L386">                    writer.write(&quot;\&quot;vertexTextureCoords\&quot;:[&quot;);</span>
-<span class="fc bfc" id="L387" title="All 2 branches covered.">                    for (int i = 0; i &lt; textureCoords.length; i++) {</span>
-<span class="pc bpc" id="L388" title="1 of 2 branches missed.">                        if (Float.isInfinite(textureCoords[i]) ||</span>
-<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                                Float.isNaN(textureCoords[i])) {</span>
-<span class="nc" id="L390">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
+<span class="fc" id="L388">                    writer.write(&quot;\&quot;vertexTextureCoords\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L389" title="All 2 branches covered.">                    for (int i = 0; i &lt; textureCoords.length; i++) {</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">                        if (Float.isInfinite(textureCoords[i]) ||</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">                                Float.isNaN(textureCoords[i])) {</span>
+<span class="nc" id="L392">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
                         } else {
-<span class="fc" id="L392">                            writer.write(Float.toString(textureCoords[i]));</span>
+<span class="fc" id="L394">                            writer.write(Float.toString(textureCoords[i]));</span>
                         }
                         //write separator if more elements in array
-<span class="fc bfc" id="L395" title="All 2 branches covered.">                        if (i &lt; (textureCoords.length - 1)) {</span>
-<span class="fc" id="L396">                            writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L397" title="All 2 branches covered.">                        if (i &lt; (textureCoords.length - 1)) {</span>
+<span class="fc" id="L398">                            writer.write(&quot;,&quot;);</span>
                         }
                     }
                     //write texture coords closing
-<span class="fc" id="L400">                    writer.write(&quot;]&quot;);</span>
-<span class="fc" id="L401">                    hasPreviousContent = true;</span>
+<span class="fc" id="L402">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L403">                    hasPreviousContent = true;</span>
                 }
-<span class="pc bpc" id="L403" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
                     //write separator for next piece of data
-<span class="fc" id="L405">                    writer.write(&quot;,&quot;);</span>
+<span class="fc" id="L407">                    writer.write(&quot;,&quot;);</span>
 
                     //write min corner
-<span class="fc" id="L408">                    writer.write(&quot;\&quot;minCorner\&quot;:[&quot; + chunk.getMinX() + &quot;,&quot; + </span>
-<span class="fc" id="L409">                            chunk.getMinY() + &quot;,&quot; + chunk.getMinZ() + &quot;],&quot;);</span>
+<span class="fc" id="L410">                    writer.write(&quot;\&quot;minCorner\&quot;:[&quot; + chunk.getMinX() + &quot;,&quot; + </span>
+<span class="fc" id="L411">                            chunk.getMinY() + &quot;,&quot; + chunk.getMinZ() + &quot;],&quot;);</span>
                     
                     //write max corner
-<span class="fc" id="L412">                    writer.write(&quot;\&quot;maxCorner\&quot;:[&quot; + chunk.getMaxX() + &quot;,&quot; +</span>
-<span class="fc" id="L413">                            chunk.getMaxY() + &quot;,&quot; + chunk.getMaxZ() + &quot;]&quot;);</span>
-<span class="fc" id="L414">                    hasPreviousContent = true;</span>
+<span class="fc" id="L414">                    writer.write(&quot;\&quot;maxCorner\&quot;:[&quot; + chunk.getMaxX() + &quot;,&quot; +</span>
+<span class="fc" id="L415">                            chunk.getMaxY() + &quot;,&quot; + chunk.getMaxZ() + &quot;]&quot;);</span>
+<span class="fc" id="L416">                    hasPreviousContent = true;</span>
                 }
-<span class="fc bfc" id="L416" title="All 2 branches covered.">                if (colorsAvailable) {</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">                if (colorsAvailable) {</span>
                     //write separator for next piece of data
-<span class="pc bpc" id="L418" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
-<span class="fc" id="L419">                        writer.write(&quot;,&quot;);</span>
+<span class="pc bpc" id="L420" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L421">                        writer.write(&quot;,&quot;);</span>
                     }
                     
                     //write colors opening
-<span class="fc" id="L423">                    writer.write(&quot;\&quot;vertexColors\&quot;:[&quot;);                                            </span>
-<span class="fc bfc" id="L424" title="All 2 branches covered.">                    for (int i = 0; i &lt; colors.length; i++) {</span>
-<span class="fc" id="L425">                        writer.write(Short.toString(colors[i]));</span>
+<span class="fc" id="L425">                    writer.write(&quot;\&quot;vertexColors\&quot;:[&quot;);                                            </span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">                    for (int i = 0; i &lt; colors.length; i++) {</span>
+<span class="fc" id="L427">                        writer.write(Short.toString(colors[i]));</span>
                         
-<span class="fc bfc" id="L427" title="All 2 branches covered.">                        if (i &lt; (colors.length - 1)) {</span>
-<span class="fc" id="L428">                            writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">                        if (i &lt; (colors.length - 1)) {</span>
+<span class="fc" id="L430">                            writer.write(&quot;,&quot;);</span>
                         }
                     }
                     
                     //write colors closing and color components
-<span class="fc" id="L433">                    writer.write(&quot;],\&quot;colorComponents\&quot;: &quot; +</span>
-<span class="fc" id="L434">                            chunk.getColorComponents());</span>
+<span class="fc" id="L435">                    writer.write(&quot;],\&quot;colorComponents\&quot;: &quot; +</span>
+<span class="fc" id="L436">                            chunk.getColorComponents());</span>
                 }
                                 
                 //write chunk closing
-<span class="fc" id="L438">                writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L440">                writer.write(&quot;}&quot;);</span>
                 
                 //write chunk separator if more chunks are available
-<span class="fc bfc" id="L441" title="All 2 branches covered.">                if (iter.hasNext()) {</span>
-<span class="fc" id="L442">                    writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">                if (iter.hasNext()) {</span>
+<span class="fc" id="L444">                    writer.write(&quot;,&quot;);</span>
                 }
                 
-<span class="fc" id="L445">                writer.flush();</span>
-<span class="fc" id="L446">            }</span>
+<span class="fc" id="L447">                writer.flush();</span>
+<span class="fc" id="L448">            }</span>
             //write array closing
-<span class="fc" id="L448">            writer.write(&quot;],&quot;);</span>
+<span class="fc" id="L450">            writer.write(&quot;],&quot;);</span>
             //write bounding box for all chunks
             //write min corner
-<span class="fc" id="L451">            writer.write(&quot;\&quot;minCorner\&quot;:[&quot; + minX + &quot;,&quot; + minY + &quot;,&quot; + minZ + </span>
+<span class="fc" id="L453">            writer.write(&quot;\&quot;minCorner\&quot;:[&quot; + minX + &quot;,&quot; + minY + &quot;,&quot; + minZ + </span>
                     &quot;],&quot;);
                     
             //write max corner
-<span class="fc" id="L455">            writer.write(&quot;\&quot;maxCorner\&quot;:[&quot; + maxX + &quot;,&quot; + maxY + &quot;,&quot; + maxZ + </span>
+<span class="fc" id="L457">            writer.write(&quot;\&quot;maxCorner\&quot;:[&quot; + maxX + &quot;,&quot; + maxY + &quot;,&quot; + maxZ + </span>
                     &quot;]&quot;);            
             
             //write object closing
-<span class="fc" id="L459">            writer.write(&quot;}&quot;);</span>
-<span class="fc" id="L460">            writer.flush();</span>
+<span class="fc" id="L461">            writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L462">            writer.flush();</span>
             
-<span class="pc bpc" id="L462" title="1 of 2 branches missed.">            if (listener != null) {</span>
-<span class="fc" id="L463">                listener.onWriteEnd(this);</span>
+<span class="pc bpc" id="L464" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L465">                listener.onWriteEnd(this);</span>
             }
-<span class="fc" id="L465">            locked = false;</span>
+<span class="fc" id="L467">            locked = false;</span>
             
-<span class="nc" id="L467">        } catch (LoaderException | IOException e) {</span>
-<span class="nc" id="L468">            throw e;</span>
-<span class="nc" id="L469">        } catch (Exception e) {</span>
-<span class="nc" id="L470">            throw new LoaderException(e);</span>
-<span class="fc" id="L471">        }</span>
+<span class="nc" id="L469">        } catch (LoaderException | IOException e) {</span>
+<span class="nc" id="L470">            throw e;</span>
+<span class="nc" id="L471">        } catch (Exception e) {</span>
+<span class="nc" id="L472">            throw new LoaderException(e);</span>
+<span class="fc" id="L473">        }</span>
 
-<span class="fc" id="L473">    }</span>
+<span class="fc" id="L475">    }</span>
 
     /**
      * Processes texture file. By reading provided texture file that has been 
@@ -484,56 +486,56 @@ public class MeshWriterJson extends MeshWriter {
     @Override
     protected void processTextureFile(Texture texture, File textureFile) 
             throws IOException {
-<span class="fc bfc" id="L487" title="All 2 branches covered.">        if (textureCounter &gt; 0) {</span>
-<span class="fc" id="L488">            writer.write(&quot;,&quot;);</span>
+<span class="fc bfc" id="L489" title="All 2 branches covered.">        if (textureCounter &gt; 0) {</span>
+<span class="fc" id="L490">            writer.write(&quot;,&quot;);</span>
         }
-<span class="fc" id="L490">        writer.write(&quot;{\&quot;id\&quot;:&quot; + texture.getId());</span>
-<span class="fc" id="L491">        writer.write(&quot;,\&quot;width\&quot;:&quot; + texture.getWidth());</span>
-<span class="fc" id="L492">        writer.write(&quot;,\&quot;height\&quot;:&quot; + texture.getHeight());</span>
-<span class="pc bpc" id="L493" title="1 of 2 branches missed.">        if (listener instanceof MeshWriterJsonListener) {</span>
-<span class="fc" id="L494">            MeshWriterJsonListener listener2 = (MeshWriterJsonListener)listener;</span>
-<span class="pc bpc" id="L495" title="1 of 2 branches missed.">            if (remoteTextureUrlEnabled) {</span>
-<span class="fc" id="L496">                String remoteUrl = listener2.onRemoteTextureUrlRequested(this, </span>
+<span class="fc" id="L492">        writer.write(&quot;{\&quot;id\&quot;:&quot; + texture.getId());</span>
+<span class="fc" id="L493">        writer.write(&quot;,\&quot;width\&quot;:&quot; + texture.getWidth());</span>
+<span class="fc" id="L494">        writer.write(&quot;,\&quot;height\&quot;:&quot; + texture.getHeight());</span>
+<span class="pc bpc" id="L495" title="1 of 2 branches missed.">        if (listener instanceof MeshWriterJsonListener) {</span>
+<span class="fc" id="L496">            MeshWriterJsonListener listener2 = (MeshWriterJsonListener)listener;</span>
+<span class="pc bpc" id="L497" title="1 of 2 branches missed.">            if (remoteTextureUrlEnabled) {</span>
+<span class="fc" id="L498">                String remoteUrl = listener2.onRemoteTextureUrlRequested(this, </span>
                         texture, textureFile);
-<span class="pc bpc" id="L498" title="1 of 2 branches missed.">                if (remoteUrl != null) {</span>
+<span class="pc bpc" id="L500" title="1 of 2 branches missed.">                if (remoteUrl != null) {</span>
                     //add url to json
-<span class="fc" id="L500">                    writer.write(&quot;,\&quot;remoteUrl\&quot;:\&quot;&quot; + remoteUrl + &quot;\&quot;&quot;);</span>
+<span class="fc" id="L502">                    writer.write(&quot;,\&quot;remoteUrl\&quot;:\&quot;&quot; + remoteUrl + &quot;\&quot;&quot;);</span>
                 }
             }
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">            if (remoteTextureIdEnabled) {</span>
-<span class="fc" id="L504">                String remoteId = listener2.onRemoteTextureIdRequested(this, </span>
+<span class="pc bpc" id="L505" title="1 of 2 branches missed.">            if (remoteTextureIdEnabled) {</span>
+<span class="fc" id="L506">                String remoteId = listener2.onRemoteTextureIdRequested(this, </span>
                         texture, textureFile);
-<span class="pc bpc" id="L506" title="1 of 2 branches missed.">                if (remoteId != null) {</span>
+<span class="pc bpc" id="L508" title="1 of 2 branches missed.">                if (remoteId != null) {</span>
                     //add id to json
-<span class="fc" id="L508">                    writer.write(&quot;,\&quot;remoteId\&quot;: \&quot;&quot; + remoteId + &quot;\&quot;&quot;);</span>
+<span class="fc" id="L510">                    writer.write(&quot;,\&quot;remoteId\&quot;: \&quot;&quot; + remoteId + &quot;\&quot;&quot;);</span>
                 }
             }
             
         }
-<span class="pc bpc" id="L513" title="1 of 2 branches missed.">        if (embedTexturesEnabled) {</span>
-<span class="fc" id="L514">            writer.write(&quot;,\&quot;data\&quot;:\&quot;&quot;);</span>
+<span class="pc bpc" id="L515" title="1 of 2 branches missed.">        if (embedTexturesEnabled) {</span>
+<span class="fc" id="L516">            writer.write(&quot;,\&quot;data\&quot;:\&quot;&quot;);</span>
             //write teture file data as base64
-<span class="fc" id="L516">            writer.flush(); //flush to sync writer and stream</span>
+<span class="fc" id="L518">            writer.flush(); //flush to sync writer and stream</span>
 
 
-<span class="fc" id="L519">            try (InputStream textureStream = new FileInputStream(textureFile)) {</span>
-<span class="fc" id="L520">                byte[] imageData = new byte[(int) textureFile.length()];</span>
+<span class="fc" id="L521">            try (InputStream textureStream = new FileInputStream(textureFile)) {</span>
+<span class="fc" id="L522">                byte[] imageData = new byte[(int) textureFile.length()];</span>
 
-<span class="pc bpc" id="L522" title="1 of 2 branches missed.">                if (textureStream.read(imageData) &gt; 0) {</span>
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">                if (textureStream.read(imageData) &gt; 0) {</span>
                     //convert image byte array into Base64 string
                     //TODO: could we use a Base64OutputStream to reduce memory usage,
                     //but doing the same replacement for safe json generation?
-<span class="fc" id="L526">                    String base64 = Base64.encodeBase64String(imageData);</span>
-<span class="fc" id="L527">                    base64 = base64.replace(&quot;/&quot;, &quot;\\/&quot;);</span>
-<span class="fc" id="L528">                    writer.write(base64);</span>
-<span class="fc" id="L529">                    writer.flush();</span>
+<span class="fc" id="L528">                    String base64 = Base64.encodeBase64String(imageData);</span>
+<span class="fc" id="L529">                    base64 = base64.replace(&quot;/&quot;, &quot;\\/&quot;);</span>
+<span class="fc" id="L530">                    writer.write(base64);</span>
+<span class="fc" id="L531">                    writer.flush();</span>
                 }
             }
-<span class="fc" id="L532">            writer.write(&quot;\&quot;&quot;);</span>
+<span class="fc" id="L534">            writer.write(&quot;\&quot;&quot;);</span>
         }
-<span class="fc" id="L534">        writer.write(&quot;}&quot;);</span>
-<span class="fc" id="L535">        textureCounter++;</span>
-<span class="fc" id="L536">    }</span>
+<span class="fc" id="L536">        writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L537">        textureCounter++;</span>
+<span class="fc" id="L538">    }</span>
     
     /**
      * Writes material into output JSON file.
@@ -541,55 +543,55 @@ public class MeshWriterJson extends MeshWriter {
      * @throws IOException if an I/O error occurs.
      */
     private void writeMaterial(Material material) throws IOException {
-<span class="fc" id="L544">        writer.write(&quot;\&quot;material\&quot;:{&quot;);</span>
-<span class="fc" id="L545">        writer.write(&quot;\&quot;id\&quot;:&quot; + material.getId());</span>
-<span class="pc bpc" id="L546" title="1 of 2 branches missed.">        if (material.isAmbientColorAvailable()) {</span>
-<span class="fc" id="L547">            writer.write(&quot;,\&quot;ambientColor\&quot;:[&quot; + material.getAmbientRedColor() +</span>
-<span class="fc" id="L548">                    &quot;,&quot; + material.getAmbientGreenColor() + &quot;,&quot; + </span>
-<span class="fc" id="L549">                    material.getAmbientBlueColor() + &quot;]&quot;);</span>
+<span class="fc" id="L546">        writer.write(&quot;\&quot;material\&quot;:{&quot;);</span>
+<span class="fc" id="L547">        writer.write(&quot;\&quot;id\&quot;:&quot; + material.getId());</span>
+<span class="pc bpc" id="L548" title="1 of 2 branches missed.">        if (material.isAmbientColorAvailable()) {</span>
+<span class="fc" id="L549">            writer.write(&quot;,\&quot;ambientColor\&quot;:[&quot; + material.getAmbientRedColor() +</span>
+<span class="fc" id="L550">                    &quot;,&quot; + material.getAmbientGreenColor() + &quot;,&quot; + </span>
+<span class="fc" id="L551">                    material.getAmbientBlueColor() + &quot;]&quot;);</span>
         }
-<span class="pc bpc" id="L551" title="1 of 2 branches missed.">        if (material.isDiffuseColorAvailable()) {</span>
-<span class="fc" id="L552">            writer.write(&quot;,\&quot;diffuseColor\&quot;:[&quot; + material.getDiffuseRedColor() +</span>
-<span class="fc" id="L553">                    &quot;,&quot; + material.getDiffuseGreenColor() + &quot;,&quot; +</span>
-<span class="fc" id="L554">                    material.getDiffuseBlueColor() + &quot;]&quot;);</span>
+<span class="pc bpc" id="L553" title="1 of 2 branches missed.">        if (material.isDiffuseColorAvailable()) {</span>
+<span class="fc" id="L554">            writer.write(&quot;,\&quot;diffuseColor\&quot;:[&quot; + material.getDiffuseRedColor() +</span>
+<span class="fc" id="L555">                    &quot;,&quot; + material.getDiffuseGreenColor() + &quot;,&quot; +</span>
+<span class="fc" id="L556">                    material.getDiffuseBlueColor() + &quot;]&quot;);</span>
         }
-<span class="fc bfc" id="L556" title="All 2 branches covered.">        if (material.isSpecularColorAvailable()) {</span>
-<span class="fc" id="L557">            writer.write(&quot;,\&quot;specularColor\&quot;:[&quot; + material.getSpecularRedColor() </span>
-<span class="fc" id="L558">                    + &quot;,&quot; + material.getSpecularGreenColor() + &quot;,&quot; +</span>
-<span class="fc" id="L559">                    material.getSpecularBlueColor() + &quot;]&quot;);</span>
+<span class="fc bfc" id="L558" title="All 2 branches covered.">        if (material.isSpecularColorAvailable()) {</span>
+<span class="fc" id="L559">            writer.write(&quot;,\&quot;specularColor\&quot;:[&quot; + material.getSpecularRedColor() </span>
+<span class="fc" id="L560">                    + &quot;,&quot; + material.getSpecularGreenColor() + &quot;,&quot; +</span>
+<span class="fc" id="L561">                    material.getSpecularBlueColor() + &quot;]&quot;);</span>
         }
-<span class="pc bpc" id="L561" title="1 of 2 branches missed.">        if (material.isSpecularCoefficientAvailable()) {</span>
-<span class="fc" id="L562">            writer.write(&quot;,\&quot;specularCoefficient\&quot;:&quot; + </span>
-<span class="fc" id="L563">                    material.getSpecularCoefficient());</span>
+<span class="pc bpc" id="L563" title="1 of 2 branches missed.">        if (material.isSpecularCoefficientAvailable()) {</span>
+<span class="fc" id="L564">            writer.write(&quot;,\&quot;specularCoefficient\&quot;:&quot; + </span>
+<span class="fc" id="L565">                    material.getSpecularCoefficient());</span>
         }
-<span class="fc bfc" id="L565" title="All 2 branches covered.">        if (material.isAmbientTextureMapAvailable()) {</span>
-<span class="fc" id="L566">            Texture tex = material.getAmbientTextureMap();</span>
-<span class="fc" id="L567">            writer.write(&quot;,\&quot;ambientTextureId\&quot;:&quot; + tex.getId());</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">        if (material.isAmbientTextureMapAvailable()) {</span>
+<span class="fc" id="L568">            Texture tex = material.getAmbientTextureMap();</span>
+<span class="fc" id="L569">            writer.write(&quot;,\&quot;ambientTextureId\&quot;:&quot; + tex.getId());</span>
         }
-<span class="fc bfc" id="L569" title="All 2 branches covered.">        if (material.isDiffuseTextureMapAvailable()) {</span>
-<span class="fc" id="L570">            Texture tex = material.getDiffuseTextureMap();</span>
-<span class="fc" id="L571">            writer.write(&quot;,\&quot;diffuseTextureId\&quot;:&quot; + tex.getId());</span>
+<span class="fc bfc" id="L571" title="All 2 branches covered.">        if (material.isDiffuseTextureMapAvailable()) {</span>
+<span class="fc" id="L572">            Texture tex = material.getDiffuseTextureMap();</span>
+<span class="fc" id="L573">            writer.write(&quot;,\&quot;diffuseTextureId\&quot;:&quot; + tex.getId());</span>
         }
-<span class="pc bpc" id="L573" title="1 of 2 branches missed.">        if (material.isSpecularTextureMapAvailable()) {</span>
-<span class="nc" id="L574">            Texture tex = material.getSpecularTextureMap();</span>
-<span class="nc" id="L575">            writer.write(&quot;,\&quot;specularTextureId\&quot;:&quot; + tex.getId());</span>
+<span class="pc bpc" id="L575" title="1 of 2 branches missed.">        if (material.isSpecularTextureMapAvailable()) {</span>
+<span class="nc" id="L576">            Texture tex = material.getSpecularTextureMap();</span>
+<span class="nc" id="L577">            writer.write(&quot;,\&quot;specularTextureId\&quot;:&quot; + tex.getId());</span>
         }
-<span class="pc bpc" id="L577" title="1 of 2 branches missed.">        if (material.isAlphaTextureMapAvailable()) {</span>
-<span class="nc" id="L578">            Texture tex = material.getAlphaTextureMap();</span>
-<span class="nc" id="L579">            writer.write(&quot;,\&quot;alphaTextureId\&quot;:&quot; + tex.getId());</span>
+<span class="pc bpc" id="L579" title="1 of 2 branches missed.">        if (material.isAlphaTextureMapAvailable()) {</span>
+<span class="nc" id="L580">            Texture tex = material.getAlphaTextureMap();</span>
+<span class="nc" id="L581">            writer.write(&quot;,\&quot;alphaTextureId\&quot;:&quot; + tex.getId());</span>
         }
-<span class="pc bpc" id="L581" title="1 of 2 branches missed.">        if (material.isBumpTextureMapAvailable()) {</span>
-<span class="nc" id="L582">            Texture tex = material.getBumpTextureMap();</span>
-<span class="nc" id="L583">            writer.write(&quot;,\&quot;bumpTextureId\&quot;:&quot; + tex.getId());</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">        if (material.isBumpTextureMapAvailable()) {</span>
+<span class="nc" id="L584">            Texture tex = material.getBumpTextureMap();</span>
+<span class="nc" id="L585">            writer.write(&quot;,\&quot;bumpTextureId\&quot;:&quot; + tex.getId());</span>
         }
-<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (material.isTransparencyAvailable()) {</span>
-<span class="fc" id="L586">            writer.write(&quot;,\&quot;transparency\&quot;:&quot; + material.getTransparency());</span>
+<span class="fc bfc" id="L587" title="All 2 branches covered.">        if (material.isTransparencyAvailable()) {</span>
+<span class="fc" id="L588">            writer.write(&quot;,\&quot;transparency\&quot;:&quot; + material.getTransparency());</span>
         }
-<span class="pc bpc" id="L588" title="1 of 2 branches missed.">        if (material.isIlluminationAvailable()) {</span>
-<span class="fc" id="L589">            writer.write(&quot;,\&quot;illumination\&quot;:\&quot;&quot; + material.getIllumination().</span>
-<span class="fc" id="L590">                    name() + &quot;\&quot;&quot;);</span>
+<span class="pc bpc" id="L590" title="1 of 2 branches missed.">        if (material.isIlluminationAvailable()) {</span>
+<span class="fc" id="L591">            writer.write(&quot;,\&quot;illumination\&quot;:\&quot;&quot; + material.getIllumination().</span>
+<span class="fc" id="L592">                    name() + &quot;\&quot;&quot;);</span>
         }
-<span class="fc" id="L592">        writer.write(&quot;}&quot;);</span>
-<span class="fc" id="L593">    }</span>
+<span class="fc" id="L594">        writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L595">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
