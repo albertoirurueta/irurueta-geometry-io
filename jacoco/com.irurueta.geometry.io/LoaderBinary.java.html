@@ -324,24 +324,24 @@ public class LoaderBinary extends Loader {
 <span class="fc" id="L324">            this.loader = loader;</span>
 <span class="fc" id="L325">            listener = null;</span>
 <span class="fc" id="L326">        }</span>
-        
-        /**
-         * Method to set listener of this loader iterator.
-         * This listener will be notified when the loading process finishes.
-         * @param listener listener of this loader iterator.
-         */
-        public void setListener(LoaderIteratorListener listener) {
-<span class="fc" id="L334">            this.listener = listener;</span>
-<span class="fc" id="L335">        }</span>
-        
+
         /**
          * Returns listener of this loader iterator.
          * This listener will be notified when the loading process finishes.
          * @return listener of this loader iterator.
          */
         public LoaderIteratorListener getListener() {
-<span class="nc" id="L343">            return listener;</span>
+<span class="nc" id="L334">            return listener;</span>
         }
+
+        /**
+         * Method to set listener of this loader iterator.
+         * This listener will be notified when the loading process finishes.
+         * @param listener listener of this loader iterator.
+         */
+        public void setListener(LoaderIteratorListener listener) {
+<span class="fc" id="L343">            this.listener = listener;</span>
+<span class="fc" id="L344">        }</span>
 
         /**
          * Indicates if there is another chunk of data to be loaded.

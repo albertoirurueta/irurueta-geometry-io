@@ -165,14 +165,18 @@ public abstract class MeshWriter {
          * @param loader reference to loader.
          */
         @Override
-<span class="fc" id="L168">        public void onLoadStart(Loader loader) { }</span>
+        public void onLoadStart(Loader loader) {
+            //no action needed
+<span class="fc" id="L170">        }</span>
 
         /**
          * Method called when the loader ends processing a file.
          * @param loader reference to loader.
          */
         @Override
-<span class="fc" id="L175">        public void onLoadEnd(Loader loader) { }</span>
+        public void onLoadEnd(Loader loader) {
+            //no action needed
+<span class="fc" id="L179">        }</span>
 
         /**
          * Method called when loading progress changes enough to be notified.
@@ -181,10 +185,10 @@ public abstract class MeshWriter {
          */
         @Override
         public void onLoadProgressChange(Loader loader, float progress) {
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">            if(listener != null){</span>
-<span class="fc" id="L185">                listener.onWriteProgressChange(writer, progress);</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">            if(listener != null){</span>
+<span class="fc" id="L189">                listener.onWriteProgressChange(writer, progress);</span>
             }
-<span class="fc" id="L187">        }</span>
+<span class="fc" id="L191">        }</span>
 
         //OBJ loader listener (requesting a material loader for a given path)
         /**
@@ -199,24 +203,24 @@ public abstract class MeshWriter {
         @Override
         public MaterialLoaderOBJ onMaterialLoaderRequested(LoaderOBJ loader, 
                 String path) {
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if (listener != null) {</span>
-<span class="fc" id="L203">                File materialFile = listener.onMaterialFileRequested(writer, </span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L207">                File materialFile = listener.onMaterialFileRequested(writer, </span>
                         path);
                 
-<span class="fc bfc" id="L206" title="All 2 branches covered.">                if (materialFile == null) {</span>
-<span class="fc" id="L207">                    return null;</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                if (materialFile == null) {</span>
+<span class="fc" id="L211">                    return null;</span>
                 }
                 
                 try {
                     //when instantiating material loader it checks if file
                     //exists, if not we return null
-<span class="fc" id="L213">                    return new MaterialLoaderOBJ(materialFile, this);</span>
-<span class="fc" id="L214">                } catch (IOException ex) {</span>
-<span class="fc" id="L215">                    return null;</span>
+<span class="fc" id="L217">                    return new MaterialLoaderOBJ(materialFile, this);</span>
+<span class="fc" id="L218">                } catch (IOException ex) {</span>
+<span class="fc" id="L219">                    return null;</span>
                 }
             }
         
-<span class="nc" id="L219">            return null;</span>
+<span class="nc" id="L223">            return null;</span>
         }
     
         /**
@@ -230,12 +234,12 @@ public abstract class MeshWriter {
         @Override
         public File onTextureReceived(LoaderBinary loader, int textureId,
                 int textureImageWidth, int textureImageHeight) {
-<span class="nc bnc" id="L233" title="All 2 branches missed.">            if (listener != null) {</span>
-<span class="nc" id="L234">                return listener.onTextureReceived(writer, textureImageWidth, </span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">            if (listener != null) {</span>
+<span class="nc" id="L238">                return listener.onTextureReceived(writer, textureImageWidth, </span>
                         textureImageHeight);
             }
         
-<span class="nc" id="L238">            return null;</span>
+<span class="nc" id="L242">            return null;</span>
         }
     
         /**
@@ -253,36 +257,36 @@ public abstract class MeshWriter {
         public boolean onTextureDataAvailable(LoaderBinary loader, 
                 File textureFile, int textureId, int textureImageWidth, 
                 int textureImageHeight) {
-<span class="nc" id="L256">            boolean valid = true;</span>
-<span class="nc" id="L257">            File convertedFile = textureFile;</span>
-<span class="nc bnc" id="L258" title="All 2 branches missed.">            if (textureFile != null) {</span>
-<span class="nc bnc" id="L259" title="All 2 branches missed.">                if (listener != null) {</span>
+<span class="nc" id="L260">            boolean valid = true;</span>
+<span class="nc" id="L261">            File convertedFile = textureFile;</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">            if (textureFile != null) {</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                if (listener != null) {</span>
                     //notify that texture data has been copied into texture file 
                     //in case it needs to be handled elsewhere (to transform it 
                     //into another format)
-<span class="nc" id="L263">                    convertedFile = listener.onTextureDataAvailable(writer, </span>
+<span class="nc" id="L267">                    convertedFile = listener.onTextureDataAvailable(writer, </span>
                             textureFile, textureImageWidth, textureImageHeight);
                 }
                 
-<span class="nc bnc" id="L267" title="All 2 branches missed.">                if (convertedFile != null) {</span>
-<span class="nc" id="L268">                    Texture tex = new Texture(textureId);</span>
-<span class="nc" id="L269">                    tex.setWidth(textureImageWidth);</span>
-<span class="nc" id="L270">                    tex.setHeight(textureImageHeight);</span>
-<span class="nc" id="L271">                    tex.setValid(true);</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                if (convertedFile != null) {</span>
+<span class="nc" id="L272">                    Texture tex = new Texture(textureId);</span>
+<span class="nc" id="L273">                    tex.setWidth(textureImageWidth);</span>
+<span class="nc" id="L274">                    tex.setHeight(textureImageHeight);</span>
+<span class="nc" id="L275">                    tex.setValid(true);</span>
             
                     try {
-<span class="nc" id="L274">                        processTextureFile(tex, convertedFile);</span>
-<span class="nc" id="L275">                    } catch (IOException ex) {</span>
-<span class="nc" id="L276">                        valid = false;</span>
-<span class="nc" id="L277">                    }</span>
+<span class="nc" id="L278">                        processTextureFile(tex, convertedFile);</span>
+<span class="nc" id="L279">                    } catch (IOException ex) {</span>
+<span class="nc" id="L280">                        valid = false;</span>
+<span class="nc" id="L281">                    }</span>
                     
-<span class="nc bnc" id="L279" title="All 2 branches missed.">                    if (listener != null) {</span>
-<span class="nc" id="L280">                        listener.onTextureDataProcessed(writer, textureFile, </span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                    if (listener != null) {</span>
+<span class="nc" id="L284">                        listener.onTextureDataProcessed(writer, textureFile, </span>
                                 textureId, textureImageHeight);
                     }                    
                 }                
             }
-<span class="nc" id="L285">            return valid;</span>
+<span class="nc" id="L289">            return valid;</span>
         }
     
         //Material loader listener
@@ -291,14 +295,14 @@ public abstract class MeshWriter {
          * @param loader reference to loader.
          */
         @Override
-<span class="fc" id="L294">        public void onLoadStart(MaterialLoader loader) { }</span>
+<span class="fc" id="L298">        public void onLoadStart(MaterialLoader loader) { }</span>
 
         /**
          * Called when material loader finishes processing materials.
          * @param loader reference to loader.
          */
         @Override
-<span class="fc" id="L301">        public void onLoadEnd(MaterialLoader loader) { }</span>
+<span class="fc" id="L305">        public void onLoadEnd(MaterialLoader loader) { }</span>
 
         /**
          * Called when a texture assigned to a material must be validated to
@@ -310,24 +314,24 @@ public abstract class MeshWriter {
         @Override
         public boolean onValidateTexture(MaterialLoader loader, 
                 Texture texture) {
-<span class="fc" id="L313">            boolean valid = true;</span>
-<span class="pc bpc" id="L314" title="2 of 4 branches missed.">            if (listener != null &amp;&amp; !ignoreTextureValidation) {</span>
-<span class="fc" id="L315">                File textureFile = listener.onValidateTexture(writer, texture);</span>
-<span class="fc" id="L316">                valid = texture.isValid();</span>
+<span class="fc" id="L317">            boolean valid = true;</span>
+<span class="pc bpc" id="L318" title="2 of 4 branches missed.">            if (listener != null &amp;&amp; !ignoreTextureValidation) {</span>
+<span class="fc" id="L319">                File textureFile = listener.onValidateTexture(writer, texture);</span>
+<span class="fc" id="L320">                valid = texture.isValid();</span>
             
-<span class="pc bpc" id="L318" title="2 of 4 branches missed.">                if (valid &amp;&amp; textureFile != null) {</span>
+<span class="pc bpc" id="L322" title="2 of 4 branches missed.">                if (valid &amp;&amp; textureFile != null) {</span>
                     try {
-<span class="fc" id="L320">                        processTextureFile(texture, textureFile);</span>
-<span class="nc" id="L321">                    } catch (IOException ex) {</span>
-<span class="nc" id="L322">                        valid = false;</span>
-<span class="fc" id="L323">                    }</span>
+<span class="fc" id="L324">                        processTextureFile(texture, textureFile);</span>
+<span class="nc" id="L325">                    } catch (IOException ex) {</span>
+<span class="nc" id="L326">                        valid = false;</span>
+<span class="fc" id="L327">                    }</span>
             
                     //notify that texture was validated in case that texture 
                     //file needs to be removed
-<span class="fc" id="L327">                    listener.onDidValidateTexture(writer, textureFile);</span>
+<span class="fc" id="L331">                    listener.onDidValidateTexture(writer, textureFile);</span>
                 }
             }
-<span class="fc" id="L330">            return valid;</span>
+<span class="fc" id="L334">            return valid;</span>
         }
     }
     

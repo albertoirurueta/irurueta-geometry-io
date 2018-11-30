@@ -139,27 +139,14 @@ public abstract class MaterialLoader {
 <span class="fc" id="L139">        this.listener = listener;</span>
 <span class="fc" id="L140">        textureValidationEnabled = DEFAULT_TEXTURE_VALIDATION_ENABLED;</span>
 <span class="fc" id="L141">    }</span>
-    
-    /**
-     * Method called when an instance of this class is garbage collected.
-     * This method ensures that resources such as files get closed.
-     * @throws Throwable if something fails.
-     */
-    @Override
-    protected void finalize() throws Throwable {
-<span class="fc" id="L150">        super.finalize();</span>
-        try {
-<span class="fc" id="L152">            close(); //attempt to close file resources</span>
-<span class="pc" id="L153">        } catch (Throwable ignore) { }</span>
-<span class="fc" id="L154">    }    </span>
-    
+
     /**
      * Returns maximum allowed file size to keep cached in memory. Files 
      * exceeding this size will just be streamed.
      * @return maximum allowed file size to keep cached in memory.
      */
     public long getFileSizeLimitToKeepInMemory() {
-<span class="fc" id="L162">        return fileSizeLimitToKeepInMemory;</span>
+<span class="fc" id="L149">        return fileSizeLimitToKeepInMemory;</span>
     }
     
     /**
@@ -171,19 +158,19 @@ public abstract class MaterialLoader {
      */
     public void setFileSizeLimitToKeepInMemoery(
             long fileSizeLimitToKeepInMemory) throws LockedException {
-<span class="nc bnc" id="L174" title="All 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L175">            throw new LockedException();</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L162">            throw new LockedException();</span>
         }
         
-<span class="nc" id="L178">        this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;</span>
-<span class="nc" id="L179">    }</span>
+<span class="nc" id="L165">        this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;</span>
+<span class="nc" id="L166">    }</span>
     
     /**
      * Indicates whether a material file to be loaded has already been set.
      * @return True if material file has already been provided, false otherwise.
      */
     public boolean hasFile() {
-<span class="fc bfc" id="L186" title="All 2 branches covered.">        return (reader != null);</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        return (reader != null);</span>
     }
     
     /**
@@ -196,33 +183,33 @@ public abstract class MaterialLoader {
      */
     public void setFile(File f) 
             throws LockedException, IOException {
-<span class="nc bnc" id="L199" title="All 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L200">            throw new LockedException();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L187">            throw new LockedException();</span>
         }
-<span class="nc" id="L202">        file = f;</span>
+<span class="nc" id="L189">        file = f;</span>
         
-<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (reader != null) {</span>
-<span class="nc" id="L205">            reader.close(); //close previous file</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (reader != null) {</span>
+<span class="nc" id="L192">            reader.close(); //close previous file</span>
         }
         
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
-<span class="nc" id="L209">            reader = new MappedFileReaderAndWriter(f, </span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="nc" id="L196">            reader = new MappedFileReaderAndWriter(f, </span>
                     FileChannel.MapMode.READ_ONLY);            
         } else {
-<span class="nc" id="L212">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+<span class="nc" id="L199">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
         }
-<span class="nc" id="L214">    }</span>
+<span class="nc" id="L201">    }</span>
     
     /**
      * Closes file provided to this loader.
      * @throws IOException if an I/O error occurs.
      */
     public void close() throws IOException {
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (reader != null) {</span>
-<span class="fc" id="L222">            reader.close();</span>
-<span class="fc" id="L223">            reader = null;</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (reader != null) {</span>
+<span class="fc" id="L209">            reader.close();</span>
+<span class="fc" id="L210">            reader = null;</span>
         }
-<span class="fc" id="L225">    }</span>
+<span class="fc" id="L212">    }</span>
     
     /**
      * Indicates if textures must be validated to ensure that image files are
@@ -230,7 +217,7 @@ public abstract class MaterialLoader {
      * @return true if textures must be validated, false otherwise.
      */
     public boolean isTextureValidationEnabled() {
-<span class="fc" id="L233">        return textureValidationEnabled;</span>
+<span class="fc" id="L220">        return textureValidationEnabled;</span>
     }
     
     /**
@@ -240,8 +227,8 @@ public abstract class MaterialLoader {
      * otherwise.
      */
     public void setTextureValidationEnabled(boolean textureValidationEnabled) {
-<span class="nc" id="L243">        this.textureValidationEnabled = textureValidationEnabled;</span>
-<span class="nc" id="L244">    }</span>
+<span class="nc" id="L230">        this.textureValidationEnabled = textureValidationEnabled;</span>
+<span class="nc" id="L231">    }</span>
       
     /**
      * Determines whether this instance is locked.
@@ -253,7 +240,7 @@ public abstract class MaterialLoader {
      * @return True if instance is locked, false otherwise.
      */
     public synchronized boolean isLocked() {
-<span class="fc" id="L256">        return locked;</span>
+<span class="fc" id="L243">        return locked;</span>
     }
     
     /**
@@ -263,8 +250,8 @@ public abstract class MaterialLoader {
      * not.
      */
     protected synchronized void setLocked(boolean locked) {
-<span class="fc" id="L266">        this.locked = locked;</span>
-<span class="fc" id="L267">    }</span>
+<span class="fc" id="L253">        this.locked = locked;</span>
+<span class="fc" id="L254">    }</span>
     
     /**
      * Returns material listener of this instance.
@@ -272,7 +259,7 @@ public abstract class MaterialLoader {
      * @return material listener of this instance.
      */
     public MaterialLoaderListener getListener() {
-<span class="fc" id="L275">        return listener;</span>
+<span class="fc" id="L262">        return listener;</span>
     }
     
     /**
@@ -283,11 +270,11 @@ public abstract class MaterialLoader {
      */
     public void setListener(MaterialLoaderListener listener) 
             throws LockedException {
-<span class="nc bnc" id="L286" title="All 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L287">            throw new LockedException();</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L274">            throw new LockedException();</span>
         }
-<span class="nc" id="L289">        this.listener = listener;</span>
-<span class="nc" id="L290">    }</span>
+<span class="nc" id="L276">        this.listener = listener;</span>
+<span class="nc" id="L277">    }</span>
    
     /**
      * Determines whether enough parameters have been set so that the loading

@@ -20,7 +20,7 @@ package com.irurueta.geometry.io;
  * etc.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
-public class Material {
+<span class="fc" id="L23">public class Material {</span>
     
     /**
      * Id of material. 
@@ -131,18 +131,13 @@ public class Material {
     private Illumination illumination;
     
     /**
-     * Constructor.
-     */
-<span class="fc" id="L136">    public Material() { }</span>
-        
-    /**
      * Returns id of material.
      * This value is generated automatically when loading a 3D file and it is 
      * intended to uniquely identify a material
      * @return id of material.
      */
     public int getId() {
-<span class="fc" id="L145">        return id;</span>
+<span class="fc" id="L140">        return id;</span>
     }
     
     /**
@@ -152,8 +147,8 @@ public class Material {
      * @param id id of material to be set.
      */
     public void setId(int id) {
-<span class="fc" id="L155">        this.id = id;</span>
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L150">        this.id = id;</span>
+<span class="fc" id="L151">    }</span>
     
     /**
      * Returns ambient red color component value. If defined, must be between 0
@@ -161,7 +156,7 @@ public class Material {
      * @return ambient red color component value.
      */
     public short getAmbientRedColor() {
-<span class="fc" id="L164">        return ambientRedColor;</span>
+<span class="fc" id="L159">        return ambientRedColor;</span>
     }
 
     /**
@@ -170,8 +165,8 @@ public class Material {
      * @param ambientRedColor ambient red color component value to be set.
      */
     public void setAmbientRedColor(short ambientRedColor) {
-<span class="fc" id="L173">        this.ambientRedColor = ambientRedColor;</span>
-<span class="fc" id="L174">    }        </span>
+<span class="fc" id="L168">        this.ambientRedColor = ambientRedColor;</span>
+<span class="fc" id="L169">    }        </span>
     
     /**
      * Indicates if ambient red color component value is available.
@@ -179,7 +174,7 @@ public class Material {
      * @return true if ambient red color is not negative.
      */
     public boolean isAmbientRedColorAvailable() {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        return ambientRedColor &gt;= 0;</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        return ambientRedColor &gt;= 0;</span>
     }
     
     /**
@@ -188,7 +183,7 @@ public class Material {
      * @return ambient green color component value.
      */
     public short getAmbientGreenColor() {
-<span class="fc" id="L191">        return ambientGreenColor;</span>
+<span class="fc" id="L186">        return ambientGreenColor;</span>
     }
 
     /**
@@ -197,8 +192,8 @@ public class Material {
      * @param ambientGreenColor ambient green color component value to be set.
      */
     public void setAmbientGreenColor(short ambientGreenColor) {
-<span class="fc" id="L200">        this.ambientGreenColor = ambientGreenColor;</span>
-<span class="fc" id="L201">    }    </span>
+<span class="fc" id="L195">        this.ambientGreenColor = ambientGreenColor;</span>
+<span class="fc" id="L196">    }    </span>
     
     /**
      * Indicates if ambient green color component value is available.
@@ -206,7 +201,7 @@ public class Material {
      * @return true if ambient green color is not negative.
      */
     public boolean isAmbientGreenColorAvailable() {
-<span class="fc bfc" id="L209" title="All 2 branches covered.">        return ambientGreenColor &gt;= 0;</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        return ambientGreenColor &gt;= 0;</span>
     }
     
     /**
@@ -215,7 +210,7 @@ public class Material {
      * @return ambient blue color component value.
      */
     public short getAmbientBlueColor() {
-<span class="fc" id="L218">        return ambientBlueColor;</span>
+<span class="fc" id="L213">        return ambientBlueColor;</span>
     }
 
     /**
@@ -224,8 +219,8 @@ public class Material {
      * @param ambientBlueColor ambient blue color component value to be set.
      */
     public void setAmbientBlueColor(short ambientBlueColor) {
-<span class="fc" id="L227">        this.ambientBlueColor = ambientBlueColor;</span>
-<span class="fc" id="L228">    }</span>
+<span class="fc" id="L222">        this.ambientBlueColor = ambientBlueColor;</span>
+<span class="fc" id="L223">    }</span>
     
     /**
      * Indicates if ambient blue color component value is available.
@@ -233,7 +228,7 @@ public class Material {
      * @return true if ambient blue color is not negative.
      */
     public boolean isAmbientBlueColorAvailable() {
-<span class="fc bfc" id="L236" title="All 2 branches covered.">        return ambientBlueColor &gt;= 0;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        return ambientBlueColor &gt;= 0;</span>
     }
     
     /**
@@ -248,10 +243,10 @@ public class Material {
      * between 0 and 255 (both included).
      */
     public void setAmbientColor(short red, short green, short blue) {
-<span class="fc" id="L251">        ambientRedColor = red;</span>
-<span class="fc" id="L252">        ambientGreenColor = green;</span>
-<span class="fc" id="L253">        ambientBlueColor = blue;</span>
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L246">        ambientRedColor = red;</span>
+<span class="fc" id="L247">        ambientGreenColor = green;</span>
+<span class="fc" id="L248">        ambientBlueColor = blue;</span>
+<span class="fc" id="L249">    }</span>
     
     /**
      * Indicates if ambient color has been defined.
@@ -259,7 +254,7 @@ public class Material {
      * not negative).
      */
     public boolean isAmbientColorAvailable() {
-<span class="pc bpc" id="L262" title="2 of 6 branches missed.">        return ambientRedColor &gt;= 0 &amp;&amp; ambientGreenColor &gt;= 0 &amp;&amp;</span>
+<span class="pc bpc" id="L257" title="2 of 6 branches missed.">        return ambientRedColor &gt;= 0 &amp;&amp; ambientGreenColor &gt;= 0 &amp;&amp;</span>
                 ambientBlueColor &gt;= 0;
     }
     
@@ -269,7 +264,7 @@ public class Material {
      * @return diffuse red color component value.
      */
     public short getDiffuseRedColor() {
-<span class="fc" id="L272">        return diffuseRedColor;</span>
+<span class="fc" id="L267">        return diffuseRedColor;</span>
     }
 
     /**
@@ -278,8 +273,8 @@ public class Material {
      * @param diffuseRedColor diffuse red color component value to be set.
      */
     public void setDiffuseRedColor(short diffuseRedColor) {
-<span class="fc" id="L281">        this.diffuseRedColor = diffuseRedColor;</span>
-<span class="fc" id="L282">    }        </span>
+<span class="fc" id="L276">        this.diffuseRedColor = diffuseRedColor;</span>
+<span class="fc" id="L277">    }        </span>
     
     /**
      * Indicates if diffuse red color component value is available.
@@ -287,7 +282,7 @@ public class Material {
      * @return true if diffuse red color is not negative.
      */
     public boolean isDiffuseRedColorAvailable() {
-<span class="fc bfc" id="L290" title="All 2 branches covered.">        return diffuseRedColor &gt;= 0;</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        return diffuseRedColor &gt;= 0;</span>
     }
     
     /**
@@ -296,7 +291,7 @@ public class Material {
      * @return diffuse green color component value.
      */
     public short getDiffuseGreenColor() {
-<span class="fc" id="L299">        return diffuseGreenColor;</span>
+<span class="fc" id="L294">        return diffuseGreenColor;</span>
     }
 
     /**
@@ -305,8 +300,8 @@ public class Material {
      * @param diffuseGreenColor diffuse green color component value to be set.
      */
     public void setDiffuseGreenColor(short diffuseGreenColor) {
-<span class="fc" id="L308">        this.diffuseGreenColor = diffuseGreenColor;</span>
-<span class="fc" id="L309">    }    </span>
+<span class="fc" id="L303">        this.diffuseGreenColor = diffuseGreenColor;</span>
+<span class="fc" id="L304">    }    </span>
     
     /**
      * Indicates if diffuse green color component value is available.
@@ -314,7 +309,7 @@ public class Material {
      * @return true if diffuse green color is not negative.
      */
     public boolean isDiffuseGreenColorAvailable() {
-<span class="fc bfc" id="L317" title="All 2 branches covered.">        return diffuseGreenColor &gt;= 0;</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">        return diffuseGreenColor &gt;= 0;</span>
     }
     
     /**
@@ -323,7 +318,7 @@ public class Material {
      * @return diffuse blue color component value.
      */
     public short getDiffuseBlueColor() {
-<span class="fc" id="L326">        return diffuseBlueColor;</span>
+<span class="fc" id="L321">        return diffuseBlueColor;</span>
     }
 
     /**
@@ -332,8 +327,8 @@ public class Material {
      * @param diffuseBlueColor diffuse blue color component value to be set.
      */
     public void setDiffuseBlueColor(short diffuseBlueColor) {
-<span class="fc" id="L335">        this.diffuseBlueColor = diffuseBlueColor;</span>
-<span class="fc" id="L336">    }</span>
+<span class="fc" id="L330">        this.diffuseBlueColor = diffuseBlueColor;</span>
+<span class="fc" id="L331">    }</span>
     
     /**
      * Indicates if diffuse blue color component value is available.
@@ -341,7 +336,7 @@ public class Material {
      * @return true if diffuse blue color is not negative.
      */
     public boolean isDiffuseBlueColorAvailable() {
-<span class="fc bfc" id="L344" title="All 2 branches covered.">        return diffuseBlueColor &gt;= 0;</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">        return diffuseBlueColor &gt;= 0;</span>
     }
     
     /**
@@ -356,10 +351,10 @@ public class Material {
      * between 0 and 255 (both included).
      */
     public void setDiffuseColor(short red, short green, short blue) {
-<span class="fc" id="L359">        diffuseRedColor = red;</span>
-<span class="fc" id="L360">        diffuseGreenColor = green;</span>
-<span class="fc" id="L361">        diffuseBlueColor = blue;</span>
-<span class="fc" id="L362">    }</span>
+<span class="fc" id="L354">        diffuseRedColor = red;</span>
+<span class="fc" id="L355">        diffuseGreenColor = green;</span>
+<span class="fc" id="L356">        diffuseBlueColor = blue;</span>
+<span class="fc" id="L357">    }</span>
     
     /**
      * Indicates if diffuse color has been defined.
@@ -367,7 +362,7 @@ public class Material {
      * not negative).
      */
     public boolean isDiffuseColorAvailable() {
-<span class="pc bpc" id="L370" title="2 of 6 branches missed.">        return diffuseRedColor &gt;= 0 &amp;&amp; diffuseGreenColor &gt;= 0 &amp;&amp;</span>
+<span class="pc bpc" id="L365" title="2 of 6 branches missed.">        return diffuseRedColor &gt;= 0 &amp;&amp; diffuseGreenColor &gt;= 0 &amp;&amp;</span>
                 diffuseBlueColor &gt;= 0;
     }
 
@@ -377,7 +372,7 @@ public class Material {
      * @return specular red color component value.
      */
     public short getSpecularRedColor() {
-<span class="fc" id="L380">        return specularRedColor;</span>
+<span class="fc" id="L375">        return specularRedColor;</span>
     }
 
     /**
@@ -386,8 +381,8 @@ public class Material {
      * @param specularRedColor specular red color component value to be set.
      */
     public void setSpecularRedColor(short specularRedColor) {
-<span class="fc" id="L389">        this.specularRedColor = specularRedColor;</span>
-<span class="fc" id="L390">    }</span>
+<span class="fc" id="L384">        this.specularRedColor = specularRedColor;</span>
+<span class="fc" id="L385">    }</span>
     
     /**
      * Indicates if specular red color component value is available.
@@ -395,7 +390,7 @@ public class Material {
      * @return true if specular red color is not negative.
      */
     public boolean isSpecularRedColorAvailable() {
-<span class="fc bfc" id="L398" title="All 2 branches covered.">        return specularRedColor &gt;= 0;</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        return specularRedColor &gt;= 0;</span>
     }
     
     /**
@@ -404,7 +399,7 @@ public class Material {
      * @return specular green color component value.
      */
     public short getSpecularGreenColor() {
-<span class="fc" id="L407">        return specularGreenColor;</span>
+<span class="fc" id="L402">        return specularGreenColor;</span>
     }
 
     /**
@@ -413,8 +408,8 @@ public class Material {
      * @param specularGreenColor specular green color component value to be set.
      */
     public void setSpecularGreenColor(short specularGreenColor) {
-<span class="fc" id="L416">        this.specularGreenColor = specularGreenColor;</span>
-<span class="fc" id="L417">    }    </span>
+<span class="fc" id="L411">        this.specularGreenColor = specularGreenColor;</span>
+<span class="fc" id="L412">    }    </span>
     
     /**
      * Indicates if specular green color component value is available.
@@ -422,7 +417,7 @@ public class Material {
      * @return true if specular green color is not negative.
      */
     public boolean isSpecularGreenColorAvailable() {
-<span class="fc bfc" id="L425" title="All 2 branches covered.">        return specularGreenColor &gt;= 0;</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        return specularGreenColor &gt;= 0;</span>
     }
     
     /**
@@ -431,7 +426,7 @@ public class Material {
      * @return specular blue color component value.
      */
     public short getSpecularBlueColor() {
-<span class="fc" id="L434">        return specularBlueColor;</span>
+<span class="fc" id="L429">        return specularBlueColor;</span>
     }
 
     /**
@@ -440,8 +435,8 @@ public class Material {
      * @param specularBlueColor specular blue color component value to be set.
      */
     public void setSpecularBlueColor(short specularBlueColor) {
-<span class="fc" id="L443">        this.specularBlueColor = specularBlueColor;</span>
-<span class="fc" id="L444">    }</span>
+<span class="fc" id="L438">        this.specularBlueColor = specularBlueColor;</span>
+<span class="fc" id="L439">    }</span>
     
     /**
      * Indicates if specular blue color component value is available.
@@ -449,7 +444,7 @@ public class Material {
      * @return true if specular blue color is not negative.
      */
     public boolean isSpecularBlueColorAvailable() {
-<span class="fc bfc" id="L452" title="All 2 branches covered.">        return specularBlueColor &gt;= 0;</span>
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        return specularBlueColor &gt;= 0;</span>
     }
     
     /**
@@ -464,10 +459,10 @@ public class Material {
      * between 0 and 255 (both included).
      */
     public void setSpecularColor(short red, short green, short blue) {
-<span class="fc" id="L467">        specularRedColor = red;</span>
-<span class="fc" id="L468">        specularGreenColor = green;</span>
-<span class="fc" id="L469">        specularBlueColor = blue;</span>
-<span class="fc" id="L470">    }</span>
+<span class="fc" id="L462">        specularRedColor = red;</span>
+<span class="fc" id="L463">        specularGreenColor = green;</span>
+<span class="fc" id="L464">        specularBlueColor = blue;</span>
+<span class="fc" id="L465">    }</span>
     
     /**
      * Indicates if specular color has been defined.
@@ -475,7 +470,7 @@ public class Material {
      * not negative).
      */
     public boolean isSpecularColorAvailable() {
-<span class="pc bpc" id="L478" title="2 of 6 branches missed.">        return specularRedColor &gt;= 0 &amp;&amp; specularGreenColor &gt;= 0 &amp;&amp;</span>
+<span class="pc bpc" id="L473" title="2 of 6 branches missed.">        return specularRedColor &gt;= 0 &amp;&amp; specularGreenColor &gt;= 0 &amp;&amp;</span>
                 specularBlueColor &gt;= 0;
     }
     
@@ -485,7 +480,7 @@ public class Material {
      * @return specular coefficient.
      */
     public float getSpecularCoefficient() {
-<span class="fc" id="L488">        return specularCoefficient;</span>
+<span class="fc" id="L483">        return specularCoefficient;</span>
     }
 
     /**
@@ -494,9 +489,9 @@ public class Material {
      * @param specularCoefficient specular coefficient to be set.
      */
     public void setSpecularCoefficient(float specularCoefficient) {
-<span class="fc" id="L497">        this.specularCoefficient = specularCoefficient;</span>
-<span class="fc" id="L498">        specularCoefficientAvailable = true;</span>
-<span class="fc" id="L499">    }            </span>
+<span class="fc" id="L492">        this.specularCoefficient = specularCoefficient;</span>
+<span class="fc" id="L493">        specularCoefficientAvailable = true;</span>
+<span class="fc" id="L494">    }            </span>
     
     /**
      * Indicates if specular coefficient has been defined for this material.
@@ -504,7 +499,7 @@ public class Material {
      * false otherwise.
      */
     public boolean isSpecularCoefficientAvailable() {
-<span class="fc" id="L507">        return specularCoefficientAvailable;</span>
+<span class="fc" id="L502">        return specularCoefficientAvailable;</span>
     }
 
     /**
@@ -514,7 +509,7 @@ public class Material {
      * @return ambient texture.
      */
     public Texture getAmbientTextureMap() {
-<span class="fc" id="L517">        return ambientTextureMap;</span>
+<span class="fc" id="L512">        return ambientTextureMap;</span>
     }
 
     /**
@@ -524,8 +519,8 @@ public class Material {
      * @param ambientTextureMap ambient texture to be set.
      */
     public void setAmbientTextureMap(Texture ambientTextureMap) {
-<span class="fc" id="L527">        this.ambientTextureMap = ambientTextureMap;        </span>
-<span class="fc" id="L528">    }</span>
+<span class="fc" id="L522">        this.ambientTextureMap = ambientTextureMap;        </span>
+<span class="fc" id="L523">    }</span>
     
     /**
      * Indicates if ambient texture has been defined and is available.
@@ -533,7 +528,7 @@ public class Material {
      * otherwise.
      */
     public boolean isAmbientTextureMapAvailable() {
-<span class="fc bfc" id="L536" title="All 2 branches covered.">        return ambientTextureMap != null;</span>
+<span class="fc bfc" id="L531" title="All 2 branches covered.">        return ambientTextureMap != null;</span>
     }
 
     /**
@@ -543,7 +538,7 @@ public class Material {
      * @return diffuse texture.
      */
     public Texture getDiffuseTextureMap() {
-<span class="fc" id="L546">        return diffuseTextureMap;</span>
+<span class="fc" id="L541">        return diffuseTextureMap;</span>
     }
 
     /**
@@ -553,8 +548,8 @@ public class Material {
      * @param diffuseTextureMap diffuse texture to be set.
      */
     public void setDiffuseTextureMap(Texture diffuseTextureMap) {
-<span class="fc" id="L556">        this.diffuseTextureMap = diffuseTextureMap;</span>
-<span class="fc" id="L557">    }</span>
+<span class="fc" id="L551">        this.diffuseTextureMap = diffuseTextureMap;</span>
+<span class="fc" id="L552">    }</span>
     
     /**
      * Indicates if diffuse texture has been defined and is available.
@@ -562,7 +557,7 @@ public class Material {
      * otherwise.
      */
     public boolean isDiffuseTextureMapAvailable() {
-<span class="fc bfc" id="L565" title="All 2 branches covered.">        return diffuseTextureMap != null;</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">        return diffuseTextureMap != null;</span>
     }
     
     /**
@@ -572,7 +567,7 @@ public class Material {
      * @return specular texture.
      */
     public Texture getSpecularTextureMap() {
-<span class="fc" id="L575">        return specularTextureMap;</span>
+<span class="fc" id="L570">        return specularTextureMap;</span>
     }
 
     /**
@@ -582,8 +577,8 @@ public class Material {
      * @param specularTextureMap specular texture to be set.
      */
     public void setSpecularTextureMap(Texture specularTextureMap) {
-<span class="fc" id="L585">        this.specularTextureMap = specularTextureMap;</span>
-<span class="fc" id="L586">    }    </span>
+<span class="fc" id="L580">        this.specularTextureMap = specularTextureMap;</span>
+<span class="fc" id="L581">    }    </span>
     
     /**
      * Indicates if specular texture has been defined and is available
@@ -591,7 +586,7 @@ public class Material {
      * otherwise.
      */
     public boolean isSpecularTextureMapAvailable() {
-<span class="fc bfc" id="L594" title="All 2 branches covered.">        return specularTextureMap != null;</span>
+<span class="fc bfc" id="L589" title="All 2 branches covered.">        return specularTextureMap != null;</span>
     }
 
     /**
@@ -600,7 +595,7 @@ public class Material {
      * @return alpha texture.
      */
     public Texture getAlphaTextureMap() {
-<span class="fc" id="L603">        return alphaTextureMap;</span>
+<span class="fc" id="L598">        return alphaTextureMap;</span>
     }
 
     /**
@@ -609,8 +604,8 @@ public class Material {
      * @param alphaTextureMap alpha texture to be set.
      */
     public void setAlphaTextureMap(Texture alphaTextureMap) {
-<span class="fc" id="L612">        this.alphaTextureMap = alphaTextureMap;</span>
-<span class="fc" id="L613">    }</span>
+<span class="fc" id="L607">        this.alphaTextureMap = alphaTextureMap;</span>
+<span class="fc" id="L608">    }</span>
     
     /**
      * Indicates if alpha texture has been defined and is available.
@@ -618,7 +613,7 @@ public class Material {
      * otherwise.
      */
     public boolean isAlphaTextureMapAvailable() {
-<span class="fc bfc" id="L621" title="All 2 branches covered.">        return alphaTextureMap != null;</span>
+<span class="fc bfc" id="L616" title="All 2 branches covered.">        return alphaTextureMap != null;</span>
     }
     
     /**
@@ -628,7 +623,7 @@ public class Material {
      * @return bump texture.
      */
     public Texture getBumpTextureMap() {
-<span class="fc" id="L631">        return bumpTextureMap;</span>
+<span class="fc" id="L626">        return bumpTextureMap;</span>
     }
 
     /**
@@ -638,8 +633,8 @@ public class Material {
      * @param bumpTextureMap bump texture.
      */
     public void setBumpTextureMap(Texture bumpTextureMap) {
-<span class="fc" id="L641">        this.bumpTextureMap = bumpTextureMap;</span>
-<span class="fc" id="L642">    }    </span>
+<span class="fc" id="L636">        this.bumpTextureMap = bumpTextureMap;</span>
+<span class="fc" id="L637">    }    </span>
     
     /**
      * Indicates if bump texture has been defined and is available.
@@ -647,7 +642,7 @@ public class Material {
      * otherwise.
      */
     public boolean isBumpTextureMapAvailable() {
-<span class="fc bfc" id="L650" title="All 2 branches covered.">        return bumpTextureMap != null;</span>
+<span class="fc bfc" id="L645" title="All 2 branches covered.">        return bumpTextureMap != null;</span>
     }
     
     /**
@@ -656,7 +651,7 @@ public class Material {
      * @return transparency of this material.
      */
     public short getTransparency() {
-<span class="fc" id="L659">        return transparency;</span>
+<span class="fc" id="L654">        return transparency;</span>
     }
 
     /**
@@ -665,15 +660,15 @@ public class Material {
      * @param transparency transparency of this material to be set.
      */
     public void setTransparency(short transparency) {
-<span class="fc" id="L668">        this.transparency = transparency;</span>
-<span class="fc" id="L669">    }</span>
+<span class="fc" id="L663">        this.transparency = transparency;</span>
+<span class="fc" id="L664">    }</span>
     
     /**
      * Indicates if transparency has been defined and is available.
      * @return true if transparency is not negative, false otherwise.
      */
     public boolean isTransparencyAvailable() {
-<span class="fc bfc" id="L676" title="All 2 branches covered.">        return transparency &gt;= 0;</span>
+<span class="fc bfc" id="L671" title="All 2 branches covered.">        return transparency &gt;= 0;</span>
     }
     
     /**
@@ -681,7 +676,7 @@ public class Material {
      * @return illumination.
      */
     public Illumination getIllumination() {
-<span class="fc" id="L684">        return illumination;</span>
+<span class="fc" id="L679">        return illumination;</span>
     }    
     
     /**
@@ -689,15 +684,15 @@ public class Material {
      * @param illumination illumination method to be used.
      */
     public void setIllumination(Illumination illumination) {
-<span class="fc" id="L692">        this.illumination = illumination;</span>
-<span class="fc" id="L693">    }</span>
+<span class="fc" id="L687">        this.illumination = illumination;</span>
+<span class="fc" id="L688">    }</span>
     
     /**
      * Indicates if an illumination has been defined and is available.
      * @return true if illumination has been defined, false otherwise.
      */
     public boolean isIlluminationAvailable() {
-<span class="fc bfc" id="L700" title="All 2 branches covered.">        return illumination != null;</span>
+<span class="fc bfc" id="L695" title="All 2 branches covered.">        return illumination != null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

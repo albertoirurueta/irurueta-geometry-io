@@ -320,19 +320,17 @@ public class MaterialLoaderOBJ extends MaterialLoader {
                 
 <span class="nc" id="L321">                currentMaterial.setBumpTextureMap(tex);</span>
             }
-<span class="fc" id="L323">        } catch (LoaderException e) {</span>
-<span class="fc" id="L324">            throw e;</span>
-<span class="nc" id="L325">        } catch (Throwable t) {</span>
-<span class="nc" id="L326">            throw new LoaderException(t);</span>
-<span class="fc" id="L327">        }</span>
-<span class="fc" id="L328">    }</span>
+<span class="fc" id="L323">        } catch (Exception t) {</span>
+<span class="fc" id="L324">            throw new LoaderException(t);</span>
+<span class="fc" id="L325">        }</span>
+<span class="fc" id="L326">    }</span>
     
     /**
      * Indicates if any material has been loaded already.
      * @return true if materials have been loaded, false otherwise.
      */
     public boolean areMaterialsAvailable() {
-<span class="pc bpc" id="L335" title="1 of 4 branches missed.">        return materials != null &amp;&amp; materials.size() &gt; 0;</span>
+<span class="pc bpc" id="L333" title="1 of 4 branches missed.">        return materials != null &amp;&amp; !materials.isEmpty();</span>
     }
 
     /**
@@ -340,7 +338,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @return set of materials that have been read.
      */
     public Set&lt;Material&gt; getMaterials() {
-<span class="fc" id="L343">        return materials;</span>
+<span class="fc" id="L341">        return materials;</span>
     }
 
     /**
@@ -349,24 +347,24 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @return a material having provided name or null if none is found.
      */
     public MaterialOBJ getMaterialByName(String name) {
-<span class="pc bpc" id="L352" title="1 of 2 branches missed.">        if (name == null) {</span>
-<span class="nc" id="L353">            return null;</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">        if (name == null) {</span>
+<span class="nc" id="L351">            return null;</span>
         }
         
-<span class="fc bfc" id="L356" title="All 2 branches covered.">        for (Material m: this.materials) {</span>
-<span class="pc bpc" id="L357" title="1 of 2 branches missed.">            if (m instanceof MaterialOBJ) {</span>
-<span class="fc" id="L358">                MaterialOBJ m2 = (MaterialOBJ)m;</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        for (Material m: this.materials) {</span>
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">            if (m instanceof MaterialOBJ) {</span>
+<span class="fc" id="L356">                MaterialOBJ m2 = (MaterialOBJ)m;</span>
                 
-<span class="pc bpc" id="L360" title="1 of 2 branches missed.">                if (m2.getMaterialName() == null) {</span>
-<span class="nc" id="L361">                    continue;</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                if (m2.getMaterialName() == null) {</span>
+<span class="nc" id="L359">                    continue;</span>
                 }
                 
-<span class="fc bfc" id="L364" title="All 2 branches covered.">                if (m2.getMaterialName().equals(name)) {</span>
-<span class="fc" id="L365">                    return m2;</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">                if (m2.getMaterialName().equals(name)) {</span>
+<span class="fc" id="L363">                    return m2;</span>
                 }
             }
-<span class="fc" id="L368">        }</span>
-<span class="fc" id="L369">        return null;</span>
+<span class="fc" id="L366">        }</span>
+<span class="fc" id="L367">        return null;</span>
     }
     
     /**
@@ -375,7 +373,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @return true if material having provided name exists, false otherwise.
      */
     public boolean containsMaterial(String name) {
-<span class="fc bfc" id="L378" title="All 2 branches covered.">        return getMaterialByName(name) != null;</span>
+<span class="fc bfc" id="L376" title="All 2 branches covered.">        return getMaterialByName(name) != null;</span>
     }
     
     /**
@@ -384,36 +382,36 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @return texture that has been found or null if none has been found.
      */
     public Material getMaterialByTextureMapName(String name) {
-<span class="pc bpc" id="L387" title="1 of 2 branches missed.">        if (name == null) {</span>
-<span class="nc" id="L388">            return null;</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">        if (name == null) {</span>
+<span class="nc" id="L386">            return null;</span>
         }
         
-<span class="fc bfc" id="L391" title="All 2 branches covered.">        for (Material m: this.materials) {</span>
-<span class="pc bpc" id="L392" title="1 of 2 branches missed.">            if (m.getAlphaTextureMap() != null &amp;&amp;</span>
-<span class="nc bnc" id="L393" title="All 2 branches missed.">                    m.getAlphaTextureMap().getFileName() != null &amp;&amp;</span>
-<span class="nc bnc" id="L394" title="All 2 branches missed.">                    m.getAlphaTextureMap().getFileName().equals(name)) {</span>
-<span class="nc" id="L395">                return m;</span>
+<span class="fc bfc" id="L389" title="All 2 branches covered.">        for (Material m: this.materials) {</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">            if (m.getAlphaTextureMap() != null &amp;&amp;</span>
+<span class="nc bnc" id="L391" title="All 2 branches missed.">                    m.getAlphaTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">                    m.getAlphaTextureMap().getFileName().equals(name)) {</span>
+<span class="nc" id="L393">                return m;</span>
             }
         
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">            if (m.getAmbientTextureMap() != null &amp;&amp;</span>
-<span class="nc bnc" id="L399" title="All 2 branches missed.">                    m.getAmbientTextureMap().getFileName() != null &amp;&amp;</span>
-<span class="nc bnc" id="L400" title="All 2 branches missed.">                    m.getAmbientTextureMap().getFileName().equals(name)) {</span>
-<span class="nc" id="L401">                return m;</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">            if (m.getAmbientTextureMap() != null &amp;&amp;</span>
+<span class="nc bnc" id="L397" title="All 2 branches missed.">                    m.getAmbientTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">                    m.getAmbientTextureMap().getFileName().equals(name)) {</span>
+<span class="nc" id="L399">                return m;</span>
             }
             
-<span class="pc bpc" id="L404" title="1 of 2 branches missed.">            if (m.getDiffuseTextureMap() != null &amp;&amp;</span>
-<span class="pc bpc" id="L405" title="1 of 2 branches missed.">                    m.getDiffuseTextureMap().getFileName() != null &amp;&amp;</span>
-<span class="fc bfc" id="L406" title="All 2 branches covered.">                    m.getDiffuseTextureMap().getFileName().equals(name)) {</span>
-<span class="fc" id="L407">                return m;</span>
+<span class="pc bpc" id="L402" title="1 of 2 branches missed.">            if (m.getDiffuseTextureMap() != null &amp;&amp;</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">                    m.getDiffuseTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">                    m.getDiffuseTextureMap().getFileName().equals(name)) {</span>
+<span class="fc" id="L405">                return m;</span>
             }
             
-<span class="pc bpc" id="L410" title="1 of 2 branches missed.">            if (m.getSpecularTextureMap() != null &amp;&amp;</span>
-<span class="nc bnc" id="L411" title="All 2 branches missed.">                    m.getSpecularTextureMap().getFileName() != null &amp;&amp;</span>
-<span class="nc bnc" id="L412" title="All 2 branches missed.">                    m.getSpecularTextureMap().getFileName().equals(name)) {</span>
-<span class="nc" id="L413">                return m;</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">            if (m.getSpecularTextureMap() != null &amp;&amp;</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">                    m.getSpecularTextureMap().getFileName() != null &amp;&amp;</span>
+<span class="nc bnc" id="L410" title="All 2 branches missed.">                    m.getSpecularTextureMap().getFileName().equals(name)) {</span>
+<span class="nc" id="L411">                return m;</span>
             }
-<span class="fc" id="L415">        }</span>
-<span class="fc" id="L416">        return null;</span>
+<span class="fc" id="L413">        }</span>
+<span class="fc" id="L414">        return null;</span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

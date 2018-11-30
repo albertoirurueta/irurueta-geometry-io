@@ -496,7 +496,19 @@ public class LoaderPLY extends Loader {
 <span class="fc" id="L496">        internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);</span>
 <span class="fc" id="L497">        internalSetMaxStreamPositions(maxStreamPositions);</span>
 <span class="fc" id="L498">    }</span>
-    
+
+    /**
+     * Returns maximum number of vertices to keep in a chunk of data.
+     * By default this is the maximum values stored in a short is 65535. This is
+     * so that data chunks can be compatible with technologies such as openGL
+     * where vertex indices are short values, and hence only 65535 vertices can
+     * be indexed at a time.
+     * @return Maximum number of vertices to keep in a chunk of data.
+     */
+    public int getMaxVerticesInChunk() {
+<span class="fc" id="L509">        return maxVerticesInChunk;</span>
+    }
+
     /**
      * Sets maximum number of vertices to keep in a chunk of data.
      * @param maxVerticesInChunk Indicates maximum number of vertices to keep in
@@ -508,39 +520,23 @@ public class LoaderPLY extends Loader {
      */
     public void setMaxVerticesInChunk(int maxVerticesInChunk) 
             throws LockedException {
-<span class="fc bfc" id="L511" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L512">            throw new LockedException();</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L524">            throw new LockedException();</span>
         }
-<span class="fc" id="L514">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
-<span class="fc" id="L515">    }</span>
-    
+<span class="fc" id="L526">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L527">    }</span>
+
     /**
-     * Returns maximum number of vertices to keep in a chunk of data.
-     * By default this is the maximum values stored in a short is 65535. This is
-     * so that data chunks can be compatible with technologies such as openGL
-     * where vertex indices are short values, and hence only 65535 vertices can 
-     * be indexed at a time.
-     * @return Maximum number of vertices to keep in a chunk of data.
+     * Determines whether duplicate vertices in a chunk are allowed. By allowing
+     * duplicate vertices, PLY loading can be speed up a little bit at the
+     * expense of getting larger sets of data which will contain redundant
+     * vertices. If your environment is memory constrained, this should be
+     * disabled. By default it is disabled.
+     * @return Determines whether duplicate vertices in a chunk are allowed.
      */
-    public int getMaxVerticesInChunk() {
-<span class="fc" id="L526">        return maxVerticesInChunk;</span>
+    public boolean areDuplicateVerticesInChunkAllowed() {
+<span class="fc" id="L538">        return allowDuplicateVerticesInChunk;</span>
     }
-    
-    /**
-     * Internal method to set maximum number of vertices to keep in a chunk of
-     * data.
-     * @param maxVerticesInChunk Indicates maximum number of vertices to keep in
-     * a chunk of data.
-     * @throws IllegalArgumentException Raised if maximum number of vertices is
-     * smaller than MIN_MAX_VERTICES_IN_CHUNK.
-     */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
-<span class="fc bfc" id="L538" title="All 2 branches covered.">        if (maxVerticesInChunk &lt; MIN_MAX_VERTICES_IN_CHUNK) {</span>
-<span class="fc" id="L539">            throw new IllegalArgumentException();</span>
-        }
-        
-<span class="fc" id="L542">        this.maxVerticesInChunk = maxVerticesInChunk;</span>
-<span class="fc" id="L543">    }</span>
 
     /**
      * Sets whether duplicate vertices in a chunk are allowed. By allowing
@@ -554,36 +550,26 @@ public class LoaderPLY extends Loader {
      */
     public void setAllowDuplicateVerticesInChunk(boolean allow) 
             throws LockedException {
-<span class="fc bfc" id="L557" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L558">            throw new LockedException();</span>
+<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L554">            throw new LockedException();</span>
         }
-<span class="fc" id="L560">        internalSetAllowDuplicateVerticesInChunk(allow);</span>
-<span class="fc" id="L561">    }</span>
-    
+<span class="fc" id="L556">        internalSetAllowDuplicateVerticesInChunk(allow);</span>
+<span class="fc" id="L557">    }</span>
+
     /**
-     * Determines whether duplicate vertices in a chunk are allowed. By allowing
-     * duplicate vertices, PLY loading can be speed up a little bit at the
-     * expense of getting larger sets of data which will contain redundant
-     * vertices. If your environment is memory constrained, this should be
-     * disabled. By default it is disabled.
-     * @return Determines whether duplicate vertices in a chunk are allowed.
+     * Returns maximum number of stream positions to be cached.
+     * This loader keeps track of a set of stream positions that have been
+     * parsed on ASCII mode. By keeping a cache of positions loading times can
+     * be largely reduced at the expense of using more memory during loading.
+     * By default this is set to 1000000 positions.
+     * This only has effect on ASCII PLY files. For binary PLY files this
+     * setting is ignored.
+     * @return maximum number of stream positions to be cached.
      */
-    public boolean areDuplicateVerticesInChunkAllowed() {
-<span class="fc" id="L572">        return allowDuplicateVerticesInChunk;</span>
+    public long getMaxStreamPositions() {
+<span class="fc" id="L570">        return maxStreamPositions;</span>
     }
-    
-    /**
-     * Internal method to set whether duplicate vertices in a chunk are allowed. 
-     * By allowing duplicate vertices, PLY loading can be speed up a little bit 
-     * at the expense of getting larger sets of data which will contain 
-     * redundant vertices. If your environment is memory constrained, this 
-     * should be disabled. By default it is disabled.
-     * @param allow Indicates whether duplicates will be allowed or not.
-     */
-    private void internalSetAllowDuplicateVerticesInChunk(boolean allow) {
-<span class="fc" id="L584">        allowDuplicateVerticesInChunk = allow;</span>
-<span class="fc" id="L585">    }</span>
-    
+
     /**
      * Sets maximum number of stream positions to be cached.
      * This loader keeps track of a set of stream positions that have been 
@@ -600,45 +586,11 @@ public class LoaderPLY extends Loader {
      */
     public void setMaxStreamPositions(long maxStreamPositions) 
             throws LockedException {
-<span class="fc bfc" id="L603" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L604">            throw new LockedException();</span>
+<span class="fc bfc" id="L589" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L590">            throw new LockedException();</span>
         }
-<span class="fc" id="L606">        internalSetMaxStreamPositions(maxStreamPositions);</span>
-<span class="fc" id="L607">    }</span>
-    
-    /**
-     * Returns maximum number of stream positions to be cached.
-     * This loader keeps track of a set of stream positions that have been 
-     * parsed on ASCII mode. By keeping a cache of positions loading times can
-     * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
-     * This only has effect on ASCII PLY files. For binary PLY files this 
-     * setting is ignored.
-     * @return maximum number of stream positions to be cached.
-     */
-    public long getMaxStreamPositions() {
-<span class="fc" id="L620">        return maxStreamPositions;</span>
-    }
-    
-    /**
-     * Internal method to set maximum number of stream positions to be cached.
-     * This loader keeps track of a set of stream positions that have been 
-     * parsed on ASCII mode. By keeping a cache of positions loading times can
-     * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
-     * This only has effect on ASCII PLY files. For binary PLY files this 
-     * setting is ignored.
-     * @param maxStreamPositions Maximum number of stream positions to be cached.
-     * @throws IllegalArgumentException Raised if provided value is lower than
-     * DEFAULT_MAX_STREAM_POSITIONS.
-     */    
-    private void internalSetMaxStreamPositions(long maxStreamPositions) {
-<span class="fc bfc" id="L636" title="All 2 branches covered.">        if (maxStreamPositions &lt; MIN_STREAM_POSITIONS) {</span>
-<span class="fc" id="L637">            throw new IllegalArgumentException();</span>
-        }
-        
-<span class="fc" id="L640">        this.maxStreamPositions = maxStreamPositions;</span>
-<span class="fc" id="L641">    }</span>
+<span class="fc" id="L592">        internalSetMaxStreamPositions(maxStreamPositions);</span>
+<span class="fc" id="L593">    }</span>
 
     /**
      * Indicates it this loader has enough parameters to start the loading 
@@ -647,7 +599,7 @@ public class LoaderPLY extends Loader {
      */
     @Override
     public boolean isReady() {
-<span class="fc" id="L650">        return hasFile();</span>
+<span class="fc" id="L602">        return hasFile();</span>
     }
 
     /**
@@ -656,7 +608,7 @@ public class LoaderPLY extends Loader {
      */
     @Override
     public MeshFormat getMeshFormat() {
-<span class="fc" id="L659">        return MeshFormat.MESH_FORMAT_PLY;</span>
+<span class="fc" id="L611">        return MeshFormat.MESH_FORMAT_PLY;</span>
     }
 
     /**
@@ -669,330 +621,21 @@ public class LoaderPLY extends Loader {
      */
     @Override
     public boolean isValidFile() throws LockedException, IOException {
-<span class="pc bpc" id="L672" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L673">            throw new LockedException();</span>
+<span class="pc bpc" id="L624" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L625">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L676">        setLocked(true);</span>
-<span class="fc bfc" id="L677" title="All 2 branches covered.">        if (reader == null) {</span>
-<span class="fc" id="L678">            throw new IOException();</span>
+<span class="fc" id="L628">        setLocked(true);</span>
+<span class="fc bfc" id="L629" title="All 2 branches covered.">        if (reader == null) {</span>
+<span class="fc" id="L630">            throw new IOException();</span>
         }
         try {
-<span class="fc" id="L681">            readHeader();</span>
-<span class="nc" id="L682">        } catch (LoaderException ex) {</span>
-<span class="nc" id="L683">            validStream = false;</span>
-<span class="fc" id="L684">        }</span>
-<span class="fc" id="L685">        setLocked(false);</span>
-<span class="fc" id="L686">        return validStream;</span>
-    }
-    
-    /**
-     * Reads header of provided file and initializes iterator to read data 
-     * chunks of this file.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     * @throws IOException if an i/O error occurs.
-     * @throws LoaderException Raised if file is not a valid PLY or is corrupted
-     */
-    private void readFromStream() 
-            throws LockedException, IOException, LoaderException {
-        
-<span class="fc bfc" id="L700" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L701">            throw new LockedException();</span>
-        }
-        
-<span class="fc" id="L704">        setLocked(true);</span>
-<span class="fc bfc" id="L705" title="All 2 branches covered.">        if (listener != null) {</span>
-<span class="fc" id="L706">            listener.onLoadStart(this);</span>
-        }
-        
-<span class="pc bpc" id="L709" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L710">            throw new IOException();</span>
-        }
-        
-<span class="pc bpc" id="L713" title="1 of 2 branches missed.">        if (!validityChecked) {</span>
-<span class="fc" id="L714">            readHeader();</span>
-        }
-<span class="pc bpc" id="L716" title="1 of 2 branches missed.">        if (!validStream) {</span>
-<span class="nc" id="L717">            setLocked(false);</span>
-<span class="nc" id="L718">            throw new LoaderException();</span>
-        }
-        
-<span class="fc" id="L721">        loaderIterator = new LoaderIteratorPLY(this);</span>
-<span class="fc" id="L722">        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));</span>
-<span class="fc" id="L723">    }</span>
-    
-    /**
-     * Reads the header of provided file.
-     * @throws IOException if an I/O error occurs.
-     * @throws LoaderException  Raised if file is not a valid PLY or is 
-     * corrupted.
-     */
-    private void readHeader() throws IOException, LoaderException {
-<span class="pc bpc" id="L732" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L733">            throw new IOException();</span>
-        }
-        
-<span class="fc" id="L736">        validityChecked = true;</span>
-        
-        //first line must be equal to string &quot;ply&quot;
-<span class="fc" id="L739">        String str = reader.readLine();</span>
-        
-<span class="pc bpc" id="L741" title="2 of 4 branches missed.">        if (!str.equals(&quot;ply&quot;) || reader.isEndOfStream()) {</span>
-<span class="nc" id="L742">            validStream = false;</span>
-<span class="nc" id="L743">            throw new LoaderException();</span>
-        } 
-        
-        //second line contains format (i.e: format ascii 1.0)
-        //must start with &quot;format&quot; word
-        do {
-            //loop is to avoid empty strings
-            //(because of duplicate spaces or carriage returns)
-<span class="fc" id="L751">            str = reader.readWord();</span>
-<span class="pc bpc" id="L752" title="3 of 4 branches missed.">        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-        
-<span class="pc bpc" id="L754" title="2 of 4 branches missed.">        if (!str.equals(&quot;format&quot;) || reader.isEndOfStream()) {</span>
-<span class="nc" id="L755">            validStream = false;</span>
-<span class="nc" id="L756">            throw new LoaderException();</span>
-        }
-        
-        //next to format word comes storage mode
-        do {
-            //loop to avoid empty strings
-<span class="fc" id="L762">            str = reader.readWord();</span>
-<span class="pc bpc" id="L763" title="3 of 4 branches missed.">        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-        
-<span class="pc bpc" id="L765" title="1 of 2 branches missed.">        if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L766">            validStream = false;</span>
-<span class="nc" id="L767">            throw new LoaderException();</span>
-        }
-        
-        PLYStorageMode storageMode;
-<span class="pc bpc" id="L771" title="1 of 4 branches missed.">        switch (str) {</span>
-            case &quot;ascii&quot;:
-                //ASCII storage mode
-<span class="fc" id="L774">                storageMode = PLYStorageMode.PLY_ASCII;</span>
-<span class="fc" id="L775">                break;</span>
-            case &quot;binary_big_endian&quot;:
-                //Binary big endian storage mode
-<span class="fc" id="L778">                storageMode = PLYStorageMode.PLY_BIG_ENDIAN;</span>
-<span class="fc" id="L779">                break;</span>
-            case &quot;binary_little_endian&quot;:
-                //Binary little endian storage mode
-<span class="fc" id="L782">                storageMode = PLYStorageMode.PLY_LITTLE_ENDIAN;</span>
-<span class="fc" id="L783">                break;</span>
-            default:
-                //non supported storage mode
-<span class="nc" id="L786">                validStream = false;</span>
-<span class="nc" id="L787">                throw new LoaderException();</span>
-        }
-        
-        //next comes version (always must be 1.0)
-        do {
-            //loop to avoid empty strings
-<span class="fc" id="L793">            str = reader.readWord();</span>
-<span class="pc bpc" id="L794" title="3 of 4 branches missed.">        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-        
-<span class="pc bpc" id="L796" title="2 of 4 branches missed.">        if (!str.equals(&quot;1.0&quot;) || reader.isEndOfStream()) {</span>
-<span class="nc" id="L797">            validStream = false;</span>
-<span class="nc" id="L798">            throw new LoaderException();</span>
-        }
-        
-        //instantiate header member
-<span class="fc" id="L802">        header = new HeaderPLY();</span>
-        //set storage mode
-<span class="fc" id="L804">        header.setStorageMode(storageMode);</span>
-        
-        //read until we find the line end_header
-<span class="fc" id="L807">        boolean endOfHeader = false;</span>
-<span class="fc" id="L808">        ElementPLY lastElement = null;</span>
-        PropertyPLY property;
-        do {
-            do {
-                //loop to avoid empty strings
-<span class="fc" id="L813">                str = reader.readWord();</span>
-<span class="pc bpc" id="L814" title="3 of 4 branches missed.">            } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-            
-<span class="fc bfc" id="L816" title="All 2 branches covered.">            if (str.equals(&quot;comment&quot;)) {</span>
-                //if word is &quot;comment&quot;, read until end of line
-<span class="fc" id="L818">                str = reader.readLine();</span>
-                //add comment to list of comments in header
-<span class="fc" id="L820">                header.getComments().add(str);</span>
-<span class="pc bpc" id="L821" title="1 of 2 branches missed.">            } else if (str.equals(&quot;obj_info&quot;)) {</span>
-                //if word if &quot;obj_info&quot;, read until end of line
-<span class="nc" id="L823">                str = reader.readLine();</span>
-                //add obj_info to list of obj_infos in header
-<span class="nc" id="L825">                header.getObjInfos().add(str);</span>
-<span class="fc bfc" id="L826" title="All 2 branches covered.">            } else if (str.endsWith(&quot;element&quot;)) {</span>
-                //and element has been found. We read its information and
-                //add it to the list of elements
-                
-                //next word contains element name
-                do {
-                    //loop to avoid empty strings
-<span class="fc" id="L833">                    str = reader.readWord();</span>
-<span class="pc bpc" id="L834" title="3 of 4 branches missed.">                } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                
-<span class="pc bpc" id="L836" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L837">                    validStream = false;</span>
-<span class="nc" id="L838">                    throw new LoaderException();</span>
-                }
-                
-<span class="fc" id="L841">                String elementName = str;</span>
-                
-                //next word contains number of instances of this element
-                do {
-<span class="fc" id="L845">                    str = reader.readWord();</span>
-<span class="pc bpc" id="L846" title="3 of 4 branches missed.">                } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                
-<span class="pc bpc" id="L848" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L849">                    validStream = false;</span>
-<span class="nc" id="L850">                    throw new LoaderException();</span>
-                }
-
-                long elementInstances;
-                try {
-<span class="fc" id="L855">                    elementInstances = Long.parseLong(str);</span>
-<span class="nc" id="L856">                } catch (NumberFormatException e) {</span>
-<span class="nc" id="L857">                    throw new IOException(e);</span>
-<span class="fc" id="L858">                }</span>
-                
-                //instantiate element
-<span class="fc" id="L861">                lastElement = new ElementPLY(elementName, elementInstances);</span>
-                
-                //add element to header
-<span class="fc" id="L864">                header.getElements().add(lastElement);</span>
-<span class="fc bfc" id="L865" title="All 2 branches covered.">            } else if (str.equals(&quot;property&quot;)) {</span>
-                //a property for last element that has been found. We read its 
-                //information and add it to the element
-                
-<span class="pc bpc" id="L869" title="1 of 2 branches missed.">                if (lastElement == null) {</span>
-                    //no previous element was defined
-<span class="nc" id="L871">                    validStream = false;</span>
-<span class="nc" id="L872">                    throw new LoaderException();</span>
-                }
-                
-                //read next word
-                do {
-                    //loop to avoid empty strings
-<span class="fc" id="L878">                    str = reader.readWord();</span>
-<span class="pc bpc" id="L879" title="3 of 4 branches missed.">                } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                
-<span class="pc bpc" id="L881" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L882">                    validStream = false;</span>
-<span class="nc" id="L883">                    throw new LoaderException();</span>
-                }
-                
-<span class="fc bfc" id="L886" title="All 2 branches covered.">                if (str.equals(&quot;list&quot;)) {</span>
-                    //property is a list
-                    DataTypePLY lengthDataType;
-                    DataTypePLY valueDataType;
-                    try {
-                        //read length data type
-                        do{
-                            //loop to avoid empty strings
-<span class="fc" id="L894">                            str = reader.readWord();</span>
-<span class="pc bpc" id="L895" title="3 of 4 branches missed.">                        }while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                        
-<span class="pc bpc" id="L897" title="1 of 2 branches missed.">                        if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L898">                            validStream = false;</span>
-<span class="nc" id="L899">                            throw new LoaderException();</span>
-                        }
-                        
-<span class="fc" id="L902">                        lengthDataType = wordToDataType(str);</span>
-                        
-                        //read value data type
-                        do {
-<span class="fc" id="L906">                            str = reader.readWord();</span>
-<span class="pc bpc" id="L907" title="3 of 4 branches missed.">                        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                        
-<span class="pc bpc" id="L909" title="1 of 2 branches missed.">                        if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L910">                            validStream = false;</span>
-<span class="nc" id="L911">                            throw new LoaderException();</span>
-                        }
-                        
-<span class="fc" id="L914">                        valueDataType = wordToDataType(str);</span>
-<span class="nc" id="L915">                    } catch (LoaderException ex) {</span>
-                        //some error was found
-<span class="nc" id="L917">                        validStream = false;</span>
-<span class="nc" id="L918">                        throw ex;</span>
-<span class="fc" id="L919">                    }</span>
-                    
-                    //read property name
-                    do {
-<span class="fc" id="L923">                        str = reader.readWord();                        </span>
-<span class="pc bpc" id="L924" title="3 of 4 branches missed.">                    } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                    
-<span class="pc bpc" id="L926" title="1 of 2 branches missed.">                    if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L927">                        validStream = false;</span>
-<span class="nc" id="L928">                        throw new LoaderException();</span>
-                    }
-                    
-<span class="fc" id="L931">                    String propertyName = str;</span>
-                    
-<span class="fc" id="L933">                    property = new PropertyPLY(propertyName, lengthDataType, </span>
-                            valueDataType);
-<span class="fc" id="L935">                } else {</span>
-                    //property is scalar
-                    //word that we have already read should contain value data 
-                    //type
-                    
-                    DataTypePLY valueDataType;
-                    try {
-<span class="fc" id="L942">                        valueDataType = wordToDataType(str);</span>
-<span class="nc" id="L943">                    } catch (LoaderException ex) {</span>
-                        //invalid data type was found
-<span class="nc" id="L945">                        validStream = false;</span>
-<span class="nc" id="L946">                        throw ex;</span>
-<span class="fc" id="L947">                    }</span>
-                    //read property name
-                    do {
-<span class="fc" id="L950">                        str = reader.readWord();</span>
-<span class="pc bpc" id="L951" title="3 of 4 branches missed.">                    } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
-                    
-<span class="pc bpc" id="L953" title="1 of 2 branches missed.">                    if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L954">                        validStream = false;</span>
-<span class="nc" id="L955">                        throw new LoaderException();</span>
-                    }
-                    
-<span class="fc" id="L958">                    String propertyName = str;</span>
-                    
-<span class="fc" id="L960">                    property = new PropertyPLY(propertyName, valueDataType);</span>
-                }
-                try {
-                    //add property to last element
-<span class="fc" id="L964">                    lastElement.getProperties().add(property);</span>
-<span class="nc" id="L965">                } catch (NotAvailableException ex) {</span>
-<span class="nc" id="L966">                    validStream = false;</span>
-<span class="nc" id="L967">                    throw new LoaderException(ex);</span>
-<span class="fc" id="L968">                }</span>
-<span class="pc bpc" id="L969" title="1 of 2 branches missed.">            } else if (str.equals(&quot;end_header&quot;)) {</span>
-                //end of header has been found
-<span class="fc" id="L971">                endOfHeader = true;</span>
-            } else {
-                //something else that cannot be understood
-<span class="nc" id="L974">                validStream = false;</span>
-<span class="nc" id="L975">                throw new LoaderException();</span>
-            }
-<span class="fc bfc" id="L977" title="All 2 branches covered.">        } while (!endOfHeader);</span>
-        
-<span class="fc" id="L979">        validStream = true;</span>
-<span class="fc" id="L980">    }</span>
-    
-    /**
-     * Converts a word into a data type. If an unsupported word is found then a
-     * LoaderException is raised.
-     * @param word word to be converted.
-     * @return DataType obtained from word.
-     * @throws LoaderException  Raised if file is not a valid PLY or is 
-     * corrupted (i.e. an unsupported word is found).
-     */
-    private DataTypePLY wordToDataType(String word) throws LoaderException {
-<span class="fc" id="L991">        DataTypePLY dataType = DataTypePLY.forValue(word);</span>
-<span class="pc bpc" id="L992" title="1 of 2 branches missed.">        if (dataType == null) {</span>
-<span class="nc" id="L993">            throw new LoaderException();</span>
-        }
-<span class="fc" id="L995">        return dataType;</span>
+<span class="fc" id="L633">            readHeader();</span>
+<span class="nc" id="L634">        } catch (LoaderException ex) {</span>
+<span class="nc" id="L635">            validStream = false;</span>
+<span class="fc" id="L636">        }</span>
+<span class="fc" id="L637">        setLocked(false);</span>
+<span class="fc" id="L638">        return validStream;</span>
     }
 
     /**
@@ -1010,14 +653,371 @@ public class LoaderPLY extends Loader {
     @Override
     public LoaderIterator load() throws LockedException, NotReadyException, 
             IOException, LoaderException {
-<span class="fc bfc" id="L1013" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L1014">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L656" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L657">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L1017">        readFromStream();</span>
-<span class="fc" id="L1018">        return loaderIterator;</span>
+<span class="fc" id="L660">        readFromStream();</span>
+<span class="fc" id="L661">        return loaderIterator;</span>
     }
-    
+
+    /**
+     * Internal method to set maximum number of vertices to keep in a chunk of
+     * data.
+     * @param maxVerticesInChunk Indicates maximum number of vertices to keep in
+     * a chunk of data.
+     * @throws IllegalArgumentException Raised if maximum number of vertices is
+     * smaller than MIN_MAX_VERTICES_IN_CHUNK.
+     */
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
+<span class="fc bfc" id="L673" title="All 2 branches covered.">        if (maxVerticesInChunk &lt; MIN_MAX_VERTICES_IN_CHUNK) {</span>
+<span class="fc" id="L674">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L677">        this.maxVerticesInChunk = maxVerticesInChunk;</span>
+<span class="fc" id="L678">    }</span>
+
+    /**
+     * Internal method to set whether duplicate vertices in a chunk are allowed.
+     * By allowing duplicate vertices, PLY loading can be speed up a little bit
+     * at the expense of getting larger sets of data which will contain
+     * redundant vertices. If your environment is memory constrained, this
+     * should be disabled. By default it is disabled.
+     * @param allow Indicates whether duplicates will be allowed or not.
+     */
+    private void internalSetAllowDuplicateVerticesInChunk(boolean allow) {
+<span class="fc" id="L689">        allowDuplicateVerticesInChunk = allow;</span>
+<span class="fc" id="L690">    }</span>
+
+    /**
+     * Internal method to set maximum number of stream positions to be cached.
+     * This loader keeps track of a set of stream positions that have been
+     * parsed on ASCII mode. By keeping a cache of positions loading times can
+     * be largely reduced at the expense of using more memory during loading.
+     * By default this is set to 1000000 positions.
+     * This only has effect on ASCII PLY files. For binary PLY files this
+     * setting is ignored.
+     * @param maxStreamPositions Maximum number of stream positions to be cached.
+     * @throws IllegalArgumentException Raised if provided value is lower than
+     * DEFAULT_MAX_STREAM_POSITIONS.
+     */
+    private void internalSetMaxStreamPositions(long maxStreamPositions) {
+<span class="fc bfc" id="L705" title="All 2 branches covered.">        if (maxStreamPositions &lt; MIN_STREAM_POSITIONS) {</span>
+<span class="fc" id="L706">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L709">        this.maxStreamPositions = maxStreamPositions;</span>
+<span class="fc" id="L710">    }</span>
+
+    /**
+     * Reads header of provided file and initializes iterator to read data
+     * chunks of this file.
+     * @throws LockedException Raised if this instance is locked because loading
+     * is in progress.
+     * @throws IOException if an i/O error occurs.
+     * @throws LoaderException Raised if file is not a valid PLY or is corrupted
+     */
+    private void readFromStream()
+            throws LockedException, IOException, LoaderException {
+
+<span class="fc bfc" id="L723" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L724">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L727">        setLocked(true);</span>
+<span class="fc bfc" id="L728" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L729">            listener.onLoadStart(this);</span>
+        }
+
+<span class="pc bpc" id="L732" title="1 of 2 branches missed.">        if (reader == null) {</span>
+<span class="nc" id="L733">            throw new IOException();</span>
+        }
+
+<span class="pc bpc" id="L736" title="1 of 2 branches missed.">        if (!validityChecked) {</span>
+<span class="fc" id="L737">            readHeader();</span>
+        }
+<span class="pc bpc" id="L739" title="1 of 2 branches missed.">        if (!validStream) {</span>
+<span class="nc" id="L740">            setLocked(false);</span>
+<span class="nc" id="L741">            throw new LoaderException();</span>
+        }
+
+<span class="fc" id="L744">        loaderIterator = new LoaderIteratorPLY(this);</span>
+<span class="fc" id="L745">        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));</span>
+<span class="fc" id="L746">    }</span>
+
+    /**
+     * Reads the header of provided file.
+     * @throws IOException if an I/O error occurs.
+     * @throws LoaderException  Raised if file is not a valid PLY or is
+     * corrupted.
+     */
+    private void readHeader() throws IOException, LoaderException {
+<span class="pc bpc" id="L755" title="1 of 2 branches missed.">        if (reader == null) {</span>
+<span class="nc" id="L756">            throw new IOException();</span>
+        }
+
+<span class="fc" id="L759">        validityChecked = true;</span>
+
+        //first line must be equal to string &quot;ply&quot;
+<span class="fc" id="L762">        String str = reader.readLine();</span>
+
+<span class="pc bpc" id="L764" title="2 of 4 branches missed.">        if (!str.equals(&quot;ply&quot;) || reader.isEndOfStream()) {</span>
+<span class="nc" id="L765">            validStream = false;</span>
+<span class="nc" id="L766">            throw new LoaderException();</span>
+        }
+
+        //second line contains format (i.e: format ascii 1.0)
+        //must start with &quot;format&quot; word
+        do {
+            //loop is to avoid empty strings
+            //(because of duplicate spaces or carriage returns)
+<span class="fc" id="L774">            str = reader.readWord();</span>
+<span class="pc bpc" id="L775" title="3 of 4 branches missed.">        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L777" title="2 of 4 branches missed.">        if (!str.equals(&quot;format&quot;) || reader.isEndOfStream()) {</span>
+<span class="nc" id="L778">            validStream = false;</span>
+<span class="nc" id="L779">            throw new LoaderException();</span>
+        }
+
+        //next to format word comes storage mode
+        do {
+            //loop to avoid empty strings
+<span class="fc" id="L785">            str = reader.readWord();</span>
+<span class="pc bpc" id="L786" title="3 of 4 branches missed.">        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L788" title="1 of 2 branches missed.">        if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L789">            validStream = false;</span>
+<span class="nc" id="L790">            throw new LoaderException();</span>
+        }
+
+        PLYStorageMode storageMode;
+<span class="pc bpc" id="L794" title="1 of 4 branches missed.">        switch (str) {</span>
+            case &quot;ascii&quot;:
+                //ASCII storage mode
+<span class="fc" id="L797">                storageMode = PLYStorageMode.PLY_ASCII;</span>
+<span class="fc" id="L798">                break;</span>
+            case &quot;binary_big_endian&quot;:
+                //Binary big endian storage mode
+<span class="fc" id="L801">                storageMode = PLYStorageMode.PLY_BIG_ENDIAN;</span>
+<span class="fc" id="L802">                break;</span>
+            case &quot;binary_little_endian&quot;:
+                //Binary little endian storage mode
+<span class="fc" id="L805">                storageMode = PLYStorageMode.PLY_LITTLE_ENDIAN;</span>
+<span class="fc" id="L806">                break;</span>
+            default:
+                //non supported storage mode
+<span class="nc" id="L809">                validStream = false;</span>
+<span class="nc" id="L810">                throw new LoaderException();</span>
+        }
+
+        //next comes version (always must be 1.0)
+        do {
+            //loop to avoid empty strings
+<span class="fc" id="L816">            str = reader.readWord();</span>
+<span class="pc bpc" id="L817" title="3 of 4 branches missed.">        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L819" title="2 of 4 branches missed.">        if (!str.equals(&quot;1.0&quot;) || reader.isEndOfStream()) {</span>
+<span class="nc" id="L820">            validStream = false;</span>
+<span class="nc" id="L821">            throw new LoaderException();</span>
+        }
+
+        //instantiate header member
+<span class="fc" id="L825">        header = new HeaderPLY();</span>
+        //set storage mode
+<span class="fc" id="L827">        header.setStorageMode(storageMode);</span>
+
+        //read until we find the line end_header
+<span class="fc" id="L830">        boolean endOfHeader = false;</span>
+<span class="fc" id="L831">        ElementPLY lastElement = null;</span>
+        PropertyPLY property;
+        do {
+            do {
+                //loop to avoid empty strings
+<span class="fc" id="L836">                str = reader.readWord();</span>
+<span class="pc bpc" id="L837" title="3 of 4 branches missed.">            } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="fc bfc" id="L839" title="All 2 branches covered.">            if (str.equals(&quot;comment&quot;)) {</span>
+                //if word is &quot;comment&quot;, read until end of line
+<span class="fc" id="L841">                str = reader.readLine();</span>
+                //add comment to list of comments in header
+<span class="fc" id="L843">                header.getComments().add(str);</span>
+<span class="pc bpc" id="L844" title="1 of 2 branches missed.">            } else if (str.equals(&quot;obj_info&quot;)) {</span>
+                //if word if &quot;obj_info&quot;, read until end of line
+<span class="nc" id="L846">                str = reader.readLine();</span>
+                //add obj_info to list of obj_infos in header
+<span class="nc" id="L848">                header.getObjInfos().add(str);</span>
+<span class="fc bfc" id="L849" title="All 2 branches covered.">            } else if (str.endsWith(&quot;element&quot;)) {</span>
+                //and element has been found. We read its information and
+                //add it to the list of elements
+
+                //next word contains element name
+                do {
+                    //loop to avoid empty strings
+<span class="fc" id="L856">                    str = reader.readWord();</span>
+<span class="pc bpc" id="L857" title="3 of 4 branches missed.">                } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L859" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L860">                    validStream = false;</span>
+<span class="nc" id="L861">                    throw new LoaderException();</span>
+                }
+
+<span class="fc" id="L864">                String elementName = str;</span>
+
+                //next word contains number of instances of this element
+                do {
+<span class="fc" id="L868">                    str = reader.readWord();</span>
+<span class="pc bpc" id="L869" title="3 of 4 branches missed.">                } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L871" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L872">                    validStream = false;</span>
+<span class="nc" id="L873">                    throw new LoaderException();</span>
+                }
+
+                long elementInstances;
+                try {
+<span class="fc" id="L878">                    elementInstances = Long.parseLong(str);</span>
+<span class="nc" id="L879">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L880">                    throw new IOException(e);</span>
+<span class="fc" id="L881">                }</span>
+
+                //instantiate element
+<span class="fc" id="L884">                lastElement = new ElementPLY(elementName, elementInstances);</span>
+
+                //add element to header
+<span class="fc" id="L887">                header.getElements().add(lastElement);</span>
+<span class="fc bfc" id="L888" title="All 2 branches covered.">            } else if (str.equals(&quot;property&quot;)) {</span>
+                //a property for last element that has been found. We read its
+                //information and add it to the element
+
+<span class="pc bpc" id="L892" title="1 of 2 branches missed.">                if (lastElement == null) {</span>
+                    //no previous element was defined
+<span class="nc" id="L894">                    validStream = false;</span>
+<span class="nc" id="L895">                    throw new LoaderException();</span>
+                }
+
+                //read next word
+                do {
+                    //loop to avoid empty strings
+<span class="fc" id="L901">                    str = reader.readWord();</span>
+<span class="pc bpc" id="L902" title="3 of 4 branches missed.">                } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L904" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L905">                    validStream = false;</span>
+<span class="nc" id="L906">                    throw new LoaderException();</span>
+                }
+
+<span class="fc bfc" id="L909" title="All 2 branches covered.">                if (str.equals(&quot;list&quot;)) {</span>
+                    //property is a list
+                    DataTypePLY lengthDataType;
+                    DataTypePLY valueDataType;
+                    try {
+                        //read length data type
+                        do{
+                            //loop to avoid empty strings
+<span class="fc" id="L917">                            str = reader.readWord();</span>
+<span class="pc bpc" id="L918" title="3 of 4 branches missed.">                        }while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L920" title="1 of 2 branches missed.">                        if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L921">                            validStream = false;</span>
+<span class="nc" id="L922">                            throw new LoaderException();</span>
+                        }
+
+<span class="fc" id="L925">                        lengthDataType = wordToDataType(str);</span>
+
+                        //read value data type
+                        do {
+<span class="fc" id="L929">                            str = reader.readWord();</span>
+<span class="pc bpc" id="L930" title="3 of 4 branches missed.">                        } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L932" title="1 of 2 branches missed.">                        if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L933">                            validStream = false;</span>
+<span class="nc" id="L934">                            throw new LoaderException();</span>
+                        }
+
+<span class="fc" id="L937">                        valueDataType = wordToDataType(str);</span>
+<span class="nc" id="L938">                    } catch (LoaderException ex) {</span>
+                        //some error was found
+<span class="nc" id="L940">                        validStream = false;</span>
+<span class="nc" id="L941">                        throw ex;</span>
+<span class="fc" id="L942">                    }</span>
+
+                    //read property name
+                    do {
+<span class="fc" id="L946">                        str = reader.readWord();</span>
+<span class="pc bpc" id="L947" title="3 of 4 branches missed.">                    } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L949" title="1 of 2 branches missed.">                    if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L950">                        validStream = false;</span>
+<span class="nc" id="L951">                        throw new LoaderException();</span>
+                    }
+
+<span class="fc" id="L954">                    String propertyName = str;</span>
+
+<span class="fc" id="L956">                    property = new PropertyPLY(propertyName, lengthDataType,</span>
+                            valueDataType);
+<span class="fc" id="L958">                } else {</span>
+                    //property is scalar
+                    //word that we have already read should contain value data
+                    //type
+
+                    DataTypePLY valueDataType;
+                    try {
+<span class="fc" id="L965">                        valueDataType = wordToDataType(str);</span>
+<span class="nc" id="L966">                    } catch (LoaderException ex) {</span>
+                        //invalid data type was found
+<span class="nc" id="L968">                        validStream = false;</span>
+<span class="nc" id="L969">                        throw ex;</span>
+<span class="fc" id="L970">                    }</span>
+                    //read property name
+                    do {
+<span class="fc" id="L973">                        str = reader.readWord();</span>
+<span class="pc bpc" id="L974" title="3 of 4 branches missed.">                    } while ((str.length() == 0) &amp;&amp; !reader.isEndOfStream());</span>
+
+<span class="pc bpc" id="L976" title="1 of 2 branches missed.">                    if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L977">                        validStream = false;</span>
+<span class="nc" id="L978">                        throw new LoaderException();</span>
+                    }
+
+<span class="fc" id="L981">                    String propertyName = str;</span>
+
+<span class="fc" id="L983">                    property = new PropertyPLY(propertyName, valueDataType);</span>
+                }
+                try {
+                    //add property to last element
+<span class="fc" id="L987">                    lastElement.getProperties().add(property);</span>
+<span class="nc" id="L988">                } catch (NotAvailableException ex) {</span>
+<span class="nc" id="L989">                    validStream = false;</span>
+<span class="nc" id="L990">                    throw new LoaderException(ex);</span>
+<span class="fc" id="L991">                }</span>
+<span class="pc bpc" id="L992" title="1 of 2 branches missed.">            } else if (str.equals(&quot;end_header&quot;)) {</span>
+                //end of header has been found
+<span class="fc" id="L994">                endOfHeader = true;</span>
+            } else {
+                //something else that cannot be understood
+<span class="nc" id="L997">                validStream = false;</span>
+<span class="nc" id="L998">                throw new LoaderException();</span>
+            }
+<span class="fc bfc" id="L1000" title="All 2 branches covered.">        } while (!endOfHeader);</span>
+
+<span class="fc" id="L1002">        validStream = true;</span>
+<span class="fc" id="L1003">    }</span>
+
+    /**
+     * Converts a word into a data type. If an unsupported word is found then a
+     * LoaderException is raised.
+     * @param word word to be converted.
+     * @return DataType obtained from word.
+     * @throws LoaderException  Raised if file is not a valid PLY or is
+     * corrupted (i.e. an unsupported word is found).
+     */
+    private DataTypePLY wordToDataType(String word) throws LoaderException {
+<span class="fc" id="L1014">        DataTypePLY dataType = DataTypePLY.forValue(word);</span>
+<span class="pc bpc" id="L1015" title="1 of 2 branches missed.">        if (dataType == null) {</span>
+<span class="nc" id="L1016">            throw new LoaderException();</span>
+        }
+<span class="fc" id="L1018">        return dataType;</span>
+    }
+
     /**
      * Internal listener to be notified when loading process finishes.
      * This listener is used to free resources when loading process finishes.
