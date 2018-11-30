@@ -295,14 +295,18 @@ public abstract class MeshWriter {
          * @param loader reference to loader.
          */
         @Override
-        public void onLoadStart(MaterialLoader loader) { }
+        public void onLoadStart(MaterialLoader loader) {
+            //no action required
+        }
 
         /**
          * Called when material loader finishes processing materials.
          * @param loader reference to loader.
          */
         @Override
-        public void onLoadEnd(MaterialLoader loader) { }
+        public void onLoadEnd(MaterialLoader loader) {
+            //no action required
+        }
 
         /**
          * Called when a texture assigned to a material must be validated to

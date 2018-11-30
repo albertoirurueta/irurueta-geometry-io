@@ -614,6 +614,9 @@ public class LoaderSTL extends Loader {
                     do {
                         //read facet
                         word = readNonEmptyWord();
+                        if (word == null) {
+                            throw new LoaderException(); //undefined word
+                        }
                         
                         if (word.equalsIgnoreCase(ASCII_FACET)) {
                             //read normal
@@ -654,7 +657,6 @@ public class LoaderSTL extends Loader {
                             //check if chunk is full
                             if (verticesInChunk == loader.maxVerticesInChunk) {
                                 //no more vertices can be added to this chunk
-                                endOfChunk = true;
                                 break;
                             }                            
                             
@@ -664,7 +666,6 @@ public class LoaderSTL extends Loader {
                                 loader.maxVerticesInChunk) {
                                 //no more triangles vertices can be added to 
                                 //this chunk
-                                endOfChunk = true;
                                 break;                                                        
                             }
 
@@ -675,7 +676,6 @@ public class LoaderSTL extends Loader {
                                 loader.maxVerticesInChunk) {
                                 //no more triangles vertices can be added to 
                                 //this chunk
-                                endOfChunk = true;
                                 break;                                                        
                             }
                         } else if (word.equalsIgnoreCase(ASCII_END)) {
@@ -686,14 +686,12 @@ public class LoaderSTL extends Loader {
                         }
                         
                         //compute progress
-                        if (loader.listener != null) {
-                            if ((reader.getPosition() - previousPos) >=
-                                    progressStep) {
-                                previousPos = reader.getPosition();
-                                loader.listener.onLoadProgressChange(loader, 
-                                    (float)(reader.getPosition()) / 
-                                    (float)(fileLength));
-                            }
+                        if ((loader.listener != null) &&
+                                (reader.getPosition() - previousPos) >= progressStep) {
+                            previousPos = reader.getPosition();
+                            loader.listener.onLoadProgressChange(loader,
+                                    (float)(reader.getPosition()) /
+                                            (float)(fileLength));
                         }
                                                 
                     } while (!endOfFileReached);
@@ -750,14 +748,13 @@ public class LoaderSTL extends Loader {
                         currentTriangle++;
                         
                         //compute progress
-                        if (loader.listener != null) {
-                            if ((reader.getPosition() - previousPos) >=
-                                    progressStep) {
-                                previousPos = reader.getPosition();
-                                loader.listener.onLoadProgressChange(loader, 
-                                    (float)(reader.getPosition()) / 
-                                    (float)(fileLength));
-                            }
+                        if ((loader.listener != null) &&
+                                (reader.getPosition() - previousPos) >=
+                                        progressStep) {
+                            previousPos = reader.getPosition();
+                            loader.listener.onLoadProgressChange(loader,
+                                    (float)(reader.getPosition()) /
+                                            (float)(fileLength));
                         }
                         
                         if (verticesInChunk + VERTICES_PER_TRIANGLE >=
@@ -778,8 +775,8 @@ public class LoaderSTL extends Loader {
                 }
             } catch (IOException | LoaderException e) {
                 throw e;
-            }catch(Throwable t){
-                throw new LoaderException(t);
+            }catch(Exception e){
+                throw new LoaderException(e);
             }
             
             //trim arrays to store only needed data
@@ -800,11 +797,9 @@ public class LoaderSTL extends Loader {
             
             dataChunk.setNormalsData(normalsInChunkArray);
             
-            if (!hasNext()) {
+            if (!hasNext() && listener != null) {
                 //notify iterator finished
-                if (listener != null) {
-                    listener.onIteratorFinished(this);
-                }
+                listener.onIteratorFinished(this);
             }
             
             //if no more chunks are available, then close input reader

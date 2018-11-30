@@ -213,18 +213,15 @@ public class PropertyPLY {
         StringBuilder builder = new StringBuilder("property ");
         
         //depending if property is scalar or list
-        switch (type) {
-            case PROPERTY_PLY_SCALAR:
-                //add value data type
-                builder.append(valueType.getValue()).append(" ");
-                break;
-            case PROPERTY_PLY_LIST:
-                //indicate it is a list by adding length data type and values
-                //data type
-                builder.append("list ").append(lengthType.getValue()).append(
-                        " ").append(valueType.getValue()).append(" ");
-                        
-                break;
+        if (type == PropertyTypePLY.PROPERTY_PLY_SCALAR) {
+            //add value data type
+            builder.append(valueType.getValue()).append(" ");
+
+        } else if (type == PropertyTypePLY.PROPERTY_PLY_LIST) {
+            //indicate it is a list by adding length data type and values
+            //data type
+            builder.append("list ").append(lengthType.getValue()).append(
+                    " ").append(valueType.getValue()).append(" ");
         }
         //add name
         builder.append(name).append("\n");

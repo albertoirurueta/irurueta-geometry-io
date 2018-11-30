@@ -2485,6 +2485,8 @@ public class LoaderOBJ extends Loader {
                             loader.materials = materialLoader.load();
                             materialLoader.close(); //to release file resources
                         }
+                    } catch (LoaderException e) {
+                        throw e;
                     } catch(Exception e) {
                         throw new LoaderException(e);
                     }

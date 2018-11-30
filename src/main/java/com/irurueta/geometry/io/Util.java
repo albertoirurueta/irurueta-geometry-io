@@ -20,6 +20,12 @@ package com.irurueta.geometry.io;
  */
 @SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class Util {
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private Util() { }
     
     /**
      * Converts provided value to big endian.

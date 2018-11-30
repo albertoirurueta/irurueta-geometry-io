@@ -256,9 +256,12 @@ public class MeshWriterJson extends MeshWriter {
             writer.write("{\"textures\":[");
             LoaderIterator iter = loader.load();
             
-            float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, 
-                    minZ = Float.MAX_VALUE, maxX = -Float.MAX_VALUE, 
-                    maxY = -Float.MAX_VALUE, maxZ = -Float.MAX_VALUE;
+            float minX = Float.MAX_VALUE;
+            float minY = Float.MAX_VALUE;
+            float minZ = Float.MAX_VALUE;
+            float maxX = -Float.MAX_VALUE;
+            float maxY = -Float.MAX_VALUE;
+            float maxZ = -Float.MAX_VALUE;
             
             //write array opening
             writer.write("],\"chunks\":[");   
@@ -440,9 +443,6 @@ public class MeshWriterJson extends MeshWriter {
                 }
                 
                 writer.flush();
-                //to avoid out of memory errors we attempt to force garbage
-                //collection if possible
-                System.gc();
             }
             //write array closing
             writer.write("],");
@@ -466,7 +466,7 @@ public class MeshWriterJson extends MeshWriter {
             
         } catch (LoaderException | IOException e) {
             throw e;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new LoaderException(e);
         }
 
@@ -515,20 +515,20 @@ public class MeshWriterJson extends MeshWriter {
             //write teture file data as base64
             writer.flush(); //flush to sync writer and stream
 
- 
-            InputStream textureStream = new FileInputStream(textureFile);
-            byte[] imageData = new byte[(int)textureFile.length()];
-            //noinspection ResultOfMethodCallIgnored
-            textureStream.read(imageData);
-            
-            //convert image byte array into Base64 string
-            //TODO: could we use a Base64OutputStream to reduce memory usage,
-            //but doing the same replacement for safe json generation?
-            String base64 = Base64.encodeBase64String(imageData);
-            base64 = base64.replace("/", "\\/");
-            writer.write(base64);
-            writer.flush();
-            textureStream.close();
+
+            try (InputStream textureStream = new FileInputStream(textureFile)) {
+                byte[] imageData = new byte[(int) textureFile.length()];
+
+                if (textureStream.read(imageData) > 0) {
+                    //convert image byte array into Base64 string
+                    //TODO: could we use a Base64OutputStream to reduce memory usage,
+                    //but doing the same replacement for safe json generation?
+                    String base64 = Base64.encodeBase64String(imageData);
+                    base64 = base64.replace("/", "\\/");
+                    writer.write(base64);
+                    writer.flush();
+                }
+            }
             writer.write("\"");
         }
         writer.write("}");

@@ -516,13 +516,13 @@ public class MeshWriterBinary extends MeshWriter {
         dataStream.writeLong(length);
         
         //write file data
-        InputStream textureStream = new FileInputStream(textureFile);
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int n;
-        while ((n = textureStream.read(buffer)) > 0) {
-            dataStream.write(buffer, 0, n);
+        try (InputStream textureStream = new FileInputStream(textureFile)) {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int n;
+            while ((n = textureStream.read(buffer)) > 0) {
+                dataStream.write(buffer, 0, n);
+            }
+            dataStream.flush();
         }
-        dataStream.flush();
-        textureStream.close();
     }
 }
