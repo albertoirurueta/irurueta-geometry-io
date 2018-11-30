@@ -324,16 +324,7 @@ public class LoaderBinary extends Loader {
             this.loader = loader;
             listener = null;
         }
-        
-        /**
-         * Method to set listener of this loader iterator.
-         * This listener will be notified when the loading process finishes.
-         * @param listener listener of this loader iterator.
-         */
-        public void setListener(LoaderIteratorListener listener) {
-            this.listener = listener;
-        }
-        
+
         /**
          * Returns listener of this loader iterator.
          * This listener will be notified when the loading process finishes.
@@ -341,6 +332,15 @@ public class LoaderBinary extends Loader {
          */
         public LoaderIteratorListener getListener() {
             return listener;
+        }
+
+        /**
+         * Method to set listener of this loader iterator.
+         * This listener will be notified when the loading process finishes.
+         * @param listener listener of this loader iterator.
+         */
+        public void setListener(LoaderIteratorListener listener) {
+            this.listener = listener;
         }
 
         /**

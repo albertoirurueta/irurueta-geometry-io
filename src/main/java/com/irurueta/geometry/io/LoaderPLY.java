@@ -496,7 +496,19 @@ public class LoaderPLY extends Loader {
         internalSetAllowDuplicateVerticesInChunk(allowDuplicateVerticesInChunk);
         internalSetMaxStreamPositions(maxStreamPositions);
     }
-    
+
+    /**
+     * Returns maximum number of vertices to keep in a chunk of data.
+     * By default this is the maximum values stored in a short is 65535. This is
+     * so that data chunks can be compatible with technologies such as openGL
+     * where vertex indices are short values, and hence only 65535 vertices can
+     * be indexed at a time.
+     * @return Maximum number of vertices to keep in a chunk of data.
+     */
+    public int getMaxVerticesInChunk() {
+        return maxVerticesInChunk;
+    }
+
     /**
      * Sets maximum number of vertices to keep in a chunk of data.
      * @param maxVerticesInChunk Indicates maximum number of vertices to keep in
@@ -513,33 +525,17 @@ public class LoaderPLY extends Loader {
         }
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
     }
-    
+
     /**
-     * Returns maximum number of vertices to keep in a chunk of data.
-     * By default this is the maximum values stored in a short is 65535. This is
-     * so that data chunks can be compatible with technologies such as openGL
-     * where vertex indices are short values, and hence only 65535 vertices can 
-     * be indexed at a time.
-     * @return Maximum number of vertices to keep in a chunk of data.
+     * Determines whether duplicate vertices in a chunk are allowed. By allowing
+     * duplicate vertices, PLY loading can be speed up a little bit at the
+     * expense of getting larger sets of data which will contain redundant
+     * vertices. If your environment is memory constrained, this should be
+     * disabled. By default it is disabled.
+     * @return Determines whether duplicate vertices in a chunk are allowed.
      */
-    public int getMaxVerticesInChunk() {
-        return maxVerticesInChunk;
-    }
-    
-    /**
-     * Internal method to set maximum number of vertices to keep in a chunk of
-     * data.
-     * @param maxVerticesInChunk Indicates maximum number of vertices to keep in
-     * a chunk of data.
-     * @throws IllegalArgumentException Raised if maximum number of vertices is
-     * smaller than MIN_MAX_VERTICES_IN_CHUNK.
-     */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
-        if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.maxVerticesInChunk = maxVerticesInChunk;
+    public boolean areDuplicateVerticesInChunkAllowed() {
+        return allowDuplicateVerticesInChunk;
     }
 
     /**
@@ -559,31 +555,21 @@ public class LoaderPLY extends Loader {
         }
         internalSetAllowDuplicateVerticesInChunk(allow);
     }
-    
+
     /**
-     * Determines whether duplicate vertices in a chunk are allowed. By allowing
-     * duplicate vertices, PLY loading can be speed up a little bit at the
-     * expense of getting larger sets of data which will contain redundant
-     * vertices. If your environment is memory constrained, this should be
-     * disabled. By default it is disabled.
-     * @return Determines whether duplicate vertices in a chunk are allowed.
+     * Returns maximum number of stream positions to be cached.
+     * This loader keeps track of a set of stream positions that have been
+     * parsed on ASCII mode. By keeping a cache of positions loading times can
+     * be largely reduced at the expense of using more memory during loading.
+     * By default this is set to 1000000 positions.
+     * This only has effect on ASCII PLY files. For binary PLY files this
+     * setting is ignored.
+     * @return maximum number of stream positions to be cached.
      */
-    public boolean areDuplicateVerticesInChunkAllowed() {
-        return allowDuplicateVerticesInChunk;
+    public long getMaxStreamPositions() {
+        return maxStreamPositions;
     }
-    
-    /**
-     * Internal method to set whether duplicate vertices in a chunk are allowed. 
-     * By allowing duplicate vertices, PLY loading can be speed up a little bit 
-     * at the expense of getting larger sets of data which will contain 
-     * redundant vertices. If your environment is memory constrained, this 
-     * should be disabled. By default it is disabled.
-     * @param allow Indicates whether duplicates will be allowed or not.
-     */
-    private void internalSetAllowDuplicateVerticesInChunk(boolean allow) {
-        allowDuplicateVerticesInChunk = allow;
-    }
-    
+
     /**
      * Sets maximum number of stream positions to be cached.
      * This loader keeps track of a set of stream positions that have been 
@@ -604,40 +590,6 @@ public class LoaderPLY extends Loader {
             throw new LockedException();
         }
         internalSetMaxStreamPositions(maxStreamPositions);
-    }
-    
-    /**
-     * Returns maximum number of stream positions to be cached.
-     * This loader keeps track of a set of stream positions that have been 
-     * parsed on ASCII mode. By keeping a cache of positions loading times can
-     * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
-     * This only has effect on ASCII PLY files. For binary PLY files this 
-     * setting is ignored.
-     * @return maximum number of stream positions to be cached.
-     */
-    public long getMaxStreamPositions() {
-        return maxStreamPositions;
-    }
-    
-    /**
-     * Internal method to set maximum number of stream positions to be cached.
-     * This loader keeps track of a set of stream positions that have been 
-     * parsed on ASCII mode. By keeping a cache of positions loading times can
-     * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
-     * This only has effect on ASCII PLY files. For binary PLY files this 
-     * setting is ignored.
-     * @param maxStreamPositions Maximum number of stream positions to be cached.
-     * @throws IllegalArgumentException Raised if provided value is lower than
-     * DEFAULT_MAX_STREAM_POSITIONS.
-     */    
-    private void internalSetMaxStreamPositions(long maxStreamPositions) {
-        if (maxStreamPositions < MIN_STREAM_POSITIONS) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.maxStreamPositions = maxStreamPositions;
     }
 
     /**
@@ -685,315 +637,6 @@ public class LoaderPLY extends Loader {
         setLocked(false);
         return validStream;
     }
-    
-    /**
-     * Reads header of provided file and initializes iterator to read data 
-     * chunks of this file.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     * @throws IOException if an i/O error occurs.
-     * @throws LoaderException Raised if file is not a valid PLY or is corrupted
-     */
-    private void readFromStream() 
-            throws LockedException, IOException, LoaderException {
-        
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        setLocked(true);
-        if (listener != null) {
-            listener.onLoadStart(this);
-        }
-        
-        if (reader == null) {
-            throw new IOException();
-        }
-        
-        if (!validityChecked) {
-            readHeader();
-        }
-        if (!validStream) {
-            setLocked(false);
-            throw new LoaderException();
-        }
-        
-        loaderIterator = new LoaderIteratorPLY(this);
-        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
-    }
-    
-    /**
-     * Reads the header of provided file.
-     * @throws IOException if an I/O error occurs.
-     * @throws LoaderException  Raised if file is not a valid PLY or is 
-     * corrupted.
-     */
-    private void readHeader() throws IOException, LoaderException {
-        if (reader == null) {
-            throw new IOException();
-        }
-        
-        validityChecked = true;
-        
-        //first line must be equal to string "ply"
-        String str = reader.readLine();
-        
-        if (!str.equals("ply") || reader.isEndOfStream()) {
-            validStream = false;
-            throw new LoaderException();
-        } 
-        
-        //second line contains format (i.e: format ascii 1.0)
-        //must start with "format" word
-        do {
-            //loop is to avoid empty strings
-            //(because of duplicate spaces or carriage returns)
-            str = reader.readWord();
-        } while ((str.length() == 0) && !reader.isEndOfStream());
-        
-        if (!str.equals("format") || reader.isEndOfStream()) {
-            validStream = false;
-            throw new LoaderException();
-        }
-        
-        //next to format word comes storage mode
-        do {
-            //loop to avoid empty strings
-            str = reader.readWord();
-        } while ((str.length() == 0) && !reader.isEndOfStream());
-        
-        if (reader.isEndOfStream()) {
-            validStream = false;
-            throw new LoaderException();
-        }
-        
-        PLYStorageMode storageMode;
-        switch (str) {
-            case "ascii":
-                //ASCII storage mode
-                storageMode = PLYStorageMode.PLY_ASCII;
-                break;
-            case "binary_big_endian":
-                //Binary big endian storage mode
-                storageMode = PLYStorageMode.PLY_BIG_ENDIAN;
-                break;
-            case "binary_little_endian":
-                //Binary little endian storage mode
-                storageMode = PLYStorageMode.PLY_LITTLE_ENDIAN;
-                break;
-            default:
-                //non supported storage mode
-                validStream = false;
-                throw new LoaderException();
-        }
-        
-        //next comes version (always must be 1.0)
-        do {
-            //loop to avoid empty strings
-            str = reader.readWord();
-        } while ((str.length() == 0) && !reader.isEndOfStream());
-        
-        if (!str.equals("1.0") || reader.isEndOfStream()) {
-            validStream = false;
-            throw new LoaderException();
-        }
-        
-        //instantiate header member
-        header = new HeaderPLY();
-        //set storage mode
-        header.setStorageMode(storageMode);
-        
-        //read until we find the line end_header
-        boolean endOfHeader = false;
-        ElementPLY lastElement = null;
-        PropertyPLY property;
-        do {
-            do {
-                //loop to avoid empty strings
-                str = reader.readWord();
-            } while ((str.length() == 0) && !reader.isEndOfStream());
-            
-            if (str.equals("comment")) {
-                //if word is "comment", read until end of line
-                str = reader.readLine();
-                //add comment to list of comments in header
-                header.getComments().add(str);
-            } else if (str.equals("obj_info")) {
-                //if word if "obj_info", read until end of line
-                str = reader.readLine();
-                //add obj_info to list of obj_infos in header
-                header.getObjInfos().add(str);
-            } else if (str.endsWith("element")) {
-                //and element has been found. We read its information and
-                //add it to the list of elements
-                
-                //next word contains element name
-                do {
-                    //loop to avoid empty strings
-                    str = reader.readWord();
-                } while ((str.length() == 0) && !reader.isEndOfStream());
-                
-                if (reader.isEndOfStream()) {
-                    validStream = false;
-                    throw new LoaderException();
-                }
-                
-                String elementName = str;
-                
-                //next word contains number of instances of this element
-                do {
-                    str = reader.readWord();
-                } while ((str.length() == 0) && !reader.isEndOfStream());
-                
-                if (reader.isEndOfStream()) {
-                    validStream = false;
-                    throw new LoaderException();
-                }
-
-                long elementInstances;
-                try {
-                    elementInstances = Long.parseLong(str);
-                } catch (NumberFormatException e) {
-                    throw new IOException(e);
-                }
-                
-                //instantiate element
-                lastElement = new ElementPLY(elementName, elementInstances);
-                
-                //add element to header
-                header.getElements().add(lastElement);
-            } else if (str.equals("property")) {
-                //a property for last element that has been found. We read its 
-                //information and add it to the element
-                
-                if (lastElement == null) {
-                    //no previous element was defined
-                    validStream = false;
-                    throw new LoaderException();
-                }
-                
-                //read next word
-                do {
-                    //loop to avoid empty strings
-                    str = reader.readWord();
-                } while ((str.length() == 0) && !reader.isEndOfStream());
-                
-                if (reader.isEndOfStream()) {
-                    validStream = false;
-                    throw new LoaderException();
-                }
-                
-                if (str.equals("list")) {
-                    //property is a list
-                    DataTypePLY lengthDataType;
-                    DataTypePLY valueDataType;
-                    try {
-                        //read length data type
-                        do{
-                            //loop to avoid empty strings
-                            str = reader.readWord();
-                        }while ((str.length() == 0) && !reader.isEndOfStream());
-                        
-                        if (reader.isEndOfStream()) {
-                            validStream = false;
-                            throw new LoaderException();
-                        }
-                        
-                        lengthDataType = wordToDataType(str);
-                        
-                        //read value data type
-                        do {
-                            str = reader.readWord();
-                        } while ((str.length() == 0) && !reader.isEndOfStream());
-                        
-                        if (reader.isEndOfStream()) {
-                            validStream = false;
-                            throw new LoaderException();
-                        }
-                        
-                        valueDataType = wordToDataType(str);
-                    } catch (LoaderException ex) {
-                        //some error was found
-                        validStream = false;
-                        throw ex;
-                    }
-                    
-                    //read property name
-                    do {
-                        str = reader.readWord();                        
-                    } while ((str.length() == 0) && !reader.isEndOfStream());
-                    
-                    if (reader.isEndOfStream()) {
-                        validStream = false;
-                        throw new LoaderException();
-                    }
-                    
-                    String propertyName = str;
-                    
-                    property = new PropertyPLY(propertyName, lengthDataType, 
-                            valueDataType);
-                } else {
-                    //property is scalar
-                    //word that we have already read should contain value data 
-                    //type
-                    
-                    DataTypePLY valueDataType;
-                    try {
-                        valueDataType = wordToDataType(str);
-                    } catch (LoaderException ex) {
-                        //invalid data type was found
-                        validStream = false;
-                        throw ex;
-                    }
-                    //read property name
-                    do {
-                        str = reader.readWord();
-                    } while ((str.length() == 0) && !reader.isEndOfStream());
-                    
-                    if (reader.isEndOfStream()) {
-                        validStream = false;
-                        throw new LoaderException();
-                    }
-                    
-                    String propertyName = str;
-                    
-                    property = new PropertyPLY(propertyName, valueDataType);
-                }
-                try {
-                    //add property to last element
-                    lastElement.getProperties().add(property);
-                } catch (NotAvailableException ex) {
-                    validStream = false;
-                    throw new LoaderException(ex);
-                }
-            } else if (str.equals("end_header")) {
-                //end of header has been found
-                endOfHeader = true;
-            } else {
-                //something else that cannot be understood
-                validStream = false;
-                throw new LoaderException();
-            }
-        } while (!endOfHeader);
-        
-        validStream = true;
-    }
-    
-    /**
-     * Converts a word into a data type. If an unsupported word is found then a
-     * LoaderException is raised.
-     * @param word word to be converted.
-     * @return DataType obtained from word.
-     * @throws LoaderException  Raised if file is not a valid PLY or is 
-     * corrupted (i.e. an unsupported word is found).
-     */
-    private DataTypePLY wordToDataType(String word) throws LoaderException {
-        DataTypePLY dataType = DataTypePLY.forValue(word);
-        if (dataType == null) {
-            throw new LoaderException();
-        }
-        return dataType;
-    }
 
     /**
      * Starts the loading process.
@@ -1017,7 +660,364 @@ public class LoaderPLY extends Loader {
         readFromStream();
         return loaderIterator;
     }
-    
+
+    /**
+     * Internal method to set maximum number of vertices to keep in a chunk of
+     * data.
+     * @param maxVerticesInChunk Indicates maximum number of vertices to keep in
+     * a chunk of data.
+     * @throws IllegalArgumentException Raised if maximum number of vertices is
+     * smaller than MIN_MAX_VERTICES_IN_CHUNK.
+     */
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
+        if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
+            throw new IllegalArgumentException();
+        }
+
+        this.maxVerticesInChunk = maxVerticesInChunk;
+    }
+
+    /**
+     * Internal method to set whether duplicate vertices in a chunk are allowed.
+     * By allowing duplicate vertices, PLY loading can be speed up a little bit
+     * at the expense of getting larger sets of data which will contain
+     * redundant vertices. If your environment is memory constrained, this
+     * should be disabled. By default it is disabled.
+     * @param allow Indicates whether duplicates will be allowed or not.
+     */
+    private void internalSetAllowDuplicateVerticesInChunk(boolean allow) {
+        allowDuplicateVerticesInChunk = allow;
+    }
+
+    /**
+     * Internal method to set maximum number of stream positions to be cached.
+     * This loader keeps track of a set of stream positions that have been
+     * parsed on ASCII mode. By keeping a cache of positions loading times can
+     * be largely reduced at the expense of using more memory during loading.
+     * By default this is set to 1000000 positions.
+     * This only has effect on ASCII PLY files. For binary PLY files this
+     * setting is ignored.
+     * @param maxStreamPositions Maximum number of stream positions to be cached.
+     * @throws IllegalArgumentException Raised if provided value is lower than
+     * DEFAULT_MAX_STREAM_POSITIONS.
+     */
+    private void internalSetMaxStreamPositions(long maxStreamPositions) {
+        if (maxStreamPositions < MIN_STREAM_POSITIONS) {
+            throw new IllegalArgumentException();
+        }
+
+        this.maxStreamPositions = maxStreamPositions;
+    }
+
+    /**
+     * Reads header of provided file and initializes iterator to read data
+     * chunks of this file.
+     * @throws LockedException Raised if this instance is locked because loading
+     * is in progress.
+     * @throws IOException if an i/O error occurs.
+     * @throws LoaderException Raised if file is not a valid PLY or is corrupted
+     */
+    private void readFromStream()
+            throws LockedException, IOException, LoaderException {
+
+        if (isLocked()) {
+            throw new LockedException();
+        }
+
+        setLocked(true);
+        if (listener != null) {
+            listener.onLoadStart(this);
+        }
+
+        if (reader == null) {
+            throw new IOException();
+        }
+
+        if (!validityChecked) {
+            readHeader();
+        }
+        if (!validStream) {
+            setLocked(false);
+            throw new LoaderException();
+        }
+
+        loaderIterator = new LoaderIteratorPLY(this);
+        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
+    }
+
+    /**
+     * Reads the header of provided file.
+     * @throws IOException if an I/O error occurs.
+     * @throws LoaderException  Raised if file is not a valid PLY or is
+     * corrupted.
+     */
+    private void readHeader() throws IOException, LoaderException {
+        if (reader == null) {
+            throw new IOException();
+        }
+
+        validityChecked = true;
+
+        //first line must be equal to string "ply"
+        String str = reader.readLine();
+
+        if (!str.equals("ply") || reader.isEndOfStream()) {
+            validStream = false;
+            throw new LoaderException();
+        }
+
+        //second line contains format (i.e: format ascii 1.0)
+        //must start with "format" word
+        do {
+            //loop is to avoid empty strings
+            //(because of duplicate spaces or carriage returns)
+            str = reader.readWord();
+        } while ((str.length() == 0) && !reader.isEndOfStream());
+
+        if (!str.equals("format") || reader.isEndOfStream()) {
+            validStream = false;
+            throw new LoaderException();
+        }
+
+        //next to format word comes storage mode
+        do {
+            //loop to avoid empty strings
+            str = reader.readWord();
+        } while ((str.length() == 0) && !reader.isEndOfStream());
+
+        if (reader.isEndOfStream()) {
+            validStream = false;
+            throw new LoaderException();
+        }
+
+        PLYStorageMode storageMode;
+        switch (str) {
+            case "ascii":
+                //ASCII storage mode
+                storageMode = PLYStorageMode.PLY_ASCII;
+                break;
+            case "binary_big_endian":
+                //Binary big endian storage mode
+                storageMode = PLYStorageMode.PLY_BIG_ENDIAN;
+                break;
+            case "binary_little_endian":
+                //Binary little endian storage mode
+                storageMode = PLYStorageMode.PLY_LITTLE_ENDIAN;
+                break;
+            default:
+                //non supported storage mode
+                validStream = false;
+                throw new LoaderException();
+        }
+
+        //next comes version (always must be 1.0)
+        do {
+            //loop to avoid empty strings
+            str = reader.readWord();
+        } while ((str.length() == 0) && !reader.isEndOfStream());
+
+        if (!str.equals("1.0") || reader.isEndOfStream()) {
+            validStream = false;
+            throw new LoaderException();
+        }
+
+        //instantiate header member
+        header = new HeaderPLY();
+        //set storage mode
+        header.setStorageMode(storageMode);
+
+        //read until we find the line end_header
+        boolean endOfHeader = false;
+        ElementPLY lastElement = null;
+        PropertyPLY property;
+        do {
+            do {
+                //loop to avoid empty strings
+                str = reader.readWord();
+            } while ((str.length() == 0) && !reader.isEndOfStream());
+
+            if (str.equals("comment")) {
+                //if word is "comment", read until end of line
+                str = reader.readLine();
+                //add comment to list of comments in header
+                header.getComments().add(str);
+            } else if (str.equals("obj_info")) {
+                //if word if "obj_info", read until end of line
+                str = reader.readLine();
+                //add obj_info to list of obj_infos in header
+                header.getObjInfos().add(str);
+            } else if (str.endsWith("element")) {
+                //and element has been found. We read its information and
+                //add it to the list of elements
+
+                //next word contains element name
+                do {
+                    //loop to avoid empty strings
+                    str = reader.readWord();
+                } while ((str.length() == 0) && !reader.isEndOfStream());
+
+                if (reader.isEndOfStream()) {
+                    validStream = false;
+                    throw new LoaderException();
+                }
+
+                String elementName = str;
+
+                //next word contains number of instances of this element
+                do {
+                    str = reader.readWord();
+                } while ((str.length() == 0) && !reader.isEndOfStream());
+
+                if (reader.isEndOfStream()) {
+                    validStream = false;
+                    throw new LoaderException();
+                }
+
+                long elementInstances;
+                try {
+                    elementInstances = Long.parseLong(str);
+                } catch (NumberFormatException e) {
+                    throw new IOException(e);
+                }
+
+                //instantiate element
+                lastElement = new ElementPLY(elementName, elementInstances);
+
+                //add element to header
+                header.getElements().add(lastElement);
+            } else if (str.equals("property")) {
+                //a property for last element that has been found. We read its
+                //information and add it to the element
+
+                if (lastElement == null) {
+                    //no previous element was defined
+                    validStream = false;
+                    throw new LoaderException();
+                }
+
+                //read next word
+                do {
+                    //loop to avoid empty strings
+                    str = reader.readWord();
+                } while ((str.length() == 0) && !reader.isEndOfStream());
+
+                if (reader.isEndOfStream()) {
+                    validStream = false;
+                    throw new LoaderException();
+                }
+
+                if (str.equals("list")) {
+                    //property is a list
+                    DataTypePLY lengthDataType;
+                    DataTypePLY valueDataType;
+                    try {
+                        //read length data type
+                        do{
+                            //loop to avoid empty strings
+                            str = reader.readWord();
+                        }while ((str.length() == 0) && !reader.isEndOfStream());
+
+                        if (reader.isEndOfStream()) {
+                            validStream = false;
+                            throw new LoaderException();
+                        }
+
+                        lengthDataType = wordToDataType(str);
+
+                        //read value data type
+                        do {
+                            str = reader.readWord();
+                        } while ((str.length() == 0) && !reader.isEndOfStream());
+
+                        if (reader.isEndOfStream()) {
+                            validStream = false;
+                            throw new LoaderException();
+                        }
+
+                        valueDataType = wordToDataType(str);
+                    } catch (LoaderException ex) {
+                        //some error was found
+                        validStream = false;
+                        throw ex;
+                    }
+
+                    //read property name
+                    do {
+                        str = reader.readWord();
+                    } while ((str.length() == 0) && !reader.isEndOfStream());
+
+                    if (reader.isEndOfStream()) {
+                        validStream = false;
+                        throw new LoaderException();
+                    }
+
+                    String propertyName = str;
+
+                    property = new PropertyPLY(propertyName, lengthDataType,
+                            valueDataType);
+                } else {
+                    //property is scalar
+                    //word that we have already read should contain value data
+                    //type
+
+                    DataTypePLY valueDataType;
+                    try {
+                        valueDataType = wordToDataType(str);
+                    } catch (LoaderException ex) {
+                        //invalid data type was found
+                        validStream = false;
+                        throw ex;
+                    }
+                    //read property name
+                    do {
+                        str = reader.readWord();
+                    } while ((str.length() == 0) && !reader.isEndOfStream());
+
+                    if (reader.isEndOfStream()) {
+                        validStream = false;
+                        throw new LoaderException();
+                    }
+
+                    String propertyName = str;
+
+                    property = new PropertyPLY(propertyName, valueDataType);
+                }
+                try {
+                    //add property to last element
+                    lastElement.getProperties().add(property);
+                } catch (NotAvailableException ex) {
+                    validStream = false;
+                    throw new LoaderException(ex);
+                }
+            } else if (str.equals("end_header")) {
+                //end of header has been found
+                endOfHeader = true;
+            } else {
+                //something else that cannot be understood
+                validStream = false;
+                throw new LoaderException();
+            }
+        } while (!endOfHeader);
+
+        validStream = true;
+    }
+
+    /**
+     * Converts a word into a data type. If an unsupported word is found then a
+     * LoaderException is raised.
+     * @param word word to be converted.
+     * @return DataType obtained from word.
+     * @throws LoaderException  Raised if file is not a valid PLY or is
+     * corrupted (i.e. an unsupported word is found).
+     */
+    private DataTypePLY wordToDataType(String word) throws LoaderException {
+        DataTypePLY dataType = DataTypePLY.forValue(word);
+        if (dataType == null) {
+            throw new LoaderException();
+        }
+        return dataType;
+    }
+
     /**
      * Internal listener to be notified when loading process finishes.
      * This listener is used to free resources when loading process finishes.

@@ -38,40 +38,9 @@ public class LoaderSTL extends Loader {
      */
     public static final float PROGRESS_DELTA = 0.01f;
 
-    /**
-     * Constant below enabled periodic garbage collection. This helps to reduce
-     * memory usage, which is of special interest on mobile devices and servers.
-     */
-    public static final boolean DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION =
-            true;
-
-    /**
-     * Constant defining number of iterations to wait before starting garbage
-     * collection.
-     * The lower the value the more frequent garbage collection will be and
-     * hence the smaller the memory usage, at the expense of slower execution.
-     */
-    public static final int DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION = 10000;
-
-
     private LoaderIteratorSTL loaderIterator;
+
     private int maxVerticesInChunk;
-    
-    /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled.
-     * By default it is enabled.
-     */
-    private boolean periodicGarbageCollection;
-    
-    /**
-     * Number of attempts to clean memory before garbage collection is actually
-     * demanded. This only takes effect if periodic garbage collection is 
-     * enabled. By default this is set to 10000 attempts.
-     */
-    private int itersBeforeGarbageCollection;
 
     /**
      * Constructor.
@@ -79,9 +48,6 @@ public class LoaderSTL extends Loader {
     public LoaderSTL() {
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -92,12 +58,9 @@ public class LoaderSTL extends Loader {
      * @throws IllegalArgumentException if maximum number of vertices allowed in
      * a chunk is lower than 1.
      */    
-    public LoaderSTL(int maxVerticesInChunk) throws IllegalArgumentException {
+    public LoaderSTL(int maxVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
 
     /**
@@ -109,9 +72,6 @@ public class LoaderSTL extends Loader {
         super(f);
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -125,13 +85,10 @@ public class LoaderSTL extends Loader {
      * @throws IOException if an I/O error occurs.
      */    
     public LoaderSTL(File f, int maxVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
 
     /**
@@ -142,9 +99,6 @@ public class LoaderSTL extends Loader {
     public LoaderSTL(LoaderListener listener) {
         super(listener);
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -157,14 +111,10 @@ public class LoaderSTL extends Loader {
      * @throws IllegalArgumentException if maximum number of vertices allowed in
      * a chunk is lower than 1.
      */    
-    public LoaderSTL(LoaderListener listener, int maxVerticesInChunk)
-            throws IllegalArgumentException {
+    public LoaderSTL(LoaderListener listener, int maxVerticesInChunk) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
 
     /**
@@ -178,9 +128,6 @@ public class LoaderSTL extends Loader {
         super(f, listener);
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
     
     /**
@@ -196,13 +143,10 @@ public class LoaderSTL extends Loader {
      * @throws IOException if an I/O error occurs.
      */    
     public LoaderSTL(File f, LoaderListener listener, int maxVerticesInChunk) 
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        
-        periodicGarbageCollection = DEFAULT_ENABLE_PERIODIC_GARBAGE_COLLECTION;
-        itersBeforeGarbageCollection = DEFAULT_ITERS_BEFORE_GARBAGE_COLLECTION;        
     }
 
     /**
@@ -214,7 +158,7 @@ public class LoaderSTL extends Loader {
      * @throws LockedException if this loader is currently loading a file.
      */    
     public void setMaxVerticesInChunk(int maxVerticesInChunk)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -230,87 +174,6 @@ public class LoaderSTL extends Loader {
     public int getMaxVerticesInChunk() {
         return maxVerticesInChunk;
     }
-    
-    /**
-     * Internal method to set maximum number of vertices allowed in a chunk.
-     * This method is reused both in the constructor and in the setter of
-     * maximum number of vertices allowed in a chunk.
-     * @param maxVerticesInChunk maximum allowed number of vertices to be set.
-     * @throws IllegalArgumentException  if provided value is lower than 1.
-     */    
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk)
-            throws IllegalArgumentException {
-        if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.maxVerticesInChunk = maxVerticesInChunk;
-    }
-            
-    /**
-     * Indicates if garbage collection should be attempted from time to time
-     * to reduce memory usage. Garbage collection might slow down slightly the
-     * loading process but in memory constrained environments this setting 
-     * should be enabled. By default it is enabled.
-     * @return True if periodic garbage collection is enabled, false otherwise.
-     */
-    public boolean isPeriodicGarbageCollection() {
-        return periodicGarbageCollection;
-    }
-    
-    /**
-     * Sets whether periodic garbage collection should be attempted from time to
-     * time to reduce memory usage. Garbage collection might slow down slightly
-     * the loading process but in memory constrained environments this setting
-     * should be enabled. By default it is enabled.
-     * @param periodicGarbageCollection True if periodic garbage collection must
-     * be enabled, false otherwise.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setPeriodicGarbageCollection(boolean periodicGarbageCollection)
-            throws LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        this.periodicGarbageCollection = periodicGarbageCollection;
-    }
-    
-    /**
-     * Returns number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection 
-     * is  enabled. By default this is set to 10000 attempts.
-     * @return Number of attempts to clean memory before garbage collection is
-     * actually demanded.
-     */
-    public int getItersBeforeGarbageCollection() {
-        return itersBeforeGarbageCollection;
-    }
-    
-    /**
-     * Sets number of attempts to clean memory before garbage collection is 
-     * actually demanded. This only takes effect if periodic garbage collection
-     * is enabled. By default this is set to 10000 attempts.
-     * @param itersBeforeGarbageCollection number of iterations before actually claiming grbage collection.
-     * @throws IllegalArgumentException if provided value is negative.
-     * @throws LockedException Raised if this instance is locked because loading
-     * is in progress.
-     */
-    public void setItersBeforeGarbageCollection(
-            int itersBeforeGarbageCollection) throws IllegalArgumentException,
-            LockedException {
-        if (isLocked()) {
-            throw new LockedException();
-        }
-        
-        if (itersBeforeGarbageCollection < 0) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.itersBeforeGarbageCollection = itersBeforeGarbageCollection;
-    }        
-    
 
     /**
      * If loader is ready to start loading a file.
@@ -379,7 +242,22 @@ public class LoaderSTL extends Loader {
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
-    
+
+    /**
+     * Internal method to set maximum number of vertices allowed in a chunk.
+     * This method is reused both in the constructor and in the setter of
+     * maximum number of vertices allowed in a chunk.
+     * @param maxVerticesInChunk maximum allowed number of vertices to be set.
+     * @throws IllegalArgumentException  if provided value is lower than 1.
+     */
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
+        if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
+            throw new IllegalArgumentException();
+        }
+
+        this.maxVerticesInChunk = maxVerticesInChunk;
+    }
+
     /**
      * Internal listener to be notified when loading process finishes.
      * This listener is used to free resources when loading process finishes.
@@ -404,7 +282,9 @@ public class LoaderSTL extends Loader {
             //load method
             try {
                 reader.seek(0); //attempt restart stream to initial position
-            } catch (Throwable ignore) { }
+            } catch (Exception ignore) {
+                //this is a best effort operation, if it fails it is ignored
+            }
 
 
             //on subsequent calls
@@ -546,14 +426,6 @@ public class LoaderSTL extends Loader {
         private int indicesInChunkSize;
                         
         /**
-         * Counter of number of times that garbage collection has been 
-         * requested. When this value exceeds the itersBeforeGarbageCollection,
-         * then an actual garbage collection is requested as long as this 
-         * feature is enabled.
-         */
-        private int gcCounter;
-        
-        /**
          * Indicates if file is in ASCII format or in binary format.
          */
         private boolean isAscii;
@@ -686,24 +558,6 @@ public class LoaderSTL extends Loader {
         public LoaderIteratorListener getListener() {
             return listener;
         }
-
-        /**
-         * Attempts to clear memory.
-         * If garbage collection is enabled this method will attempt a garbage
-         * collection after being called a few times.
-         * Memory will then be released depending on system implementation.
-         */
-        @SuppressWarnings("Duplicates")
-        private void cleanMemory() {
-            if(loader.periodicGarbageCollection){
-                gcCounter++;
-                if(gcCounter > loader.itersBeforeGarbageCollection){
-                    System.gc();
-                    gcCounter = 0;
-                }
-            }
-        }
-        
         
         /**
          * Indicates if there is another chunk of data to be loaded.
@@ -957,8 +811,7 @@ public class LoaderSTL extends Loader {
             if (!hasNext()) {
                 reader.close();
             }
-            
-            cleanMemory(); // to reduce memory consumption            
+
             return dataChunk;
         }
          
@@ -1065,8 +918,6 @@ public class LoaderSTL extends Loader {
             //set new arrays and new size
             indicesInChunkArray = newIndicesInChunkArray;
             indicesInChunkSize = newIndicesInChunkSize;
-            
-            cleanMemory(); //to reduce memory consumption            
         }             
 
         /**
@@ -1106,8 +957,6 @@ public class LoaderSTL extends Loader {
                 //allow garbage collection
                 indicesInChunkArray = null;
             }
-            
-            cleanMemory(); //to reduce memory consumption            
         }        
         
         /**

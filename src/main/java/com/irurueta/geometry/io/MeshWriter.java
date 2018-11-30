@@ -165,14 +165,18 @@ public abstract class MeshWriter {
          * @param loader reference to loader.
          */
         @Override
-        public void onLoadStart(Loader loader) { }
+        public void onLoadStart(Loader loader) {
+            //no action needed
+        }
 
         /**
          * Method called when the loader ends processing a file.
          * @param loader reference to loader.
          */
         @Override
-        public void onLoadEnd(Loader loader) { }
+        public void onLoadEnd(Loader loader) {
+            //no action needed
+        }
 
         /**
          * Method called when loading progress changes enough to be notified.

@@ -96,9 +96,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         }
         int length = Math.min(buffer.remaining(), b.length);
         if (length > 0) {
-            try {
-                buffer.get(b, 0, length);
-            } catch (BufferUnderflowException ignore) { }
+            buffer.get(b, 0, length);
         }
         read = true;
         return length;
@@ -125,9 +123,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         }
         int length = Math.min(buffer.remaining(), len);
         if (length > 0) {
-            try {
-                buffer.get(b, off, length);
-            } catch (BufferUnderflowException ignore) { }
+            buffer.get(b, off, length);
         }
         read = true;
         return length;
@@ -429,10 +425,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         int fourthIntByte = 0xff & ((value << 24) >> 24);
         
         //return it as integer
-        return (long) (((firstIntByte << 24) |
+        return (long) ((firstIntByte << 24) |
                 (secondIntByte << 16) |
                 (thirdIntByte << 8) |
-                fourthIntByte));
+                fourthIntByte);
     }
 
     /**
@@ -603,8 +599,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IllegalArgumentException if no pattern characters are provided.
      */    
     @Override
-    public String readUntilAnyOfTheseCharactersIsFound(String pattern) 
-            throws IllegalArgumentException {
+    public String readUntilAnyOfTheseCharactersIsFound(String pattern) {
         
         if (pattern.length() == 0) {
             throw new IllegalArgumentException();
@@ -615,20 +610,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         StringBuilder stringBuffer = new StringBuilder();
         byte [] charBuffer = new byte[1];        
         String character;
-        for (;;) {
-            if (buffer.hasRemaining()) {
-                charBuffer[0] = buffer.get();
-                character = new String(charBuffer);
-                if (pattern.contains(character)) {
-                    //character found
-                    break;
-                }
-                //add character to output buffer
-                stringBuffer.append(character);
-            } else {
-                //no more data available in stream
+        while (buffer.hasRemaining()) {
+            charBuffer[0] = buffer.get();
+            character = new String(charBuffer);
+            if (pattern.contains(character)) {
+                //character found
                 break;
             }
+            //add character to output buffer
+            stringBuffer.append(character);
         }
         
         return stringBuffer.toString();

@@ -131,11 +131,6 @@ public class Material {
     private Illumination illumination;
     
     /**
-     * Constructor.
-     */
-    public Material() { }
-        
-    /**
      * Returns id of material.
      * This value is generated automatically when loading a 3D file and it is 
      * intended to uniquely identify a material

@@ -320,9 +320,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
                 
                 currentMaterial.setBumpTextureMap(tex);
             }
-        } catch (LoaderException e) {
-            throw e;
-        } catch (Throwable t) {
+        } catch (Exception t) {
             throw new LoaderException(t);
         }
     }
@@ -332,7 +330,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @return true if materials have been loaded, false otherwise.
      */
     public boolean areMaterialsAvailable() {
-        return materials != null && materials.size() > 0;
+        return materials != null && !materials.isEmpty();
     }
 
     /**

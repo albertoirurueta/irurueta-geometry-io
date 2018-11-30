@@ -139,20 +139,7 @@ public abstract class MaterialLoader {
         this.listener = listener;
         textureValidationEnabled = DEFAULT_TEXTURE_VALIDATION_ENABLED;
     }
-    
-    /**
-     * Method called when an instance of this class is garbage collected.
-     * This method ensures that resources such as files get closed.
-     * @throws Throwable if something fails.
-     */
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        try {
-            close(); //attempt to close file resources
-        } catch (Throwable ignore) { }
-    }    
-    
+
     /**
      * Returns maximum allowed file size to keep cached in memory. Files 
      * exceeding this size will just be streamed.

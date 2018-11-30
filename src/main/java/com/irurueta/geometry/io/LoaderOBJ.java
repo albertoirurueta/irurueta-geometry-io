@@ -486,7 +486,17 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
+    /**
+     * Returns maximum number of vertices allowed in a chunk.
+     * Once this value is exceeded when loading a file, a new chunk of data is
+     * created.
+     * @return maximum number of vertices allowed in a chunk.
+     */
+    public int getMaxVerticesInChunk() {
+        return maxVerticesInChunk;
+    }
+
     /**
      * Sets maximum number of vertices allowed in a chunk. 
      * Once this value is exceeded when loading a file, a new chunk of data is 
@@ -502,32 +512,17 @@ public class LoaderOBJ extends Loader {
         }
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
     }
-    
+
     /**
-     * Returns maximum number of vertices allowed in a chunk.
-     * Once this value is exceeded when loading a file, a new chunk of data is
-     * created.
-     * @return maximum number of vertices allowed in a chunk.
+     * Returns boolean indicating if repeated vertices in a chunk are allowed to
+     * provide faster file loading. When representing data graphically, this has
+     * no visual consequences but chunks will take up more memory.
+     * @return true if duplicate vertices are allowed, false otherwise.
      */
-    public int getMaxVerticesInChunk() {
-        return maxVerticesInChunk;
+    public boolean areDuplicateVerticesInChunkAllowed() {
+        return allowDuplicateVerticesInChunk;
     }
-    
-    /**
-     * Internal method to set maximum number of vertices allowed in a chunk.
-     * This method is reused both in the constructor and in the setter of
-     * maximum number of vertices allowed in a chunk.
-     * @param maxVerticesInChunk maximum allowed number of vertices to be set.
-     * @throws IllegalArgumentException  if provided value is lower than 1.
-     */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
-        if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.maxVerticesInChunk = maxVerticesInChunk;
-    }
-    
+
     /**
      * Sets boolean indicating if repeated vertices in a chunk are allowed to 
      * provide faster file loading. When representing data graphically, this has
@@ -542,17 +537,21 @@ public class LoaderOBJ extends Loader {
         }
         allowDuplicateVerticesInChunk = allow;
     }
-    
+
     /**
-     * Returns boolean indicating if repeated vertices in a chunk are allowed to
-     * provide faster file loading. When representing data graphically, this has
-     * no visual consequences but chunks will take up more memory.
-     * @return true if duplicate vertices are allowed, false otherwise.
+     * Returns maximum number of file stream positions to be cached.
+     * This class keeps a cache of positions in the file to allow faster file
+     * loading at the expense of larger memory usage.
+     * If the geometry of a file reuses a large number of points, keeping a
+     * large cache will increase the speed of loading a file, otherwise the
+     * impact of this parameter will be low.
+     * The default value will work fine for most cases.
+     * @return maximum number of file stream positions to be cached.
      */
-    public boolean areDuplicateVerticesInChunkAllowed() {
-        return allowDuplicateVerticesInChunk;
+    public long getMaxStreamPositions() {
+        return maxStreamPositions;
     }
-    
+
     /**
      * Sets maximum number of file stream positions to be cached.
      * This class keeps a cache of positions in the file to allow faster file 
@@ -572,20 +571,6 @@ public class LoaderOBJ extends Loader {
             throw new LockedException();
         }
         internalSetMaxStreamPositions(maxStreamPositions);        
-    }
-    
-    /**
-     * Returns maximum number of file stream positions to be cached.
-     * This class keeps a cache of positions in the file to allow faster file 
-     * loading at the expense of larger memory usage.
-     * If the geometry of a file reuses a large number of points, keeping a 
-     * large cache will increase the speed of loading a file, otherwise the
-     * impact of this parameter will be low.
-     * The default value will work fine for most cases.
-     * @return maximum number of file stream positions to be cached.
-     */
-    public long getMaxStreamPositions() {
-        return maxStreamPositions;
     }
 
     /**
@@ -696,6 +681,21 @@ public class LoaderOBJ extends Loader {
         loaderIterator = new LoaderIteratorOBJ(this);
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
+    }
+
+    /**
+     * Internal method to set maximum number of vertices allowed in a chunk.
+     * This method is reused both in the constructor and in the setter of
+     * maximum number of vertices allowed in a chunk.
+     * @param maxVerticesInChunk maximum allowed number of vertices to be set.
+     * @throws IllegalArgumentException  if provided value is lower than 1.
+     */
+    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
+        if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
+            throw new IllegalArgumentException();
+        }
+
+        this.maxVerticesInChunk = maxVerticesInChunk;
     }
 
     /**
@@ -1702,591 +1702,7 @@ public class LoaderOBJ extends Loader {
 
             return dataChunk;
         }
-        
-        /**
-         * Internal method to decompose a an array of vertices forming a polygon
-         * in a set of arrays of vertices corresponding to triangles after
-         * triangulation of the polygon. This method is used to triangulate
-         * polygons with more than 3 vertices contained in the file.
-         * @param vertices list of vertices forming a polygon to be triangulated.
-         * @return a set containing arrays of indices of vertices (in string 
-         * format) corresponding to the triangles forming the polygon after the
-         * triangulation.
-         * @throws TriangulatorException if triangulation fails (because polygon
-         * is degenerate or contains invalid values such as NaN or infinity).
-         */
-        private Set<String []> buildTriangulatedIndices(
-                List<VertexOBJ> vertices) throws TriangulatorException {
-            List<Point3D> polygonVertices = new ArrayList<>(
-                    vertices.size());
-            for (VertexOBJ v : vertices) {
-                if (v.getVertex() == null) {
-                    throw new TriangulatorException();
-                }
-                polygonVertices.add(v.getVertex());
-            }
-            List<int[]> indices = new ArrayList<>();
-            Triangulator3D triangulator = Triangulator3D.create();
-            List<Triangle3D> triangles = triangulator.triangulate(
-                    polygonVertices, indices);
-            
-            Set<String[]> result = new HashSet<>();
-            String[] face;
-            int counter = 0;
-            int[] triangleIndices;
-            int index;
-            VertexOBJ vertex;
-            StringBuilder builder;
-            for (Triangle3D ignored : triangles) {
-                triangleIndices = indices.get(counter);
-                face = new String[Triangle3D.NUM_VERTICES];
-                for (int i = 0; i < Triangle3D.NUM_VERTICES; i++) {
-                    index = triangleIndices[i];
-                    vertex = vertices.get(index);
-                    builder = new StringBuilder();
-                    if (vertex.isVertexIndexAvailable()) {
-                        builder.append(vertex.getVertexIndex());
-                    }
-                    if (vertex.isTextureIndexAvailable() ||
-                            vertex.isNormalIndexAvailable()) {
-                        builder.append("/");
-                        if (vertex.isTextureIndexAvailable()) {
-                            builder.append(vertex.getTextureIndex());
-                        }
-                        if (vertex.isNormalIndexAvailable()) {
-                            builder.append("/");
-                            builder.append(vertex.getNormalIndex());
-                        }
-                    }
-                    
-                    face[i] = builder.toString();
-                }
-                counter++;
-                result.add(face);
-            }            
-            
-            return result;
-        }
-        
-        /**
-         * This method reads a line containing face (i.e. polygon) indices of
-         * vertices and fetches those vertices coordinates and associated data
-         * such as texture coordinates or normal coordinates.
-         * @param values a string containing vertex indices forming a polygon.
-         * Note that indices refer to the values contained in OBJ file, not the
-         * indices in the chunk of data.
-         * @return a list of vertices forming a face (i.e, polygon).
-         * @throws IOException if an I/O error occurs.
-         * @throws LoaderException if loading fails because data is corrupted or
-         * cannot be interpreted.
-         */
-        private List<VertexOBJ> getFaceValues(String [] values) 
-                throws IOException, LoaderException {
 
-            VertexOBJ tmpVertex;
-            Point3D point;
-            List<VertexOBJ> vertices = new ArrayList<>(values.length);
-            
-            //keep current stream position for next face
-            long tempPosition = reader.getPosition();
-
-            for (String value : values) {
-
-                tmpVertex = new VertexOBJ();
-                point = Point3D.create();
-                tmpVertex.setVertex(point);
-
-                String[] indices = value.split("/");
-
-                if (indices.length >= 1 && (indices[0].length() != 0)) {
-                    vertexIndex = Integer.parseInt(indices[0]) - 1;
-                    tmpVertex.setVertexIndex(vertexIndex + 1);
-                    fetchVertex(vertexIndex);
-                    vertexStreamPosition = reader.getPosition();
-
-                    String vertexLine = reader.readLine();
-                    if (!vertexLine.startsWith("v ")) {
-                        throw new LoaderException();
-                    }
-                    vertexLine = vertexLine.substring("v ".length()).trim();
-                    String[] vertexCoordinates = vertexLine.split(" ");
-
-                    if (vertexCoordinates.length == 4) {
-                        //homogeneous coordinates x, y, z, w
-                        //ensure that vertex coordinates are not empty
-                        if (vertexCoordinates[0].length() == 0) {
-                            throw new LoaderException();
-                        }
-                        if (vertexCoordinates[1].length() == 0) {
-                            throw new LoaderException();
-                        }
-                        if (vertexCoordinates[2].length() == 0) {
-                            throw new LoaderException();
-                        }
-                        if (vertexCoordinates[3].length() == 0) {
-                            throw new LoaderException();
-                        }
-
-                        try {
-                            point.setHomogeneousCoordinates(
-                                    Double.parseDouble(vertexCoordinates[0]),
-                                    Double.parseDouble(vertexCoordinates[1]),
-                                    Double.parseDouble(vertexCoordinates[2]),
-                                    Double.parseDouble(vertexCoordinates[3]));
-                        } catch (NumberFormatException e) {
-                            //some vertex coordinate value could not be parsed
-                            throw new LoaderException(e);
-                        }
-                    } else if (vertexCoordinates.length >= 3) {
-                        //inhomogeneous coordinates x, y, z
-                        //ensure that vertex coordinate are not empty
-                        if (vertexCoordinates[0].length() == 0) {
-                            throw new LoaderException();
-                        }
-                        if (vertexCoordinates[1].length() == 0) {
-                            throw new LoaderException();
-                        }
-                        if (vertexCoordinates[2].length() == 0) {
-                            throw new LoaderException();
-                        }
-
-                        try {
-                            point.setInhomogeneousCoordinates(
-                                    Double.parseDouble(vertexCoordinates[0]),
-                                    Double.parseDouble(vertexCoordinates[1]),
-                                    Double.parseDouble(vertexCoordinates[2]));
-                        } catch (NumberFormatException e) {
-                            //some vertex coordinate value could not be parsed
-                            throw new LoaderException(e);
-                        }
-                    } else {
-                        throw new LoaderException(); //unsupported length
-                    }
-                }
-                if (indices.length >= 2 && (indices[1].length() != 0)) {
-                    tmpVertex.setTextureIndex(
-                            Integer.parseInt(indices[1]));
-                }
-                if (indices.length >= 3 && (indices[2].length() != 0)) {
-                    tmpVertex.setNormalIndex(
-                            Integer.parseInt(indices[2]));
-                }
-
-                vertices.add(tmpVertex);
-            }
-            
-            reader.seek(tempPosition);
-            return vertices;
-        }
-        
-        /**
-         * Initializes arrays forming current chunk of data.
-         */
-        private void initChunkArrays() {
-            coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];
-            textureCoordsInChunkArray = 
-                    new float[loader.maxVerticesInChunk * 2];
-            normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];
-            indicesInChunkArray = new int[loader.maxVerticesInChunk];           
-            
-            originalVertexIndicesInChunkArray = 
-                    new long[loader.maxVerticesInChunk];
-            originalTextureIndicesInChunkArray = 
-                    new long[loader.maxVerticesInChunk];
-            originalNormalIndicesInChunkArray = 
-                    new long[loader.maxVerticesInChunk];
-            verticesInChunk = 0;
-            indicesInChunk = 0;
-            indicesInChunkSize = loader.maxVerticesInChunk;            
-            
-            vertexIndicesMap.clear();
-            textureCoordsIndicesMap.clear();
-            normalsIndicesMap.clear();             
-        }
-        
-        /**
-         * Searches vertex index in current chunk of data by using the index
-         * used in the OBJ file.
-         * This method searches within the cached indices which relate indices
-         * in the chunk of data respect to indices in the OBJ file.
-         * @param originalIndex vertex index used in the OBJ file.
-         * @return vertex index used in current chunk of data or -1 if not found.
-         */
-        private int searchVertexIndexInChunk(long originalIndex) {
-            //returns chunk index array position where index is found
-            Integer chunkIndex = vertexIndicesMap.get(originalIndex);
-            
-            if (chunkIndex == null) {
-                return -1;
-            }
-            
-            //returns index of vertex in chunk
-            return indicesInChunkArray[chunkIndex];
-        }
-        
-        /**
-         * Searches texture index in current chunk of data by using the index
-         * used in the OBJ file.
-         * This method searches within the cached indices which relate indices
-         * in the chunk of data respect to indices in the OBJ file.
-         * @param originalIndex texture index used in the OBJ file.
-         * @return texture index used in current chunk of data or -1 if not 
-         * found.
-         */
-        private int searchTextureCoordIndexInChunk(long originalIndex) {
-            return searchVertexIndexInChunk(originalIndex);
-        }
-        
-        /**
-         * Searches normal index in current chunk of data by using the index
-         * used in the OBJ file.
-         * This method searches within the cached indices which relate indices
-         * in the chunk of data respect to indices in the OBJ file.
-         * @param originalIndex normal index used in the OBJ file.
-         * @return normal index used in current chunk of data or -1 if not found.
-         */
-        private int searchNormalIndexInChunk(long originalIndex) {
-            return searchVertexIndexInChunk(originalIndex);
-        }
-        
-        /**
-         * Add vertex position to cache of file positions.
-         * @param originalIndex vertex index used in OBJ file.
-         * @param streamPosition stream position where vertex is located.
-         */
-        private void addVertexPositionToMap(long originalIndex, 
-                long streamPosition) {
-            if (verticesStreamPositionMap.size() > loader.maxStreamPositions) {
-                //Map is full. Remove 1st item before adding a new one
-                Long origIndex = verticesStreamPositionMap.firstKey();
-                verticesStreamPositionMap.remove(origIndex);
-            }
-            //add new item
-            verticesStreamPositionMap.put(originalIndex,
-                    streamPosition);
-        }
-        
-        /**
-         * Add texture coordinate position to cache of file positions.
-         * @param originalIndex texture coordinate index used in OBJ file.
-         * @param streamPosition stream position where texture coordinate is 
-         * located.
-         */
-        private void addTextureCoordPositionToMap(long originalIndex,
-                long streamPosition) {
-            if (textureCoordsStreamPositionMap.size() >
-                    loader.maxStreamPositions) {
-                //Map is full. Remove 1st item before adding a new one
-                Long origIndex = textureCoordsStreamPositionMap.firstKey();
-                textureCoordsStreamPositionMap.remove(origIndex);
-            }
-            //add new item
-            textureCoordsStreamPositionMap.put(originalIndex,
-                    streamPosition);
-        }
-        
-        /**
-         * Add normal coordinate to cache of file positions.
-         * @param originalIndex normal coordinate index used in OBJ file.
-         * @param streamPosition stream position where normal coordinate is
-         * located.
-         */
-        private void addNormalPositionToMap(long originalIndex,
-                long streamPosition) {
-            if (normalsStreamPositionMap.size() > loader.maxStreamPositions) {
-                //Map is full. Remove 1st item before adding a new one
-                Long origIndex = normalsStreamPositionMap.firstKey();
-                normalsStreamPositionMap.remove(origIndex);
-            }
-            //add new item
-            normalsStreamPositionMap.put(originalIndex,
-                    streamPosition);
-        }
-        
-        /**
-         * Adds data of last vertex being loaded to current chunk of data as a
-         * new vertex.
-         */
-        private void addNewVertexDataToChunk() {
-            int pos = 3 * verticesInChunk;
-            int textPos = 2 * verticesInChunk;
-            
-            coordsInChunkArray[pos] = coordX;
-            normalsInChunkArray[pos] = nX;
-            textureCoordsInChunkArray[textPos] = textureU;
-            
-            pos++;
-            textPos++;
-            
-            coordsInChunkArray[pos] = coordY;
-            normalsInChunkArray[pos] = nY;
-            textureCoordsInChunkArray[textPos] = textureV;
-            
-            pos++;
-            
-            coordsInChunkArray[pos] = coordZ;
-            normalsInChunkArray[pos] = nZ;
-            
-            //update bounding box values
-            if (coordX < minX) {
-                minX = coordX;
-            }
-            if (coordY < minY) {
-                minY = coordY;
-            }
-            if (coordZ < minZ) {
-                minZ = coordZ;
-            }
-            
-            if (coordX > maxX) {
-                maxX = coordX;
-            }
-            if (coordY > maxY) {
-                maxY = coordY;
-            }
-            if (coordZ > maxZ) {
-                maxZ = coordZ;
-            }
-            
-            //if arrays of indices become full, we need to resize them
-            if (indicesInChunk >= indicesInChunkSize) {
-                increaseIndicesArraySize();
-            }
-            indicesInChunkArray[indicesInChunk] = verticesInChunk;
-            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;
-            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;            
-            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
-            //store original indices in maps so we can search chunk index by
-            //original indices of vertices, texture or normal
-            vertexIndicesMap.put((long) vertexIndex,
-                    indicesInChunk);
-            textureCoordsIndicesMap.put((long) textureIndex,
-                    indicesInChunk);
-            normalsIndicesMap.put((long) normalIndex,
-                    indicesInChunk);
-            
-            //store vertex, texture and normal stream positions
-            addVertexPositionToMap(vertexIndex, vertexStreamPosition);
-            addTextureCoordPositionToMap(textureIndex, 
-                    textureCoordStreamPosition);
-            addNormalPositionToMap(normalIndex, normalStreamPosition);
-            
-            verticesInChunk++;
-            indicesInChunk++;
-        }
-        
-        /**
-         * Adds index to current chunk of data referring to a previously 
-         * existing vertex in the chunk.
-         * @param existingIndex index of vertex that already exists in the chunk.
-         */
-        private void addExistingVertexToChunk(int existingIndex) {
-            //if arrays of indices become full, we need to resize them
-            if (indicesInChunk >= indicesInChunkSize) {
-                increaseIndicesArraySize();
-            }
-            indicesInChunkArray[indicesInChunk] = existingIndex;
-            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;
-            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;            
-            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
-            
-            indicesInChunk++;
-        }
-        
-        /**
-         * Increases size of arrays of data. This method is called when needed.
-         */
-        private void increaseIndicesArraySize() {
-            int newIndicesInChunkSize = indicesInChunkSize +
-                    loader.maxVerticesInChunk;
-            int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
-            long[] newOriginalVertexIndicesInChunkArray = 
-                    new long[newIndicesInChunkSize];
-            long[] newOriginalTextureIndicesInChunkArray =
-                    new long[newIndicesInChunkSize];
-            long[] newOriginalNormalIndicesInChunkArray =
-                    new long[newIndicesInChunkSize];
-            
-            //copy contents of old array
-            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, 
-                    indicesInChunkSize);
-            System.arraycopy(originalVertexIndicesInChunkArray, 0, 
-                    newOriginalVertexIndicesInChunkArray, 0, 
-                    indicesInChunkSize);
-            System.arraycopy(originalTextureIndicesInChunkArray, 0, 
-                    newOriginalTextureIndicesInChunkArray, 0, 
-                    indicesInChunkSize);
-            System.arraycopy(originalNormalIndicesInChunkArray, 0, 
-                    newOriginalNormalIndicesInChunkArray, 0, 
-                    indicesInChunkSize);
-            
-            //set new arrays and new size
-            indicesInChunkArray = newIndicesInChunkArray;
-            originalVertexIndicesInChunkArray = 
-                    newOriginalVertexIndicesInChunkArray;
-            originalTextureIndicesInChunkArray =
-                    newOriginalTextureIndicesInChunkArray;
-            originalNormalIndicesInChunkArray =
-                    newOriginalNormalIndicesInChunkArray;
-            indicesInChunkSize = newIndicesInChunkSize;
-        }        
-        
-        /**
-         * Trims arrays of data to reduce size of arrays to fit chunk data. This 
-         * method is loaded just before copying data to chunk being returned.
-         */
-        private void trimArrays() {
-            if (verticesInChunk > 0) {
-                int elems = verticesInChunk * 3;
-                int textElems = verticesInChunk * 2;
-                
-                float[] newCoordsInChunkArray = new float[elems];
-                float[] newTextureCoordsInChunkArray = new float[elems];
-                float[] newNormalsInChunkArray = new float[elems];
-                
-                //copy contents of old arrays
-                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,
-                        0, elems);
-                System.arraycopy(textureCoordsInChunkArray, 0, 
-                        newTextureCoordsInChunkArray, 0, textElems);
-                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray, 
-                        0, elems);
-                
-                //set new arrays
-                coordsInChunkArray = newCoordsInChunkArray;
-                textureCoordsInChunkArray = newTextureCoordsInChunkArray;
-                normalsInChunkArray = newNormalsInChunkArray;
-            } else {
-                //allow garbage collection
-                coordsInChunkArray = null;
-                textureCoordsInChunkArray = null;
-                normalsInChunkArray = null;
-            }
-            
-            if (indicesInChunk > 0) {
-                int[] newIndicesInChunkArray = new int[indicesInChunk];
-                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,
-                        0, indicesInChunk);
-                
-                //set new array
-                indicesInChunkArray = newIndicesInChunkArray;
-            } else {
-                //allow garbage collection
-                indicesInChunkArray = null;
-                originalVertexIndicesInChunkArray = null;
-                originalTextureIndicesInChunkArray = null;
-                originalNormalIndicesInChunkArray = null;
-            }
-        }
-        
-        /**
-         * Set ups loader iterator. This method is called when constructing
-         * this iterator.
-         * @throws IOException if an I/O error occurs.
-         * @throws LoaderException if data is corrupted or cannot be understood.
-         */
-        private void setUp() throws IOException, LoaderException {
-            String str;
-            long streamPosition;
-            numberOfVertices = numberOfTextureCoords = numberOfNormals = 
-                    numberOfFaces = 0;
-            
-            do {
-                streamPosition = reader.getPosition();
-                str = reader.readLine();
-                if (str == null) {
-                    break;
-                }
-                
-                if (str.startsWith("#")) {
-                    //line is a comment, so we should add it to the list of
-                    //comments
-                    loader.comments.add(str.substring("#".length()).trim());
-                } else if (str.startsWith("vt ")) {
-                    //line contains texture coordinates, so we keep its stream
-                    //position and indicate that chunks will contain texture
-                    //coordinates
-                    if (!firstTextureCoordStreamPositionAvailable) {
-                        firstTextureCoordStreamPosition = streamPosition;
-                        firstTextureCoordStreamPositionAvailable = true;
-                        textureAvailable = true;
-                    }
-                    numberOfTextureCoords++;
-                } else if (str.startsWith("vn ")) {
-                    //line contains normal, so we keep its stream position and
-                    //indicate that chunks will contain normals
-                    if (!firstNormalStreamPositionAvailable) {
-                        firstNormalStreamPosition = streamPosition;
-                        firstNormalStreamPositionAvailable = true;
-                        normalsAvailable = true;
-                    }
-                    numberOfNormals++;                    
-                } else if (str.startsWith("v ")) {
-                    //line contains vertex coordinates, so we keep its stream
-                    //position and indicate that chunks will contain vertex
-                    //coordinates
-                    if (!firstVertexStreamPositionAvailable) {
-                        firstVertexStreamPosition = streamPosition;
-                        firstVertexStreamPositionAvailable = true;
-                        verticesAvailable = true;
-                    }
-                    numberOfVertices++;
-                } else if (str.startsWith("f ")) {
-                    //line contains face definition, so we keep its stream
-                    //position and indicate that chunks will contain indices
-                    if (!firstFaceStreamPositionAvailable) {
-                        firstFaceStreamPosition = streamPosition;
-                        firstFaceStreamPositionAvailable = true;
-                        indicesAvailable = true;
-                    }
-                    
-                    numberOfFaces++;
-                    
-                } else if (str.startsWith("mtllib ")) {
-                    //a material library is found
-                    String path = str.substring("mtllib ".length()).trim();
-                    if (loader.listener instanceof LoaderListenerOBJ) {
-                        LoaderListenerOBJ loaderListener = 
-                                (LoaderListenerOBJ)loader.listener;                        
-                        materialLoader = 
-                                loaderListener.onMaterialLoaderRequested(loader,
-                                path);                        
-                    } else {
-                        materialLoader = new MaterialLoaderOBJ(new File(path));
-                    }
-                    
-                    //now load library of materials
-                    try {
-                        if (materialLoader != null) {
-                            loader.materials = materialLoader.load();
-                            materialLoader.close(); //to release file resources
-                        }
-                    } catch(Exception e) {
-                        throw new LoaderException(e);
-                    }
-                    
-                } else if (str.startsWith(USEMTL) && !firstMaterialStreamPositionAvailable) {
-                    firstMaterialStreamPositionAvailable = true;
-                    firstMaterialStreamPosition = streamPosition;
-                    materialsAvailable = true;
-                }
-                    
-                //ignore any other line
-            } while (true); //read until end of file when str == null
-            
-            //move to first face tream position
-            if (!firstFaceStreamPositionAvailable) {
-                throw new LoaderException();
-            }
-            
-            if (materialsAvailable &&
-                    firstMaterialStreamPosition < firstFaceStreamPosition) {
-                reader.seek(firstMaterialStreamPosition);
-            } else {
-                reader.seek(firstFaceStreamPosition);
-            }
-        }
-        
         /**
          * Fetches vertex data in the file using provided index. Index refers
          * to indices contained in OBJ file.
@@ -2509,6 +1925,590 @@ public class LoaderOBJ extends Loader {
             
             //seek to last streamPosition which contains the desired data
             reader.seek(streamPosition);                        
+        }
+
+        /**
+         * Internal method to decompose a an array of vertices forming a polygon
+         * in a set of arrays of vertices corresponding to triangles after
+         * triangulation of the polygon. This method is used to triangulate
+         * polygons with more than 3 vertices contained in the file.
+         * @param vertices list of vertices forming a polygon to be triangulated.
+         * @return a set containing arrays of indices of vertices (in string
+         * format) corresponding to the triangles forming the polygon after the
+         * triangulation.
+         * @throws TriangulatorException if triangulation fails (because polygon
+         * is degenerate or contains invalid values such as NaN or infinity).
+         */
+        private Set<String []> buildTriangulatedIndices(
+                List<VertexOBJ> vertices) throws TriangulatorException {
+            List<Point3D> polygonVertices = new ArrayList<>(
+                    vertices.size());
+            for (VertexOBJ v : vertices) {
+                if (v.getVertex() == null) {
+                    throw new TriangulatorException();
+                }
+                polygonVertices.add(v.getVertex());
+            }
+            List<int[]> indices = new ArrayList<>();
+            Triangulator3D triangulator = Triangulator3D.create();
+            List<Triangle3D> triangles = triangulator.triangulate(
+                    polygonVertices, indices);
+
+            Set<String[]> result = new HashSet<>();
+            String[] face;
+            int counter = 0;
+            int[] triangleIndices;
+            int index;
+            VertexOBJ vertex;
+            StringBuilder builder;
+            for (Triangle3D ignored : triangles) {
+                triangleIndices = indices.get(counter);
+                face = new String[Triangle3D.NUM_VERTICES];
+                for (int i = 0; i < Triangle3D.NUM_VERTICES; i++) {
+                    index = triangleIndices[i];
+                    vertex = vertices.get(index);
+                    builder = new StringBuilder();
+                    if (vertex.isVertexIndexAvailable()) {
+                        builder.append(vertex.getVertexIndex());
+                    }
+                    if (vertex.isTextureIndexAvailable() ||
+                            vertex.isNormalIndexAvailable()) {
+                        builder.append("/");
+                        if (vertex.isTextureIndexAvailable()) {
+                            builder.append(vertex.getTextureIndex());
+                        }
+                        if (vertex.isNormalIndexAvailable()) {
+                            builder.append("/");
+                            builder.append(vertex.getNormalIndex());
+                        }
+                    }
+
+                    face[i] = builder.toString();
+                }
+                counter++;
+                result.add(face);
+            }
+
+            return result;
+        }
+
+        /**
+         * This method reads a line containing face (i.e. polygon) indices of
+         * vertices and fetches those vertices coordinates and associated data
+         * such as texture coordinates or normal coordinates.
+         * @param values a string containing vertex indices forming a polygon.
+         * Note that indices refer to the values contained in OBJ file, not the
+         * indices in the chunk of data.
+         * @return a list of vertices forming a face (i.e, polygon).
+         * @throws IOException if an I/O error occurs.
+         * @throws LoaderException if loading fails because data is corrupted or
+         * cannot be interpreted.
+         */
+        private List<VertexOBJ> getFaceValues(String [] values)
+                throws IOException, LoaderException {
+
+            VertexOBJ tmpVertex;
+            Point3D point;
+            List<VertexOBJ> vertices = new ArrayList<>(values.length);
+
+            //keep current stream position for next face
+            long tempPosition = reader.getPosition();
+
+            for (String value : values) {
+
+                tmpVertex = new VertexOBJ();
+                point = Point3D.create();
+                tmpVertex.setVertex(point);
+
+                String[] indices = value.split("/");
+
+                if (indices.length >= 1 && (indices[0].length() != 0)) {
+                    vertexIndex = Integer.parseInt(indices[0]) - 1;
+                    tmpVertex.setVertexIndex(vertexIndex + 1);
+                    fetchVertex(vertexIndex);
+                    vertexStreamPosition = reader.getPosition();
+
+                    String vertexLine = reader.readLine();
+                    if (!vertexLine.startsWith("v ")) {
+                        throw new LoaderException();
+                    }
+                    vertexLine = vertexLine.substring("v ".length()).trim();
+                    String[] vertexCoordinates = vertexLine.split(" ");
+
+                    if (vertexCoordinates.length == 4) {
+                        //homogeneous coordinates x, y, z, w
+                        //ensure that vertex coordinates are not empty
+                        if (vertexCoordinates[0].length() == 0) {
+                            throw new LoaderException();
+                        }
+                        if (vertexCoordinates[1].length() == 0) {
+                            throw new LoaderException();
+                        }
+                        if (vertexCoordinates[2].length() == 0) {
+                            throw new LoaderException();
+                        }
+                        if (vertexCoordinates[3].length() == 0) {
+                            throw new LoaderException();
+                        }
+
+                        try {
+                            point.setHomogeneousCoordinates(
+                                    Double.parseDouble(vertexCoordinates[0]),
+                                    Double.parseDouble(vertexCoordinates[1]),
+                                    Double.parseDouble(vertexCoordinates[2]),
+                                    Double.parseDouble(vertexCoordinates[3]));
+                        } catch (NumberFormatException e) {
+                            //some vertex coordinate value could not be parsed
+                            throw new LoaderException(e);
+                        }
+                    } else if (vertexCoordinates.length >= 3) {
+                        //inhomogeneous coordinates x, y, z
+                        //ensure that vertex coordinate are not empty
+                        if (vertexCoordinates[0].length() == 0) {
+                            throw new LoaderException();
+                        }
+                        if (vertexCoordinates[1].length() == 0) {
+                            throw new LoaderException();
+                        }
+                        if (vertexCoordinates[2].length() == 0) {
+                            throw new LoaderException();
+                        }
+
+                        try {
+                            point.setInhomogeneousCoordinates(
+                                    Double.parseDouble(vertexCoordinates[0]),
+                                    Double.parseDouble(vertexCoordinates[1]),
+                                    Double.parseDouble(vertexCoordinates[2]));
+                        } catch (NumberFormatException e) {
+                            //some vertex coordinate value could not be parsed
+                            throw new LoaderException(e);
+                        }
+                    } else {
+                        throw new LoaderException(); //unsupported length
+                    }
+                }
+                if (indices.length >= 2 && (indices[1].length() != 0)) {
+                    tmpVertex.setTextureIndex(
+                            Integer.parseInt(indices[1]));
+                }
+                if (indices.length >= 3 && (indices[2].length() != 0)) {
+                    tmpVertex.setNormalIndex(
+                            Integer.parseInt(indices[2]));
+                }
+
+                vertices.add(tmpVertex);
+            }
+
+            reader.seek(tempPosition);
+            return vertices;
+        }
+
+        /**
+         * Initializes arrays forming current chunk of data.
+         */
+        private void initChunkArrays() {
+            coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];
+            textureCoordsInChunkArray =
+                    new float[loader.maxVerticesInChunk * 2];
+            normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];
+            indicesInChunkArray = new int[loader.maxVerticesInChunk];
+
+            originalVertexIndicesInChunkArray =
+                    new long[loader.maxVerticesInChunk];
+            originalTextureIndicesInChunkArray =
+                    new long[loader.maxVerticesInChunk];
+            originalNormalIndicesInChunkArray =
+                    new long[loader.maxVerticesInChunk];
+            verticesInChunk = 0;
+            indicesInChunk = 0;
+            indicesInChunkSize = loader.maxVerticesInChunk;
+
+            vertexIndicesMap.clear();
+            textureCoordsIndicesMap.clear();
+            normalsIndicesMap.clear();
+        }
+
+        /**
+         * Searches vertex index in current chunk of data by using the index
+         * used in the OBJ file.
+         * This method searches within the cached indices which relate indices
+         * in the chunk of data respect to indices in the OBJ file.
+         * @param originalIndex vertex index used in the OBJ file.
+         * @return vertex index used in current chunk of data or -1 if not found.
+         */
+        private int searchVertexIndexInChunk(long originalIndex) {
+            //returns chunk index array position where index is found
+            Integer chunkIndex = vertexIndicesMap.get(originalIndex);
+
+            if (chunkIndex == null) {
+                return -1;
+            }
+
+            //returns index of vertex in chunk
+            return indicesInChunkArray[chunkIndex];
+        }
+
+        /**
+         * Searches texture index in current chunk of data by using the index
+         * used in the OBJ file.
+         * This method searches within the cached indices which relate indices
+         * in the chunk of data respect to indices in the OBJ file.
+         * @param originalIndex texture index used in the OBJ file.
+         * @return texture index used in current chunk of data or -1 if not
+         * found.
+         */
+        private int searchTextureCoordIndexInChunk(long originalIndex) {
+            return searchVertexIndexInChunk(originalIndex);
+        }
+
+        /**
+         * Searches normal index in current chunk of data by using the index
+         * used in the OBJ file.
+         * This method searches within the cached indices which relate indices
+         * in the chunk of data respect to indices in the OBJ file.
+         * @param originalIndex normal index used in the OBJ file.
+         * @return normal index used in current chunk of data or -1 if not found.
+         */
+        private int searchNormalIndexInChunk(long originalIndex) {
+            return searchVertexIndexInChunk(originalIndex);
+        }
+
+        /**
+         * Add vertex position to cache of file positions.
+         * @param originalIndex vertex index used in OBJ file.
+         * @param streamPosition stream position where vertex is located.
+         */
+        private void addVertexPositionToMap(long originalIndex,
+                                            long streamPosition) {
+            if (verticesStreamPositionMap.size() > loader.maxStreamPositions) {
+                //Map is full. Remove 1st item before adding a new one
+                Long origIndex = verticesStreamPositionMap.firstKey();
+                verticesStreamPositionMap.remove(origIndex);
+            }
+            //add new item
+            verticesStreamPositionMap.put(originalIndex,
+                    streamPosition);
+        }
+
+        /**
+         * Add texture coordinate position to cache of file positions.
+         * @param originalIndex texture coordinate index used in OBJ file.
+         * @param streamPosition stream position where texture coordinate is
+         * located.
+         */
+        private void addTextureCoordPositionToMap(long originalIndex,
+                                                  long streamPosition) {
+            if (textureCoordsStreamPositionMap.size() >
+                    loader.maxStreamPositions) {
+                //Map is full. Remove 1st item before adding a new one
+                Long origIndex = textureCoordsStreamPositionMap.firstKey();
+                textureCoordsStreamPositionMap.remove(origIndex);
+            }
+            //add new item
+            textureCoordsStreamPositionMap.put(originalIndex,
+                    streamPosition);
+        }
+
+        /**
+         * Add normal coordinate to cache of file positions.
+         * @param originalIndex normal coordinate index used in OBJ file.
+         * @param streamPosition stream position where normal coordinate is
+         * located.
+         */
+        private void addNormalPositionToMap(long originalIndex,
+                                            long streamPosition) {
+            if (normalsStreamPositionMap.size() > loader.maxStreamPositions) {
+                //Map is full. Remove 1st item before adding a new one
+                Long origIndex = normalsStreamPositionMap.firstKey();
+                normalsStreamPositionMap.remove(origIndex);
+            }
+            //add new item
+            normalsStreamPositionMap.put(originalIndex,
+                    streamPosition);
+        }
+
+        /**
+         * Adds data of last vertex being loaded to current chunk of data as a
+         * new vertex.
+         */
+        private void addNewVertexDataToChunk() {
+            int pos = 3 * verticesInChunk;
+            int textPos = 2 * verticesInChunk;
+
+            coordsInChunkArray[pos] = coordX;
+            normalsInChunkArray[pos] = nX;
+            textureCoordsInChunkArray[textPos] = textureU;
+
+            pos++;
+            textPos++;
+
+            coordsInChunkArray[pos] = coordY;
+            normalsInChunkArray[pos] = nY;
+            textureCoordsInChunkArray[textPos] = textureV;
+
+            pos++;
+
+            coordsInChunkArray[pos] = coordZ;
+            normalsInChunkArray[pos] = nZ;
+
+            //update bounding box values
+            if (coordX < minX) {
+                minX = coordX;
+            }
+            if (coordY < minY) {
+                minY = coordY;
+            }
+            if (coordZ < minZ) {
+                minZ = coordZ;
+            }
+
+            if (coordX > maxX) {
+                maxX = coordX;
+            }
+            if (coordY > maxY) {
+                maxY = coordY;
+            }
+            if (coordZ > maxZ) {
+                maxZ = coordZ;
+            }
+
+            //if arrays of indices become full, we need to resize them
+            if (indicesInChunk >= indicesInChunkSize) {
+                increaseIndicesArraySize();
+            }
+            indicesInChunkArray[indicesInChunk] = verticesInChunk;
+            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;
+            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;
+            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
+            //store original indices in maps so we can search chunk index by
+            //original indices of vertices, texture or normal
+            vertexIndicesMap.put((long) vertexIndex,
+                    indicesInChunk);
+            textureCoordsIndicesMap.put((long) textureIndex,
+                    indicesInChunk);
+            normalsIndicesMap.put((long) normalIndex,
+                    indicesInChunk);
+
+            //store vertex, texture and normal stream positions
+            addVertexPositionToMap(vertexIndex, vertexStreamPosition);
+            addTextureCoordPositionToMap(textureIndex,
+                    textureCoordStreamPosition);
+            addNormalPositionToMap(normalIndex, normalStreamPosition);
+
+            verticesInChunk++;
+            indicesInChunk++;
+        }
+
+        /**
+         * Adds index to current chunk of data referring to a previously
+         * existing vertex in the chunk.
+         * @param existingIndex index of vertex that already exists in the chunk.
+         */
+        private void addExistingVertexToChunk(int existingIndex) {
+            //if arrays of indices become full, we need to resize them
+            if (indicesInChunk >= indicesInChunkSize) {
+                increaseIndicesArraySize();
+            }
+            indicesInChunkArray[indicesInChunk] = existingIndex;
+            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;
+            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;
+            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
+
+            indicesInChunk++;
+        }
+
+        /**
+         * Increases size of arrays of data. This method is called when needed.
+         */
+        private void increaseIndicesArraySize() {
+            int newIndicesInChunkSize = indicesInChunkSize +
+                    loader.maxVerticesInChunk;
+            int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
+            long[] newOriginalVertexIndicesInChunkArray =
+                    new long[newIndicesInChunkSize];
+            long[] newOriginalTextureIndicesInChunkArray =
+                    new long[newIndicesInChunkSize];
+            long[] newOriginalNormalIndicesInChunkArray =
+                    new long[newIndicesInChunkSize];
+
+            //copy contents of old array
+            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,
+                    indicesInChunkSize);
+            System.arraycopy(originalVertexIndicesInChunkArray, 0,
+                    newOriginalVertexIndicesInChunkArray, 0,
+                    indicesInChunkSize);
+            System.arraycopy(originalTextureIndicesInChunkArray, 0,
+                    newOriginalTextureIndicesInChunkArray, 0,
+                    indicesInChunkSize);
+            System.arraycopy(originalNormalIndicesInChunkArray, 0,
+                    newOriginalNormalIndicesInChunkArray, 0,
+                    indicesInChunkSize);
+
+            //set new arrays and new size
+            indicesInChunkArray = newIndicesInChunkArray;
+            originalVertexIndicesInChunkArray =
+                    newOriginalVertexIndicesInChunkArray;
+            originalTextureIndicesInChunkArray =
+                    newOriginalTextureIndicesInChunkArray;
+            originalNormalIndicesInChunkArray =
+                    newOriginalNormalIndicesInChunkArray;
+            indicesInChunkSize = newIndicesInChunkSize;
+        }
+
+        /**
+         * Trims arrays of data to reduce size of arrays to fit chunk data. This
+         * method is loaded just before copying data to chunk being returned.
+         */
+        private void trimArrays() {
+            if (verticesInChunk > 0) {
+                int elems = verticesInChunk * 3;
+                int textElems = verticesInChunk * 2;
+
+                float[] newCoordsInChunkArray = new float[elems];
+                float[] newTextureCoordsInChunkArray = new float[elems];
+                float[] newNormalsInChunkArray = new float[elems];
+
+                //copy contents of old arrays
+                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,
+                        0, elems);
+                System.arraycopy(textureCoordsInChunkArray, 0,
+                        newTextureCoordsInChunkArray, 0, textElems);
+                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,
+                        0, elems);
+
+                //set new arrays
+                coordsInChunkArray = newCoordsInChunkArray;
+                textureCoordsInChunkArray = newTextureCoordsInChunkArray;
+                normalsInChunkArray = newNormalsInChunkArray;
+            } else {
+                //allow garbage collection
+                coordsInChunkArray = null;
+                textureCoordsInChunkArray = null;
+                normalsInChunkArray = null;
+            }
+
+            if (indicesInChunk > 0) {
+                int[] newIndicesInChunkArray = new int[indicesInChunk];
+                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,
+                        0, indicesInChunk);
+
+                //set new array
+                indicesInChunkArray = newIndicesInChunkArray;
+            } else {
+                //allow garbage collection
+                indicesInChunkArray = null;
+                originalVertexIndicesInChunkArray = null;
+                originalTextureIndicesInChunkArray = null;
+                originalNormalIndicesInChunkArray = null;
+            }
+        }
+
+        /**
+         * Set ups loader iterator. This method is called when constructing
+         * this iterator.
+         * @throws IOException if an I/O error occurs.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         */
+        private void setUp() throws IOException, LoaderException {
+            String str;
+            long streamPosition;
+            numberOfVertices = numberOfTextureCoords = numberOfNormals =
+                    numberOfFaces = 0;
+
+            do {
+                streamPosition = reader.getPosition();
+                str = reader.readLine();
+                if (str == null) {
+                    break;
+                }
+
+                if (str.startsWith("#")) {
+                    //line is a comment, so we should add it to the list of
+                    //comments
+                    loader.comments.add(str.substring("#".length()).trim());
+                } else if (str.startsWith("vt ")) {
+                    //line contains texture coordinates, so we keep its stream
+                    //position and indicate that chunks will contain texture
+                    //coordinates
+                    if (!firstTextureCoordStreamPositionAvailable) {
+                        firstTextureCoordStreamPosition = streamPosition;
+                        firstTextureCoordStreamPositionAvailable = true;
+                        textureAvailable = true;
+                    }
+                    numberOfTextureCoords++;
+                } else if (str.startsWith("vn ")) {
+                    //line contains normal, so we keep its stream position and
+                    //indicate that chunks will contain normals
+                    if (!firstNormalStreamPositionAvailable) {
+                        firstNormalStreamPosition = streamPosition;
+                        firstNormalStreamPositionAvailable = true;
+                        normalsAvailable = true;
+                    }
+                    numberOfNormals++;
+                } else if (str.startsWith("v ")) {
+                    //line contains vertex coordinates, so we keep its stream
+                    //position and indicate that chunks will contain vertex
+                    //coordinates
+                    if (!firstVertexStreamPositionAvailable) {
+                        firstVertexStreamPosition = streamPosition;
+                        firstVertexStreamPositionAvailable = true;
+                        verticesAvailable = true;
+                    }
+                    numberOfVertices++;
+                } else if (str.startsWith("f ")) {
+                    //line contains face definition, so we keep its stream
+                    //position and indicate that chunks will contain indices
+                    if (!firstFaceStreamPositionAvailable) {
+                        firstFaceStreamPosition = streamPosition;
+                        firstFaceStreamPositionAvailable = true;
+                        indicesAvailable = true;
+                    }
+
+                    numberOfFaces++;
+
+                } else if (str.startsWith("mtllib ")) {
+                    //a material library is found
+                    String path = str.substring("mtllib ".length()).trim();
+                    if (loader.listener instanceof LoaderListenerOBJ) {
+                        LoaderListenerOBJ loaderListener =
+                                (LoaderListenerOBJ)loader.listener;
+                        materialLoader =
+                                loaderListener.onMaterialLoaderRequested(loader,
+                                        path);
+                    } else {
+                        materialLoader = new MaterialLoaderOBJ(new File(path));
+                    }
+
+                    //now load library of materials
+                    try {
+                        if (materialLoader != null) {
+                            loader.materials = materialLoader.load();
+                            materialLoader.close(); //to release file resources
+                        }
+                    } catch(Exception e) {
+                        throw new LoaderException(e);
+                    }
+
+                } else if (str.startsWith(USEMTL) && !firstMaterialStreamPositionAvailable) {
+                    firstMaterialStreamPositionAvailable = true;
+                    firstMaterialStreamPosition = streamPosition;
+                    materialsAvailable = true;
+                }
+
+                //ignore any other line
+            } while (true); //read until end of file when str == null
+
+            //move to first face tream position
+            if (!firstFaceStreamPositionAvailable) {
+                throw new LoaderException();
+            }
+
+            if (materialsAvailable &&
+                    firstMaterialStreamPosition < firstFaceStreamPosition) {
+                reader.seek(firstMaterialStreamPosition);
+            } else {
+                reader.seek(firstFaceStreamPosition);
+            }
         }
     }
 }
