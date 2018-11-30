@@ -2485,31 +2485,33 @@ public class LoaderOBJ extends Loader {
 <span class="fc" id="L2485">                            loader.materials = materialLoader.load();</span>
 <span class="fc" id="L2486">                            materialLoader.close(); //to release file resources</span>
                         }
-<span class="nc" id="L2488">                    } catch(Exception e) {</span>
-<span class="nc" id="L2489">                        throw new LoaderException(e);</span>
-<span class="fc" id="L2490">                    }</span>
+<span class="nc" id="L2488">                    } catch (LoaderException e) {</span>
+<span class="nc" id="L2489">                        throw e;</span>
+<span class="nc" id="L2490">                    } catch(Exception e) {</span>
+<span class="nc" id="L2491">                        throw new LoaderException(e);</span>
+<span class="fc" id="L2492">                    }</span>
 
-<span class="fc bfc" id="L2492" title="All 4 branches covered.">                } else if (str.startsWith(USEMTL) &amp;&amp; !firstMaterialStreamPositionAvailable) {</span>
-<span class="fc" id="L2493">                    firstMaterialStreamPositionAvailable = true;</span>
-<span class="fc" id="L2494">                    firstMaterialStreamPosition = streamPosition;</span>
-<span class="fc" id="L2495">                    materialsAvailable = true;</span>
+<span class="fc bfc" id="L2494" title="All 4 branches covered.">                } else if (str.startsWith(USEMTL) &amp;&amp; !firstMaterialStreamPositionAvailable) {</span>
+<span class="fc" id="L2495">                    firstMaterialStreamPositionAvailable = true;</span>
+<span class="fc" id="L2496">                    firstMaterialStreamPosition = streamPosition;</span>
+<span class="fc" id="L2497">                    materialsAvailable = true;</span>
                 }
 
                 //ignore any other line
             } while (true); //read until end of file when str == null
 
             //move to first face tream position
-<span class="pc bpc" id="L2502" title="1 of 2 branches missed.">            if (!firstFaceStreamPositionAvailable) {</span>
-<span class="nc" id="L2503">                throw new LoaderException();</span>
+<span class="pc bpc" id="L2504" title="1 of 2 branches missed.">            if (!firstFaceStreamPositionAvailable) {</span>
+<span class="nc" id="L2505">                throw new LoaderException();</span>
             }
 
-<span class="pc bpc" id="L2506" title="1 of 4 branches missed.">            if (materialsAvailable &amp;&amp;</span>
+<span class="pc bpc" id="L2508" title="1 of 4 branches missed.">            if (materialsAvailable &amp;&amp;</span>
                     firstMaterialStreamPosition &lt; firstFaceStreamPosition) {
-<span class="fc" id="L2508">                reader.seek(firstMaterialStreamPosition);</span>
+<span class="fc" id="L2510">                reader.seek(firstMaterialStreamPosition);</span>
             } else {
-<span class="fc" id="L2510">                reader.seek(firstFaceStreamPosition);</span>
+<span class="fc" id="L2512">                reader.seek(firstFaceStreamPosition);</span>
             }
-<span class="fc" id="L2512">        }</span>
+<span class="fc" id="L2514">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

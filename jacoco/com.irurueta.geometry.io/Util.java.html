@@ -19,7 +19,13 @@ package com.irurueta.geometry.io;
  *  Utility methods for I/O operations.
  */
 @SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
-<span class="nc" id="L22">public class Util {</span>
+public class Util {
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private Util() { }
     
     /**
      * Converts provided value to big endian.
@@ -30,7 +36,7 @@ package com.irurueta.geometry.io;
      */
     static short toBigEndian(short value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L33">        return value;</span>
+<span class="fc" id="L39">        return value;</span>
     }
     
     /**
@@ -41,7 +47,7 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */
     static short toLittleEndian(short value) {
-<span class="fc" id="L44">        return Short.reverseBytes(value);</span>
+<span class="fc" id="L50">        return Short.reverseBytes(value);</span>
     }
     
     /**
@@ -53,12 +59,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */
     static short toEndianType(EndianType endianType, short value) {
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L58">                return toLittleEndian(value);</span>
+<span class="fc" id="L64">                return toLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L61">                return value;                </span>
+<span class="fc" id="L67">                return value;                </span>
         }
     }
     
@@ -71,7 +77,7 @@ package com.irurueta.geometry.io;
      */
     static short fromBigEndian(short value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L74">        return value;</span>
+<span class="fc" id="L80">        return value;</span>
     }
     
     /**
@@ -84,7 +90,7 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */
     static short fromLittleEndian(short value) {
-<span class="fc" id="L87">        return Short.reverseBytes(value);</span>
+<span class="fc" id="L93">        return Short.reverseBytes(value);</span>
     }
     
     /**
@@ -98,12 +104,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */
     static short fromEndianType(EndianType endianType, short value) {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L103">                return fromLittleEndian(value);</span>
+<span class="fc" id="L109">                return fromLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L106">                return value;</span>
+<span class="fc" id="L112">                return value;</span>
         }
     }
     
@@ -116,7 +122,7 @@ package com.irurueta.geometry.io;
      */    
     static int toBigEndian(int value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L119">        return value;</span>
+<span class="fc" id="L125">        return value;</span>
     }
     
     /**
@@ -127,7 +133,7 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static int toLittleEndian(int value) {
-<span class="fc" id="L130">        return Integer.reverseBytes(value);        </span>
+<span class="fc" id="L136">        return Integer.reverseBytes(value);        </span>
     }
     
     /**
@@ -139,12 +145,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static int toEndianType(EndianType endianType, int value) {
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L144">                return toLittleEndian(value);</span>
+<span class="fc" id="L150">                return toLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L147">                return value;                </span>
+<span class="fc" id="L153">                return value;                </span>
         }
     }
 
@@ -157,7 +163,7 @@ package com.irurueta.geometry.io;
      */    
     static int fromBigEndian(int value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L160">        return value;</span>
+<span class="fc" id="L166">        return value;</span>
     }
 
     /**
@@ -170,7 +176,7 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static int fromLittleEndian(int value) {
-<span class="fc" id="L173">        return Integer.reverseBytes(value);        </span>
+<span class="fc" id="L179">        return Integer.reverseBytes(value);        </span>
     }
     
     /**
@@ -184,12 +190,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static int fromEndianType(EndianType endianType, int value) {
-<span class="fc bfc" id="L187" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L189">                return fromLittleEndian(value);</span>
+<span class="fc" id="L195">                return fromLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L192">                return value;</span>
+<span class="fc" id="L198">                return value;</span>
         }
     }    
     
@@ -202,7 +208,7 @@ package com.irurueta.geometry.io;
      */    
     static long toBigEndian(long value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L205">        return value;</span>
+<span class="fc" id="L211">        return value;</span>
     }
     
     /**
@@ -213,7 +219,7 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static long toLittleEndian(long value) {
-<span class="fc" id="L216">        return Long.reverseBytes(value);</span>
+<span class="fc" id="L222">        return Long.reverseBytes(value);</span>
     }
     
     /**
@@ -225,12 +231,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static long toEndianType(EndianType endianType, long value) {
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L230">                return toLittleEndian(value);</span>
+<span class="fc" id="L236">                return toLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L233">                return value;                </span>
+<span class="fc" id="L239">                return value;                </span>
         }
     }
     
@@ -243,7 +249,7 @@ package com.irurueta.geometry.io;
      */    
     static long fromBigEndian(long value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L246">        return value;</span>
+<span class="fc" id="L252">        return value;</span>
     }
     
     /**
@@ -256,7 +262,7 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static long fromLittleEndian(long value) {
-<span class="fc" id="L259">        return Long.reverseBytes(value);</span>
+<span class="fc" id="L265">        return Long.reverseBytes(value);</span>
     }
     
     /**
@@ -270,12 +276,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static long fromEndianType(EndianType endianType, long value) {
-<span class="fc bfc" id="L273" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L275">                return fromLittleEndian(value);</span>
+<span class="fc" id="L281">                return fromLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L278">                return value;</span>
+<span class="fc" id="L284">                return value;</span>
         }
     }        
     
@@ -288,7 +294,7 @@ package com.irurueta.geometry.io;
      */    
     static float toBigEndian(float value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L291">        return value;</span>
+<span class="fc" id="L297">        return value;</span>
     }
     
     /**
@@ -299,8 +305,8 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static float toLittleEndian(float value) {
-<span class="fc" id="L302">        return Float.intBitsToFloat(Integer.reverseBytes(</span>
-<span class="fc" id="L303">                Float.floatToRawIntBits(value)));</span>
+<span class="fc" id="L308">        return Float.intBitsToFloat(Integer.reverseBytes(</span>
+<span class="fc" id="L309">                Float.floatToRawIntBits(value)));</span>
     }
     
     /**
@@ -312,12 +318,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static float toEndianType(EndianType endianType, float value) {
-<span class="fc bfc" id="L315" title="All 2 branches covered.">        switch(endianType) {</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        switch(endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L317">                return toLittleEndian(value);</span>
+<span class="fc" id="L323">                return toLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L320">                return value;                </span>
+<span class="fc" id="L326">                return value;                </span>
         }
     }
     
@@ -330,7 +336,7 @@ package com.irurueta.geometry.io;
      */    
     static float fromBigEndian(float value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L333">        return value;</span>
+<span class="fc" id="L339">        return value;</span>
     }
     
     /**
@@ -343,8 +349,8 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static float fromLittleEndian(float value) {
-<span class="fc" id="L346">        return Float.intBitsToFloat(Integer.reverseBytes(</span>
-<span class="fc" id="L347">                Float.floatToRawIntBits(value)));        </span>
+<span class="fc" id="L352">        return Float.intBitsToFloat(Integer.reverseBytes(</span>
+<span class="fc" id="L353">                Float.floatToRawIntBits(value)));        </span>
     }
     
     /**
@@ -358,12 +364,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static float fromEndianType(EndianType endianType, float value) {
-<span class="fc bfc" id="L361" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L363">                return fromLittleEndian(value);</span>
+<span class="fc" id="L369">                return fromLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L366">                return value;</span>
+<span class="fc" id="L372">                return value;</span>
         }
     }            
     
@@ -376,7 +382,7 @@ package com.irurueta.geometry.io;
      */    
     static double toBigEndian(double value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L379">        return value;</span>
+<span class="fc" id="L385">        return value;</span>
     }
     
     /**
@@ -387,8 +393,8 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static double toLittleEndian(double value) {
-<span class="fc" id="L390">        return Double.longBitsToDouble(Long.reverseBytes(</span>
-<span class="fc" id="L391">                Double.doubleToRawLongBits(value)));</span>
+<span class="fc" id="L396">        return Double.longBitsToDouble(Long.reverseBytes(</span>
+<span class="fc" id="L397">                Double.doubleToRawLongBits(value)));</span>
     }
     
     /**
@@ -400,12 +406,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static double toEndianType(EndianType endianType, double value) {
-<span class="fc bfc" id="L403" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L405">                return toLittleEndian(value);</span>
+<span class="fc" id="L411">                return toLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L408">                return value;                </span>
+<span class="fc" id="L414">                return value;                </span>
         }
     }
     
@@ -418,7 +424,7 @@ package com.irurueta.geometry.io;
      */    
     static double fromBigEndian(double value) {
         //Java virtual machine always is big endian
-<span class="fc" id="L421">        return value;</span>
+<span class="fc" id="L427">        return value;</span>
     }
     
     /**
@@ -431,8 +437,8 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static double fromLittleEndian(double value) {
-<span class="fc" id="L434">        return Double.longBitsToDouble(Long.reverseBytes(</span>
-<span class="fc" id="L435">                Double.doubleToRawLongBits(value)));        </span>
+<span class="fc" id="L440">        return Double.longBitsToDouble(Long.reverseBytes(</span>
+<span class="fc" id="L441">                Double.doubleToRawLongBits(value)));        </span>
     }
     
     /**
@@ -446,12 +452,12 @@ package com.irurueta.geometry.io;
      * @return Converted value.
      */    
     static double fromEndianType(EndianType endianType, double value) {
-<span class="fc bfc" id="L449" title="All 2 branches covered.">        switch (endianType) {</span>
+<span class="fc bfc" id="L455" title="All 2 branches covered.">        switch (endianType) {</span>
             case LITTLE_ENDIAN_TYPE:
-<span class="fc" id="L451">                return fromLittleEndian(value);</span>
+<span class="fc" id="L457">                return fromLittleEndian(value);</span>
             case BIG_ENDIAN_TYPE:
             default:
-<span class="fc" id="L454">                return value;</span>
+<span class="fc" id="L460">                return value;</span>
         }
     }            
     

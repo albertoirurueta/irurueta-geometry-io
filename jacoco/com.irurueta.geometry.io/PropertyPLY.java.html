@@ -213,23 +213,20 @@ public class PropertyPLY {
 <span class="fc" id="L213">        StringBuilder builder = new StringBuilder(&quot;property &quot;);</span>
         
         //depending if property is scalar or list
-<span class="pc bpc" id="L216" title="1 of 3 branches missed.">        switch (type) {</span>
-            case PROPERTY_PLY_SCALAR:
-                //add value data type
-<span class="fc" id="L219">                builder.append(valueType.getValue()).append(&quot; &quot;);</span>
-<span class="fc" id="L220">                break;</span>
-            case PROPERTY_PLY_LIST:
-                //indicate it is a list by adding length data type and values
-                //data type
-<span class="fc" id="L224">                builder.append(&quot;list &quot;).append(lengthType.getValue()).append(</span>
-<span class="fc" id="L225">                        &quot; &quot;).append(valueType.getValue()).append(&quot; &quot;);</span>
-                        
-                break;
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (type == PropertyTypePLY.PROPERTY_PLY_SCALAR) {</span>
+            //add value data type
+<span class="fc" id="L218">            builder.append(valueType.getValue()).append(&quot; &quot;);</span>
+
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        } else if (type == PropertyTypePLY.PROPERTY_PLY_LIST) {</span>
+            //indicate it is a list by adding length data type and values
+            //data type
+<span class="fc" id="L223">            builder.append(&quot;list &quot;).append(lengthType.getValue()).append(</span>
+<span class="fc" id="L224">                    &quot; &quot;).append(valueType.getValue()).append(&quot; &quot;);</span>
         }
         //add name
-<span class="fc" id="L230">        builder.append(name).append(&quot;\n&quot;);</span>
+<span class="fc" id="L227">        builder.append(name).append(&quot;\n&quot;);</span>
         
-<span class="fc" id="L232">        return builder.toString();</span>
+<span class="fc" id="L229">        return builder.toString();</span>
     }
       
     /**
@@ -242,11 +239,11 @@ public class PropertyPLY {
      */
     public PLYReadValueFromBufferListener getReadValueFromBufferListener() 
             throws NotAvailableException {
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (!isReadValueFromBufferListenerAvailable()) {</span>
-<span class="fc" id="L246">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (!isReadValueFromBufferListenerAvailable()) {</span>
+<span class="fc" id="L243">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L249">        return readValueFromBufferListener;</span>
+<span class="fc" id="L246">        return readValueFromBufferListener;</span>
     }
     
     /**
@@ -257,8 +254,8 @@ public class PropertyPLY {
      */
     public void setReadValueFromBufferListener(
             PLYReadValueFromBufferListener listener) {
-<span class="fc" id="L260">        readValueFromBufferListener = listener;</span>
-<span class="fc" id="L261">    }</span>
+<span class="fc" id="L257">        readValueFromBufferListener = listener;</span>
+<span class="fc" id="L258">    }</span>
     
     /**
      * Determines if listener to read the value of this property has been 
@@ -266,7 +263,7 @@ public class PropertyPLY {
      * @return True if listener is available, false otherwise.
      */
     public boolean isReadValueFromBufferListenerAvailable() {
-<span class="fc bfc" id="L269" title="All 2 branches covered.">        return readValueFromBufferListener != null;</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        return readValueFromBufferListener != null;</span>
     }
         
     /**
@@ -279,11 +276,11 @@ public class PropertyPLY {
      */
     public PLYReadValueFromStreamListener getReadValueFromStreamListener()
             throws NotAvailableException {
-<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (!isReadValueFromStreamListenerAvailable()) {</span>
-<span class="fc" id="L283">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (!isReadValueFromStreamListenerAvailable()) {</span>
+<span class="fc" id="L280">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L286">        return readValueFromStreamListener;</span>
+<span class="fc" id="L283">        return readValueFromStreamListener;</span>
     }
     
     /**
@@ -295,8 +292,8 @@ public class PropertyPLY {
      */
     public void setReadValueFromStreamListener(
             PLYReadValueFromStreamListener listener) {
-<span class="fc" id="L298">        readValueFromStreamListener = listener;</span>
-<span class="fc" id="L299">    }</span>
+<span class="fc" id="L295">        readValueFromStreamListener = listener;</span>
+<span class="fc" id="L296">    }</span>
     
     /**
      * Determines if listener to read the appropriate amount of bytes from a PLY
@@ -304,7 +301,7 @@ public class PropertyPLY {
      * @return True if listener is available, false otherwise.
      */
     public boolean isReadValueFromStreamListenerAvailable() {
-<span class="fc bfc" id="L307" title="All 2 branches covered.">        return readValueFromStreamListener != null;</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        return readValueFromStreamListener != null;</span>
     }
     
     /**
@@ -317,11 +314,11 @@ public class PropertyPLY {
      */
     public PLYReadValueFromBufferListener getReadLengthValueFromBufferListener()
             throws NotAvailableException {
-<span class="fc bfc" id="L320" title="All 2 branches covered.">        if (!isReadLengthValueFromBufferListenerAvailable()) {</span>
-<span class="fc" id="L321">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (!isReadLengthValueFromBufferListenerAvailable()) {</span>
+<span class="fc" id="L318">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L324">        return readLengthValueFromBufferListener;</span>
+<span class="fc" id="L321">        return readLengthValueFromBufferListener;</span>
     }
     
     /**
@@ -332,8 +329,8 @@ public class PropertyPLY {
      */
     public void setReadLengthValueFromBufferListener(
             PLYReadValueFromBufferListener listener) {
-<span class="fc" id="L335">        readLengthValueFromBufferListener = listener;</span>
-<span class="fc" id="L336">    }</span>
+<span class="fc" id="L332">        readLengthValueFromBufferListener = listener;</span>
+<span class="fc" id="L333">    }</span>
     
     /**
      * Determines if listener to read the length value of this property has been
@@ -341,7 +338,7 @@ public class PropertyPLY {
      * @return True if listener is available, false otherwise.
      */
     public boolean isReadLengthValueFromBufferListenerAvailable() {
-<span class="fc bfc" id="L344" title="All 2 branches covered.">        return readLengthValueFromBufferListener != null;</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        return readLengthValueFromBufferListener != null;</span>
     }
     
     /**
@@ -354,11 +351,11 @@ public class PropertyPLY {
      */
     public PLYReadValueFromStreamListener getReadLengthValueFromStreamListener()
             throws NotAvailableException {
-<span class="fc bfc" id="L357" title="All 2 branches covered.">        if (!isReadLengthValueFromStreamListenerAvailable()) {</span>
-<span class="fc" id="L358">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if (!isReadLengthValueFromStreamListenerAvailable()) {</span>
+<span class="fc" id="L355">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L361">        return readLengthValueFromStreamListener;</span>
+<span class="fc" id="L358">        return readLengthValueFromStreamListener;</span>
     }
     
     /**
@@ -370,8 +367,8 @@ public class PropertyPLY {
      */
     public void setReadLengthValueFromStreamListener(
             PLYReadValueFromStreamListener listener) {
-<span class="fc" id="L373">            readLengthValueFromStreamListener = listener;</span>
-<span class="fc" id="L374">    }</span>
+<span class="fc" id="L370">            readLengthValueFromStreamListener = listener;</span>
+<span class="fc" id="L371">    }</span>
     
     /**
      * Determines if listener to read the appropriate amount of bytes from a PLY
@@ -379,7 +376,7 @@ public class PropertyPLY {
      * @return True if listener is available, false otherwise.
      */
     public boolean isReadLengthValueFromStreamListenerAvailable() {
-<span class="fc bfc" id="L382" title="All 2 branches covered.">        return readLengthValueFromStreamListener != null;</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        return readLengthValueFromStreamListener != null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

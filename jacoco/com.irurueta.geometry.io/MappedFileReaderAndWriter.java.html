@@ -18,7 +18,6 @@ package com.irurueta.geometry.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.BufferUnderflowException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -51,16 +50,16 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs .
      */
     public MappedFileReaderAndWriter(File f, FileChannel.MapMode mode) 
-<span class="fc" id="L54">            throws IOException {</span>
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (mode == FileChannel.MapMode.READ_ONLY) {</span>
-<span class="fc" id="L56">            this.randomAccessFile = new RandomAccessFile(f, &quot;r&quot;);</span>
+<span class="fc" id="L53">            throws IOException {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (mode == FileChannel.MapMode.READ_ONLY) {</span>
+<span class="fc" id="L55">            this.randomAccessFile = new RandomAccessFile(f, &quot;r&quot;);</span>
         } else {
-<span class="fc" id="L58">            this.randomAccessFile = new RandomAccessFile(f, &quot;rw&quot;);</span>
+<span class="fc" id="L57">            this.randomAccessFile = new RandomAccessFile(f, &quot;rw&quot;);</span>
         }
-<span class="fc" id="L60">        this.buffer = randomAccessFile.getChannel().map(mode, 0, </span>
-<span class="fc" id="L61">                randomAccessFile.length());</span>
-<span class="fc" id="L62">        this.buffer.load();</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L59">        this.buffer = randomAccessFile.getChannel().map(mode, 0, </span>
+<span class="fc" id="L60">                randomAccessFile.length());</span>
+<span class="fc" id="L61">        this.buffer.load();</span>
+<span class="fc" id="L62">    }</span>
     
     /**
      * Reads one byte at current file position and advances one position.
@@ -70,13 +69,13 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int read() throws IOException {
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (isEndOfStream()) {</span>
-<span class="nc" id="L74">            return -1;</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (isEndOfStream()) {</span>
+<span class="nc" id="L73">            return -1;</span>
         }
-<span class="fc" id="L76">        int value = buffer.get();</span>
-<span class="fc" id="L77">        value = ((value &lt;&lt; 8) &gt;&gt; 8) &amp; 0xff;</span>
-<span class="fc" id="L78">        read = true;</span>
-<span class="fc" id="L79">        return value;</span>
+<span class="fc" id="L75">        int value = buffer.get();</span>
+<span class="fc" id="L76">        value = ((value &lt;&lt; 8) &gt;&gt; 8) &amp; 0xff;</span>
+<span class="fc" id="L77">        read = true;</span>
+<span class="fc" id="L78">        return value;</span>
     }
 
     /**
@@ -91,15 +90,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int read(byte[] b) throws IOException {
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (isEndOfStream()) {</span>
-<span class="nc" id="L95">            return -1;</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (isEndOfStream()) {</span>
+<span class="nc" id="L94">            return -1;</span>
         }
-<span class="fc" id="L97">        int length = Math.min(buffer.remaining(), b.length);</span>
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (length &gt; 0) {</span>
-<span class="fc" id="L99">            buffer.get(b, 0, length);</span>
+<span class="fc" id="L96">        int length = Math.min(buffer.remaining(), b.length);</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (length &gt; 0) {</span>
+<span class="fc" id="L98">            buffer.get(b, 0, length);</span>
         }
-<span class="fc" id="L101">        read = true;</span>
-<span class="fc" id="L102">        return length;</span>
+<span class="fc" id="L100">        read = true;</span>
+<span class="fc" id="L101">        return length;</span>
     }
 
     /**
@@ -118,15 +117,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (isEndOfStream()) {</span>
-<span class="nc" id="L122">            return -1;</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (isEndOfStream()) {</span>
+<span class="nc" id="L121">            return -1;</span>
         }
-<span class="fc" id="L124">        int length = Math.min(buffer.remaining(), len);</span>
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (length &gt; 0) {</span>
-<span class="fc" id="L126">            buffer.get(b, off, length);</span>
+<span class="fc" id="L123">        int length = Math.min(buffer.remaining(), len);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (length &gt; 0) {</span>
+<span class="fc" id="L125">            buffer.get(b, off, length);</span>
         }
-<span class="fc" id="L128">        read = true;</span>
-<span class="fc" id="L129">        return length;</span>
+<span class="fc" id="L127">        read = true;</span>
+<span class="fc" id="L128">        return length;</span>
     }
 
     /**
@@ -141,15 +140,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public long skip(long n) {
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (n &lt; 0) {</span>
-<span class="nc" id="L145">            return 0;</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if (n &lt; 0) {</span>
+<span class="nc" id="L144">            return 0;</span>
         }
                         
-<span class="fc" id="L148">        int skipped = Math.min(buffer.remaining(), (int)n);</span>
-<span class="fc" id="L149">        int newPos = buffer.position() + skipped;</span>
-<span class="fc" id="L150">        buffer.position(newPos);</span>
-<span class="fc" id="L151">        read = true;</span>
-<span class="fc" id="L152">        return skipped;</span>
+<span class="fc" id="L147">        int skipped = Math.min(buffer.remaining(), (int)n);</span>
+<span class="fc" id="L148">        int newPos = buffer.position() + skipped;</span>
+<span class="fc" id="L149">        buffer.position(newPos);</span>
+<span class="fc" id="L150">        read = true;</span>
+<span class="fc" id="L151">        return skipped;</span>
     }
 
     /**
@@ -160,9 +159,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void write(int b) throws IOException {
-<span class="fc" id="L163">        randomAccessFile.write(b);</span>
-<span class="fc" id="L164">        read = false;</span>
-<span class="fc" id="L165">    }</span>
+<span class="fc" id="L162">        randomAccessFile.write(b);</span>
+<span class="fc" id="L163">        read = false;</span>
+<span class="fc" id="L164">    }</span>
 
     /**
      * Writes b.length bytes from the specified byte array to this file, 
@@ -172,9 +171,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void write(byte[] b) throws IOException {
-<span class="fc" id="L175">        randomAccessFile.write(b);</span>
-<span class="fc" id="L176">        read = false;</span>
-<span class="fc" id="L177">    }</span>
+<span class="fc" id="L174">        randomAccessFile.write(b);</span>
+<span class="fc" id="L175">        read = false;</span>
+<span class="fc" id="L176">    }</span>
 
     /**
      * Writes len bytes from the specified byte array starting at offset off to
@@ -186,9 +185,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-<span class="fc" id="L189">        randomAccessFile.write(b, off, len);</span>
-<span class="fc" id="L190">        read = false;</span>
-<span class="fc" id="L191">    }</span>
+<span class="fc" id="L188">        randomAccessFile.write(b, off, len);</span>
+<span class="fc" id="L189">        read = false;</span>
+<span class="fc" id="L190">    }</span>
 
     /**
      * Returns the current offset in this file.
@@ -198,10 +197,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public long getPosition() throws IOException {
-<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (read) {</span>
-<span class="fc" id="L202">            return buffer.position();</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (read) {</span>
+<span class="fc" id="L201">            return buffer.position();</span>
         } else {
-<span class="fc" id="L204">            return randomAccessFile.getFilePointer();</span>
+<span class="fc" id="L203">            return randomAccessFile.getFilePointer();</span>
         }
     }
 
@@ -213,7 +212,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public boolean isEndOfStream() throws IOException {
-<span class="fc bfc" id="L216" title="All 2 branches covered.">        return getPosition() &gt;= randomAccessFile.length();</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        return getPosition() &gt;= randomAccessFile.length();</span>
     }
 
     /**
@@ -225,9 +224,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void seek(long pos) {
-<span class="fc" id="L228">        buffer.position((int)pos);</span>
-<span class="fc" id="L229">        read = true;</span>
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L227">        buffer.position((int)pos);</span>
+<span class="fc" id="L228">        read = true;</span>
+<span class="fc" id="L229">    }</span>
 
     /**
      * Closes this file stream and releases any system resources associated with
@@ -239,9 +238,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public void close() throws IOException {
-<span class="fc" id="L242">        buffer.force();</span>
-<span class="fc" id="L243">        randomAccessFile.close();</span>
-<span class="fc" id="L244">    }</span>
+<span class="fc" id="L241">        buffer.force();</span>
+<span class="fc" id="L242">        randomAccessFile.close();</span>
+<span class="fc" id="L243">    }</span>
 
     /**
      * Reads a boolean from this file. This method reads a single byte from the
@@ -252,8 +251,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public boolean readBoolean() {
-<span class="fc" id="L255">        read = true;</span>
-<span class="fc bfc" id="L256" title="All 2 branches covered.">        return buffer.get() != 0;</span>
+<span class="fc" id="L254">        read = true;</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        return buffer.get() != 0;</span>
     }
 
     /**
@@ -266,8 +265,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public byte readByte() {
-<span class="fc" id="L269">        read = true;</span>
-<span class="fc" id="L270">        return buffer.get();</span>
+<span class="fc" id="L268">        read = true;</span>
+<span class="fc" id="L269">        return buffer.get();</span>
     }
 
     /**
@@ -281,8 +280,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public short readUnsignedByte() {
-<span class="fc" id="L284">        read = true;</span>
-<span class="fc" id="L285">        return (short)(((((int)buffer.get()) &lt;&lt; 8) &gt;&gt; 8) &amp; 0xff);</span>
+<span class="fc" id="L283">        read = true;</span>
+<span class="fc" id="L284">        return (short)(((((int)buffer.get()) &lt;&lt; 8) &gt;&gt; 8) &amp; 0xff);</span>
     }
 
     /**
@@ -298,8 +297,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public short readShort() {
-<span class="fc" id="L301">        read = true;</span>
-<span class="fc" id="L302">        return buffer.getShort();</span>
+<span class="fc" id="L300">        read = true;</span>
+<span class="fc" id="L301">        return buffer.getShort();</span>
     }
 
     /**
@@ -315,8 +314,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public short readShort(EndianType endianType) {
-<span class="fc" id="L318">        read = true;</span>
-<span class="fc" id="L319">        return Util.fromEndianType(endianType, buffer.getShort());</span>
+<span class="fc" id="L317">        read = true;</span>
+<span class="fc" id="L318">        return Util.fromEndianType(endianType, buffer.getShort());</span>
     }
 
     /**
@@ -331,15 +330,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int readUnsignedShort() {
-<span class="fc" id="L334">        read = true;</span>
-<span class="fc" id="L335">        short value = buffer.getShort();</span>
+<span class="fc" id="L333">        read = true;</span>
+<span class="fc" id="L334">        short value = buffer.getShort();</span>
         
         //convert value to byte array
-<span class="fc" id="L338">        int firstShortByte = 0xff &amp; (value &gt;&gt; 8);</span>
-<span class="fc" id="L339">        int secondShortByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 8);</span>
+<span class="fc" id="L337">        int firstShortByte = 0xff &amp; (value &gt;&gt; 8);</span>
+<span class="fc" id="L338">        int secondShortByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 8);</span>
         
         //return it as integer
-<span class="fc" id="L342">        return 0xffff &amp; ((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L341">        return 0xffff &amp; ((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
     }
 
@@ -357,16 +356,16 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int readUnsignedShort(EndianType endianType) {
-<span class="fc" id="L360">        read = true;</span>
-<span class="fc" id="L361">        short streamValue = buffer.getShort();</span>
-<span class="fc" id="L362">        short value = Util.fromEndianType(endianType, streamValue);</span>
+<span class="fc" id="L359">        read = true;</span>
+<span class="fc" id="L360">        short streamValue = buffer.getShort();</span>
+<span class="fc" id="L361">        short value = Util.fromEndianType(endianType, streamValue);</span>
         
         //convert value to byte array
-<span class="fc" id="L365">        int firstShortByte = 0xff &amp; (value &gt;&gt; 8);</span>
-<span class="fc" id="L366">        int secondShortByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 8);</span>
+<span class="fc" id="L364">        int firstShortByte = 0xff &amp; (value &gt;&gt; 8);</span>
+<span class="fc" id="L365">        int secondShortByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 8);</span>
         
         //return it as integer
-<span class="fc" id="L369">        return 0xffff &amp; ((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L368">        return 0xffff &amp; ((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
     }
 
@@ -382,8 +381,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int readInt() {
-<span class="fc" id="L385">        read = true;</span>
-<span class="fc" id="L386">        return buffer.getInt();</span>
+<span class="fc" id="L384">        read = true;</span>
+<span class="fc" id="L385">        return buffer.getInt();</span>
     }
 
     /**
@@ -399,8 +398,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public int readInt(EndianType endianType) {
-<span class="fc" id="L402">        read = true;</span>
-<span class="fc" id="L403">        return Util.fromEndianType(endianType, buffer.getInt());</span>
+<span class="fc" id="L401">        read = true;</span>
+<span class="fc" id="L402">        return Util.fromEndianType(endianType, buffer.getInt());</span>
     }
 
     /**
@@ -415,17 +414,17 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */        
     @Override
     public long readUnsignedInt() {
-<span class="fc" id="L418">        read = true;</span>
-<span class="fc" id="L419">        int value = buffer.getInt();</span>
+<span class="fc" id="L417">        read = true;</span>
+<span class="fc" id="L418">        int value = buffer.getInt();</span>
         
         //convert value to byte array
-<span class="fc" id="L422">        int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
-<span class="fc" id="L423">        int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
-<span class="fc" id="L424">        int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
-<span class="fc" id="L425">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
+<span class="fc" id="L421">        int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
+<span class="fc" id="L422">        int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
+<span class="fc" id="L423">        int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
+<span class="fc" id="L424">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
         
         //return it as integer
-<span class="fc" id="L428">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L427">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte);
@@ -444,18 +443,18 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */        
     @Override
     public long readUnsignedInt(EndianType endianType) {
-<span class="fc" id="L447">        read = true;</span>
-<span class="fc" id="L448">        int streamValue = buffer.getInt();</span>
-<span class="fc" id="L449">        int value = Util.fromEndianType(endianType, streamValue);</span>
+<span class="fc" id="L446">        read = true;</span>
+<span class="fc" id="L447">        int streamValue = buffer.getInt();</span>
+<span class="fc" id="L448">        int value = Util.fromEndianType(endianType, streamValue);</span>
         
         //convert value to byte array
-<span class="fc" id="L452">        int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
-<span class="fc" id="L453">        int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
-<span class="fc" id="L454">        int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
-<span class="fc" id="L455">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
+<span class="fc" id="L451">        int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
+<span class="fc" id="L452">        int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
+<span class="fc" id="L453">        int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
+<span class="fc" id="L454">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
         
         //return it as integer
-<span class="fc" id="L458">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L457">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte);
@@ -477,8 +476,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public long readLong() {
-<span class="fc" id="L480">        read = true;</span>
-<span class="fc" id="L481">        return buffer.getLong();</span>
+<span class="fc" id="L479">        read = true;</span>
+<span class="fc" id="L480">        return buffer.getLong();</span>
     }
 
     /**
@@ -494,8 +493,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public long readLong(EndianType endianType) {
-<span class="fc" id="L497">        read = true;</span>
-<span class="fc" id="L498">        return Util.fromEndianType(endianType, buffer.getLong());</span>
+<span class="fc" id="L496">        read = true;</span>
+<span class="fc" id="L497">        return Util.fromEndianType(endianType, buffer.getLong());</span>
     }
 
     /**
@@ -508,8 +507,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public float readFloat() {
-<span class="fc" id="L511">        read = true;</span>
-<span class="fc" id="L512">        return buffer.getFloat();</span>
+<span class="fc" id="L510">        read = true;</span>
+<span class="fc" id="L511">        return buffer.getFloat();</span>
     }
 
     /**
@@ -524,8 +523,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public float readFloat(EndianType endianType) {
-<span class="fc" id="L527">        read = true;</span>
-<span class="fc" id="L528">        return Util.fromEndianType(endianType, buffer.getFloat());</span>
+<span class="fc" id="L526">        read = true;</span>
+<span class="fc" id="L527">        return Util.fromEndianType(endianType, buffer.getFloat());</span>
     }
 
     /**
@@ -539,8 +538,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public double readDouble() {
-<span class="fc" id="L542">        read = true;</span>
-<span class="fc" id="L543">        return buffer.getDouble();</span>
+<span class="fc" id="L541">        read = true;</span>
+<span class="fc" id="L542">        return buffer.getDouble();</span>
     }
 
     /**
@@ -555,8 +554,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public double readDouble(EndianType endianType) {
-<span class="fc" id="L558">        read = true;</span>
-<span class="fc" id="L559">        return Util.fromEndianType(endianType, buffer.getDouble());</span>
+<span class="fc" id="L557">        read = true;</span>
+<span class="fc" id="L558">        return Util.fromEndianType(endianType, buffer.getDouble());</span>
     }
 
     /**
@@ -579,11 +578,11 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public String readLine() {
-<span class="fc" id="L582">        read = true;</span>
-<span class="fc bfc" id="L583" title="All 2 branches covered.">        if (buffer.hasRemaining()) {</span>
-<span class="fc" id="L584">            return readUntilAnyOfTheseCharactersIsFound(&quot;\n&quot;);</span>
+<span class="fc" id="L581">        read = true;</span>
+<span class="fc bfc" id="L582" title="All 2 branches covered.">        if (buffer.hasRemaining()) {</span>
+<span class="fc" id="L583">            return readUntilAnyOfTheseCharactersIsFound(&quot;\n&quot;);</span>
         } else {
-<span class="fc" id="L586">            return null;</span>
+<span class="fc" id="L585">            return null;</span>
         }
     }
     
@@ -601,27 +600,27 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public String readUntilAnyOfTheseCharactersIsFound(String pattern) {
         
-<span class="pc bpc" id="L604" title="1 of 2 branches missed.">        if (pattern.length() == 0) {</span>
-<span class="nc" id="L605">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L603" title="1 of 2 branches missed.">        if (pattern.length() == 0) {</span>
+<span class="nc" id="L604">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L608">        read = true;</span>
+<span class="fc" id="L607">        read = true;</span>
 
-<span class="fc" id="L610">        StringBuilder stringBuffer = new StringBuilder();</span>
-<span class="fc" id="L611">        byte [] charBuffer = new byte[1];        </span>
+<span class="fc" id="L609">        StringBuilder stringBuffer = new StringBuilder();</span>
+<span class="fc" id="L610">        byte [] charBuffer = new byte[1];        </span>
         String character;
-<span class="fc bfc" id="L613" title="All 2 branches covered.">        while (buffer.hasRemaining()) {</span>
-<span class="fc" id="L614">            charBuffer[0] = buffer.get();</span>
-<span class="fc" id="L615">            character = new String(charBuffer);</span>
-<span class="fc bfc" id="L616" title="All 2 branches covered.">            if (pattern.contains(character)) {</span>
+<span class="fc bfc" id="L612" title="All 2 branches covered.">        while (buffer.hasRemaining()) {</span>
+<span class="fc" id="L613">            charBuffer[0] = buffer.get();</span>
+<span class="fc" id="L614">            character = new String(charBuffer);</span>
+<span class="fc bfc" id="L615" title="All 2 branches covered.">            if (pattern.contains(character)) {</span>
                 //character found
-<span class="fc" id="L618">                break;</span>
+<span class="fc" id="L617">                break;</span>
             }
             //add character to output buffer
-<span class="fc" id="L621">            stringBuffer.append(character);</span>
+<span class="fc" id="L620">            stringBuffer.append(character);</span>
         }
         
-<span class="fc" id="L624">        return stringBuffer.toString();</span>
+<span class="fc" id="L623">        return stringBuffer.toString();</span>
     }
 
     /**
@@ -634,9 +633,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeBoolean(boolean v) throws IOException {
-<span class="fc" id="L637">        randomAccessFile.writeBoolean(v);</span>
-<span class="fc" id="L638">        read = false;</span>
-<span class="fc" id="L639">    }</span>
+<span class="fc" id="L636">        randomAccessFile.writeBoolean(v);</span>
+<span class="fc" id="L637">        read = false;</span>
+<span class="fc" id="L638">    }</span>
 
     /**
      * Writes a byte to the file as a one-byte value. The write starts at the
@@ -646,9 +645,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeByte(byte v) throws IOException {
-<span class="fc" id="L649">        randomAccessFile.writeByte(v);</span>
-<span class="fc" id="L650">        read = false;</span>
-<span class="fc" id="L651">    }</span>
+<span class="fc" id="L648">        randomAccessFile.writeByte(v);</span>
+<span class="fc" id="L649">        read = false;</span>
+<span class="fc" id="L650">    }</span>
 
     /**
      * Writes provided value in the range 0-255 as an unsigned byte. The write
@@ -658,10 +657,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedByte(short v) throws IOException {
-<span class="fc" id="L661">        byte data = (byte)(0xff &amp; v);</span>
-<span class="fc" id="L662">        randomAccessFile.writeByte(data);</span>
-<span class="fc" id="L663">        read = false;</span>
-<span class="fc" id="L664">    }</span>
+<span class="fc" id="L660">        byte data = (byte)(0xff &amp; v);</span>
+<span class="fc" id="L661">        randomAccessFile.writeByte(data);</span>
+<span class="fc" id="L662">        read = false;</span>
+<span class="fc" id="L663">    }</span>
 
     /**
      * Writes a short to the file as two bytes, high byte first. The write 
@@ -671,9 +670,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeShort(short v) throws IOException {
-<span class="fc" id="L674">        randomAccessFile.writeShort(v);</span>
-<span class="fc" id="L675">        read = false;</span>
-<span class="fc" id="L676">    }</span>
+<span class="fc" id="L673">        randomAccessFile.writeShort(v);</span>
+<span class="fc" id="L674">        read = false;</span>
+<span class="fc" id="L675">    }</span>
 
     /**
      * Writes a short to the file as two bytes using provided enadian type.
@@ -687,10 +686,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeShort(short v, EndianType endianType) throws IOException {
-<span class="fc" id="L690">        short value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L691">        randomAccessFile.writeShort(value);</span>
-<span class="fc" id="L692">        read = false;</span>
-<span class="fc" id="L693">    }</span>
+<span class="fc" id="L689">        short value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L690">        randomAccessFile.writeShort(value);</span>
+<span class="fc" id="L691">        read = false;</span>
+<span class="fc" id="L692">    }</span>
 
     /**
      * Writes an unsigned short to the file as two bytes, high byte first. 
@@ -703,15 +702,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedShort(int v) throws IOException {
-<span class="fc" id="L706">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
-<span class="fc" id="L707">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
+<span class="fc" id="L705">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
+<span class="fc" id="L706">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
         
-<span class="fc" id="L709">        short value = (short)((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L708">        short value = (short)((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
         
-<span class="fc" id="L712">        randomAccessFile.writeShort(value);        </span>
-<span class="fc" id="L713">        read = false;</span>
-<span class="fc" id="L714">    }</span>
+<span class="fc" id="L711">        randomAccessFile.writeShort(value);        </span>
+<span class="fc" id="L712">        read = false;</span>
+<span class="fc" id="L713">    }</span>
 
     /**
      * Writes an unsigned short to the file as two bytes, using provided endian
@@ -731,16 +730,16 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public void writeUnsignedShort(int v, EndianType endianType) 
             throws IOException {
-<span class="fc" id="L734">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
-<span class="fc" id="L735">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
+<span class="fc" id="L733">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
+<span class="fc" id="L734">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
         
-<span class="fc" id="L737">        short machineValue = (short)((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L736">        short machineValue = (short)((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
-<span class="fc" id="L739">        short value = Util.toEndianType(endianType, machineValue);</span>
+<span class="fc" id="L738">        short value = Util.toEndianType(endianType, machineValue);</span>
         
-<span class="fc" id="L741">        randomAccessFile.writeShort(value);        </span>
-<span class="fc" id="L742">        read = false;</span>
-<span class="fc" id="L743">    }</span>
+<span class="fc" id="L740">        randomAccessFile.writeShort(value);        </span>
+<span class="fc" id="L741">        read = false;</span>
+<span class="fc" id="L742">    }</span>
 
     /**
      * Writes an int to the file as four bytes, high byte first. The write 
@@ -750,9 +749,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeInt(int v) throws IOException {
-<span class="fc" id="L753">        randomAccessFile.writeInt(v);</span>
-<span class="fc" id="L754">        read = false;</span>
-<span class="fc" id="L755">    }</span>
+<span class="fc" id="L752">        randomAccessFile.writeInt(v);</span>
+<span class="fc" id="L753">        read = false;</span>
+<span class="fc" id="L754">    }</span>
 
     /**
      * Writes an int to the file as four bytes, using provided endian type.
@@ -767,10 +766,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeInt(int v, EndianType endianType) throws IOException {
-<span class="fc" id="L770">        int value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L771">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L772">        read = false;</span>
-<span class="fc" id="L773">    }</span>
+<span class="fc" id="L769">        int value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L770">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L771">        read = false;</span>
+<span class="fc" id="L772">    }</span>
 
     /**
      * Writes an unsigned int to the file as four bytes, high byte first. 
@@ -783,19 +782,19 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */    
     @Override
     public void writeUnsignedInt(long v) throws IOException {
-<span class="fc" id="L786">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
-<span class="fc" id="L787">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
-<span class="fc" id="L788">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
-<span class="fc" id="L789">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
+<span class="fc" id="L785">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
+<span class="fc" id="L786">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
+<span class="fc" id="L787">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
+<span class="fc" id="L788">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
         
-<span class="fc" id="L791">        int value = (firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L790">        int value = (firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte;
         
-<span class="fc" id="L796">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L797">        read = false;</span>
-<span class="fc" id="L798">    }</span>
+<span class="fc" id="L795">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L796">        read = false;</span>
+<span class="fc" id="L797">    }</span>
 
     /**
      * Writes an unsigned int to the file as four bytes, using provided endian
@@ -815,20 +814,20 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public void writeUnsignedInt(long v, EndianType endianType) 
             throws IOException {
-<span class="fc" id="L818">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
-<span class="fc" id="L819">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
-<span class="fc" id="L820">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
-<span class="fc" id="L821">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
+<span class="fc" id="L817">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
+<span class="fc" id="L818">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
+<span class="fc" id="L819">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
+<span class="fc" id="L820">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
         
-<span class="fc" id="L823">        int machineValue = (firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L822">        int machineValue = (firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte;
-<span class="fc" id="L827">        int value = Util.toEndianType(endianType, machineValue);</span>
+<span class="fc" id="L826">        int value = Util.toEndianType(endianType, machineValue);</span>
         
-<span class="fc" id="L829">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L830">        read = false;</span>
-<span class="fc" id="L831">    }</span>
+<span class="fc" id="L828">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L829">        read = false;</span>
+<span class="fc" id="L830">    }</span>
 
     /**
      * Writes a long to the file as eight bytes, high byte first. The write 
@@ -838,9 +837,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeLong(long v) throws IOException {
-<span class="fc" id="L841">        randomAccessFile.writeLong(v);</span>
-<span class="fc" id="L842">        read = false;</span>
-<span class="fc" id="L843">    }</span>
+<span class="fc" id="L840">        randomAccessFile.writeLong(v);</span>
+<span class="fc" id="L841">        read = false;</span>
+<span class="fc" id="L842">    }</span>
 
     /**
      * Writes a long to the file as eight bytes, using provided endian type. 
@@ -855,10 +854,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeLong(long v, EndianType endianType) throws IOException {
-<span class="fc" id="L858">        long value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L859">        randomAccessFile.writeLong(value);</span>
-<span class="fc" id="L860">        read = false;</span>
-<span class="fc" id="L861">    }</span>
+<span class="fc" id="L857">        long value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L858">        randomAccessFile.writeLong(value);</span>
+<span class="fc" id="L859">        read = false;</span>
+<span class="fc" id="L860">    }</span>
 
     /**
      * Converts the float argument to an int using the floatToIntBits method in
@@ -870,9 +869,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeFloat(float v) throws IOException {
-<span class="fc" id="L873">        randomAccessFile.writeFloat(v);</span>
-<span class="fc" id="L874">        read = false;</span>
-<span class="fc" id="L875">    }</span>
+<span class="fc" id="L872">        randomAccessFile.writeFloat(v);</span>
+<span class="fc" id="L873">        read = false;</span>
+<span class="fc" id="L874">    }</span>
 
     /**
      * Converts the float argument to an int using the floatToIntBits method in
@@ -889,10 +888,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeFloat(float v, EndianType endianType) throws IOException {
-<span class="fc" id="L892">        float value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L893">        randomAccessFile.writeFloat(value);</span>
-<span class="fc" id="L894">        read = false;</span>
-<span class="fc" id="L895">    }</span>
+<span class="fc" id="L891">        float value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L892">        randomAccessFile.writeFloat(value);</span>
+<span class="fc" id="L893">        read = false;</span>
+<span class="fc" id="L894">    }</span>
 
     /**
      * Converts the double argument to a long using the doubleToLongBits method
@@ -904,9 +903,9 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeDouble(double v) throws IOException {
-<span class="fc" id="L907">        randomAccessFile.writeDouble(v);</span>
-<span class="fc" id="L908">        read = false;</span>
-<span class="fc" id="L909">    }</span>
+<span class="fc" id="L906">        randomAccessFile.writeDouble(v);</span>
+<span class="fc" id="L907">        read = false;</span>
+<span class="fc" id="L908">    }</span>
 
     /**
      * Converts the double argument to a long using the doubleToLongBits method
@@ -923,10 +922,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeDouble(double v, EndianType endianType) throws IOException {
-<span class="fc" id="L926">        double value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L927">        randomAccessFile.writeDouble(value);</span>
-<span class="fc" id="L928">        read = false;</span>
-<span class="fc" id="L929">    }</span>
+<span class="fc" id="L925">        double value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L926">        randomAccessFile.writeDouble(value);</span>
+<span class="fc" id="L927">        read = false;</span>
+<span class="fc" id="L928">    }</span>
 
     /**
      * Writes the string to the file as a sequence of bytes. Each character in
@@ -937,8 +936,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeASCII(String s) throws IOException {
-<span class="fc" id="L940">        randomAccessFile.writeBytes(s);</span>
-<span class="fc" id="L941">        read = false;</span>
-<span class="fc" id="L942">    }</span>
+<span class="fc" id="L939">        randomAccessFile.writeBytes(s);</span>
+<span class="fc" id="L940">        read = false;</span>
+<span class="fc" id="L941">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

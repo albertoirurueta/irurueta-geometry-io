@@ -2493,33 +2493,35 @@
 <a class="jxr_linenumber" name="L2485" href="#L2485">2485</a>                             loader.materials = materialLoader.load();
 <a class="jxr_linenumber" name="L2486" href="#L2486">2486</a>                             materialLoader.close(); <em class="jxr_comment">//to release file resources</em>
 <a class="jxr_linenumber" name="L2487" href="#L2487">2487</a>                         }
-<a class="jxr_linenumber" name="L2488" href="#L2488">2488</a>                     } <strong class="jxr_keyword">catch</strong>(Exception e) {
-<a class="jxr_linenumber" name="L2489" href="#L2489">2489</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderException.html">LoaderException</a>(e);
-<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a>                     }
-<a class="jxr_linenumber" name="L2491" href="#L2491">2491</a> 
-<a class="jxr_linenumber" name="L2492" href="#L2492">2492</a>                 } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (str.startsWith(USEMTL) &amp;&amp; !firstMaterialStreamPositionAvailable) {
-<a class="jxr_linenumber" name="L2493" href="#L2493">2493</a>                     firstMaterialStreamPositionAvailable = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L2494" href="#L2494">2494</a>                     firstMaterialStreamPosition = streamPosition;
-<a class="jxr_linenumber" name="L2495" href="#L2495">2495</a>                     materialsAvailable = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L2496" href="#L2496">2496</a>                 }
-<a class="jxr_linenumber" name="L2497" href="#L2497">2497</a> 
-<a class="jxr_linenumber" name="L2498" href="#L2498">2498</a>                 <em class="jxr_comment">//ignore any other line</em>
-<a class="jxr_linenumber" name="L2499" href="#L2499">2499</a>             } <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>); <em class="jxr_comment">//read until end of file when str == null</em>
-<a class="jxr_linenumber" name="L2500" href="#L2500">2500</a> 
-<a class="jxr_linenumber" name="L2501" href="#L2501">2501</a>             <em class="jxr_comment">//move to first face tream position</em>
-<a class="jxr_linenumber" name="L2502" href="#L2502">2502</a>             <strong class="jxr_keyword">if</strong> (!firstFaceStreamPositionAvailable) {
-<a class="jxr_linenumber" name="L2503" href="#L2503">2503</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderException.html">LoaderException</a>();
-<a class="jxr_linenumber" name="L2504" href="#L2504">2504</a>             }
-<a class="jxr_linenumber" name="L2505" href="#L2505">2505</a> 
-<a class="jxr_linenumber" name="L2506" href="#L2506">2506</a>             <strong class="jxr_keyword">if</strong> (materialsAvailable &amp;&amp;
-<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a>                     firstMaterialStreamPosition &lt; firstFaceStreamPosition) {
-<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a>                 reader.seek(firstMaterialStreamPosition);
-<a class="jxr_linenumber" name="L2509" href="#L2509">2509</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L2510" href="#L2510">2510</a>                 reader.seek(firstFaceStreamPosition);
-<a class="jxr_linenumber" name="L2511" href="#L2511">2511</a>             }
-<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a>         }
-<a class="jxr_linenumber" name="L2513" href="#L2513">2513</a>     }
-<a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> }
+<a class="jxr_linenumber" name="L2488" href="#L2488">2488</a>                     } <strong class="jxr_keyword">catch</strong> (LoaderException e) {
+<a class="jxr_linenumber" name="L2489" href="#L2489">2489</a>                         <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a>                     } <strong class="jxr_keyword">catch</strong>(Exception e) {
+<a class="jxr_linenumber" name="L2491" href="#L2491">2491</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderException.html">LoaderException</a>(e);
+<a class="jxr_linenumber" name="L2492" href="#L2492">2492</a>                     }
+<a class="jxr_linenumber" name="L2493" href="#L2493">2493</a> 
+<a class="jxr_linenumber" name="L2494" href="#L2494">2494</a>                 } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (str.startsWith(USEMTL) &amp;&amp; !firstMaterialStreamPositionAvailable) {
+<a class="jxr_linenumber" name="L2495" href="#L2495">2495</a>                     firstMaterialStreamPositionAvailable = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L2496" href="#L2496">2496</a>                     firstMaterialStreamPosition = streamPosition;
+<a class="jxr_linenumber" name="L2497" href="#L2497">2497</a>                     materialsAvailable = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L2498" href="#L2498">2498</a>                 }
+<a class="jxr_linenumber" name="L2499" href="#L2499">2499</a> 
+<a class="jxr_linenumber" name="L2500" href="#L2500">2500</a>                 <em class="jxr_comment">//ignore any other line</em>
+<a class="jxr_linenumber" name="L2501" href="#L2501">2501</a>             } <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>); <em class="jxr_comment">//read until end of file when str == null</em>
+<a class="jxr_linenumber" name="L2502" href="#L2502">2502</a> 
+<a class="jxr_linenumber" name="L2503" href="#L2503">2503</a>             <em class="jxr_comment">//move to first face tream position</em>
+<a class="jxr_linenumber" name="L2504" href="#L2504">2504</a>             <strong class="jxr_keyword">if</strong> (!firstFaceStreamPositionAvailable) {
+<a class="jxr_linenumber" name="L2505" href="#L2505">2505</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderException.html">LoaderException</a>();
+<a class="jxr_linenumber" name="L2506" href="#L2506">2506</a>             }
+<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> 
+<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a>             <strong class="jxr_keyword">if</strong> (materialsAvailable &amp;&amp;
+<a class="jxr_linenumber" name="L2509" href="#L2509">2509</a>                     firstMaterialStreamPosition &lt; firstFaceStreamPosition) {
+<a class="jxr_linenumber" name="L2510" href="#L2510">2510</a>                 reader.seek(firstMaterialStreamPosition);
+<a class="jxr_linenumber" name="L2511" href="#L2511">2511</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a>                 reader.seek(firstFaceStreamPosition);
+<a class="jxr_linenumber" name="L2513" href="#L2513">2513</a>             }
+<a class="jxr_linenumber" name="L2514" href="#L2514">2514</a>         }
+<a class="jxr_linenumber" name="L2515" href="#L2515">2515</a>     }
+<a class="jxr_linenumber" name="L2516" href="#L2516">2516</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

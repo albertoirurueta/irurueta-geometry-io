@@ -516,14 +516,14 @@ public class MeshWriterBinary extends MeshWriter {
 <span class="fc" id="L516">        dataStream.writeLong(length);</span>
         
         //write file data
-<span class="fc" id="L519">        InputStream textureStream = new FileInputStream(textureFile);</span>
-<span class="fc" id="L520">        byte[] buffer = new byte[BUFFER_SIZE];</span>
-        int n;
-<span class="fc bfc" id="L522" title="All 2 branches covered.">        while ((n = textureStream.read(buffer)) &gt; 0) {</span>
-<span class="fc" id="L523">            dataStream.write(buffer, 0, n);</span>
+<span class="fc" id="L519">        try (InputStream textureStream = new FileInputStream(textureFile)) {</span>
+<span class="fc" id="L520">            byte[] buffer = new byte[BUFFER_SIZE];</span>
+            int n;
+<span class="fc bfc" id="L522" title="All 2 branches covered.">            while ((n = textureStream.read(buffer)) &gt; 0) {</span>
+<span class="fc" id="L523">                dataStream.write(buffer, 0, n);</span>
+            }
+<span class="fc" id="L525">            dataStream.flush();</span>
         }
-<span class="fc" id="L525">        dataStream.flush();</span>
-<span class="fc" id="L526">        textureStream.close();</span>
 <span class="fc" id="L527">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
