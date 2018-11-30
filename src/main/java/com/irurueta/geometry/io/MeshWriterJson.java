@@ -250,7 +250,9 @@ public class MeshWriterJson extends MeshWriter {
             
             try {
                 loader.setListener(this.internalListeners);
-            } catch (LockedException ignore) { }
+            } catch (LockedException ignore) {
+                //never happens
+            }
 
                         
             writer.write("{\"textures\":[");

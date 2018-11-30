@@ -621,7 +621,10 @@ public class LoaderSTL extends Loader {
                         if (word.equalsIgnoreCase(ASCII_FACET)) {
                             //read normal
                             word = readNonEmptyWord();
-                            
+                            if (word == null) {
+                                throw new LoaderException(); //undefined word
+                            }
+
                             if (word.equalsIgnoreCase(ASCII_NORMAL)) {
                                 //read 3 normal values
                                 
@@ -638,6 +641,10 @@ public class LoaderSTL extends Loader {
                         } else if (word.equalsIgnoreCase(ASCII_OUTER)) {
                             //next word has to be loop
                             word = readNonEmptyWord();
+                            if (word == null) {
+                                throw new LoaderException(); //undefined word
+                            }
+
                             if (!word.equalsIgnoreCase(ASCII_LOOP)) {
                                 throw new LoaderException(); //unexpected word
                             }

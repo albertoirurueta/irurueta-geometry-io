@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2326f7cd-cae4-4b0e-b5e9-6299f4c81c95" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MappedFileReaderAndWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MappedFileReaderAndWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterBinary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterBinary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/PropertyPLY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/PropertyPLY.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Util.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,35 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="801" column="50" selection-start-line="801" selection-start-column="50" selection-end-line="801" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="520" selection-start-line="520" selection-end-line="520" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/PropertyPLY.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="225" selection-start-line="225" selection-end-line="225" />
-              <folding>
-                <element signature="e#9112#9113#0" expanded="true" />
-                <element signature="e#10652#10653#0" expanded="true" />
-                <element signature="e#12162#12163#0" expanded="true" />
-                <element signature="e#13760#13761#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="261">
+              <caret line="243" column="12" lean-forward="true" selection-start-line="243" selection-start-column="12" selection-end-line="243" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -127,13 +97,13 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MaterialLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MaterialLoaderOBJ.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MappedFileReaderAndWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterBinary.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/PropertyPLY.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/Util.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java" />
       </list>
     </option>
   </component>
@@ -151,8 +121,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="162" />
-    <option name="y" value="23" />
+    <option name="x" value="191" />
+    <option name="y" value="50" />
     <option name="width" value="1261" />
     <option name="height" value="877" />
   </component>
@@ -349,7 +319,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543611753666" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543613007638" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -577,14 +547,11 @@
       <workItem from="1543446390999" duration="4202000" />
       <workItem from="1543503572355" duration="2543000" />
       <workItem from="1543528585305" duration="4020000" />
-      <workItem from="1543600492119" duration="6832000" />
+      <workItem from="1543600492119" duration="7789000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 06m 05s.xml">
-      <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="LoaderIteratorPLYTest - 2018.11.30 at 00h 06m 33s.xml">
       <configuration name="LoaderIteratorPLYTest" configurationId="JUnit" />
     </history-entry>
@@ -612,15 +579,18 @@
     <history-entry file="com_irurueta_geometry_io_in_irurueta-geometry-io - 2018.11.30 at 21h 47m 56s.xml">
       <configuration name="com.irurueta.geometry.io in irurueta-geometry-io" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="com_irurueta_geometry_io_in_irurueta-geometry-io - 2018.11.30 at 22h 27m 19s.xml">
+      <configuration name="com.irurueta.geometry.io in irurueta-geometry-io" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58154000" />
+    <option name="totallyTimeSpent" value="59111000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="162" y="23" width="1261" height="877" extended-state="0" />
+    <frame x="191" y="50" width="1261" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28219852" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28219852" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Nl-Palette" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -630,7 +600,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3299363" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32866243" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32866243" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1161,13 +1131,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="801" column="50" selection-start-line="801" selection-start-column="50" selection-end-line="801" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
@@ -1258,10 +1221,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/LoaderSTL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="646" lean-forward="true" selection-start-line="646" selection-end-line="646" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="520" selection-start-line="520" selection-end-line="520" />
+        <state relative-caret-position="261">
+          <caret line="243" column="12" lean-forward="true" selection-start-line="243" selection-start-column="12" selection-end-line="243" selection-end-column="12" />
         </state>
       </provider>
     </entry>
