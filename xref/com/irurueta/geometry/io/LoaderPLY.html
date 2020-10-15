@@ -750,7 +750,7 @@
 <a class="jxr_linenumber" name="L742" href="#L742">742</a>         }
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 
 <a class="jxr_linenumber" name="L744" href="#L744">744</a>         loaderIterator = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorPLY</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>         loaderIterator.setListener(<strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderSTL.html">LoaderIteratorListenerImpl</a>(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>         loaderIterator.setListener(<strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorListenerImpl</a>(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L746" href="#L746">746</a>     }
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 
 <a class="jxr_linenumber" name="L748" href="#L748">748</a>     <em class="jxr_javadoccomment">/**</em>
@@ -1030,7 +1030,7 @@
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">     * Internal listener to be notified when loading process finishes.</em>
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">     * This listener is used to free resources when loading process finishes.</em>
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/io/LoaderSTL.html">LoaderIteratorListenerImpl</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/irurueta/geometry/io/LoaderIteratorListener.html">LoaderIteratorListener</a> {
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorListenerImpl</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/irurueta/geometry/io/LoaderIteratorListener.html">LoaderIteratorListener</a> {
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a>         <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">         * Reference to Loader loading PLY file.</em>
@@ -1041,7 +1041,7 @@
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">         * Constructor.</em>
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">         * @param loader reference to Loader.</em>
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">         */</em>
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/io/LoaderSTL.html">LoaderIteratorListenerImpl</a>(<a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderPLY</a> loader) {
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorListenerImpl</a>(<a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderPLY</a> loader) {
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a>             <strong class="jxr_keyword">this</strong>.loader = loader;
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a>         }
 <a class="jxr_linenumber" name="L1039" href="#L1039">1039</a>         
@@ -8390,6 +8390,6 @@
 <a class="jxr_linenumber" name="L8382" href="#L8382">8382</a> <em class="jxr_comment">//TODO: add unit tests for loader ply</em>
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>

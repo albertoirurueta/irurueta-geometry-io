@@ -687,7 +687,7 @@
 <a class="jxr_linenumber" name="L679" href="#L679">679</a>         }
 <a class="jxr_linenumber" name="L680" href="#L680">680</a>         
 <a class="jxr_linenumber" name="L681" href="#L681">681</a>         loaderIterator = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderOBJ.html">LoaderIteratorOBJ</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a>         loaderIterator.setListener(<strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderSTL.html">LoaderIteratorListenerImpl</a>(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>         loaderIterator.setListener(<strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorListenerImpl</a>(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L683" href="#L683">683</a>         <strong class="jxr_keyword">return</strong> loaderIterator;
 <a class="jxr_linenumber" name="L684" href="#L684">684</a>     }
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> 
@@ -727,7 +727,7 @@
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">     * Internal listener to be notified when loading process finishes.</em>
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">     * This listener is used to free resources when loading process finishes.</em>
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L722" href="#L722">722</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/io/LoaderSTL.html">LoaderIteratorListenerImpl</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/irurueta/geometry/io/LoaderIteratorListener.html">LoaderIteratorListener</a> {
+<a class="jxr_linenumber" name="L722" href="#L722">722</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorListenerImpl</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/irurueta/geometry/io/LoaderIteratorListener.html">LoaderIteratorListener</a> {
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 
 <a class="jxr_linenumber" name="L724" href="#L724">724</a>         <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">         * Reference to Loader loading an OBJ file.</em>
@@ -738,7 +738,7 @@
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">         * Constructor.</em>
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">         * @param loader reference to Loader.</em>
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">         */</em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/io/LoaderSTL.html">LoaderIteratorListenerImpl</a>(<a href="../../../../com/irurueta/geometry/io/LoaderOBJ.html">LoaderOBJ</a> loader) {
+<a class="jxr_linenumber" name="L733" href="#L733">733</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/io/LoaderPLY.html">LoaderIteratorListenerImpl</a>(<a href="../../../../com/irurueta/geometry/io/LoaderOBJ.html">LoaderOBJ</a> loader) {
 <a class="jxr_linenumber" name="L734" href="#L734">734</a>             <strong class="jxr_keyword">this</strong>.loader = loader;
 <a class="jxr_linenumber" name="L735" href="#L735">735</a>         }
 <a class="jxr_linenumber" name="L736" href="#L736">736</a>         
@@ -2524,6 +2524,6 @@
 <a class="jxr_linenumber" name="L2516" href="#L2516">2516</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>
