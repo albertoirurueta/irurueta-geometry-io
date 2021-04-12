@@ -26,40 +26,43 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.io.File;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../com/irurueta/geometry/io/LoaderListenerBinary.html">LoaderListenerBinary</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/irurueta/geometry/io/LoaderListener.html">LoaderListener</a> {
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>      
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">     * Callee should create a file where texture data will be stored.</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">     * Caller of this method will be in charge of writing texture data in JPG</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">     * format at the file returned by this method.</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">     * @param loader Caller of this method.</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     * @param textureId internal identifier of texture.</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     * @param textureImageWidth Texture image width in pixels.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     * @param textureImageHeight Texture image height in pixels.</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">     * @return A file where texture data will be stored.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      File onTextureReceived(<a href="../../../../com/irurueta/geometry/io/LoaderBinary.html">LoaderBinary</a> loader, <strong class="jxr_keyword">int</strong> textureId,
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>              <strong class="jxr_keyword">int</strong> textureImageWidth, <strong class="jxr_keyword">int</strong> textureImageHeight);
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Indicates that texture data has been stored in provided texture file,</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     * which is the one returned by onTextureReceived(LoaderBinary).</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * Texture data is always provided in JPG format.</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * @param loader Caller of this method.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * @param textureFile File where texture data has been stored.</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * @param textureId id assigned to texture.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     * @param textureImageWidth Texture image width in pixels.</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     * @param textureImageHeight Texture image height in pixels.</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     * @return True to indicate that texture data is a valid image, </em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     * false otherwise. Returning false will halt the loading process for a</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * binary loader by raising a LoaderException.</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     * @see #onTextureReceived(LoaderBinary, int, int, int)</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">boolean</strong> onTextureDataAvailable(<a href="../../../../com/irurueta/geometry/io/LoaderBinary.html">LoaderBinary</a> loader,
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>              File textureFile, <strong class="jxr_keyword">int</strong> textureId, <strong class="jxr_keyword">int</strong> textureImageWidth, 
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>              <strong class="jxr_keyword">int</strong> textureImageHeight);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  }
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     * @param loader             Caller of this method.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     * @param textureId          internal identifier of texture.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     * @param textureImageWidth  Texture image width in pixels.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">     * @param textureImageHeight Texture image height in pixels.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">     * @return A file where texture data will be stored.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      File onTextureReceived(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/io/LoaderBinary.html">LoaderBinary</a> loader, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> textureId,
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>                             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> textureImageWidth, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> textureImageHeight);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     * Indicates that texture data has been stored in provided texture file,</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * which is the one returned by onTextureReceived(LoaderBinary).</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * Texture data is always provided in JPG format.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * @param loader             Caller of this method.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     * @param textureFile        File where texture data has been stored.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     * @param textureId          id assigned to texture.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     * @param textureImageWidth  Texture image width in pixels.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     * @param textureImageHeight Texture image height in pixels.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * @return True to indicate that texture data is a valid image,</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     * false otherwise. Returning false will halt the loading process for a</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * binary loader by raising a LoaderException.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     * @see #onTextureReceived(LoaderBinary, int, int, int)</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">boolean</strong> onTextureDataAvailable(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/io/LoaderBinary.html">LoaderBinary</a> loader,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                                     <strong class="jxr_keyword">final</strong> File textureFile, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> textureId,
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> textureImageWidth,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> textureImageHeight);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>
 </body>
 </html>

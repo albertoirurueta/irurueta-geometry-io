@@ -22,129 +22,134 @@ import java.util.List;
  * This class contains elements of the header of a PLY file.
  * The header of a ply file is stored in text form at the beginning of the file.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class HeaderPLY {
     /**
      * Indicates storage mode of the file. This can be either binary big-endian,
      * binary little-endian or ascii text.
      */
     private PLYStorageMode storageMode;
-    
+
     /**
      * List containing all the elements forming the data of the file.
      */
-    private List&lt;ElementPLY&gt; elements;
-    
+    private final List&lt;ElementPLY&gt; elements;
+
     /**
      * List containing all the string comments that the author might have stored
      * in the file.
      */
-    private List&lt;String&gt; comments;
-    
+    private final List&lt;String&gt; comments;
+
     /**
      * List of strings containing addition object information.
      */
-    private List&lt;String&gt; objInfos;
-    
+    private final List&lt;String&gt; objInfos;
+
     /**
      * Constructor
      */
-<span class="fc" id="L52">    public HeaderPLY() {</span>
-<span class="fc" id="L53">        storageMode = PLYStorageMode.PLY_ASCII;</span>
-<span class="fc" id="L54">        elements = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L55">        comments = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L56">        objInfos = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L57">    }</span>
-    
+<span class="fc" id="L51">    public HeaderPLY() {</span>
+<span class="fc" id="L52">        storageMode = PLYStorageMode.PLY_ASCII;</span>
+<span class="fc" id="L53">        elements = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L54">        comments = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L55">        objInfos = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L56">    }</span>
+
     /**
      * Returns storage mode of this file.
+     *
      * @return Storage mode of this file.
      */
     public PLYStorageMode getStorageMode() {
 <span class="fc" id="L64">        return storageMode;</span>
     }
-    
+
     /**
      * Sets storage mode of this file.
+     *
      * @param storageMode Storage mode to be set.
      */
-    public void setStorageMode(PLYStorageMode storageMode) {
-<span class="fc" id="L72">        this.storageMode = storageMode;</span>
-<span class="fc" id="L73">    }</span>
-    
+    public void setStorageMode(final PLYStorageMode storageMode) {
+<span class="fc" id="L73">        this.storageMode = storageMode;</span>
+<span class="fc" id="L74">    }</span>
+
     /**
      * Returns the structure of all the elements forming the data of this file.
+     *
      * @return All the elements forming the data of this file.
      */
     public List&lt;ElementPLY&gt; getElements() {
-<span class="fc" id="L80">        return elements;</span>
+<span class="fc" id="L82">        return elements;</span>
     }
-    
+
     /**
      * Returns a list of strings containing all the comments set by the author
      * of this file.
+     *
      * @return Comments of this file.
      */
     public List&lt;String&gt; getComments() {
-<span class="fc" id="L89">        return comments;</span>
+<span class="fc" id="L92">        return comments;</span>
     }
-    
+
     /**
      * Returns list of strings containing additional object information.
+     *
      * @return Additional object information.
      */
     public List&lt;String&gt; getObjInfos() {
-<span class="fc" id="L97">        return objInfos;</span>
+<span class="fc" id="L101">        return objInfos;</span>
     }
-    
+
     /**
      * Converts header data into string format ready to be saved on a PLY file.
+     *
      * @return Header data into string format.
      */
     @Override
     public String toString() {
-<span class="fc" id="L106">        StringBuilder builder = new StringBuilder(&quot;ply\n&quot;);</span>
+<span class="fc" id="L111">        final StringBuilder builder = new StringBuilder(&quot;ply\n&quot;);</span>
 
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (storageMode != null) {</span>
-<span class="fc" id="L109">            builder.append(&quot;format &quot;);</span>
-<span class="pc bpc" id="L110" title="3 of 4 branches missed.">            switch (storageMode) {</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (storageMode != null) {</span>
+<span class="fc" id="L114">            builder.append(&quot;format &quot;);</span>
+<span class="pc bpc" id="L115" title="3 of 4 branches missed.">            switch (storageMode) {</span>
                 case PLY_ASCII:
-<span class="fc" id="L112">                    builder.append(&quot;ascii &quot;);</span>
-<span class="fc" id="L113">                    break;</span>
+<span class="fc" id="L117">                    builder.append(&quot;ascii &quot;);</span>
+<span class="fc" id="L118">                    break;</span>
                 case PLY_LITTLE_ENDIAN:
-<span class="nc" id="L115">                    builder.append(&quot;binary_little_endian &quot;);</span>
-<span class="nc" id="L116">                    break;</span>
+<span class="nc" id="L120">                    builder.append(&quot;binary_little_endian &quot;);</span>
+<span class="nc" id="L121">                    break;</span>
                 case PLY_BIG_ENDIAN:
-<span class="nc" id="L118">                    builder.append(&quot;binary_big_endian &quot;);</span>
-<span class="nc" id="L119">                    break;</span>
+<span class="nc" id="L123">                    builder.append(&quot;binary_big_endian &quot;);</span>
+<span class="nc" id="L124">                    break;</span>
                 default:
                     break;
             }
         }
-        
-        //add version
-<span class="fc" id="L126">        builder.append(&quot;1.0\n&quot;);</span>
-        
-        //add comments
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        for (String comment : comments) {</span>
-<span class="nc" id="L130">            builder.append(&quot;comment &quot;).append(comment).append(&quot;\n&quot;);</span>
-<span class="nc" id="L131">        }</span>
-        
-        //add obj_infos
-<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        for (String objInfo : objInfos) {</span>
-<span class="nc" id="L135">            builder.append(&quot;obj_info &quot;).append(objInfo).append(&quot;\n&quot;);</span>
+
+        // add version
+<span class="fc" id="L131">        builder.append(&quot;1.0\n&quot;);</span>
+
+        // add comments
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        for (final String comment : comments) {</span>
+<span class="nc" id="L135">            builder.append(&quot;comment &quot;).append(comment).append(&quot;\n&quot;);</span>
 <span class="nc" id="L136">        }</span>
-        
-        //add elements
-<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (ElementPLY element : elements) {</span>
-            //NOTE: elements already contain carrier return on their textual
-            //representation
-<span class="fc" id="L142">            builder.append(element.toString());</span>
-<span class="fc" id="L143">        }</span>
-        
-<span class="fc" id="L145">        builder.append(&quot;end_header\n&quot;);</span>
-        
-<span class="fc" id="L147">        return builder.toString();</span>
+
+        // add obj_infos
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        for (final String objInfo : objInfos) {</span>
+<span class="nc" id="L140">            builder.append(&quot;obj_info &quot;).append(objInfo).append(&quot;\n&quot;);</span>
+<span class="nc" id="L141">        }</span>
+
+        // dd elements
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for (final ElementPLY element : elements) {</span>
+            // NOTE: elements already contain carrier return on their textual
+            // representation
+<span class="fc" id="L147">            builder.append(element.toString());</span>
+<span class="fc" id="L148">        }</span>
+
+<span class="fc" id="L150">        builder.append(&quot;end_header\n&quot;);</span>
+
+<span class="fc" id="L152">        return builder.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -16,43 +16,44 @@
 package com.irurueta.geometry.io;
 
 /**
- *
  * Raised if a material loader fails to validate a texture. This is usually
  * because image file cannot be found or is corrupted.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class InvalidTextureException extends LoaderException {
-    
+
     /**
      * Constructor.
-     */        
+     */
     public InvalidTextureException() {
-<span class="fc" id="L30">        super();</span>
-<span class="fc" id="L31">    }</span>
-    
+<span class="fc" id="L28">        super();</span>
+<span class="fc" id="L29">    }</span>
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */        
-    public InvalidTextureException(String message) {
-<span class="fc" id="L38">        super(message);</span>
-<span class="fc" id="L39">    }</span>
-    
+     */
+    public InvalidTextureException(final String message) {
+<span class="fc" id="L37">        super(message);</span>
+<span class="fc" id="L38">    }</span>
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */        
-    public InvalidTextureException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public InvalidTextureException(final String message, final Throwable cause) {
 <span class="fc" id="L47">        super(message, cause);</span>
 <span class="fc" id="L48">    }</span>
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */        
-    public InvalidTextureException(Throwable cause) {
-<span class="fc" id="L55">        super(cause);</span>
-<span class="fc" id="L56">    }    </span>
+     */
+    public InvalidTextureException(final Throwable cause) {
+<span class="fc" id="L56">        super(cause);</span>
+<span class="fc" id="L57">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -20,186 +20,201 @@ import java.io.File;
 /**
  * Contains data related to a texture.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class Texture {
-    
+
     /**
      * Path to file containing texture image in any of the supported formats.
      */
-    private String fileName;
-    
+    private final String fileName;
+
     /**
      * Reference to file actually containing the texture image.
      */
     private File file;
-    
+
     /**
      * With of texture image expressed in pixels.
      */
     private int width;
-    
+
     /**
      * Height of texture image expressed in pixels.
      */
     private int height;
-    
+
     /**
      * Indicates if texture is valid or not. A texture will be considered to be
      * invalid when its image cannot be loaded because the file cannot be found,
      * it is corrupted or its format is not supported.
      */
-    private boolean valid;  
-    
+    private boolean valid;
+
     /**
-     * Id assigned to this texture. Id must be unique so that texture can be 
+     * Id assigned to this texture. Id must be unique so that texture can be
      * uniquely identified.
      */
-    private int id;
-    
+    private final int id;
+
     /**
      * Constructor.
+     *
      * @param id id to be set for this texture.
      */
-<span class="fc" id="L63">    public Texture(int id) {</span>
+<span class="fc" id="L63">    public Texture(final int id) {</span>
 <span class="fc" id="L64">        this.fileName = &quot;&quot;;</span>
 <span class="fc" id="L65">        this.id = id;</span>
 <span class="fc" id="L66">        file = null;</span>
 <span class="fc" id="L67">        width = height = -1;</span>
-<span class="fc" id="L68">        valid = false;                </span>
+<span class="fc" id="L68">        valid = false;</span>
 <span class="fc" id="L69">    }</span>
-    
+
     /**
      * COnstructor.
-     * @param fileName path to file containing texture image in any of the 
-     * supported formats.
-     * @param id id to be set for this texture.
+     *
+     * @param fileName path to file containing texture image in any of the
+     *                 supported formats.
+     * @param id       id to be set for this texture.
      */
-<span class="fc" id="L77">    public Texture(String fileName, int id) {</span>
-<span class="fc" id="L78">        this.fileName = fileName;</span>
-<span class="fc" id="L79">        this.id = id;</span>
-<span class="fc" id="L80">        file = new File(fileName);</span>
-<span class="fc" id="L81">        width = height = -1;</span>
-<span class="fc" id="L82">        valid = false;        </span>
-<span class="fc" id="L83">    }</span>
-    
+<span class="fc" id="L78">    public Texture(final String fileName, final int id) {</span>
+<span class="fc" id="L79">        this.fileName = fileName;</span>
+<span class="fc" id="L80">        this.id = id;</span>
+<span class="fc" id="L81">        file = new File(fileName);</span>
+<span class="fc" id="L82">        width = height = -1;</span>
+<span class="fc" id="L83">        valid = false;</span>
+<span class="fc" id="L84">    }</span>
+
     /**
      * Returns path to file containing texture image in any of the supported
      * formats.
+     *
      * @return path to file containing texture image in any of the supported
      * formats.
      */
     public String getFileName() {
-<span class="fc" id="L92">        return fileName;</span>
-    }
-    
-    /**
-     * Indicates if file name has been provided or not.
-     * @return true if file names has been provided, false otherwise.
-     */
-    public boolean isFileNameAvailable() {
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        return fileName != null;</span>
+<span class="fc" id="L94">        return fileName;</span>
     }
 
     /**
-     * Returns id assigned to this texture. Id must be unique so that texture 
+     * Indicates if file name has been provided or not.
+     *
+     * @return true if file names has been provided, false otherwise.
+     */
+    public boolean isFileNameAvailable() {
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        return fileName != null;</span>
+    }
+
+    /**
+     * Returns id assigned to this texture. Id must be unique so that texture
      * can be uniquely identified.
+     *
      * @return id assigned to this texture.
      */
     public int getId() {
-<span class="fc" id="L109">        return id;</span>
+<span class="fc" id="L113">        return id;</span>
     }
-    
+
     /**
      * Returns reference to file actually containing the texture image.
+     *
      * @return reference to file actually containing the texture image.
      */
     public File getFile() {
-<span class="fc" id="L117">        return file;</span>
+<span class="fc" id="L122">        return file;</span>
     }
-    
+
     /**
      * Sets file containing the texture image.
+     *
      * @param file file containing the texture image.
      */
-    public void setFile(File file) {
-<span class="fc" id="L125">        this.file = file;</span>
-<span class="fc" id="L126">    }</span>
-    
+    public void setFile(final File file) {
+<span class="fc" id="L131">        this.file = file;</span>
+<span class="fc" id="L132">    }</span>
+
     /**
      * Indicates if file containing the texture image has already been provided.
+     *
      * @return true if file containing the texture image is available, false
      * otherwise.
      */
     public boolean isFileAvailable() {
-<span class="fc bfc" id="L134" title="All 2 branches covered.">        return file != null;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        return file != null;</span>
     }
-    
+
     /**
      * Returns texture image width expressed in pixels.
+     *
      * @return texture image width expressed in pixels.
      */
     public int getWidth() {
-<span class="fc" id="L142">        return width;</span>
+<span class="fc" id="L150">        return width;</span>
     }
-    
+
     /**
      * Sets texture image width expressed in pixels.
+     *
      * @param width texture image width to be set and expressed in pixels.
      */
-    public void setWidth(int width) {
-<span class="fc" id="L150">        this.width = width;</span>
-<span class="fc" id="L151">    }</span>
-    
+    public void setWidth(final int width) {
+<span class="fc" id="L159">        this.width = width;</span>
+<span class="fc" id="L160">    }</span>
+
     /**
      * Indicates whether width has been provided (when its value is positive).
+     *
      * @return true if width is available, false otherwise.
      */
     public boolean isWidthAvailable() {
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        return width &gt;= 0;</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        return width &gt;= 0;</span>
     }
-    
+
     /**
      * Returns texture image height expressed in pixels.
+     *
      * @return texture image height expressed in pixels.
      */
     public int getHeight() {
-<span class="fc" id="L166">        return height;</span>
+<span class="fc" id="L177">        return height;</span>
     }
-    
+
     /**
      * Sets texture image height expressed in pixels.
+     *
      * @param height texture image height to be set and expressed in pixels.
      */
-    public void setHeight(int height) {
-<span class="fc" id="L174">        this.height = height;</span>
-<span class="fc" id="L175">    }</span>
-    
+    public void setHeight(final int height) {
+<span class="fc" id="L186">        this.height = height;</span>
+<span class="fc" id="L187">    }</span>
+
     /**
      * Indicates whether height has been provided (when its value is positive).
+     *
      * @return true if height is available, false otherwise.
      */
     public boolean isHeightAvailable() {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        return height &gt;= 0;</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        return height &gt;= 0;</span>
     }
-    
+
     /**
      * Indicates if texture is valid or not. A texture will be considered to be
      * invalid when its image cannot be loaded because the file cannot be found,
      * it is corrupted or its format is not supported.
+     *
      * @return true if texture is valid, false otherwise.
      */
     public boolean isValid() {
-<span class="fc" id="L192">        return valid;</span>
+<span class="fc" id="L206">        return valid;</span>
     }
-    
+
     /**
      * Specifies whether a texture is valid or not. A texture will be considered
      * to be invalid when its image cannot be loaded because the file cannot be
      * found, it is corrupted or its format is not supported.
+     *
      * @param valid whether texture is to be set as valid or not.
      */
-    public void setValid(boolean valid) {
-<span class="fc" id="L202">        this.valid = valid;</span>
-<span class="fc" id="L203">    }</span>
+    public void setValid(final boolean valid) {
+<span class="fc" id="L217">        this.valid = valid;</span>
+<span class="fc" id="L218">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

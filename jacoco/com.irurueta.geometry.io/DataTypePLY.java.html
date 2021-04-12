@@ -23,148 +23,151 @@ package com.irurueta.geometry.io;
      * Signed 8 bit integer.
      */
 <span class="fc" id="L25">    PLY_INT8(&quot;int8&quot;),</span>
-    
+
     /**
      * Unsigned 8 bit integer.
      */
 <span class="fc" id="L30">    PLY_UINT8(&quot;uint8&quot;),</span>
-    
+
     /**
      * Signed 16 bit integer.
      */
 <span class="fc" id="L35">    PLY_INT16(&quot;int16&quot;),</span>
-    
+
     /**
      * Unsigned 16 bit integer.
      */
 <span class="fc" id="L40">    PLY_UINT16(&quot;uint16&quot;),</span>
-    
+
     /**
      * Signed 32 bit integer.
      */
 <span class="fc" id="L45">    PLY_INT32(&quot;int32&quot;),</span>
-    
+
     /**
      * Unsigned 32 bit integer.
      */
 <span class="fc" id="L50">    PLY_UINT32(&quot;uint32&quot;),</span>
-    
+
     /**
      * 32 bit floating-point.
      */
 <span class="fc" id="L55">    PLY_FLOAT32(&quot;float32&quot;),</span>
-    
+
     /**
      * 64 bit floating-point.
      */
 <span class="fc" id="L60">    PLY_FLOAT64(&quot;float64&quot;),</span>
-    
+
     /**
      * Signed character (signed 8 bit integer).
      */
 <span class="fc" id="L65">    PLY_CHAR(&quot;char&quot;),</span>
-    
+
     /**
      * Unsigned character (unsigned 8 bit integer).
      */
 <span class="fc" id="L70">    PLY_UCHAR(&quot;uchar&quot;),</span>
-    
+
     /**
      * Signed short (signed 16 bit integer).
      */
 <span class="fc" id="L75">    PLY_SHORT(&quot;short&quot;),</span>
-    
+
     /**
      * Unsigned short (unsigned 16 bit integer).
      */
 <span class="fc" id="L80">    PLY_USHORT(&quot;ushort&quot;),</span>
-    
+
     /**
      * Signed integer (signed 32 bit integer).
      */
 <span class="fc" id="L85">    PLY_INT(&quot;int&quot;),</span>
-    
+
     /**
      * Unsigned integer (unsigned 32 bit integer).
      */
 <span class="fc" id="L90">    PLY_UINT(&quot;uint&quot;),</span>
-    
+
     /**
      * Float (32 bit floating-point).
      */
 <span class="fc" id="L95">    PLY_FLOAT(&quot;float&quot;),</span>
-    
+
     /**
      * Double (64 bit floating-point).
      */
 <span class="fc" id="L100">    PLY_DOUBLE(&quot;double&quot;);</span>
-    
-    
+
+
     /**
      * Internal representation of this enum as a string.
      */
-    private String value;
-    
+    private final String value;
+
     /**
      * Constructor of this enum with a string representation.
+     *
      * @param value String value for this enum.
      */
-<span class="fc" id="L112">    DataTypePLY(String value) {</span>
-<span class="fc" id="L113">        this.value = value;</span>
-<span class="fc" id="L114">    }</span>
-    
+<span class="fc" id="L113">    DataTypePLY(String value) {</span>
+<span class="fc" id="L114">        this.value = value;</span>
+<span class="fc" id="L115">    }</span>
+
     /**
      * Returns string representation of an instance of this enum.
+     *
      * @return String representation.
      */
     public String getValue() {
-<span class="fc" id="L121">        return this.value;</span>
+<span class="fc" id="L123">        return this.value;</span>
     }
-    
+
     /**
      * Builds an instance of this enum.
+     *
      * @param value String representation of this enum.
      * @return An instance of this enum.
      */
-    public static DataTypePLY forValue(String value) {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (value != null) {</span>
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">            if (value.equalsIgnoreCase(&quot;int8&quot;)) {</span>
-<span class="nc" id="L132">                return PLY_INT8;</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint8&quot;)) {</span>
-<span class="nc" id="L134">                return PLY_UINT8;</span>
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;int16&quot;)) {</span>
-<span class="nc" id="L136">                return PLY_INT16;</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint16&quot;)) {</span>
-<span class="nc" id="L138">                return PLY_UINT16;</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;int32&quot;)) {</span>
-<span class="nc" id="L140">                return PLY_INT32;</span>
-<span class="pc bpc" id="L141" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint32&quot;)) {</span>
-<span class="nc" id="L142">                return PLY_UINT32;</span>
-<span class="pc bpc" id="L143" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;float32&quot;)) {</span>
-<span class="nc" id="L144">                return PLY_FLOAT32;</span>
-<span class="pc bpc" id="L145" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;float64&quot;)) {</span>
-<span class="nc" id="L146">                return PLY_FLOAT64;</span>
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;char&quot;)) {</span>
-<span class="nc" id="L148">                return PLY_CHAR;</span>
-<span class="fc bfc" id="L149" title="All 2 branches covered.">            } else if (value.equalsIgnoreCase(&quot;uchar&quot;)) {</span>
-<span class="fc" id="L150">                return PLY_UCHAR;</span>
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;short&quot;)) {</span>
-<span class="nc" id="L152">                return PLY_SHORT;</span>
-<span class="pc bpc" id="L153" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;ushort&quot;)) {</span>
-<span class="nc" id="L154">                return PLY_USHORT;</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">            } else if (value.equalsIgnoreCase(&quot;int&quot;)) {</span>
-<span class="fc" id="L156">                return PLY_INT;</span>
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint&quot;)) {</span>
-<span class="nc" id="L158">                return PLY_UINT;</span>
-<span class="pc bpc" id="L159" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;float&quot;)) {</span>
-<span class="fc" id="L160">                return PLY_FLOAT;</span>
-<span class="nc bnc" id="L161" title="All 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;double&quot;)) {</span>
-<span class="nc" id="L162">                return PLY_DOUBLE;</span>
+    public static DataTypePLY forValue(final String value) {
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (value != null) {</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">            if (value.equalsIgnoreCase(&quot;int8&quot;)) {</span>
+<span class="nc" id="L135">                return PLY_INT8;</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint8&quot;)) {</span>
+<span class="nc" id="L137">                return PLY_UINT8;</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;int16&quot;)) {</span>
+<span class="nc" id="L139">                return PLY_INT16;</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint16&quot;)) {</span>
+<span class="nc" id="L141">                return PLY_UINT16;</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;int32&quot;)) {</span>
+<span class="nc" id="L143">                return PLY_INT32;</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint32&quot;)) {</span>
+<span class="nc" id="L145">                return PLY_UINT32;</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;float32&quot;)) {</span>
+<span class="nc" id="L147">                return PLY_FLOAT32;</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;float64&quot;)) {</span>
+<span class="nc" id="L149">                return PLY_FLOAT64;</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;char&quot;)) {</span>
+<span class="nc" id="L151">                return PLY_CHAR;</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            } else if (value.equalsIgnoreCase(&quot;uchar&quot;)) {</span>
+<span class="fc" id="L153">                return PLY_UCHAR;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;short&quot;)) {</span>
+<span class="nc" id="L155">                return PLY_SHORT;</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;ushort&quot;)) {</span>
+<span class="nc" id="L157">                return PLY_USHORT;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            } else if (value.equalsIgnoreCase(&quot;int&quot;)) {</span>
+<span class="fc" id="L159">                return PLY_INT;</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;uint&quot;)) {</span>
+<span class="nc" id="L161">                return PLY_UINT;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;float&quot;)) {</span>
+<span class="fc" id="L163">                return PLY_FLOAT;</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            } else if (value.equalsIgnoreCase(&quot;double&quot;)) {</span>
+<span class="nc" id="L165">                return PLY_DOUBLE;</span>
             } else {
-<span class="nc" id="L164">                return null;</span>
+<span class="nc" id="L167">                return null;</span>
             }
         }
-<span class="nc" id="L167">        return null;</span>
+<span class="nc" id="L170">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

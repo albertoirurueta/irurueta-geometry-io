@@ -23,10 +23,10 @@ under the License.
     <link>https://bitbucket.org/alberto_irurueta/irurueta-geometry-io</link>
     <description>com.irurueta:irurueta-geometry-io - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2017 - 2020</copyright>
+    <copyright>&#169;2017 - 2021</copyright>
     <item>
       <title>File: 52,
-             Errors: 1222,
+             Errors: 941,
              Warnings: 0,
              Infos: 0
       </title>
@@ -139,7 +139,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  84
+                  70
                 </td>
               </tr>
                           <tr>
@@ -195,7 +195,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  0
                 </td>
               </tr>
                           <tr>
@@ -209,7 +209,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  256
+                  240
                 </td>
               </tr>
                           <tr>
@@ -237,7 +237,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  11
+                  2
                 </td>
               </tr>
                           <tr>
@@ -321,7 +321,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  278
+                  149
                 </td>
               </tr>
                           <tr>
@@ -405,7 +405,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  77
+                  76
                 </td>
               </tr>
                           <tr>
@@ -447,7 +447,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  9
+                  7
                 </td>
               </tr>
                           <tr>
@@ -461,7 +461,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  24
+                  22
                 </td>
               </tr>
                           <tr>
@@ -475,7 +475,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  72
+                  44
                 </td>
               </tr>
                           <tr>
@@ -545,7 +545,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  109
+                  60
                 </td>
               </tr>
                           <tr>
@@ -573,7 +573,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  8
+                  6
                 </td>
               </tr>
                           <tr>
@@ -615,7 +615,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  15
+                  14
                 </td>
               </tr>
                           <tr>
@@ -629,7 +629,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  40
+                  27
                 </td>
               </tr>
                           <tr>
@@ -643,7 +643,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
               </tr>
                           <tr>
@@ -671,7 +671,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  8
+                  7
                 </td>
               </tr>
                           <tr>
@@ -699,7 +699,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  28
+                  23
                 </td>
               </tr>
                           <tr>
@@ -713,7 +713,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  18
+                  14
                 </td>
               </tr>
                           <tr>

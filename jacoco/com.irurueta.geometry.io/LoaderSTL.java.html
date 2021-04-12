@@ -18,7 +18,6 @@ package com.irurueta.geometry.io;
 import java.io.File;
 import java.io.IOException;
 
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
 public class LoaderSTL extends Loader {
     /**
      * Constant defining the default value of maximum number of vertices to keep
@@ -44,219 +43,233 @@ public class LoaderSTL extends Loader {
 
     /**
      * Constructor.
-     */    
-<span class="fc" id="L48">    public LoaderSTL() {</span>
-<span class="fc" id="L49">        loaderIterator = null;</span>
-<span class="fc" id="L50">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
-<span class="fc" id="L51">    }</span>
-    
+     */
+<span class="fc" id="L47">    public LoaderSTL() {</span>
+<span class="fc" id="L48">        loaderIterator = null;</span>
+<span class="fc" id="L49">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L50">    }</span>
+
     /**
      * Constructor.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
+     *
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     */    
-<span class="fc" id="L61">    public LoaderSTL(int maxVerticesInChunk) {</span>
+     *                                  a chunk is lower than 1.
+     */
+<span class="fc" id="L61">    public LoaderSTL(final int maxVerticesInChunk) {</span>
 <span class="fc" id="L62">        loaderIterator = null;</span>
 <span class="fc" id="L63">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
 <span class="fc" id="L64">    }</span>
 
     /**
      * Constructor.
+     *
      * @param f file to be loaded.
      * @throws IOException if an I/O error occurs.
-     */    
-    public LoaderSTL(File f) throws IOException {
-<span class="fc" id="L72">        super(f);</span>
-<span class="fc" id="L73">        loaderIterator = null;</span>
-<span class="fc" id="L74">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
-<span class="fc" id="L75">    }</span>
-    
-    /**
-     * Constructor.
-     * @param f file to be loaded.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
-     */    
-    public LoaderSTL(File f, int maxVerticesInChunk) 
-            throws IOException {
-<span class="fc" id="L89">        super(f);</span>
-<span class="fc" id="L90">        loaderIterator = null;</span>
-<span class="fc" id="L91">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
-<span class="fc" id="L92">    }</span>
+     */
+    public LoaderSTL(final File f) throws IOException {
+<span class="fc" id="L73">        super(f);</span>
+<span class="fc" id="L74">        loaderIterator = null;</span>
+<span class="fc" id="L75">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L76">    }</span>
 
     /**
      * Constructor.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     */    
-    public LoaderSTL(LoaderListener listener) {
-<span class="fc" id="L100">        super(listener);</span>
-<span class="fc" id="L101">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
-<span class="fc" id="L102">    }</span>
-    
+     *
+     * @param f                  file to be loaded.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
+     */
+    public LoaderSTL(final File f, final int maxVerticesInChunk)
+            throws IOException {
+<span class="fc" id="L91">        super(f);</span>
+<span class="fc" id="L92">        loaderIterator = null;</span>
+<span class="fc" id="L93">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L94">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
+     *                 loading process starts or finishes.
+     */
+    public LoaderSTL(final LoaderListener listener) {
+<span class="fc" id="L103">        super(listener);</span>
+<span class="fc" id="L104">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener           listener to be notified of loading progress and when
+     *                           loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     *                                  a chunk is lower than 1.
+     */
+    public LoaderSTL(final LoaderListener listener, final int maxVerticesInChunk) {
+<span class="fc" id="L119">        super(listener);</span>
+<span class="fc" id="L120">        loaderIterator = null;</span>
+<span class="fc" id="L121">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param f        file to be loaded.
+     * @param listener listener to be notified of loading progress and when
+     *                 loading process starts or finishes.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderSTL(final File f, final LoaderListener listener) throws IOException {
+<span class="fc" id="L133">        super(f, listener);</span>
+<span class="fc" id="L134">        loaderIterator = null;</span>
+<span class="fc" id="L135">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param f                  file to be loaded.
+     * @param listener           listener to be notified of loading progress and when
+     *                           loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
+     * @throws IllegalArgumentException if maximum number of vertices allowed in
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
+     */
+    public LoaderSTL(final File f, final LoaderListener listener, final int maxVerticesInChunk)
+            throws IOException {
+<span class="fc" id="L153">        super(f, listener);</span>
+<span class="fc" id="L154">        loaderIterator = null;</span>
+<span class="fc" id="L155">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L156">    }</span>
+
+    /**
+     * Sets maximum number of vertices allowed in a chunk.
      * Once this value is exceeded when loading a file, a new chunk of data is
      * created.
-     * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     */    
-    public LoaderSTL(LoaderListener listener, int maxVerticesInChunk) {
-<span class="fc" id="L115">        super(listener);</span>
-<span class="fc" id="L116">        loaderIterator = null;</span>
-<span class="fc" id="L117">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
-<span class="fc" id="L118">    }</span>
-
-    /**
-     * Constructor.
-     * @param f file to be loaded.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @throws IOException if an I/O error occurs.
-     */    
-    public LoaderSTL(File f, LoaderListener listener) throws IOException {
-<span class="fc" id="L128">        super(f, listener);</span>
-<span class="fc" id="L129">        loaderIterator = null;</span>
-<span class="fc" id="L130">        maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;</span>
-<span class="fc" id="L131">    }</span>
-    
-    /**
-     * Constructor.
-     * @param f file to be loaded.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
-     */    
-    public LoaderSTL(File f, LoaderListener listener, int maxVerticesInChunk) 
-            throws IOException {
-<span class="fc" id="L147">        super(f, listener);</span>
-<span class="fc" id="L148">        loaderIterator = null;</span>
-<span class="fc" id="L149">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
-<span class="fc" id="L150">    }</span>
-
-    /**
-     * Sets maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
+     *
      * @param maxVerticesInChunk maximum allowed number of vertices to be set.
      * @throws IllegalArgumentException if provided value is lower than 1.
-     * @throws LockedException if this loader is currently loading a file.
-     */    
-    public void setMaxVerticesInChunk(int maxVerticesInChunk)
+     * @throws LockedException          if this loader is currently loading a file.
+     */
+    public void setMaxVerticesInChunk(final int maxVerticesInChunk)
             throws LockedException {
-<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L163">            throw new LockedException();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L170">            throw new LockedException();</span>
         }
-<span class="fc" id="L165">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
-<span class="fc" id="L166">    }</span>
-    
+<span class="fc" id="L172">        internalSetMaxVerticesInChunk(maxVerticesInChunk);</span>
+<span class="fc" id="L173">    }</span>
+
     /**
      * Returns maximum number of vertices allowed in a chunk.
      * Once this value is exceeded when loading a file, a new chunk of data is
      * created.
+     *
      * @return maximum number of vertices allowed in a chunk.
-     */    
+     */
     public int getMaxVerticesInChunk() {
-<span class="fc" id="L175">        return maxVerticesInChunk;</span>
+<span class="fc" id="L183">        return maxVerticesInChunk;</span>
     }
 
     /**
      * If loader is ready to start loading a file.
      * This is true once a file has been provided.
+     *
      * @return true if ready to start loading a file, false otherwise.
-     */        
+     */
     @Override
     public boolean isReady() {
-<span class="fc" id="L185">        return hasFile();</span>
+<span class="fc" id="L194">        return hasFile();</span>
     }
 
     /**
      * Returns mesh format supported by this class, which is MESH_FORMAT_STL.
+     *
      * @return mesh format supported by this class.
-     */        
+     */
     @Override
     public MeshFormat getMeshFormat() {
-<span class="fc" id="L194">        return MeshFormat.MESH_FORMAT_STL;</span>
+<span class="fc" id="L204">        return MeshFormat.MESH_FORMAT_STL;</span>
     }
 
     /**
-     * Determines if provided file is a valid file that can be read by this 
+     * Determines if provided file is a valid file that can be read by this
      * loader.
+     *
      * @return true if file is valid, false otherwise.
      * @throws LockedException raised if this instance is already locked.
-     * @throws IOException if an I/O error occurs.
-     */        
+     * @throws IOException     if an I/O error occurs.
+     */
     @Override
     public boolean isValidFile() throws LockedException, IOException {
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (!hasFile()) {</span>
-<span class="fc" id="L207">            throw new IOException();</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if (!hasFile()) {</span>
+<span class="fc" id="L218">            throw new IOException();</span>
         }
-<span class="pc bpc" id="L209" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L210">            throw new LockedException();</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L221">            throw new LockedException();</span>
         }
-<span class="fc" id="L212">        return true;</span>
+<span class="fc" id="L223">        return true;</span>
     }
 
     /**
      * Starts the loading process of provided file.
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
+     *
      * @return a loader iterator to read the file in a step by step process.
-     * @throws LockedException raised if this instance is already locked.
+     * @throws LockedException   raised if this instance is already locked.
      * @throws NotReadyException raised if this instance is not yet ready.
-     * @throws IOException if an I/O error occurs.
-     * @throws LoaderException if file is corrupted or cannot be interpreted.
-     */    
+     * @throws IOException       if an I/O error occurs.
+     * @throws LoaderException   if file is corrupted or cannot be interpreted.
+     */
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException, 
+    public LoaderIterator load() throws LockedException, NotReadyException,
             IOException, LoaderException {
-        
-<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L230">            throw new LockedException();</span>
+
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L242">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L233">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L245">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L236">        setLocked(true);</span>
-<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (listener != null) {</span>
-<span class="fc" id="L238">            listener.onLoadStart(this);</span>
+
+<span class="fc" id="L248">        setLocked(true);</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L250">            listener.onLoadStart(this);</span>
         }
-        
-<span class="fc" id="L241">        loaderIterator = new LoaderIteratorSTL(this);</span>
-<span class="fc" id="L242">        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));</span>
-<span class="fc" id="L243">        return loaderIterator;</span>
+
+<span class="fc" id="L253">        loaderIterator = new LoaderIteratorSTL(this);</span>
+<span class="fc" id="L254">        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));</span>
+<span class="fc" id="L255">        return loaderIterator;</span>
     }
 
     /**
      * Internal method to set maximum number of vertices allowed in a chunk.
      * This method is reused both in the constructor and in the setter of
      * maximum number of vertices allowed in a chunk.
+     *
      * @param maxVerticesInChunk maximum allowed number of vertices to be set.
-     * @throws IllegalArgumentException  if provided value is lower than 1.
+     * @throws IllegalArgumentException if provided value is lower than 1.
      */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
-<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (maxVerticesInChunk &lt; MIN_MAX_VERTICES_IN_CHUNK) {</span>
-<span class="fc" id="L255">            throw new IllegalArgumentException();</span>
+    private void internalSetMaxVerticesInChunk(final int maxVerticesInChunk) {
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        if (maxVerticesInChunk &lt; MIN_MAX_VERTICES_IN_CHUNK) {</span>
+<span class="fc" id="L268">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L258">        this.maxVerticesInChunk = maxVerticesInChunk;</span>
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L271">        this.maxVerticesInChunk = maxVerticesInChunk;</span>
+<span class="fc" id="L272">    }</span>
 
     /**
      * Internal listener to be notified when loading process finishes.
@@ -266,740 +279,763 @@ public class LoaderSTL extends Loader {
         /**
          * Reference to Loader loading an STL file.
          */
-        private LoaderSTL loader;
-        
-<span class="fc" id="L271">        public LoaderIteratorListenerImpl(LoaderSTL loader) {</span>
-<span class="fc" id="L272">            this.loader = loader;</span>
-<span class="fc" id="L273">        }</span>
-        
+        private final LoaderSTL loader;
+
+<span class="fc" id="L284">        public LoaderIteratorListenerImpl(final LoaderSTL loader) {</span>
+<span class="fc" id="L285">            this.loader = loader;</span>
+<span class="fc" id="L286">        }</span>
+
         /**
          * Method to be notified when the loading process finishes.
+         *
          * @param iterator iterator loading the file in chunks.
          */
         @Override
-        public void onIteratorFinished(LoaderIterator iterator) {
-            //because iterator is finished, we should allow subsequent calls to 
-            //load method
+        public void onIteratorFinished(final LoaderIterator iterator) {
+            // because iterator is finished, we should allow subsequent calls to
+            // load method
             try {
-<span class="fc" id="L284">                reader.seek(0); //attempt restart stream to initial position</span>
-<span class="nc" id="L285">            } catch (Exception ignore) {</span>
-                //this is a best effort operation, if it fails it is ignored
-<span class="fc" id="L287">            }</span>
+                // attempt restart stream to initial position
+<span class="fc" id="L299">                reader.seek(0);</span>
+<span class="nc" id="L300">            } catch (final Exception ignore) {</span>
+                // this is a best effort operation, if it fails it is ignored
+<span class="fc" id="L302">            }</span>
 
 
-            //on subsequent calls
-<span class="pc bpc" id="L291" title="1 of 2 branches missed.">            if (listener != null) {</span>
-<span class="fc" id="L292">                listener.onLoadEnd(loader);</span>
+            // on subsequent calls
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L307">                listener.onLoadEnd(loader);</span>
             }
-<span class="fc" id="L294">            setLocked(false);            </span>
-<span class="fc" id="L295">        }</span>
+<span class="fc" id="L309">            setLocked(false);</span>
+<span class="fc" id="L310">        }</span>
     }
 
     /**
      * Loader iterator in charge of loading file data in small chunks.
-     * Usually data is divided in chunks small enough that can be directly 
-     * loaded by graphical layers such as OpenGL (which has a limit of 65535 
-     * indices when using Vertex Buffer Objects, which increase graphical 
+     * Usually data is divided in chunks small enough that can be directly
+     * loaded by graphical layers such as OpenGL (which has a limit of 65535
+     * indices when using Vertex Buffer Objects, which increase graphical
      * performance).
-     */        
+     */
     private class LoaderIteratorSTL implements LoaderIterator {
 
         /**
          * Reference to loader loading STL file.
          */
-        private LoaderSTL loader;
-        
+        private final LoaderSTL loader;
+
         /**
          * X coordinate of the latest point that has been read.
          */
         private float coordX;
-        
+
         /**
          * Y coordinate of the latest point that has been read.
          */
         private float coordY;
-        
+
         /**
          * Z coordinate of the latest point that has been read.
          */
         private float coordZ;
-                
+
         /**
          * X coordinate of the latest point normal that has been read.
          */
         private float nX;
-        
+
         /**
          * Y coordinate of the latest point normal that has been read.
          */
         private float nY;
-        
+
         /**
          * Z coordinate of the latest point normal that has been read.
          */
         private float nZ;
-                
-        //coordinates for bounding box in a chunk
+
+        // coordinates for bounding box in a chunk
+
         /**
          * X coordinate of the minimum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
-         */        
+         */
         private float minX;
-        
+
         /**
          * Y coordinate of the minimum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
-         */        
+         */
         private float minY;
-        
+
         /**
          * Z coordinate of the minimum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
-         */        
+         */
         private float minZ;
-        
+
         /**
          * X coordinate of the maximum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
-         */        
+         */
         private float maxX;
-        
+
         /**
          * Y coordinate of the maximum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
-         */        
+         */
         private float maxY;
-        
+
         /**
          * Z coordinate of the maximum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
-         */        
-        private float maxZ;
-        
-        /**
-         * Value that might contain additional information such as color for the
-         * latest point that has been read.
          */
-        private int attributeByteCount;        
-        
+        private float maxZ;
+
         /**
          * Reference to the listener of this loader iterator. This listener will
          * be notified when the loading process finishes so that resources can
          * be freed.
-         */                
+         */
         private LoaderIteratorListener listener;
-        
+
         /**
          * Array containing vertices coordinates to be added to current chunk
          * of data.
-         */        
+         */
         private float[] coordsInChunkArray;
-        
+
         /**
          * Array containing normal coordinates to be added to current chunk of
          * data.
-         */        
-        private float[] normalsInChunkArray;   
-        
+         */
+        private float[] normalsInChunkArray;
+
         /**
          * Array containing indices to be added to current chunk of data. Notice
          * that this indices are not the original indices appearing in the file.
-         * Instead, they are indices referring to data in current chunk, 
-         * accounting for duplicate points, etc. This way, indices in a chunk 
+         * Instead, they are indices referring to data in current chunk,
+         * accounting for duplicate points, etc. This way, indices in a chunk
          * can be directly used to draw the chunk of data by the graphical layer.
-         */        
+         */
         private int[] indicesInChunkArray;
-                        
+
         /**
          * Number of vertices stored in chunk.
-         */        
+         */
         private int verticesInChunk;
-        
+
         /**
          * Number of indices stored in chunk.
-         */        
+         */
         private int indicesInChunk;
-        
+
         /**
          * Size of indices stored in chunk.
-         */        
+         */
         private int indicesInChunkSize;
-                        
+
         /**
          * Indicates if file is in ASCII format or in binary format.
          */
         private boolean isAscii;
-                
+
         /**
          * Indicates number of triangles that are contained in the file (when
          * available).
          */
         private long numberOfTriangles;
-        
+
         /**
          * Indicates current triangle being read (when available).
          */
         private long currentTriangle;
-        
+
         /**
          * Contains number of vertices contained in the file.
          */
         private long numberOfVertices;
-                
+
         /**
          * Indicates when end of file has been reached.
          */
         private boolean endOfFileReached;
-        
+
         /**
          * Contains name for the 3D object.
          */
         private String solidName;
-        
+
         /**
          * Constant defining beginning of 3D file.
          */
         public static final String ASCII_START = &quot;solid&quot;;
-        
+
         /**
          * Constant defining end of 3D file.
          */
         public static final String ASCII_END = &quot;endsolid&quot;;
-        
+
         /**
          * Constant defining a face (i.e. triangle or polygon).
          */
         public static final String ASCII_FACET = &quot;facet&quot;;
-        
+
         /**
          * Constant defining a normal.
          */
         public static final String ASCII_NORMAL = &quot;normal&quot;;
-        
+
         /**
          * Constant defining grouping levels.
          */
         public static final String ASCII_OUTER = &quot;outer&quot;;
-        
+
         /**
          * Constant defining a loop that will contain vertices.
          */
         public static final String ASCII_LOOP = &quot;loop&quot;;
-        
+
         /**
          * Constant defining a vertex.
          */
         public static final String ASCII_VERTEX = &quot;vertex&quot;;
-        
+
         /**
          * Constant defining end of loop containing vertices.
          */
         public static final String ASCII_END_LOOP = &quot;endloop&quot;;
-        
+
         /**
          * Constant defining end of 3D face (i.e. triangle or polygon).
          */
         public static final String ASCII_END_FACET = &quot;endfacet&quot;;
-        
+
         /**
          * Header size for binary format.
          */
         public static final int BINARY_HEADER_SIZE = 80;
-        
+
         /**
          * Constant defining number of vertices in a triangle.
          */
         public static final int VERTICES_PER_TRIANGLE = 3;
-        
+
         /**
          * Constructor.
+         *
          * @param loader reference to loader loading binary file.
-         * @throws IOException if an I/O error occurs.
-         * @throws LoaderException if file data is corrupt or cannot be 
-         * understood.
-         */        
-        public LoaderIteratorSTL(LoaderSTL loader) throws IOException, 
-<span class="fc" id="L522">                LoaderException {</span>
-<span class="fc" id="L523">            this.loader = loader;</span>
-<span class="fc" id="L524">            nX = nY = nZ = 1.0f;</span>
-<span class="fc" id="L525">            listener = null;</span>
-<span class="fc" id="L526">            coordsInChunkArray = null;</span>
-<span class="fc" id="L527">            normalsInChunkArray = null;</span>
-<span class="fc" id="L528">            indicesInChunkArray = null;</span>
-            
-<span class="fc" id="L530">            verticesInChunk = indicesInChunk = indicesInChunkSize = 0;</span>
-                        
-<span class="fc" id="L532">            minX = minY = minZ = Float.MAX_VALUE;</span>
-<span class="fc" id="L533">            maxX = maxY = maxZ = -Float.MAX_VALUE;</span>
-            
-<span class="fc" id="L535">            isAscii = false;</span>
-<span class="fc" id="L536">            numberOfTriangles = currentTriangle = 0;</span>
-<span class="fc" id="L537">            endOfFileReached = false;</span>
-            
-<span class="fc" id="L539">            numberOfVertices = 0;</span>
-            
-<span class="fc" id="L541">            setUp();</span>
-<span class="fc" id="L542">        }</span>
-        
+         * @throws IOException     if an I/O error occurs.
+         * @throws LoaderException if file data is corrupt or cannot be
+         *                         understood.
+         */
+        public LoaderIteratorSTL(final LoaderSTL loader) throws IOException,
+<span class="fc" id="L533">                LoaderException {</span>
+<span class="fc" id="L534">            this.loader = loader;</span>
+<span class="fc" id="L535">            nX = nY = nZ = 1.0f;</span>
+<span class="fc" id="L536">            listener = null;</span>
+<span class="fc" id="L537">            coordsInChunkArray = null;</span>
+<span class="fc" id="L538">            normalsInChunkArray = null;</span>
+<span class="fc" id="L539">            indicesInChunkArray = null;</span>
+
+<span class="fc" id="L541">            verticesInChunk = indicesInChunk = indicesInChunkSize = 0;</span>
+
+<span class="fc" id="L543">            minX = minY = minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L544">            maxX = maxY = maxZ = -Float.MAX_VALUE;</span>
+
+<span class="fc" id="L546">            isAscii = false;</span>
+<span class="fc" id="L547">            numberOfTriangles = currentTriangle = 0;</span>
+<span class="fc" id="L548">            endOfFileReached = false;</span>
+
+<span class="fc" id="L550">            numberOfVertices = 0;</span>
+
+<span class="fc" id="L552">            setUp();</span>
+<span class="fc" id="L553">        }</span>
+
         /**
          * Method to set listener of this loader iterator.
          * This listener will be notified when the loading process finishes.
+         *
          * @param listener listener of this loader iterator.
-         */                
-        public void setListener(LoaderIteratorListener listener) {
-<span class="fc" id="L550">            this.listener = listener;</span>
-<span class="fc" id="L551">        }</span>
-        
+         */
+        public void setListener(final LoaderIteratorListener listener) {
+<span class="fc" id="L562">            this.listener = listener;</span>
+<span class="fc" id="L563">        }</span>
+
         /**
          * Returns listener of this loader iterator.
          * This listener will be notified when the loading process finishes
+         *
          * @return listener of this loader iterator.
-         */                
+         */
         public LoaderIteratorListener getListener() {
-<span class="nc" id="L559">            return listener;</span>
+<span class="nc" id="L572">            return listener;</span>
         }
-        
+
         /**
          * Indicates if there is another chunk of data to be loaded.
+         *
          * @return true if there is another chunk of data, false otherwise.
-         */                
+         */
         @Override
         public boolean hasNext() {
-<span class="fc bfc" id="L568" title="All 2 branches covered.">            if (isAscii) {</span>
-<span class="fc bfc" id="L569" title="All 2 branches covered.">                return !endOfFileReached;</span>
+<span class="fc bfc" id="L582" title="All 2 branches covered.">            if (isAscii) {</span>
+<span class="fc bfc" id="L583" title="All 2 branches covered.">                return !endOfFileReached;</span>
             } else {
-<span class="fc bfc" id="L571" title="All 2 branches covered.">                return currentTriangle &lt; numberOfTriangles;</span>
+<span class="fc bfc" id="L585" title="All 2 branches covered.">                return currentTriangle &lt; numberOfTriangles;</span>
             }
         }
 
         /**
          * Loads and returns next chunk of data, if available.
+         *
          * @return next chunk of data.
          * @throws NotAvailableException thrown if no more data is available.
-         * @throws LoaderException if file data is corrupt or cannot be 
-         * understood.
-         * @throws IOException if an I/O error occurs.
-         */                
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
         @Override
-        public DataChunk next() throws NotAvailableException, LoaderException, 
+        public DataChunk next() throws NotAvailableException, LoaderException,
                 IOException {
-            
-<span class="pc bpc" id="L587" title="1 of 2 branches missed.">            if (reader == null) {</span>
-<span class="nc" id="L588">                throw new IOException();</span>
-            }
-            
-<span class="pc bpc" id="L591" title="1 of 2 branches missed.">            if (!hasNext()) {</span>
-<span class="nc" id="L592">                throw new NotAvailableException();</span>
-            }
-            
-<span class="fc" id="L595">            initChunkArrays();</span>
-            
-            //reset chunk bounding box values
-<span class="fc" id="L598">            minX = minY = minZ = Float.MAX_VALUE;</span>
-<span class="fc" id="L599">            maxX = maxY = maxZ = -Float.MAX_VALUE;</span>
-            
-            //read data until chunk is full
-<span class="fc" id="L602">            boolean endOfChunk = false;</span>
-<span class="fc" id="L603">            long fileLength = file.length();            </span>
 
-<span class="fc" id="L605">            long progressStep = Math.max(</span>
-                    (long)(LoaderSTL.PROGRESS_DELTA * fileLength), 1);
-<span class="fc" id="L607">            long previousPos = 0;</span>
-            
+<span class="pc bpc" id="L602" title="1 of 2 branches missed.">            if (reader == null) {</span>
+<span class="nc" id="L603">                throw new IOException();</span>
+            }
+
+<span class="pc bpc" id="L606" title="1 of 2 branches missed.">            if (!hasNext()) {</span>
+<span class="nc" id="L607">                throw new NotAvailableException();</span>
+            }
+
+<span class="fc" id="L610">            initChunkArrays();</span>
+
+            // reset chunk bounding box values
+<span class="fc" id="L613">            minX = minY = minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L614">            maxX = maxY = maxZ = -Float.MAX_VALUE;</span>
+
+            // read data until chunk is full
+<span class="fc" id="L617">            boolean endOfChunk = false;</span>
+<span class="fc" id="L618">            final long fileLength = file.length();</span>
+
+<span class="fc" id="L620">            final long progressStep = Math.max(</span>
+                    (long) (LoaderSTL.PROGRESS_DELTA * fileLength), 1);
+<span class="fc" id="L622">            long previousPos = 0;</span>
+
             try {
-<span class="fc bfc" id="L610" title="All 2 branches covered.">                if (isAscii) {</span>
+<span class="fc bfc" id="L625" title="All 2 branches covered.">                if (isAscii) {</span>
 
-                    //ascii format
+                    // ascii format
                     String word;
                     do {
-                        //read facet
-<span class="fc" id="L616">                        word = readNonEmptyWord();</span>
-<span class="pc bpc" id="L617" title="1 of 2 branches missed.">                        if (word == null) {</span>
-<span class="nc" id="L618">                            throw new LoaderException(); //undefined word</span>
+                        // read facet
+<span class="fc" id="L631">                        word = readNonEmptyWord();</span>
+<span class="pc bpc" id="L632" title="1 of 2 branches missed.">                        if (word == null) {</span>
+                            // undefined word
+<span class="nc" id="L634">                            throw new LoaderException();</span>
                         }
-                        
-<span class="fc bfc" id="L621" title="All 2 branches covered.">                        if (word.equalsIgnoreCase(ASCII_FACET)) {</span>
-                            //read normal
-<span class="fc" id="L623">                            word = readNonEmptyWord();</span>
-<span class="pc bpc" id="L624" title="1 of 2 branches missed.">                            if (word == null) {</span>
-<span class="nc" id="L625">                                throw new LoaderException(); //undefined word</span>
+
+<span class="fc bfc" id="L637" title="All 2 branches covered.">                        if (word.equalsIgnoreCase(ASCII_FACET)) {</span>
+                            // read normal
+<span class="fc" id="L639">                            word = readNonEmptyWord();</span>
+<span class="pc bpc" id="L640" title="1 of 2 branches missed.">                            if (word == null) {</span>
+                                // undefined word
+<span class="nc" id="L642">                                throw new LoaderException();</span>
                             }
 
-<span class="pc bpc" id="L628" title="1 of 2 branches missed.">                            if (word.equalsIgnoreCase(ASCII_NORMAL)) {</span>
-                                //read 3 normal values
-                                
-<span class="fc" id="L631">                                word = readNonEmptyWord();</span>
-<span class="fc" id="L632">                                nX = Float.valueOf(word);</span>
-<span class="fc" id="L633">                                word = readNonEmptyWord();</span>
-<span class="fc" id="L634">                                nY = Float.valueOf(word);</span>
-<span class="fc" id="L635">                                word = readNonEmptyWord();</span>
-<span class="fc" id="L636">                                nZ = Float.valueOf(word);</span>
+<span class="pc bpc" id="L645" title="1 of 2 branches missed.">                            if (word.equalsIgnoreCase(ASCII_NORMAL)) {</span>
+                                // read 3 normal values
+
+<span class="fc" id="L648">                                word = readNonEmptyWord();</span>
+<span class="fc" id="L649">                                nX = Float.parseFloat(word);</span>
+<span class="fc" id="L650">                                word = readNonEmptyWord();</span>
+<span class="fc" id="L651">                                nY = Float.parseFloat(word);</span>
+<span class="fc" id="L652">                                word = readNonEmptyWord();</span>
+<span class="fc" id="L653">                                nZ = Float.parseFloat(word);</span>
                             } else {
-<span class="nc" id="L638">                                throw new LoaderException(); //unexpected word</span>
-                            }
-                            
-<span class="fc bfc" id="L641" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_OUTER)) {</span>
-                            //next word has to be loop
-<span class="fc" id="L643">                            word = readNonEmptyWord();</span>
-<span class="pc bpc" id="L644" title="1 of 2 branches missed.">                            if (word == null) {</span>
-<span class="nc" id="L645">                                throw new LoaderException(); //undefined word</span>
+                                // unexpected word
+<span class="nc" id="L656">                                throw new LoaderException();</span>
                             }
 
-<span class="pc bpc" id="L648" title="1 of 2 branches missed.">                            if (!word.equalsIgnoreCase(ASCII_LOOP)) {</span>
-<span class="nc" id="L649">                                throw new LoaderException(); //unexpected word</span>
-                            }
-                            
-<span class="fc bfc" id="L652" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_VERTEX)) {</span>
-                            //read vertex data
-<span class="fc" id="L654">                            word = readNonEmptyWord();</span>
-<span class="fc" id="L655">                            coordX = Float.valueOf(word);</span>
-<span class="fc" id="L656">                            word = readNonEmptyWord();</span>
-<span class="fc" id="L657">                            coordY = Float.valueOf(word);</span>
-<span class="fc" id="L658">                            word = readNonEmptyWord();</span>
-<span class="fc" id="L659">                            coordZ = Float.valueOf(word);</span>
-                            
-                            //add coordinates into chunk arrays
-<span class="fc" id="L662">                            addNewVertexDataToChunk();  </span>
-                            
-                            //check if chunk is full
-<span class="pc bpc" id="L665" title="1 of 2 branches missed.">                            if (verticesInChunk == loader.maxVerticesInChunk) {</span>
-                                //no more vertices can be added to this chunk
-<span class="nc" id="L667">                                break;</span>
-                            }                            
-                            
-<span class="fc bfc" id="L670" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_END_LOOP)) {</span>
-                            //check if chunk is full
-<span class="fc" id="L672">                            if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
-<span class="fc bfc" id="L673" title="All 2 branches covered.">                                loader.maxVerticesInChunk) {</span>
-                                //no more triangles vertices can be added to 
-                                //this chunk
-<span class="fc" id="L676">                                break;                                                        </span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_OUTER)) {</span>
+                            // next word has to be loop
+<span class="fc" id="L661">                            word = readNonEmptyWord();</span>
+<span class="pc bpc" id="L662" title="1 of 2 branches missed.">                            if (word == null) {</span>
+                                // undefined word
+<span class="nc" id="L664">                                throw new LoaderException();</span>
                             }
 
-<span class="fc bfc" id="L679" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_END_FACET)) {</span>
-                     
-                            //check if chunk is full
-<span class="fc" id="L682">                            if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
-<span class="pc bpc" id="L683" title="1 of 2 branches missed.">                                loader.maxVerticesInChunk) {</span>
-                                //no more triangles vertices can be added to 
-                                //this chunk
-<span class="nc" id="L686">                                break;                                                        </span>
+<span class="pc bpc" id="L667" title="1 of 2 branches missed.">                            if (!word.equalsIgnoreCase(ASCII_LOOP)) {</span>
+                                // unexpected word
+<span class="nc" id="L669">                                throw new LoaderException();</span>
                             }
-<span class="pc bpc" id="L688" title="1 of 2 branches missed.">                        } else if (word.equalsIgnoreCase(ASCII_END)) {</span>
-<span class="fc" id="L689">                            endOfFileReached = true;</span>
-<span class="fc" id="L690">                            break;</span>
+
+<span class="fc bfc" id="L672" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_VERTEX)) {</span>
+                            // read vertex data
+<span class="fc" id="L674">                            word = readNonEmptyWord();</span>
+<span class="fc" id="L675">                            coordX = Float.parseFloat(word);</span>
+<span class="fc" id="L676">                            word = readNonEmptyWord();</span>
+<span class="fc" id="L677">                            coordY = Float.parseFloat(word);</span>
+<span class="fc" id="L678">                            word = readNonEmptyWord();</span>
+<span class="fc" id="L679">                            coordZ = Float.parseFloat(word);</span>
+
+                            // add coordinates into chunk arrays
+<span class="fc" id="L682">                            addNewVertexDataToChunk();</span>
+
+                            // check if chunk is full
+<span class="pc bpc" id="L685" title="1 of 2 branches missed.">                            if (verticesInChunk == loader.maxVerticesInChunk) {</span>
+                                // no more vertices can be added to this chunk
+<span class="nc" id="L687">                                break;</span>
+                            }
+
+<span class="fc bfc" id="L690" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_END_LOOP)) {</span>
+                            // check if chunk is full
+<span class="fc" id="L692">                            if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
+<span class="fc bfc" id="L693" title="All 2 branches covered.">                                    loader.maxVerticesInChunk) {</span>
+                                // no more triangles vertices can be added to
+                                // this chunk
+<span class="fc" id="L696">                                break;</span>
+                            }
+
+<span class="fc bfc" id="L699" title="All 2 branches covered.">                        } else if (word.equalsIgnoreCase(ASCII_END_FACET)) {</span>
+
+                            // check if chunk is full
+<span class="fc" id="L702">                            if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
+<span class="pc bpc" id="L703" title="1 of 2 branches missed.">                                    loader.maxVerticesInChunk) {</span>
+                                // no more triangles vertices can be added to
+                                // this chunk
+<span class="nc" id="L706">                                break;</span>
+                            }
+<span class="pc bpc" id="L708" title="1 of 2 branches missed.">                        } else if (word.equalsIgnoreCase(ASCII_END)) {</span>
+<span class="fc" id="L709">                            endOfFileReached = true;</span>
+<span class="fc" id="L710">                            break;</span>
                         } else {
-<span class="nc" id="L692">                            throw new LoaderException(); //unexpected word</span>
+                            // unexpected word
+<span class="nc" id="L713">                            throw new LoaderException();</span>
                         }
-                        
-                        //compute progress
-<span class="pc bpc" id="L696" title="1 of 2 branches missed.">                        if ((loader.listener != null) &amp;&amp;</span>
-<span class="fc bfc" id="L697" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;= progressStep) {</span>
-<span class="fc" id="L698">                            previousPos = reader.getPosition();</span>
-<span class="fc" id="L699">                            loader.listener.onLoadProgressChange(loader,</span>
-<span class="fc" id="L700">                                    (float)(reader.getPosition()) /</span>
-                                            (float)(fileLength));
-                        }
-                                                
-<span class="pc bpc" id="L704" title="1 of 2 branches missed.">                    } while (!endOfFileReached);</span>
 
-<span class="fc" id="L706">                } else {</span>
+                        // compute progress
+<span class="pc bpc" id="L717" title="1 of 2 branches missed.">                        if ((loader.listener != null) &amp;&amp;</span>
+<span class="fc bfc" id="L718" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;= progressStep) {</span>
+<span class="fc" id="L719">                            previousPos = reader.getPosition();</span>
+<span class="fc" id="L720">                            loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L721">                                    (float) (reader.getPosition()) /</span>
+                                            (float) (fileLength));
+                        }
+
+<span class="pc bpc" id="L725" title="1 of 2 branches missed.">                    } while (!endOfFileReached);</span>
+
+<span class="fc" id="L727">                } else {</span>
                     do {
-                        //read vertex data (triangle normal, triangle vertices
-                        //and two bytes attribute byte count
-                        
-                        //read vertex normals
-<span class="fc" id="L712">                        nX = reader.readFloat(</span>
+                        // read vertex data (triangle normal, triangle vertices
+                        // and two bytes attribute byte count
+
+                        // read vertex normals
+<span class="fc" id="L733">                        nX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L714">                        nY = reader.readFloat(</span>
+<span class="fc" id="L735">                        nY = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L716">                        nZ = reader.readFloat(</span>
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        
-                        //read 1st vertex coordinates of triangle
-<span class="fc" id="L720">                        coordX = reader.readFloat(</span>
-                                EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L722">                        coordY = reader.readFloat(</span>
-                                EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L724">                        coordZ = reader.readFloat(</span>
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        
-                        //add coordinates into chunk arrays
-<span class="fc" id="L728">                        addNewVertexDataToChunk();          </span>
-                                                    
-                        //read 2nd vertex coordinates of triangle
-<span class="fc" id="L731">                        coordX = reader.readFloat(</span>
-                                EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L733">                        coordY = reader.readFloat(</span>
-                                EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L735">                        coordZ = reader.readFloat(</span>
+<span class="fc" id="L737">                        nZ = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
-                        //add coordinates into chunk arrays
-<span class="fc" id="L739">                        addNewVertexDataToChunk();   </span>
-                            
-                        //read 3rd vertex coordinates of triangle
-<span class="fc" id="L742">                        coordX = reader.readFloat(</span>
+                        // read 1st vertex coordinates of triangle
+<span class="fc" id="L741">                        coordX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L744">                        coordY = reader.readFloat(</span>
+<span class="fc" id="L743">                        coordY = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L746">                        coordZ = reader.readFloat(</span>
+<span class="fc" id="L745">                        coordZ = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
-                        //add coordinates into chunk arrays
-<span class="fc" id="L750">                        addNewVertexDataToChunk();</span>
-                        
-<span class="fc" id="L752">                        attributeByteCount = reader.readUnsignedShort(</span>
+                        // add coordinates into chunk arrays
+<span class="fc" id="L749">                        addNewVertexDataToChunk();</span>
+
+                        // read 2nd vertex coordinates of triangle
+<span class="fc" id="L752">                        coordX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-                        
-<span class="fc" id="L755">                        currentTriangle++;</span>
-                        
-                        //compute progress
-<span class="pc bpc" id="L758" title="1 of 2 branches missed.">                        if ((loader.listener != null) &amp;&amp;</span>
-<span class="fc bfc" id="L759" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;=</span>
+<span class="fc" id="L754">                        coordY = reader.readFloat(</span>
+                                EndianType.LITTLE_ENDIAN_TYPE);
+<span class="fc" id="L756">                        coordZ = reader.readFloat(</span>
+                                EndianType.LITTLE_ENDIAN_TYPE);
+
+                        // add coordinates into chunk arrays
+<span class="fc" id="L760">                        addNewVertexDataToChunk();</span>
+
+                        // read 3rd vertex coordinates of triangle
+<span class="fc" id="L763">                        coordX = reader.readFloat(</span>
+                                EndianType.LITTLE_ENDIAN_TYPE);
+<span class="fc" id="L765">                        coordY = reader.readFloat(</span>
+                                EndianType.LITTLE_ENDIAN_TYPE);
+<span class="fc" id="L767">                        coordZ = reader.readFloat(</span>
+                                EndianType.LITTLE_ENDIAN_TYPE);
+
+                        // add coordinates into chunk arrays
+<span class="fc" id="L771">                        addNewVertexDataToChunk();</span>
+
+<span class="fc" id="L773">                        int attributeByteCount = reader.readUnsignedShort(</span>
+                                EndianType.LITTLE_ENDIAN_TYPE);
+
+<span class="fc" id="L776">                        currentTriangle++;</span>
+
+                        // compute progress
+<span class="pc bpc" id="L779" title="1 of 2 branches missed.">                        if ((loader.listener != null) &amp;&amp;</span>
+<span class="fc bfc" id="L780" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;=</span>
                                         progressStep) {
-<span class="fc" id="L761">                            previousPos = reader.getPosition();</span>
-<span class="fc" id="L762">                            loader.listener.onLoadProgressChange(loader,</span>
-<span class="fc" id="L763">                                    (float)(reader.getPosition()) /</span>
-                                            (float)(fileLength));
+<span class="fc" id="L782">                            previousPos = reader.getPosition();</span>
+<span class="fc" id="L783">                            loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L784">                                    (float) (reader.getPosition()) /</span>
+                                            (float) (fileLength));
                         }
-                        
-<span class="fc" id="L767">                        if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
-<span class="fc bfc" id="L768" title="All 2 branches covered.">                            loader.maxVerticesInChunk) {</span>
-                            //no more triangles vertices can be added to this 
-                            //chunk
-<span class="fc" id="L771">                            endOfChunk = true;</span>
-<span class="fc" id="L772">                            break;                                                        </span>
+
+<span class="fc" id="L788">                        if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
+<span class="fc bfc" id="L789" title="All 2 branches covered.">                                loader.maxVerticesInChunk) {</span>
+                            // no more triangles vertices can be added to this
+                            // chunk
+<span class="fc" id="L792">                            endOfChunk = true;</span>
+<span class="fc" id="L793">                            break;</span>
                         }
-                        
-<span class="pc bpc" id="L775" title="1 of 4 branches missed.">                    } while (!reader.isEndOfStream() &amp;&amp;</span>
+
+<span class="pc bpc" id="L796" title="1 of 4 branches missed.">                    } while (!reader.isEndOfStream() &amp;&amp;</span>
                             currentTriangle &lt; numberOfTriangles);
-                    
-                    //file ended before all triangles were read
-<span class="pc bpc" id="L779" title="1 of 4 branches missed.">                    if (currentTriangle &lt; numberOfTriangles &amp;&amp; !endOfChunk) {</span>
-<span class="nc" id="L780">                        throw new LoaderException();</span>
+
+                    // file ended before all triangles were read
+<span class="pc bpc" id="L800" title="1 of 4 branches missed.">                    if (currentTriangle &lt; numberOfTriangles &amp;&amp; !endOfChunk) {</span>
+<span class="nc" id="L801">                        throw new LoaderException();</span>
                     }
                 }
-<span class="nc" id="L783">            } catch (IOException | LoaderException e) {</span>
-<span class="nc" id="L784">                throw e;</span>
-<span class="nc" id="L785">            }catch(Exception e){</span>
-<span class="nc" id="L786">                throw new LoaderException(e);</span>
-<span class="fc" id="L787">            }</span>
-            
-            //trim arrays to store only needed data
-<span class="fc" id="L790">            trimArrays();</span>
-            
-            //Instantiate DataChunk with chunk arrays
-<span class="fc" id="L793">            DataChunk dataChunk = new DataChunk();</span>
-            
-<span class="fc" id="L795">            dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
-<span class="fc" id="L796">            dataChunk.setMinX(minX);</span>
-<span class="fc" id="L797">            dataChunk.setMinY(minY);</span>
-<span class="fc" id="L798">            dataChunk.setMinZ(minZ);</span>
-<span class="fc" id="L799">            dataChunk.setMaxX(maxX);</span>
-<span class="fc" id="L800">            dataChunk.setMaxY(maxY);</span>
-<span class="fc" id="L801">            dataChunk.setMaxZ(maxZ);</span>
-                        
-<span class="fc" id="L803">            dataChunk.setIndicesData(indicesInChunkArray);</span>
-            
-<span class="fc" id="L805">            dataChunk.setNormalsData(normalsInChunkArray);</span>
-            
-<span class="pc bpc" id="L807" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
-                //notify iterator finished
-<span class="fc" id="L809">                listener.onIteratorFinished(this);</span>
-            }
-            
-            //if no more chunks are available, then close input reader
-<span class="fc bfc" id="L813" title="All 2 branches covered.">            if (!hasNext()) {</span>
-<span class="fc" id="L814">                reader.close();</span>
+<span class="nc" id="L804">            } catch (final IOException | LoaderException e) {</span>
+<span class="nc" id="L805">                throw e;</span>
+<span class="nc" id="L806">            } catch (final Exception e) {</span>
+<span class="nc" id="L807">                throw new LoaderException(e);</span>
+<span class="fc" id="L808">            }</span>
+
+            // trim arrays to store only needed data
+<span class="fc" id="L811">            trimArrays();</span>
+
+            // Instantiate DataChunk with chunk arrays
+<span class="fc" id="L814">            final DataChunk dataChunk = new DataChunk();</span>
+
+<span class="fc" id="L816">            dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
+<span class="fc" id="L817">            dataChunk.setMinX(minX);</span>
+<span class="fc" id="L818">            dataChunk.setMinY(minY);</span>
+<span class="fc" id="L819">            dataChunk.setMinZ(minZ);</span>
+<span class="fc" id="L820">            dataChunk.setMaxX(maxX);</span>
+<span class="fc" id="L821">            dataChunk.setMaxY(maxY);</span>
+<span class="fc" id="L822">            dataChunk.setMaxZ(maxZ);</span>
+
+<span class="fc" id="L824">            dataChunk.setIndicesData(indicesInChunkArray);</span>
+
+<span class="fc" id="L826">            dataChunk.setNormalsData(normalsInChunkArray);</span>
+
+<span class="pc bpc" id="L828" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
+                // notify iterator finished
+<span class="fc" id="L830">                listener.onIteratorFinished(this);</span>
             }
 
-<span class="fc" id="L817">            return dataChunk;</span>
+            // if no more chunks are available, then close input reader
+<span class="fc bfc" id="L834" title="All 2 branches covered.">            if (!hasNext()) {</span>
+<span class="fc" id="L835">                reader.close();</span>
+            }
+
+<span class="fc" id="L838">            return dataChunk;</span>
         }
-         
+
         /**
          * Returns name of 3D object.
+         *
          * @return name of 3D object.
          */
         public String getSolidName() {
-<span class="nc" id="L825">            return solidName;</span>
-        }        
-        
+<span class="nc" id="L847">            return solidName;</span>
+        }
+
+        /**
+         * Gets number of vertices contained in the file.
+         *
+         * @return number of vertices contained in the file.
+         */
+        public long getNumberOfVertices() {
+<span class="nc" id="L856">            return numberOfVertices;</span>
+        }
+
         /**
          * Internal method to read a word from ASCII file.
+         *
          * @return next word that has been read.
          * @throws IOException if an I/O error occurs.
          */
         private String readNonEmptyWord() throws IOException {
-            //read normal
+            // read normal
             String word;
             do {
-<span class="fc" id="L837">                word = reader.readWord(); //ignore empty words </span>
-                //(line feeds, etc)
-<span class="pc bpc" id="L839" title="1 of 4 branches missed.">            } while (word != null &amp;&amp; word.isEmpty());</span>
-<span class="fc" id="L840">            return word;</span>
+                // ignore empty words
+                // (line feeds, etc)
+<span class="fc" id="L871">                word = reader.readWord();</span>
+<span class="pc bpc" id="L872" title="1 of 4 branches missed.">            } while (word != null &amp;&amp; word.isEmpty());</span>
+<span class="fc" id="L873">            return word;</span>
         }
-        
+
         /**
          * Initializes arrays forming current chunk of data.
-         */        
+         */
         private void initChunkArrays() {
-<span class="fc" id="L847">            coordsInChunkArray = new float[loader.maxVerticesInChunk * </span>
+<span class="fc" id="L880">            coordsInChunkArray = new float[loader.maxVerticesInChunk *</span>
                     VERTICES_PER_TRIANGLE];
-<span class="fc" id="L849">            normalsInChunkArray = new float[loader.maxVerticesInChunk * </span>
+<span class="fc" id="L882">            normalsInChunkArray = new float[loader.maxVerticesInChunk *</span>
                     VERTICES_PER_TRIANGLE];
-<span class="fc" id="L851">            indicesInChunkArray = new int[loader.maxVerticesInChunk];           </span>
-            
-<span class="fc" id="L853">            verticesInChunk = indicesInChunk = 0;</span>
-<span class="fc" id="L854">            indicesInChunkSize = loader.maxVerticesInChunk;            </span>
-<span class="fc" id="L855">        }        </span>
-        
+<span class="fc" id="L884">            indicesInChunkArray = new int[loader.maxVerticesInChunk];</span>
+
+<span class="fc" id="L886">            verticesInChunk = indicesInChunk = 0;</span>
+<span class="fc" id="L887">            indicesInChunkSize = loader.maxVerticesInChunk;</span>
+<span class="fc" id="L888">        }</span>
+
         /**
          * Adds data of last vertex being loaded to current chunk of data as a
          * new vertex.
-         */        
+         */
         private void addNewVertexDataToChunk() {
-<span class="fc" id="L862">            int pos = 3 * verticesInChunk;</span>
-            
-<span class="fc" id="L864">            coordsInChunkArray[pos] = coordX;</span>
-<span class="fc" id="L865">            normalsInChunkArray[pos] = nX;</span>
-            
-<span class="fc" id="L867">            pos++;</span>
-            
-<span class="fc" id="L869">            coordsInChunkArray[pos] = coordY;</span>
-<span class="fc" id="L870">            normalsInChunkArray[pos] = nY;</span>
-            
-<span class="fc" id="L872">            pos++;</span>
-            
-<span class="fc" id="L874">            coordsInChunkArray[pos] = coordZ;</span>
-<span class="fc" id="L875">            normalsInChunkArray[pos] = nZ;</span>
-            
-            //update bounding box values
-<span class="fc bfc" id="L878" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
-<span class="fc" id="L879">                minX = coordX;</span>
+<span class="fc" id="L895">            int pos = 3 * verticesInChunk;</span>
+
+<span class="fc" id="L897">            coordsInChunkArray[pos] = coordX;</span>
+<span class="fc" id="L898">            normalsInChunkArray[pos] = nX;</span>
+
+<span class="fc" id="L900">            pos++;</span>
+
+<span class="fc" id="L902">            coordsInChunkArray[pos] = coordY;</span>
+<span class="fc" id="L903">            normalsInChunkArray[pos] = nY;</span>
+
+<span class="fc" id="L905">            pos++;</span>
+
+<span class="fc" id="L907">            coordsInChunkArray[pos] = coordZ;</span>
+<span class="fc" id="L908">            normalsInChunkArray[pos] = nZ;</span>
+
+            // update bounding box values
+<span class="fc bfc" id="L911" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
+<span class="fc" id="L912">                minX = coordX;</span>
             }
-<span class="fc bfc" id="L881" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
-<span class="fc" id="L882">                minY = coordY;</span>
+<span class="fc bfc" id="L914" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
+<span class="fc" id="L915">                minY = coordY;</span>
             }
-<span class="fc bfc" id="L884" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
-<span class="fc" id="L885">                minZ = coordZ;</span>
+<span class="fc bfc" id="L917" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
+<span class="fc" id="L918">                minZ = coordZ;</span>
             }
-            
-<span class="fc bfc" id="L888" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
-<span class="fc" id="L889">                maxX = coordX;</span>
+
+<span class="fc bfc" id="L921" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
+<span class="fc" id="L922">                maxX = coordX;</span>
             }
-<span class="fc bfc" id="L891" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
-<span class="fc" id="L892">                maxY = coordY;</span>
+<span class="fc bfc" id="L924" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
+<span class="fc" id="L925">                maxY = coordY;</span>
             }
-<span class="fc bfc" id="L894" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
-<span class="fc" id="L895">                maxZ = coordZ;</span>
+<span class="fc bfc" id="L927" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
+<span class="fc" id="L928">                maxZ = coordZ;</span>
             }
-            
-            //if arrays of indices become full, we need to resize them
-<span class="pc bpc" id="L899" title="1 of 2 branches missed.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
-<span class="nc" id="L900">                increaseIndicesArraySize();</span>
+
+            // if arrays of indices become full, we need to resize them
+<span class="pc bpc" id="L932" title="1 of 2 branches missed.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
+<span class="nc" id="L933">                increaseIndicesArraySize();</span>
             }
-<span class="fc" id="L902">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
-                        
-<span class="fc" id="L904">            verticesInChunk++;</span>
-<span class="fc" id="L905">            indicesInChunk++;</span>
-<span class="fc" id="L906">        }</span>
-        
-        /**
-         * Increases size of arrays of data. This method is called when needed.
-         */        
-        private void increaseIndicesArraySize() {
-<span class="nc" id="L912">            int newIndicesInChunkSize = indicesInChunkSize +</span>
-<span class="nc" id="L913">                    loader.maxVerticesInChunk;</span>
-<span class="nc" id="L914">            int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
-            
-            //copy contents of old array
-<span class="nc" id="L917">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, </span>
-                    indicesInChunkSize);
-            
-            //set new arrays and new size
-<span class="nc" id="L921">            indicesInChunkArray = newIndicesInChunkArray;</span>
-<span class="nc" id="L922">            indicesInChunkSize = newIndicesInChunkSize;</span>
-<span class="nc" id="L923">        }             </span>
+<span class="fc" id="L935">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
+
+<span class="fc" id="L937">            verticesInChunk++;</span>
+<span class="fc" id="L938">            indicesInChunk++;</span>
+<span class="fc" id="L939">        }</span>
 
         /**
-         * Trims arrays of data to reduce size of arrays to fit chunk data. This 
+         * Increases size of arrays of data. This method is called when needed.
+         */
+        private void increaseIndicesArraySize() {
+<span class="nc" id="L945">            final int newIndicesInChunkSize = indicesInChunkSize +</span>
+<span class="nc" id="L946">                    loader.maxVerticesInChunk;</span>
+<span class="nc" id="L947">            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
+
+            // copy contents of old array
+<span class="nc" id="L950">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,</span>
+                    indicesInChunkSize);
+
+            // set new arrays and new size
+<span class="nc" id="L954">            indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="nc" id="L955">            indicesInChunkSize = newIndicesInChunkSize;</span>
+<span class="nc" id="L956">        }</span>
+
+        /**
+         * Trims arrays of data to reduce size of arrays to fit chunk data. This
          * method is loaded just before copying data to chunk being returned.
-         */        
+         */
         private void trimArrays() {
-<span class="pc bpc" id="L930" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
-<span class="fc" id="L931">                int elems = verticesInChunk * VERTICES_PER_TRIANGLE;</span>
-                
-<span class="fc" id="L933">                float[] newCoordsInChunkArray = new float[elems];</span>
-<span class="fc" id="L934">                float[] newNormalsInChunkArray = new float[elems];</span>
-                
-                //copy contents of old arrays
-<span class="fc" id="L937">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
+<span class="pc bpc" id="L963" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
+<span class="fc" id="L964">                final int elems = verticesInChunk * VERTICES_PER_TRIANGLE;</span>
+
+<span class="fc" id="L966">                final float[] newCoordsInChunkArray = new float[elems];</span>
+<span class="fc" id="L967">                final float[] newNormalsInChunkArray = new float[elems];</span>
+
+                // copy contents of old arrays
+<span class="fc" id="L970">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
                         0, elems);
-<span class="fc" id="L939">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray, </span>
+<span class="fc" id="L972">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,</span>
                         0, elems);
-                
-                //set new arrays
-<span class="fc" id="L943">                coordsInChunkArray = newCoordsInChunkArray;</span>
-<span class="fc" id="L944">                normalsInChunkArray = newNormalsInChunkArray;</span>
-<span class="fc" id="L945">            } else {</span>
-                //allow garbage collection
-<span class="nc" id="L947">                coordsInChunkArray = null;</span>
-<span class="nc" id="L948">                normalsInChunkArray = null;</span>
+
+                // set new arrays
+<span class="fc" id="L976">                coordsInChunkArray = newCoordsInChunkArray;</span>
+<span class="fc" id="L977">                normalsInChunkArray = newNormalsInChunkArray;</span>
+<span class="fc" id="L978">            } else {</span>
+                // allow garbage collection
+<span class="nc" id="L980">                coordsInChunkArray = null;</span>
+<span class="nc" id="L981">                normalsInChunkArray = null;</span>
             }
-            
-<span class="pc bpc" id="L951" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
-<span class="fc" id="L952">                int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
-<span class="fc" id="L953">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
+
+<span class="pc bpc" id="L984" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
+<span class="fc" id="L985">                final int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
+<span class="fc" id="L986">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
                         0, indicesInChunk);
-                
-                //set new array
-<span class="fc" id="L957">                indicesInChunkArray = newIndicesInChunkArray;</span>
-<span class="fc" id="L958">            } else {</span>
-                //allow garbage collection
-<span class="nc" id="L960">                indicesInChunkArray = null;</span>
+
+                // set new array
+<span class="fc" id="L990">                indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="fc" id="L991">            } else {</span>
+                // allow garbage collection
+<span class="nc" id="L993">                indicesInChunkArray = null;</span>
             }
-<span class="fc" id="L962">        }        </span>
-        
+<span class="fc" id="L995">        }</span>
+
         /**
          * Set ups loader iterator. This method is called when constructing
          * this iterator.
-         * @throws IOException if an I/O error occurs.
+         *
+         * @throws IOException     if an I/O error occurs.
          * @throws LoaderException if data is corrupted or cannot be understood.
-         */        
+         */
         private void setUp() throws IOException, LoaderException {
-            //read start of file to determine whether it is in ascii or binary
-            //format
-<span class="fc" id="L973">            reader.seek(0); //move to start of file</span>
-<span class="fc" id="L974">            int magicStartLength = ASCII_START.length();</span>
-<span class="fc" id="L975">            byte[] buffer = new byte[magicStartLength];</span>
-<span class="fc" id="L976">            int n = reader.read(buffer);</span>
-<span class="pc bpc" id="L977" title="1 of 2 branches missed.">            if (n != magicStartLength) {</span>
-<span class="nc" id="L978">                throw new LoaderException();</span>
+            // read start of file to determine whether it is in ascii or binary
+            // format
+
+            // move to start of file
+<span class="fc" id="L1009">            reader.seek(0);</span>
+<span class="fc" id="L1010">            final int magicStartLength = ASCII_START.length();</span>
+<span class="fc" id="L1011">            final byte[] buffer = new byte[magicStartLength];</span>
+<span class="fc" id="L1012">            final int n = reader.read(buffer);</span>
+<span class="pc bpc" id="L1013" title="1 of 2 branches missed.">            if (n != magicStartLength) {</span>
+<span class="nc" id="L1014">                throw new LoaderException();</span>
             }
-<span class="fc" id="L980">            String str = new String(buffer);</span>
-            
-<span class="fc" id="L982">            isAscii = str.equalsIgnoreCase(ASCII_START);</span>
-<span class="fc bfc" id="L983" title="All 2 branches covered.">            if (isAscii) {</span>
-                //check 
-<span class="pc bpc" id="L985" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L986">                    throw new LoaderException();</span>
+<span class="fc" id="L1016">            final String str = new String(buffer);</span>
+
+<span class="fc" id="L1018">            isAscii = str.equalsIgnoreCase(ASCII_START);</span>
+<span class="fc bfc" id="L1019" title="All 2 branches covered.">            if (isAscii) {</span>
+                // check
+<span class="pc bpc" id="L1021" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L1022">                    throw new LoaderException();</span>
                 }
-                //load solid name
-<span class="fc" id="L989">                solidName = reader.readLine();</span>
+                // load solid name
+<span class="fc" id="L1025">                solidName = reader.readLine();</span>
             } else {
-                //Binary format (always is in little endian form)
-                
-                //set position after 80 byte header
-<span class="fc" id="L994">                reader.seek(BINARY_HEADER_SIZE);</span>
-                
-                //read number of triangles
-<span class="fc" id="L997">                numberOfTriangles = reader.readUnsignedInt</span>
-<span class="fc" id="L998">                        (EndianType.LITTLE_ENDIAN_TYPE);</span>
-<span class="fc" id="L999">                numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;</span>
+                // Binary format (always is in little endian form)
+
+                // set position after 80 byte header
+<span class="fc" id="L1030">                reader.seek(BINARY_HEADER_SIZE);</span>
+
+                // read number of triangles
+<span class="fc" id="L1033">                numberOfTriangles = reader.readUnsignedInt</span>
+<span class="fc" id="L1034">                        (EndianType.LITTLE_ENDIAN_TYPE);</span>
+<span class="fc" id="L1035">                numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;</span>
             }
-<span class="fc" id="L1001">        }</span>
-        
+<span class="fc" id="L1037">        }</span>
+
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

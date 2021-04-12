@@ -23,177 +23,189 @@ import java.nio.channels.FileChannel;
 /**
  * This class provides methods to access file data at random positions.
  */
-@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;Duplicates&quot;})
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**
      * Underlying input file.
      */
-    private RandomAccessFile randomAccessFile;
-    
+    private final RandomAccessFile randomAccessFile;
+
     /**
      * Constructor.
-     * @param f file to read from or write to.
+     *
+     * @param f    file to read from or write to.
      * @param mode file opening mode (read only or read write).
      * @throws IOException if an I/O error occurs.
      */
-    public FileReaderAndWriter(File f, FileChannel.MapMode mode) 
-<span class="fc" id="L41">            throws IOException {</span>
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (mode == FileChannel.MapMode.READ_ONLY) {</span>
-<span class="fc" id="L43">            this.randomAccessFile = new RandomAccessFile(f, &quot;r&quot;);</span>
+    public FileReaderAndWriter(final File f, final FileChannel.MapMode mode)
+<span class="fc" id="L42">            throws IOException {</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (mode == FileChannel.MapMode.READ_ONLY) {</span>
+<span class="fc" id="L44">            this.randomAccessFile = new RandomAccessFile(f, &quot;r&quot;);</span>
         } else {
-<span class="fc" id="L45">            this.randomAccessFile = new RandomAccessFile(f, &quot;rw&quot;);</span>
+<span class="fc" id="L46">            this.randomAccessFile = new RandomAccessFile(f, &quot;rw&quot;);</span>
         }
-<span class="fc" id="L47">    }</span>
-                
+<span class="fc" id="L48">    }</span>
+
     /**
      * Reads one byte at current file position and advances one position.
+     *
      * @return Next byte of data or -1 if end of file is reached.
      * @throws IOException if an I/O error occurs. Not thrown if end-of-file has
-     * been reached.
+     *                     been reached.
      */
     @Override
     public int read() throws IOException {
-<span class="fc" id="L57">        return randomAccessFile.read();</span>
+<span class="fc" id="L59">        return randomAccessFile.read();</span>
     }
-    
+
     /**
      * Reads up to b.length bytes of data from this file into an array of bytes.
      * This method blocks until at least one byte of input is available.
+     *
      * @param b The buffer into which the data is read.
      * @return The total number of bytes read into the buffer, or -1 if there is
      * no more data because the end of the file has been reached.
      * @throws IOException If the first byte cannot be read for any reason other
-     * than end of file, or if the file has been closed, or if some other I/O
-     * error occurs.
+     *                     than end of file, or if the file has been closed, or if some other I/O
+     *                     error occurs.
      */
     @Override
-    public int read(byte[] b) throws IOException {
-<span class="fc" id="L72">        return randomAccessFile.read(b);</span>
+    public int read(final byte[] b) throws IOException {
+<span class="fc" id="L75">        return randomAccessFile.read(b);</span>
     }
-    
+
     /**
      * Reads up to len bytes of data from this file into an array of bytes. This
      * method blocks until at least one byte of input is available.
-     * This method behaves in exactly the same way as the 
+     * This method behaves in exactly the same way as the
      * InputStream.read(byte[], int, int) method of InputStream.
-     * @param b the buffer into which the data is read.
+     *
+     * @param b   the buffer into which the data is read.
      * @param off the start offset in array b at which the data is written.
      * @param len the maximum number of bytes read.
      * @return the total number of bytes read into the buffer, or -1 if there is
      * no more data because the end of the file has been reached.
      * @throws IOException If the first byte cannot be read for any reason other
-     * than end of file, or if the random access file has been closed, or if 
-     * some other I/O error occurs.
+     *                     than end of file, or if the random access file has been closed, or if
+     *                     some other I/O error occurs.
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-<span class="fc" id="L91">        return randomAccessFile.read(b, off, len);</span>
+    public int read(final byte[] b, final int off, final int len) throws IOException {
+<span class="fc" id="L95">        return randomAccessFile.read(b, off, len);</span>
     }
-    
+
     /**
-     * Reads b.length bytes from this file into the byte array, starting at the 
-     * current file pointer. This method reads repeatedly from the file until 
-     * the requested number of bytes are read. This method blocks until the 
+     * Reads b.length bytes from this file into the byte array, starting at the
+     * current file pointer. This method reads repeatedly from the file until
+     * the requested number of bytes are read. This method blocks until the
      * requested number of bytes are read, the end of the stream is detected, or
      * an exception is thrown.
+     *
      * @param b the buffer into which the data is read.
-     * @throws IOException  if this file reaches the end before reading all the 
-     * bytes.
+     * @throws IOException if this file reaches the end before reading all the
+     *                     bytes.
      */
-    public void readFully(byte[] b) throws IOException {
-<span class="fc" id="L105">        randomAccessFile.readFully(b);</span>
-<span class="fc" id="L106">    }</span>
-    
+    public void readFully(final byte[] b) throws IOException {
+<span class="fc" id="L110">        randomAccessFile.readFully(b);</span>
+<span class="fc" id="L111">    }</span>
+
     /**
-     * Reads exactly len bytes from this file into the byte array, starting at 
-     * the current file pointer. This method reads repeatedly from the file 
+     * Reads exactly len bytes from this file into the byte array, starting at
+     * the current file pointer. This method reads repeatedly from the file
      * until the requested number of bytes are read. This method blocks until
-     * the requested number of bytes are read, the end of the stream is 
+     * the requested number of bytes are read, the end of the stream is
      * detected, or an exception is thrown.
-     * @param b the buffer into which the data is read.
+     *
+     * @param b   the buffer into which the data is read.
      * @param off the start offset of the data.
      * @param len the number of byte to read.
-     * @throws IOException if this file reaches the end before reading all the 
-     * bytes or if an I/O error occurs.
+     * @throws IOException if this file reaches the end before reading all the
+     *                     bytes or if an I/O error occurs.
      */
-    public void readFully(byte[] b, int off, int len) throws IOException {
-<span class="fc" id="L121">        randomAccessFile.readFully(b, off, len);</span>
-<span class="fc" id="L122">    }</span>
-    
+    public void readFully(final byte[] b, final int off, final int len) throws IOException {
+<span class="fc" id="L127">        randomAccessFile.readFully(b, off, len);</span>
+<span class="fc" id="L128">    }</span>
+
     /**
      * Attempts to skip over n byte of input discarding the skipped bytes.
-     * 
+     * &lt;p&gt;
      * This method may skip over some number of bytes, possibly zero. This may
      * result from any of a number of conditions; reaching end of file before n
-     * bytes have been skipped is only one possibility. The actual number of 
+     * bytes have been skipped is only one possibility. The actual number of
      * bytes skipped is returned. If n is negative, no bytes are skipped.
+     *
      * @param n the number of bytes to be skipped.
      * @return the actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public long skip(long n) throws IOException {
-<span class="fc" id="L137">        return randomAccessFile.skipBytes((int)n);</span>
+    public long skip(final long n) throws IOException {
+<span class="fc" id="L144">        return randomAccessFile.skipBytes((int) n);</span>
     }
-    
+
     /**
      * Writes the specified byte to this file. The write starts at the current
      * fiel pointer.
+     *
      * @param b the byte to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(int b) throws IOException {
-<span class="fc" id="L148">        randomAccessFile.write(b);</span>
-<span class="fc" id="L149">    }</span>
-    
+    public void write(final int b) throws IOException {
+<span class="fc" id="L156">        randomAccessFile.write(b);</span>
+<span class="fc" id="L157">    }</span>
+
     /**
-     * Writes b.length bytes from the specified byte array to this file, 
+     * Writes b.length bytes from the specified byte array to this file,
      * starting at the current file pointer.
+     *
      * @param b the data.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(byte[] b) throws IOException {
-<span class="fc" id="L159">        randomAccessFile.write(b);</span>
-<span class="fc" id="L160">    }</span>
-    
+    public void write(final byte[] b) throws IOException {
+<span class="fc" id="L168">        randomAccessFile.write(b);</span>
+<span class="fc" id="L169">    }</span>
+
     /**
      * Writes len bytes from the specified byte array starting at offset off to
      * this file.
-     * @param b the data.
+     *
+     * @param b   the data.
      * @param off the start offset in the data.
      * @param len the number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(byte[] b, int off, int len) throws IOException {
-<span class="fc" id="L172">        randomAccessFile.write(b, off, len);</span>
-<span class="fc" id="L173">    }</span>
-    
+    public void write(final byte[] b, final int off, final int len) throws IOException {
+<span class="fc" id="L182">        randomAccessFile.write(b, off, len);</span>
+<span class="fc" id="L183">    }</span>
+
     /**
      * Returns the current offset in this file.
+     *
      * @return the offset from the beginning of the file, in bytes, at which the
      * next read or write occurs.
      * @throws IOException in an I/O error occurs.
      */
     @Override
     public long getPosition() throws IOException {
-<span class="fc" id="L183">        return randomAccessFile.getFilePointer();</span>
+<span class="fc" id="L194">        return randomAccessFile.getFilePointer();</span>
     }
-    
+
     /**
-     * Determines whether end of file has been reached (next read() will return 
+     * Determines whether end of file has been reached (next read() will return
      * -1). or not.
+     *
      * @return True if end of file has been reached, false otherwise.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public boolean isEndOfStream() throws IOException {
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        return getPosition() &gt;= randomAccessFile.length();</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        return getPosition() &gt;= randomAccessFile.length();</span>
     }
-    
+
     /**
      * Sets the file-pointer offset, measured from the beginning of this file,
      * at which the next read or write occurs. The offset may be set beyond the
@@ -201,242 +213,255 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * change the file length.
      * The file length will change only by writing after the offset has been set
      * beyond the end of the file.
+     *
      * @param pos the offset position, measured in bytes from the beginning of
-     * the file, at which to set the file pointer.
+     *            the file, at which to set the file pointer.
      * @throws IOException if pos is less than 0 or if an I/O error occurs.
      */
     @Override
-    public void seek(long pos) throws IOException {
-<span class="fc" id="L210">        randomAccessFile.seek(pos);</span>
-<span class="fc" id="L211">    }</span>
-    
+    public void seek(final long pos) throws IOException {
+<span class="fc" id="L223">        randomAccessFile.seek(pos);</span>
+<span class="fc" id="L224">    }</span>
+
     /**
      * Closes this file stream and releases any system resources associated with
      * the stream. A closed file cannot perform input or output operations and
      * cannot be reopened.
-     * If this file has an associated channel then the channel is closed as 
+     * If this file has an associated channel then the channel is closed as
      * well.
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
-<span class="fc" id="L223">        randomAccessFile.close();</span>
-<span class="fc" id="L224">    }        </span>
-    
+<span class="fc" id="L237">        randomAccessFile.close();</span>
+<span class="fc" id="L238">    }</span>
+
     /**
      * Reads a boolean from this file. This method reads a single byte from the
-     * file, starting at the current file pointer. A value of 0 represents 
+     * file, starting at the current file pointer. A value of 0 represents
      * false. Any other value represents true. This method blocks until the byte
      * is read, the end of the stream is detected, or an exception is thrown.
+     *
      * @return the boolean value read.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public boolean readBoolean() throws IOException {
-<span class="fc" id="L236">        return randomAccessFile.readBoolean();</span>
-    }   
-    
+<span class="fc" id="L251">        return randomAccessFile.readBoolean();</span>
+    }
+
     /**
-     * Reads a signed eight-bit value from this file. This method reads a byte 
-     * from the file, starting from the current file pointer. If the byte read 
+     * Reads a signed eight-bit value from this file. This method reads a byte
+     * from the file, starting from the current file pointer. If the byte read
      * is b, where 0 &amp;lt;= b &amp;lt;= 255, then the result is: (byte)(b)
      * This method blocks until the byte is read, the end of the stream is
      * detected, or an exception is thrown.
+     *
      * @return the next byte of this file is a signed eight-bit byte.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public byte readByte() throws IOException {
-<span class="fc" id="L250">        return randomAccessFile.readByte();</span>
+<span class="fc" id="L266">        return randomAccessFile.readByte();</span>
     }
-    
+
     /**
      * Reads an unsigned eight-bit number from this file. This method reads a
      * byte from this file, starting at the current file pointer, and returns
      * that byte.
      * This method blocks until the byte is read, the end of the stream is
      * detected, or an exception is thrown.
+     *
      * @return the next byte of this file, interpreted as an unsigned eight-bit
      * number.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public short readUnsignedByte() throws IOException {
-<span class="fc" id="L265">        return (short)randomAccessFile.readUnsignedByte();</span>
+<span class="fc" id="L282">        return (short) randomAccessFile.readUnsignedByte();</span>
     }
-    
+
     /**
-     * Reads a signed 16-bit number from this file. The method reads two byte 
+     * Reads a signed 16-bit number from this file. The method reads two byte
      * from this file, starting at the current file pointer. If the two bytes
-     * read, in order, are b1 and b2, where each of the two values is between 0 
+     * read, in order, are b1 and b2, where each of the two values is between 0
      * and 255, inclusive, then the result is equal to: (short)((b1 &amp;lt;&amp;lt; 8 |
      * b2).
      * This method blocks until the two bytes are read, the end of the stream is
      * detected, or an exception is thrown.
-     * @return the next two bytes of this file, interpreted as a signed 16-bit 
+     *
+     * @return the next two bytes of this file, interpreted as a signed 16-bit
      * number.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public short readShort() throws IOException {
-<span class="fc" id="L282">        return randomAccessFile.readShort();</span>
+<span class="fc" id="L300">        return randomAccessFile.readShort();</span>
     }
-    
+
     /**
      * Reads a signed 16-bit number from this file assuming that file is encoded
-     * using provided endian type. If endian type is big endian type, then 
+     * using provided endian type. If endian type is big endian type, then
      * natural binary order is preserved, otherwise byte order is reversed.
      * This method blocks until the two bytes of the 16-bit number are read, the
      * end of the stream is detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
+     *                   little endian reverses byte order.
      * @return the next two bytes of this file, interpreted as a signed 16-bit
      * number encoded in provided endian type.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public short readShort(EndianType endianType) throws IOException {
-<span class="fc" id="L299">        short value = randomAccessFile.readShort();</span>
-<span class="fc" id="L300">        return Util.fromEndianType(endianType, value);</span>
+    public short readShort(final EndianType endianType) throws IOException {
+<span class="fc" id="L318">        short value = randomAccessFile.readShort();</span>
+<span class="fc" id="L319">        return Util.fromEndianType(endianType, value);</span>
     }
-    
+
     /**
-     * Reads an unsigned 16-bit number from this file. This method reads two 
+     * Reads an unsigned 16-bit number from this file. This method reads two
      * bytes from this file, starting at the current file pointer. If the bytes
      * read, in order, are b1 and b2, where 0 &amp;lt;= b1, b2 &amp;lt;= 255, then the
      * result is equal to: (b1 &amp;lt;&amp;lt; 8) | b2.
      * This method blocks until the two bytes are read, the end of the stream is
      * detected, or an exception is thrown.
-     * @return the next two bytes of this file, interpreted as an unsigned 
+     *
+     * @return the next two bytes of this file, interpreted as an unsigned
      * 16-bit integer.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public int readUnsignedShort() throws IOException {
-<span class="fc" id="L316">        return randomAccessFile.readUnsignedShort();</span>
+<span class="fc" id="L336">        return randomAccessFile.readUnsignedShort();</span>
     }
-    
+
     /**
      * Reads an unsigned 16-bit number from this file. This method reads two
-     * bytes from this file, starting at the current file pointer and using 
+     * bytes from this file, starting at the current file pointer and using
      * provided endian type. If endian type is big endian, then natural binary
      * order is preserved, otherwise byte order is reversed.
      * This method blocks until the two bytes are read, the end of the stream is
      * detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
-     * @return the next two bytes of this file, interpreted as an unsigned 
+     *                   little endian reverses byte order.
+     * @return the next two bytes of this file, interpreted as an unsigned
      * 16-bit integer.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public int readUnsignedShort(EndianType endianType) throws IOException {
-<span class="fc" id="L334">        short streamValue = randomAccessFile.readShort();</span>
-<span class="fc" id="L335">        short value = Util.fromEndianType(endianType, streamValue);</span>
-        
-        //convert value to byte array
-<span class="fc" id="L338">        int firstShortByte = 0xff &amp; (value &gt;&gt; 8);</span>
-<span class="fc" id="L339">        int secondShortByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 8);</span>
-        
-        //return it as integer
-<span class="fc" id="L342">        return 0xffff &amp; ((firstShortByte &lt;&lt; 8) |</span>
+    public int readUnsignedShort(final EndianType endianType) throws IOException {
+<span class="fc" id="L355">        final short streamValue = randomAccessFile.readShort();</span>
+<span class="fc" id="L356">        final short value = Util.fromEndianType(endianType, streamValue);</span>
+
+        // convert value to byte array
+<span class="fc" id="L359">        final int firstShortByte = 0xff &amp; (value &gt;&gt; 8);</span>
+<span class="fc" id="L360">        final int secondShortByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 8);</span>
+
+        // return it as integer
+<span class="fc" id="L363">        return 0xffff &amp; ((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
     }
-    
+
     /**
      * Reads a signed 32-bit integer from this file. This method reads 4 bytes
      * from the file, starting at the current file pointer. If the bytes read,
      * in order, are b1, b2, b3, and b4, where 0 &amp;lt;= b1, b3, b4 &amp;lt;= 255, then
      * the result is equal to: (b1 &amp;lt;&amp;lt; 24) | (b2 &amp;lt;&amp;lt; 16) + (b3 &amp;lt;&amp;lt; 8) +
      * b4.
-     * This method blocks until the four bytes are read, the end of the stream 
+     * This method blocks until the four bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @return the next four bytes of this file, interpreted as an int.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public int readInt() throws IOException {
-<span class="fc" id="L359">        return randomAccessFile.readInt();</span>
+<span class="fc" id="L381">        return randomAccessFile.readInt();</span>
     }
-    
+
     /**
      * Reads a signed 32-bit integer from this file. This method reads 4 bytes
-     * from the file, starting at the current file pointer and using provided 
-     * endian type. If endian type is big endian, then natural binary order is 
+     * from the file, starting at the current file pointer and using provided
+     * endian type. If endian type is big endian, then natural binary order is
      * preserved, otherwise byte order is reversed.
-     * This method blocks until the four bytes are read, the end of the stream 
+     * This method blocks until the four bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
+     *                   little endian reverses byte order.
      * @return the next four bytes of this file, interpreted as an int.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public int readInt(EndianType endianType) throws IOException {
-<span class="fc" id="L376">        int value = randomAccessFile.readInt();</span>
-<span class="fc" id="L377">        return Util.fromEndianType(endianType, value);</span>
+    public int readInt(final EndianType endianType) throws IOException {
+<span class="fc" id="L399">        final int value = randomAccessFile.readInt();</span>
+<span class="fc" id="L400">        return Util.fromEndianType(endianType, value);</span>
     }
-    
+
     /**
-     * Reads an unsigned 32-bit integer from this file. This method reads 4 
-     * bytes from the file, starting at the current file pointer. If the bytes 
+     * Reads an unsigned 32-bit integer from this file. This method reads 4
+     * bytes from the file, starting at the current file pointer. If the bytes
      * read, in order, are b1, b2, b3, and b4, where 0 &amp;lt;= b1, b3, b4 &amp;lt;= 255,
      * then the result is equal to: (b1 &amp;lt;&amp;lt; 24) | (b2 &amp;lt;&amp;lt; 16) +
      * (b3 &amp;lt;&amp;lt; 8) + b4
-     * This method blocks until the four bytes are read, the end of the stream 
+     * This method blocks until the four bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @return the next four bytes of this file, interpreted as a long.
      * @throws IOException if an I/O error occurs.
-     */    
+     */
     @Override
     public long readUnsignedInt() throws IOException {
-<span class="fc" id="L393">        int value = randomAccessFile.readInt();</span>
-        
-        //convert value to byte array
-<span class="fc" id="L396">        int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
-<span class="fc" id="L397">        int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
-<span class="fc" id="L398">        int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
-<span class="fc" id="L399">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
-        
-        //return it as integer
-<span class="fc" id="L402">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L417">        final int value = randomAccessFile.readInt();</span>
+
+        // convert value to byte array
+<span class="fc" id="L420">        final int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
+<span class="fc" id="L421">        final int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
+<span class="fc" id="L422">        final int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
+<span class="fc" id="L423">        final int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
+
+        // return it as integer
+<span class="fc" id="L426">        return ((long) firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
-                fourthIntByte);
+                fourthIntByte;
     }
-    
+
     /**
-     * Reads an unsigned 32-bit integer from this file. This method reads 4 
-     * bytes from the file, starting at the current file pointer and using 
-     * provided endian type. If endian type is big endian, then natural binary 
+     * Reads an unsigned 32-bit integer from this file. This method reads 4
+     * bytes from the file, starting at the current file pointer and using
+     * provided endian type. If endian type is big endian, then natural binary
      * order is preserved, otherwise byte order is reversed.
-     * This method blocks until the four bytes are read, the end of the stream 
+     * This method blocks until the four bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
+     *                   little endian reverses byte order.
      * @return the next four bytes of this file, interpreted as an int.
      * @throws IOException if an I/O error occurs.
-     */    
+     */
     @Override
-    public long readUnsignedInt(EndianType endianType) throws IOException {
-<span class="fc" id="L422">        int streamValue = randomAccessFile.readInt();</span>
-<span class="fc" id="L423">        int value = Util.fromEndianType(endianType, streamValue);</span>
-        
-        //convert value to byte array
-<span class="fc" id="L426">        int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
-<span class="fc" id="L427">        int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
-<span class="fc" id="L428">        int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
-<span class="fc" id="L429">        int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
-        
-        //return it as integer
-<span class="fc" id="L432">        return (long) ((firstIntByte &lt;&lt; 24) |</span>
+    public long readUnsignedInt(final EndianType endianType) throws IOException {
+<span class="fc" id="L447">        final int streamValue = randomAccessFile.readInt();</span>
+<span class="fc" id="L448">        final int value = Util.fromEndianType(endianType, streamValue);</span>
+
+        // convert value to byte array
+<span class="fc" id="L451">        final int firstIntByte = 0xff &amp; (value &gt;&gt; 24);</span>
+<span class="fc" id="L452">        final int secondIntByte = 0xff &amp; ((value &lt;&lt; 8) &gt;&gt; 24);</span>
+<span class="fc" id="L453">        final int thirdIntByte = 0xff &amp; ((value &lt;&lt; 16) &gt;&gt; 24);</span>
+<span class="fc" id="L454">        final int fourthIntByte = 0xff &amp; ((value &lt;&lt; 24) &gt;&gt; 24);</span>
+
+        // return it as integer
+<span class="fc" id="L457">        return ((long) firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
-                fourthIntByte);
+                fourthIntByte;
     }
-    
+
     /**
-     * Reads a signed 64-bit integer from this file. This method reads eight 
+     * Reads a signed 64-bit integer from this file. This method reads eight
      * bytes from the file, starting at the current file pointer. If the bytes
      * read, in order, are b1, b2, b3, b4, b5, b6, b7, and b8, where:
      * 0 &amp;lt;= b1, b2, b3, b4. b5. b6. b7. b8 &amp;lt;= 255,
@@ -447,97 +472,103 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * + ((long)b7 &amp;lt;&amp;lt; 8) + b8
      * This method blocks until the eight bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @return the next eight bytes of this file, interpreted as a long.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public long readLong() throws IOException {
-<span class="fc" id="L455">        return randomAccessFile.readLong();</span>
+<span class="fc" id="L481">        return randomAccessFile.readLong();</span>
     }
-    
+
     /**
-     * Reads a signed 64-bit integer from this file. This method reads eight 
-     * bytes from the file, starting at the current file pointer and using 
-     * provided endian type. If endian type is big endian, then natural binary 
+     * Reads a signed 64-bit integer from this file. This method reads eight
+     * bytes from the file, starting at the current file pointer and using
+     * provided endian type. If endian type is big endian, then natural binary
      * order is preserved, otherwise byte order is reversed.
      * This method blocks until the eight bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
+     *                   little endian reverses byte order.
      * @return the next eight bytes of this file, interpreted as a long
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public long readLong(EndianType endianType) throws IOException {
-<span class="fc" id="L472">        long value = randomAccessFile.readLong();</span>
-<span class="fc" id="L473">        return Util.fromEndianType(endianType, value);</span>
+    public long readLong(final EndianType endianType) throws IOException {
+<span class="fc" id="L499">        final long value = randomAccessFile.readLong();</span>
+<span class="fc" id="L500">        return Util.fromEndianType(endianType, value);</span>
     }
-    
+
     /**
      * Reads a float from this file. This method reads an int value, starting at
      * the current file pointer, as if by the readInt method and then converts
      * that in to a float using the intBitsToFloat method in class Float.
-     * This method blocks until the four bytes are read, the end of the stream 
+     * This method blocks until the four bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @return the next four bytes of this file, interpreted as a float.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public float readFloat() throws IOException {
-<span class="fc" id="L487">        return randomAccessFile.readFloat();</span>
+<span class="fc" id="L515">        return randomAccessFile.readFloat();</span>
     }
-    
+
     /**
-     * Reads a float from this file. This method reads four bytes using 
-     * provided endian type. If endian type is big endian, then natural binary 
+     * Reads a float from this file. This method reads four bytes using
+     * provided endian type. If endian type is big endian, then natural binary
      * order is preserved, otherwise byte order is reversed.
      * This method blocks until the four bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
+     *                   little endian reverses byte order.
      * @return the next four bytes of this file, interpreted as a float.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public float readFloat(EndianType endianType) throws IOException {
-<span class="fc" id="L503">        float value = randomAccessFile.readFloat();</span>
-<span class="fc" id="L504">        return Util.fromEndianType(endianType, value);</span>
+    public float readFloat(final EndianType endianType) throws IOException {
+<span class="fc" id="L532">        final float value = randomAccessFile.readFloat();</span>
+<span class="fc" id="L533">        return Util.fromEndianType(endianType, value);</span>
     }
-    
+
     /**
-     * Reads a double from this file. This method reads a long value, starting 
-     * at the current file pointer, as if by the readLong method and then 
+     * Reads a double from this file. This method reads a long value, starting
+     * at the current file pointer, as if by the readLong method and then
      * converts that long to a double using the longBitsToDouble method in class
      * Double.
-     * This method blocks until the eight bytes are read, the end of the stream 
+     * This method blocks until the eight bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @return the next eight bytes of this file, interpreted as a double.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public double readDouble() throws IOException {
-<span class="fc" id="L519">        return randomAccessFile.readDouble();</span>
+<span class="fc" id="L549">        return randomAccessFile.readDouble();</span>
     }
-    
+
     /**
      * Reads a double from this file. This method reads eight bytes using
      * provided endian type. If endian type is big endian, then natural binary
      * order is preserved, otherwise byte order is reversed.
      * This method blocks until the eight bytes are read, the end of the stream
      * is detected, or an exception is thrown.
+     *
      * @param endianType Endian type. Big endian preserves natural binary order,
-     * little endian reverses byte order.
+     *                   little endian reverses byte order.
      * @return the next eight bytes of this file, interpreted as a double.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public double readDouble(EndianType endianType) throws IOException {
-<span class="fc" id="L535">        double value = randomAccessFile.readDouble();</span>
-<span class="fc" id="L536">        return Util.fromEndianType(endianType, value);</span>
+    public double readDouble(final EndianType endianType) throws IOException {
+<span class="fc" id="L566">        final double value = randomAccessFile.readDouble();</span>
+<span class="fc" id="L567">        return Util.fromEndianType(endianType, value);</span>
     }
-    
+
     /**
-     * Reads the next line of text from this file. This method successively 
+     * Reads the next line of text from this file. This method successively
      * reads bytes from the file, starting at the current file pointer, until it
      * reaches a line terminator of the end of the file. Each byte is converted
      * into a character by taking the byte's value for the lower eight bits of
@@ -545,21 +576,22 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * This method does not, therefore, support the full Unicode character set.
      * A line of text is terminated by a carriage-return character ('\r'), a
      * newline character('\n'), a carriage-return character immediately followed
-     * by a newline character, or the end of the file. Line-terminating 
-     * characters are discarded and are not included as part of the string 
+     * by a newline character, or the end of the file. Line-terminating
+     * characters are discarded and are not included as part of the string
      * returned.
      * This method blocks until a newline character is read, a carriage return
      * and the byte following it are read (to see if it is a newline), the end
      * of the file is reached, or an exception is thrown.
+     *
      * @return the next line of text from this file, or null if end of file is
      * encountered before even one byte is read.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public String readLine() throws IOException {
-<span class="fc" id="L560">        return randomAccessFile.readLine();</span>
+<span class="fc" id="L592">        return randomAccessFile.readLine();</span>
     }
-        
+
     /**
      * Reads in a string from this file. The string has been encoded using a
      * modified UTF-8 format.
@@ -570,317 +602,338 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * the modified UTF-8 format and are converted into characters.
      * This method blocks until all the bytes are read, the end of the stream is
      * detected, or an exception is thrown.
+     *
      * @return a Unicode string.
      * @throws IOException if an I/O error occurs.
      */
     public String readUTF() throws IOException {
-<span class="fc" id="L577">        return randomAccessFile.readUTF();</span>
+<span class="fc" id="L610">        return randomAccessFile.readUTF();</span>
     }
-    
+
     /**
      * Sequentially reads characters starting at current file position until one
      * of the characters in provided pattern is found.
      * All characters read so far will be returned without including any of the
      * pattern characters.
+     *
      * @param pattern Stop characters to stop reading when they are found.
      * @return String read so far until any of the pattern characters was found
-     * or an empty string if the first character is contained in provided 
+     * or an empty string if the first character is contained in provided
      * pattern.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException              if an I/O error occurs.
      * @throws IllegalArgumentException if no pattern characters are provided.
      */
     @Override
-    public String readUntilAnyOfTheseCharactersIsFound(String pattern) 
+    public String readUntilAnyOfTheseCharactersIsFound(final String pattern)
             throws IOException {
-        
-<span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (pattern.length() == 0) {</span>
-<span class="nc" id="L597">            throw new IllegalArgumentException();</span>
+
+<span class="pc bpc" id="L630" title="1 of 2 branches missed.">        if (pattern.length() == 0) {</span>
+<span class="nc" id="L631">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L600">        StringBuilder buffer = new StringBuilder();</span>
-<span class="fc" id="L601">        byte [] charBuffer = new byte[1];        </span>
+<span class="fc" id="L634">        final StringBuilder buffer = new StringBuilder();</span>
+<span class="fc" id="L635">        final byte[] charBuffer = new byte[1];</span>
         String character;
-<span class="fc bfc" id="L603" title="All 2 branches covered.">        while(randomAccessFile.read(charBuffer) == 1) {</span>
-<span class="fc" id="L604">            character = new String(charBuffer);</span>
-<span class="fc bfc" id="L605" title="All 2 branches covered.">            if (pattern.contains(character)) {</span>
-                //character found
-<span class="fc" id="L607">                break;</span>
+<span class="fc bfc" id="L637" title="All 2 branches covered.">        while (randomAccessFile.read(charBuffer) == 1) {</span>
+<span class="fc" id="L638">            character = new String(charBuffer);</span>
+<span class="fc bfc" id="L639" title="All 2 branches covered.">            if (pattern.contains(character)) {</span>
+                // character found
+<span class="fc" id="L641">                break;</span>
             }
-            //add character to output buffer
-<span class="fc" id="L610">            buffer.append(character);</span>
+            // add character to output buffer
+<span class="fc" id="L644">            buffer.append(character);</span>
         }
 
-<span class="fc" id="L613">        return buffer.toString();</span>
+<span class="fc" id="L647">        return buffer.toString();</span>
     }
-    
+
     /**
-     * Writes a boolean to the file as a one-byte value. The value true is 
+     * Writes a boolean to the file as a one-byte value. The value true is
      * written out as the value (byte)1; the value false is written out as the
-     * value (byte)0. The write starts at the current position of the file 
+     * value (byte)0. The write starts at the current position of the file
      * pointer.
+     *
      * @param v a boolean value to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeBoolean(boolean v) throws IOException {
-<span class="fc" id="L626">        randomAccessFile.writeBoolean(v);</span>
-<span class="fc" id="L627">    }</span>
-    
+    public void writeBoolean(final boolean v) throws IOException {
+<span class="fc" id="L661">        randomAccessFile.writeBoolean(v);</span>
+<span class="fc" id="L662">    }</span>
+
     /**
      * Writes a byte to the file as a one-byte value. The write starts at the
      * current position of the file pointer.
+     *
      * @param v a byte value to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeByte(byte v) throws IOException {
-<span class="fc" id="L637">        randomAccessFile.writeByte(v);</span>
-<span class="fc" id="L638">    }</span>
-    
+    public void writeByte(final byte v) throws IOException {
+<span class="fc" id="L673">        randomAccessFile.writeByte(v);</span>
+<span class="fc" id="L674">    }</span>
+
     /**
      * Writes provided value in the range 0-255 as an unsigned byte. The write
      * starts at the current position of the file pointer.
+     *
      * @param v a value to be written as an unsigned byte.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeUnsignedByte(short v) throws IOException {
-<span class="fc" id="L648">        byte data = (byte)(0xff &amp; v);</span>
-<span class="fc" id="L649">        randomAccessFile.writeByte(data);</span>
-<span class="fc" id="L650">    }</span>
-    
+    public void writeUnsignedByte(final short v) throws IOException {
+<span class="fc" id="L685">        final byte data = (byte) (0xff &amp; v);</span>
+<span class="fc" id="L686">        randomAccessFile.writeByte(data);</span>
+<span class="fc" id="L687">    }</span>
+
     /**
-     * Writes a short to the file as two bytes, high byte first. The write 
+     * Writes a short to the file as two bytes, high byte first. The write
      * starts at the current position of the file pointer.
+     *
      * @param v a short to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeShort(short v) throws IOException {
-<span class="fc" id="L660">        randomAccessFile.writeShort(v);</span>
-<span class="fc" id="L661">    }</span>
-    
+    public void writeShort(final short v) throws IOException {
+<span class="fc" id="L698">        randomAccessFile.writeShort(v);</span>
+<span class="fc" id="L699">    }</span>
+
     /**
      * Writes a short to the file as two bytes using provided endian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
-     * @param v a short to be written.
+     *
+     * @param v          a short to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeShort(short v, EndianType endianType) throws IOException {
-<span class="fc" id="L675">        short value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L676">        randomAccessFile.writeShort(value);</span>
-<span class="fc" id="L677">    }</span>
-    
+    public void writeShort(final short v, final EndianType endianType)
+            throws IOException {
+<span class="fc" id="L715">        final short value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L716">        randomAccessFile.writeShort(value);</span>
+<span class="fc" id="L717">    }</span>
+
     /**
-     * Writes an unsigned short to the file as two bytes, high byte first. 
+     * Writes an unsigned short to the file as two bytes, high byte first.
      * Provided integer value is converted to an unsigned short by taking into
-     * account only the two lower bytes. The write starts at the current 
+     * account only the two lower bytes. The write starts at the current
      * position of the file pointer.
-     * @param v an unsigned short to be written (int is converted to unsigned 
-     * short).
+     *
+     * @param v an unsigned short to be written (int is converted to unsigned
+     *          short).
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeUnsignedShort(int v) throws IOException {
-<span class="fc" id="L690">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
-<span class="fc" id="L691">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
-        
-<span class="fc" id="L693">        short value = (short)((firstShortByte &lt;&lt; 8) |</span>
+    public void writeUnsignedShort(final int v) throws IOException {
+<span class="fc" id="L731">        final int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
+<span class="fc" id="L732">        final int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
+
+<span class="fc" id="L734">        final short value = (short) ((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
-        
-<span class="fc" id="L696">        randomAccessFile.writeShort(value);        </span>
-<span class="fc" id="L697">    }</span>
-    
+
+<span class="fc" id="L737">        randomAccessFile.writeShort(value);</span>
+<span class="fc" id="L738">    }</span>
+
     /**
      * Writes an unsigned short to the file as two bytes, using provided endian
-     * type. 
+     * type.
      * Provided integer value is converted to an unsigned short by taking into
-     * account only the two lower bytes. 
+     * account only the two lower bytes.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v an unsigned short to be written (int is converted to unsigned 
-     * short).
+     *
+     * @param v          an unsigned short to be written (int is converted to unsigned
+     *                   short).
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeUnsignedShort(int v, EndianType endianType) 
+    public void writeUnsignedShort(final int v, final EndianType endianType)
             throws IOException {
-<span class="fc" id="L717">        int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
-<span class="fc" id="L718">        int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
-        
-<span class="fc" id="L720">        short machineValue = (short)((firstShortByte &lt;&lt; 8) |</span>
+<span class="fc" id="L759">        final int firstShortByte = 0xff &amp; (v &gt;&gt; 8);</span>
+<span class="fc" id="L760">        final int secondShortByte = 0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 8);</span>
+
+<span class="fc" id="L762">        final short machineValue = (short) ((firstShortByte &lt;&lt; 8) |</span>
                 secondShortByte);
-<span class="fc" id="L722">        short value = Util.toEndianType(endianType, machineValue);</span>
-        
-<span class="fc" id="L724">        randomAccessFile.writeShort(value);        </span>
-<span class="fc" id="L725">    }</span>
-    
+<span class="fc" id="L764">        final short value = Util.toEndianType(endianType, machineValue);</span>
+
+<span class="fc" id="L766">        randomAccessFile.writeShort(value);</span>
+<span class="fc" id="L767">    }</span>
+
     /**
-     * Writes an int to the file as four bytes, high byte first. The write 
+     * Writes an int to the file as four bytes, high byte first. The write
      * starts at the current position of the file pointer.
+     *
      * @param v an int to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeInt(int v) throws IOException {
-<span class="fc" id="L735">        randomAccessFile.writeInt(v);</span>
-<span class="fc" id="L736">    }</span>
-    
+    public void writeInt(final int v) throws IOException {
+<span class="fc" id="L778">        randomAccessFile.writeInt(v);</span>
+<span class="fc" id="L779">    }</span>
+
     /**
      * Writes an int to the file as four bytes, using provided endian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v an int to be written.
+     *
+     * @param v          an int to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeInt(int v, EndianType endianType) throws IOException {
-<span class="fc" id="L751">        int value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L752">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L753">    }</span>
+    public void writeInt(final int v, final EndianType endianType) throws IOException {
+<span class="fc" id="L795">        final int value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L796">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L797">    }</span>
 
     /**
-     * Writes an unsigned int to the file as four bytes, high byte first. 
+     * Writes an unsigned int to the file as four bytes, high byte first.
      * Provided integer value is converted to an unsigned int by taking into
-     * account only the four lower bytes. The write starts at the current 
+     * account only the four lower bytes. The write starts at the current
      * position of the file pointer.
-     * @param v an unsigned int to be written (long is converted to unsigned 
-     * int).
+     *
+     * @param v an unsigned int to be written (long is converted to unsigned
+     *          int).
      * @throws IOException if an I/O error occurs.
-     */    
+     */
     @Override
-    public void writeUnsignedInt(long v) throws IOException {
-<span class="fc" id="L766">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
-<span class="fc" id="L767">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
-<span class="fc" id="L768">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
-<span class="fc" id="L769">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
-        
-<span class="fc" id="L771">        int value = (firstIntByte &lt;&lt; 24) |</span>
+    public void writeUnsignedInt(final long v) throws IOException {
+<span class="fc" id="L811">        final int firstIntByte = (int) (0xff &amp; (v &gt;&gt; 24));</span>
+<span class="fc" id="L812">        final int secondIntByte = (int) (0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
+<span class="fc" id="L813">        final int thirdIntByte = (int) (0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
+<span class="fc" id="L814">        final int fourthIntByte = (int) (0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
+
+<span class="fc" id="L816">        final int value = (firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte;
-        
-<span class="fc" id="L776">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L777">    }</span>
-    
+
+<span class="fc" id="L821">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L822">    }</span>
+
     /**
      * Writes an unsigned int to the file as four bytes, using provided endian
-     * type. 
+     * type.
      * Provided integer value is converted to an unsigned int by taking into
-     * account only the four lower bytes. 
+     * account only the four lower bytes.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v an unsigned int to be written (long is converted to unsigned 
-     * short).
+     *
+     * @param v          an unsigned int to be written (long is converted to unsigned
+     *                   short).
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
-     */    
+     */
     @Override
-    public void writeUnsignedInt(long v, EndianType endianType) 
+    public void writeUnsignedInt(final long v, final EndianType endianType)
             throws IOException {
-<span class="fc" id="L797">        int firstIntByte = (int)(0xff &amp; (v &gt;&gt; 24));</span>
-<span class="fc" id="L798">        int secondIntByte = (int)(0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
-<span class="fc" id="L799">        int thirdIntByte = (int)(0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
-<span class="fc" id="L800">        int fourthIntByte = (int)(0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
-        
-<span class="fc" id="L802">        int machineValue = (firstIntByte &lt;&lt; 24) |</span>
+<span class="fc" id="L843">        final int firstIntByte = (int) (0xff &amp; (v &gt;&gt; 24));</span>
+<span class="fc" id="L844">        final int secondIntByte = (int) (0xff &amp; ((v &lt;&lt; 8) &gt;&gt; 24));</span>
+<span class="fc" id="L845">        final int thirdIntByte = (int) (0xff &amp; ((v &lt;&lt; 16) &gt;&gt; 24));</span>
+<span class="fc" id="L846">        final int fourthIntByte = (int) (0xff &amp; ((v &lt;&lt; 24) &gt;&gt; 24));</span>
+
+<span class="fc" id="L848">        final int machineValue = (firstIntByte &lt;&lt; 24) |</span>
                 (secondIntByte &lt;&lt; 16) |
                 (thirdIntByte &lt;&lt; 8) |
                 fourthIntByte;
-<span class="fc" id="L806">        int value = Util.toEndianType(endianType, machineValue);</span>
-        
-<span class="fc" id="L808">        randomAccessFile.writeInt(value);</span>
-<span class="fc" id="L809">    }</span>
-    
+<span class="fc" id="L852">        final int value = Util.toEndianType(endianType, machineValue);</span>
+
+<span class="fc" id="L854">        randomAccessFile.writeInt(value);</span>
+<span class="fc" id="L855">    }</span>
+
     /**
-     * Writes a long to the file as eight bytes, high byte first. The write 
+     * Writes a long to the file as eight bytes, high byte first. The write
      * starts at the current position of the file pointer.
+     *
      * @param v a long to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeLong(long v) throws IOException {
-<span class="fc" id="L819">        randomAccessFile.writeLong(v);</span>
-<span class="fc" id="L820">    }</span>
-    
+    public void writeLong(final long v) throws IOException {
+<span class="fc" id="L866">        randomAccessFile.writeLong(v);</span>
+<span class="fc" id="L867">    }</span>
+
     /**
-     * Writes a long to the file as eight bytes, using provided endian type. 
+     * Writes a long to the file as eight bytes, using provided endian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v a long to be written.
+     *
+     * @param v          a long to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeLong(long v, EndianType endianType) throws IOException {
-<span class="fc" id="L835">        long value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L836">        randomAccessFile.writeLong(value);</span>
-<span class="fc" id="L837">    }</span>
-    
+    public void writeLong(final long v, final EndianType endianType)
+            throws IOException {
+<span class="fc" id="L884">        final long value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L885">        randomAccessFile.writeLong(value);</span>
+<span class="fc" id="L886">    }</span>
+
     /**
      * Converts the float argument to an int using the floatToIntBits method in
-     * class Float, and then write that int value to the file as a four-byte 
-     * quantity, high byte first. The write starts at the current position of 
+     * class Float, and then write that int value to the file as a four-byte
+     * quantity, high byte first. The write starts at the current position of
      * the file pointer.
+     *
      * @param v a float value to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeFloat(float v) throws IOException {
-<span class="fc" id="L849">        randomAccessFile.writeFloat(v);</span>
-<span class="fc" id="L850">    }</span>
-    
+    public void writeFloat(final float v) throws IOException {
+<span class="fc" id="L899">        randomAccessFile.writeFloat(v);</span>
+<span class="fc" id="L900">    }</span>
+
     /**
      * Converts the float argument to an int using the floatToIntBits method in
-     * class Float, and then write that int value to the file as a four-byte 
-     * quantity, using provided endian type. 
+     * class Float, and then write that int value to the file as a four-byte
+     * quantity, using provided endian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v a float value to be written.
+     *
+     * @param v          a float value to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeFloat(float v, EndianType endianType) throws IOException {
-<span class="fc" id="L867">        float value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L868">        randomAccessFile.writeFloat(value);</span>
-<span class="fc" id="L869">    }</span>
-    
+    public void writeFloat(final float v, final EndianType endianType)
+            throws IOException {
+<span class="fc" id="L919">        final float value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L920">        randomAccessFile.writeFloat(value);</span>
+<span class="fc" id="L921">    }</span>
+
     /**
      * Converts the double argument to a long using the doubleToLongBits method
      * in class Double, and then writes that long value to the file as an eight-
      * byte quantity, high byte first. The write starts at the current position
      * of the file pointer.
+     *
      * @param v a double value to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeDouble(double v) throws IOException {
-<span class="fc" id="L881">        randomAccessFile.writeDouble(v);</span>
-<span class="fc" id="L882">    }</span>
-    
+    public void writeDouble(final double v) throws IOException {
+<span class="fc" id="L934">        randomAccessFile.writeDouble(v);</span>
+<span class="fc" id="L935">    }</span>
+
     /**
      * Converts the double argument to a long using the doubleToLongBits method
      * in class Double, and then writes that long value to the file as an eight-
@@ -889,29 +942,32 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.
      * The write starts at the current position of the file pointer.
-     * @param v a double value to be written.
+     *
+     * @param v          a double value to be written.
      * @param endianType endian type. If it is big endian, natural byte order is
-     * preserved, otherwise byte order is reversed.
+     *                   preserved, otherwise byte order is reversed.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeDouble(double v, EndianType endianType) throws IOException {
-<span class="fc" id="L899">        double value = Util.toEndianType(endianType, v);</span>
-<span class="fc" id="L900">        randomAccessFile.writeDouble(value);</span>
-<span class="fc" id="L901">    }</span>
-    
+    public void writeDouble(final double v, final EndianType endianType)
+            throws IOException {
+<span class="fc" id="L954">        final double value = Util.toEndianType(endianType, v);</span>
+<span class="fc" id="L955">        randomAccessFile.writeDouble(value);</span>
+<span class="fc" id="L956">    }</span>
+
     /**
      * Writes the string to the file as a sequence of bytes. Each character in
-     * the string is written out, in sequence, by discarding its high eight 
+     * the string is written out, in sequence, by discarding its high eight
      * bits. The write starts at the current position of the file pointer.
+     *
      * @param s a string of bytes to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeASCII(String s) throws IOException {
-<span class="fc" id="L912">        randomAccessFile.writeBytes(s);</span>
-<span class="fc" id="L913">    }</span>
-    
+    public void writeASCII(final String s) throws IOException {
+<span class="fc" id="L968">        randomAccessFile.writeBytes(s);</span>
+<span class="fc" id="L969">    }</span>
+
     /**
      * Writes a string to the file using modified UTF-8 encoding in a machine-
      * independent manner.
@@ -919,13 +975,14 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      * pointer, as if by the writeShort method giving the number of bytes to
      * follow. This value is the number of bytes actually written out, not the
      * length of the string.
-     * Following the length, each character of the string is output, in 
+     * Following the length, each character of the string is output, in
      * sequence, using the modified UTF-8 encoding for each character.
+     *
      * @param str a string to be written.
      * @throws IOException if an I/O error occurs.
      */
-    public void writeUTF(String str) throws IOException {
-<span class="fc" id="L928">        randomAccessFile.writeUTF(str);</span>
-<span class="fc" id="L929">    }</span>
+    public void writeUTF(final String str) throws IOException {
+<span class="fc" id="L985">        randomAccessFile.writeUTF(str);</span>
+<span class="fc" id="L986">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

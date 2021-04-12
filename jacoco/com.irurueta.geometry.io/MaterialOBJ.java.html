@@ -18,21 +18,21 @@ package com.irurueta.geometry.io;
 /**
  * Implementation of a material for an OBJ file.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class MaterialOBJ extends Material {
-    
+
     /**
      * Material name.
      */
     private String materialName;
-    
-    public MaterialOBJ(String materialName) {
-<span class="fc" id="L30">        super();</span>
-<span class="fc" id="L31">        this.materialName = materialName;</span>
-<span class="fc" id="L32">    }</span>
-    
+
+    public MaterialOBJ(final String materialName) {
+<span class="fc" id="L29">        super();</span>
+<span class="fc" id="L30">        this.materialName = materialName;</span>
+<span class="fc" id="L31">    }</span>
+
     /**
      * Returns material name.
+     *
      * @return material name.
      */
     public String getMaterialName() {
@@ -41,18 +41,20 @@ public class MaterialOBJ extends Material {
 
     /**
      * Sets material name.
+     *
      * @param materialName material name.
      */
-    public void setMaterialName(String materialName) {
-<span class="fc" id="L47">        this.materialName = materialName;</span>
-<span class="fc" id="L48">    }    </span>
-    
+    public void setMaterialName(final String materialName) {
+<span class="fc" id="L48">        this.materialName = materialName;</span>
+<span class="fc" id="L49">    }</span>
+
     /**
      * Indicates if material name is available.
+     *
      * @return true if material name is available, false otherwise.
      */
     public boolean isMaterialNameAvailable() {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        return materialName != null;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        return materialName != null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

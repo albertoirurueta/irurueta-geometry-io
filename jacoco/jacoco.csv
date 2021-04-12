@@ -3,7 +3,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderBinary.LoaderIt
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,Texture,1,106,1,7,0,32,1,19,0,16
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.ZintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BlueFloat64ReadValueFromBufferListener,20,0,0,0,4,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MeshWriterJson,87,1020,32,108,15,223,32,52,0,14
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MeshWriterJson,86,1019,32,108,14,224,32,52,0,14
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.AlphaInt8ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MaterialOBJ,0,20,0,2,0,7,0,5,0,4
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,VertexOBJ,0,71,0,8,0,20,0,17,0,13
@@ -51,7 +51,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.YushortReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceInt8ReadLengthValueFromBufferListener,16,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.GreenDoubleReadValueFromBufferListener,20,0,0,0,4,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderOBJ.LoaderIteratorOBJ,403,2397,124,236,101,551,114,88,2,20
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderOBJ.LoaderIteratorOBJ,403,2395,123,235,101,551,113,88,2,20
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUint32ReadLengthValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceDoubleReadLengthValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUint8ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
@@ -87,7 +87,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.AlphaUshortReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.XfloatReadValueFromBufferListener,0,16,0,0,0,3,0,2,0,2
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.AlphaDoubleReadValueFromBufferListener,20,0,0,0,4,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,BuildInfo,12,113,2,4,4,31,2,11,0,10
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,BuildInfo,6,107,1,3,2,28,1,11,0,10
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.RedCharReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LockedException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.YfloatReadValueFromBufferListener,0,16,0,0,0,3,0,2,0,2
@@ -128,7 +128,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BlueUint16ReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUcharReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.XdoubleReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,AbstractFileReaderAndWriter,0,12,0,2,0,3,0,3,0,2
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,AbstractFileReaderAndWriter,0,12,0,2,0,4,0,3,0,2
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUint32ReadValueFromBufferListener,16,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NYshortReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.AlphaUintReadValueFromBufferListener,20,0,0,0,4,0,2,0,2,0
@@ -170,7 +170,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MeshFormat,0,54,0,0,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceCharReadLengthValueFromBufferListener,16,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,DataChunk,35,144,10,4,5,52,10,30,5,28
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,EndianType,0,24,0,0,0,3,0,1,0,1
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,Loader3DS,862,0,165,0,234,0,137,0,23,0
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,Loader3DS,856,0,165,0,239,0,136,0,22,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.GreenUint8ReadValueFromBufferListener,16,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.RedUint16ReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NZfloat32ReadValueFromBufferListener,16,0,0,0,3,0,2,0,2,0
@@ -206,12 +206,12 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NZucharReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.Yint16ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BinaryBigEndianUint32ReadValueFromStreamListener,19,0,0,0,4,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MappedFileReaderAndWriter,12,849,7,21,5,195,7,56,0,49
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MappedFileReaderAndWriter,12,855,7,21,5,195,7,56,0,49
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.AlphaUint16ReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.Xuint32ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.ZshortReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NXintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY,2148,1638,324,157,520,379,304,80,2,18
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY,2126,1636,313,156,509,378,293,79,2,18
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NZushortReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUint16ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BinaryLittleEndianUshortReadValueFromStreamListener,19,0,0,0,4,0,2,0,2,0
@@ -248,7 +248,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceFloat32ReadLengthValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NXuint16ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NXucharReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MaterialLoaderOBJ,206,550,55,81,48,129,40,40,0,12
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MaterialLoaderOBJ,206,538,55,81,48,129,40,40,0,12
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.XintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.GreenInt32ReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NXfloatReadValueFromBufferListener,0,16,0,0,0,3,0,2,0,2
@@ -261,7 +261,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderBinary.LoaderIt
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NZintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.ZuintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.GreenIntReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,FileReaderAndWriter,4,614,1,9,1,135,1,57,0,53
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,FileReaderAndWriter,4,620,1,9,1,135,1,57,0,53
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MeshWriter,0,80,0,6,0,23,0,10,0,7
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUshortReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.RedFloatReadValueFromBufferListener,20,0,0,0,4,0,2,0,2,0
@@ -278,10 +278,10 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BinaryLittleEndianShortReadValueFromStreamListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NZuintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.YuintReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MeshWriterBinary,108,790,30,92,36,213,30,35,0,4
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,MeshWriterBinary,108,790,30,92,37,218,30,35,0,4
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NYfloatReadValueFromBufferListener,0,16,0,0,0,3,0,2,0,2
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderSTL.LoaderIteratorSTL,97,826,22,72,30,183,25,34,3,9
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderSTL.LoaderIteratorSTL,100,819,22,72,31,183,26,34,4,9
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceInt8ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.RedInt32ReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BlueUint8ReadValueFromBufferListener,16,0,0,0,3,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,ElementPLY,7,127,4,12,1,32,4,14,0,10
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,ElementPLY,7,127,4,12,2,32,4,14,0,10
