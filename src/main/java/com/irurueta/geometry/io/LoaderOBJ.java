@@ -1544,7 +1544,8 @@ public class LoaderOBJ extends Loader {
                                                 vertexCoordinates[2]);
 
                                     } else {
-                                        throw new LoaderException(); // unsupported length
+                                        // unsupported length
+                                        throw new LoaderException();
                                     }
 
                                     addExisting = false;

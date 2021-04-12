@@ -23,6 +23,7 @@ import java.util.Set;
  * Loads 3D Studio Max files.
  * NOTE: implementation is not yet finished.
  */
+@SuppressWarnings("FieldMayBeFinal")
 public class Loader3DS extends Loader {
 
     public static final int ID_MAIN_CHUNK = 0x4D4D;
@@ -74,7 +75,7 @@ public class Loader3DS extends Loader {
 
     private long meshVersion = DEFAULT_MESH_VERSION;
     private float masterScale = DEFAULT_MASTER_SCALE;
-    private final float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;
+    private float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;
     private int keyfRevision;
     private String name;
     private int frames;
@@ -82,7 +83,7 @@ public class Loader3DS extends Loader {
     private int segmentTo;
     private int currentFrame;
 
-    private final short[] ambientColor = DEFAULT_AMBIENT_COLOR;
+    private short[] ambientColor = DEFAULT_AMBIENT_COLOR;
     private Set<Material> materials;
 
     //TODO: to be modified when implementation is finished

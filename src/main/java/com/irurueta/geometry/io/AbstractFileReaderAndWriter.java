@@ -138,18 +138,6 @@ public abstract class AbstractFileReaderAndWriter implements Closeable {
     public abstract void seek(final long pos) throws IOException;
 
     /**
-     * Closes this file stream and releases any system resources associated with
-     * the stream. A closed file cannot perform input or output operations and
-     * cannot be reopened.
-     * If this file has an associated channel then the channel is closed as
-     * well.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public abstract void close() throws IOException;
-
-    /**
      * Reads a boolean from this file. This method reads a single byte from the
      * file, starting at the current file pointer. A value of 0 represents
      * false. Any other value represents true. This method blocks until the byte

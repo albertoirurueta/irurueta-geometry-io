@@ -96,10 +96,7 @@ public class MeshWriterBinary extends MeshWriter {
                 listener.onWriteStart(this);
             }
 
-            try {
-                loader.setListener(this.internalListeners);
-            } catch (LockedException ignore) {
-            }
+            loader.setListener(this.internalListeners);
 
             // write version
             dataStream.writeByte(VERSION);
@@ -513,10 +510,6 @@ public class MeshWriterBinary extends MeshWriter {
                 dataStream.writeFloat(chunk.getMaxZ());
 
                 dataStream.flush();
-
-                // to avoid out of memory errors we attempt to force garbage
-                // collection if possible
-                System.gc();
             }
 
             if (listener != null) {
@@ -526,7 +519,7 @@ public class MeshWriterBinary extends MeshWriter {
 
         } catch (final LoaderException | IOException e) {
             throw e;
-        } catch (final Throwable e) {
+        } catch (final Exception e) {
             throw new LoaderException(e);
         }
     }

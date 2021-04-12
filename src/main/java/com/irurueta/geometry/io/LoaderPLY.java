@@ -2982,6 +2982,7 @@ public class LoaderPLY extends Loader {
                     throw new LoaderException();
                 }
 
+                boolean stop = false;
                 if (element.getName().equals("vertex")) {
                     // FIRST VERTEX FOUND!
                     firstVertexStreamPosition = reader.getPosition();
@@ -2990,9 +2991,7 @@ public class LoaderPLY extends Loader {
                     vertexElement = element;
 
                     // stop if both 1st vertex and face are known
-                    if (firstFaceStreamPositionAvailable) {
-                        break;
-                    }
+                    stop = firstFaceStreamPositionAvailable;
                 } else if (element.getName().equals("face")) {
                     // FIRST FACE FOUND!
                     firstFaceStreamPosition = reader.getPosition();
@@ -3001,9 +3000,11 @@ public class LoaderPLY extends Loader {
                     faceElement = element;
 
                     // stop if both 1st vertex and face are known
-                    if (firstVertexStreamPositionAvailable) {
-                        break;
-                    }
+                    stop = firstVertexStreamPositionAvailable;
+                }
+
+                if (stop) {
+                    break;
                 }
 
                 nElems = element.getNumberOfInstances();

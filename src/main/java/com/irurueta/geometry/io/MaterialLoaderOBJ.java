@@ -337,7 +337,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @return true if materials have been loaded, false otherwise.
      */
     public boolean areMaterialsAvailable() {
-        return materials != null && !materials.isEmpty();
+        return !materials.isEmpty();
     }
 
     /**
