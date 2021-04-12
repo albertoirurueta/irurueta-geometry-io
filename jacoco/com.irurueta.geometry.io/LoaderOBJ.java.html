@@ -1544,218 +1544,219 @@ public class LoaderOBJ extends Loader {
                                                 vertexCoordinates[2]);
 
                                     } else {
-<span class="nc" id="L1547">                                        throw new LoaderException(); // unsupported length</span>
+                                        // unsupported length
+<span class="nc" id="L1548">                                        throw new LoaderException();</span>
                                     }
 
-<span class="fc" id="L1550">                                    addExisting = false;</span>
+<span class="fc" id="L1551">                                    addExisting = false;</span>
                                 }
-<span class="pc bpc" id="L1552" title="1 of 2 branches missed.">                                if (indices.length &gt;= 2 &amp;&amp;</span>
-<span class="pc bpc" id="L1553" title="1 of 4 branches missed.">                                        (indices[1].length() != 0) &amp;&amp; !addExistingTextureCoords) {</span>
+<span class="pc bpc" id="L1553" title="1 of 2 branches missed.">                                if (indices.length &gt;= 2 &amp;&amp;</span>
+<span class="pc bpc" id="L1554" title="1 of 4 branches missed.">                                        (indices[1].length() != 0) &amp;&amp; !addExistingTextureCoords) {</span>
                                     // new texture values need to be added into
                                     // chunk, so we need to read texture
                                     // coordinates data
 
                                     // fetch texture data position
-<span class="fc" id="L1559">                                    fetchTexture(textureIndex);</span>
-<span class="fc" id="L1560">                                    textureCoordStreamPosition =</span>
-<span class="fc" id="L1561">                                            reader.getPosition();</span>
+<span class="fc" id="L1560">                                    fetchTexture(textureIndex);</span>
+<span class="fc" id="L1561">                                    textureCoordStreamPosition =</span>
+<span class="fc" id="L1562">                                            reader.getPosition();</span>
 
                                     // read all texture data
-<span class="fc" id="L1564">                                    String textureLine = reader.readLine();</span>
-<span class="pc bpc" id="L1565" title="1 of 2 branches missed.">                                    if (!textureLine.startsWith(&quot;vt &quot;)) {</span>
-<span class="nc" id="L1566">                                        throw new LoaderException();</span>
+<span class="fc" id="L1565">                                    String textureLine = reader.readLine();</span>
+<span class="pc bpc" id="L1566" title="1 of 2 branches missed.">                                    if (!textureLine.startsWith(&quot;vt &quot;)) {</span>
+<span class="nc" id="L1567">                                        throw new LoaderException();</span>
                                     }
-<span class="fc" id="L1568">                                    textureLine = textureLine.substring(</span>
-<span class="fc" id="L1569">                                            &quot;vt &quot;.length()).trim();</span>
+<span class="fc" id="L1569">                                    textureLine = textureLine.substring(</span>
+<span class="fc" id="L1570">                                            &quot;vt &quot;.length()).trim();</span>
                                     // retrieve words in textureLine, which contain
                                     // texture coordinates either as u, w or u, v, w
-<span class="fc" id="L1572">                                    final String[] textureCoordinates =</span>
-<span class="fc" id="L1573">                                            textureLine.split(&quot; &quot;);</span>
-<span class="fc bfc" id="L1574" title="All 2 branches covered.">                                    if (textureCoordinates.length == 3) {</span>
+<span class="fc" id="L1573">                                    final String[] textureCoordinates =</span>
+<span class="fc" id="L1574">                                            textureLine.split(&quot; &quot;);</span>
+<span class="fc bfc" id="L1575" title="All 2 branches covered.">                                    if (textureCoordinates.length == 3) {</span>
                                         // homogeneous coordinates u, v, w
 
                                         // check that values are valid
-<span class="pc bpc" id="L1578" title="1 of 2 branches missed.">                                        if (textureCoordinates[0].length() == 0) {</span>
-<span class="nc" id="L1579">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1579" title="1 of 2 branches missed.">                                        if (textureCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1580">                                            throw new LoaderException();</span>
                                         }
-<span class="pc bpc" id="L1581" title="1 of 2 branches missed.">                                        if (textureCoordinates[1].length() == 0) {</span>
-<span class="nc" id="L1582">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1582" title="1 of 2 branches missed.">                                        if (textureCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1583">                                            throw new LoaderException();</span>
                                         }
-<span class="pc bpc" id="L1584" title="1 of 2 branches missed.">                                        if (textureCoordinates[2].length() == 0) {</span>
-<span class="nc" id="L1585">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1585" title="1 of 2 branches missed.">                                        if (textureCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L1586">                                            throw new LoaderException();</span>
                                         }
 
-<span class="fc" id="L1588">                                        final float w = Float.parseFloat(</span>
+<span class="fc" id="L1589">                                        final float w = Float.parseFloat(</span>
                                                 textureCoordinates[2]);
 
-<span class="fc" id="L1591">                                        textureU = Float.parseFloat(</span>
+<span class="fc" id="L1592">                                        textureU = Float.parseFloat(</span>
                                                 textureCoordinates[0]) / w;
-<span class="fc" id="L1593">                                        textureV = Float.parseFloat(</span>
+<span class="fc" id="L1594">                                        textureV = Float.parseFloat(</span>
                                                 textureCoordinates[1]) / w;
-<span class="fc bfc" id="L1595" title="All 2 branches covered.">                                        if (Math.abs(w) &lt; Float.MIN_VALUE ||</span>
-<span class="pc bpc" id="L1596" title="1 of 2 branches missed.">                                                Float.isInfinite(textureU) ||</span>
-<span class="pc bpc" id="L1597" title="1 of 2 branches missed.">                                                Float.isNaN(textureU) ||</span>
-<span class="pc bpc" id="L1598" title="1 of 2 branches missed.">                                                Float.isInfinite(textureV) ||</span>
-<span class="pc bpc" id="L1599" title="1 of 2 branches missed.">                                                Float.isNaN(textureV)) {</span>
-<span class="fc" id="L1600">                                            textureU = Float.parseFloat(</span>
+<span class="fc bfc" id="L1596" title="All 2 branches covered.">                                        if (Math.abs(w) &lt; Float.MIN_VALUE ||</span>
+<span class="pc bpc" id="L1597" title="1 of 2 branches missed.">                                                Float.isInfinite(textureU) ||</span>
+<span class="pc bpc" id="L1598" title="1 of 2 branches missed.">                                                Float.isNaN(textureU) ||</span>
+<span class="pc bpc" id="L1599" title="1 of 2 branches missed.">                                                Float.isInfinite(textureV) ||</span>
+<span class="pc bpc" id="L1600" title="1 of 2 branches missed.">                                                Float.isNaN(textureV)) {</span>
+<span class="fc" id="L1601">                                            textureU = Float.parseFloat(</span>
                                                     textureCoordinates[0]);
-<span class="fc" id="L1602">                                            textureV = Float.parseFloat(</span>
+<span class="fc" id="L1603">                                            textureV = Float.parseFloat(</span>
                                                     textureCoordinates[1]);
                                         }
 
-<span class="pc bpc" id="L1606" title="1 of 2 branches missed.">                                    } else if (textureCoordinates.length &gt;= 2) {</span>
+<span class="pc bpc" id="L1607" title="1 of 2 branches missed.">                                    } else if (textureCoordinates.length &gt;= 2) {</span>
                                         // inhomogeneous coordinates u, v
 
                                         // check that values are valid
-<span class="pc bpc" id="L1610" title="1 of 2 branches missed.">                                        if (textureCoordinates[0].length() == 0) {</span>
-<span class="nc" id="L1611">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1611" title="1 of 2 branches missed.">                                        if (textureCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1612">                                            throw new LoaderException();</span>
                                         }
-<span class="pc bpc" id="L1613" title="1 of 2 branches missed.">                                        if (textureCoordinates[1].length() == 0) {</span>
-<span class="nc" id="L1614">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1614" title="1 of 2 branches missed.">                                        if (textureCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1615">                                            throw new LoaderException();</span>
                                         }
 
-<span class="fc" id="L1617">                                        textureU = Float.parseFloat(</span>
+<span class="fc" id="L1618">                                        textureU = Float.parseFloat(</span>
                                                 textureCoordinates[0]);
-<span class="fc" id="L1619">                                        textureV = Float.parseFloat(</span>
+<span class="fc" id="L1620">                                        textureV = Float.parseFloat(</span>
                                                 textureCoordinates[1]);
                                     } else {
                                         // unsupported length
-<span class="nc" id="L1623">                                        throw new LoaderException();</span>
+<span class="nc" id="L1624">                                        throw new LoaderException();</span>
                                     }
 
-<span class="fc" id="L1626">                                    addExisting = false;</span>
+<span class="fc" id="L1627">                                    addExisting = false;</span>
                                 }
-<span class="pc bpc" id="L1628" title="1 of 2 branches missed.">                                if (indices.length &gt;= 3 &amp;&amp;</span>
-<span class="pc bpc" id="L1629" title="1 of 4 branches missed.">                                        (indices[2].length() != 0) &amp;&amp; !addExistingNormal) {</span>
+<span class="pc bpc" id="L1629" title="1 of 2 branches missed.">                                if (indices.length &gt;= 3 &amp;&amp;</span>
+<span class="pc bpc" id="L1630" title="1 of 4 branches missed.">                                        (indices[2].length() != 0) &amp;&amp; !addExistingNormal) {</span>
                                     // new normal needs to be added into chunk,
                                     // so we need to read vertex data
 
                                     // fetch normal data position
-<span class="fc" id="L1634">                                    fetchNormal(normalIndex);</span>
-<span class="fc" id="L1635">                                    normalStreamPosition = reader.getPosition();</span>
+<span class="fc" id="L1635">                                    fetchNormal(normalIndex);</span>
+<span class="fc" id="L1636">                                    normalStreamPosition = reader.getPosition();</span>
 
                                     // read all normal data
-<span class="fc" id="L1638">                                    String normalLine = reader.readLine();</span>
-<span class="pc bpc" id="L1639" title="1 of 2 branches missed.">                                    if (!normalLine.startsWith(&quot;vn &quot;)) {</span>
-<span class="nc" id="L1640">                                        throw new LoaderException();</span>
+<span class="fc" id="L1639">                                    String normalLine = reader.readLine();</span>
+<span class="pc bpc" id="L1640" title="1 of 2 branches missed.">                                    if (!normalLine.startsWith(&quot;vn &quot;)) {</span>
+<span class="nc" id="L1641">                                        throw new LoaderException();</span>
                                     }
-<span class="fc" id="L1642">                                    normalLine = normalLine.substring(</span>
-<span class="fc" id="L1643">                                            &quot;vn &quot;.length()).trim();</span>
+<span class="fc" id="L1643">                                    normalLine = normalLine.substring(</span>
+<span class="fc" id="L1644">                                            &quot;vn &quot;.length()).trim();</span>
                                     // retrieve words in normalLine, which must
                                     // contain normal coordinates as x, y, z
-<span class="fc" id="L1646">                                    final String[] normalCoordinates =</span>
-<span class="fc" id="L1647">                                            normalLine.split(&quot; &quot;);</span>
-<span class="pc bpc" id="L1648" title="1 of 2 branches missed.">                                    if (normalCoordinates.length == 3) {</span>
+<span class="fc" id="L1647">                                    final String[] normalCoordinates =</span>
+<span class="fc" id="L1648">                                            normalLine.split(&quot; &quot;);</span>
+<span class="pc bpc" id="L1649" title="1 of 2 branches missed.">                                    if (normalCoordinates.length == 3) {</span>
                                         // normal coordinates x, y, z
 
                                         // check that values are valid
-<span class="pc bpc" id="L1652" title="1 of 2 branches missed.">                                        if (normalCoordinates[0].length() == 0) {</span>
-<span class="nc" id="L1653">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1653" title="1 of 2 branches missed.">                                        if (normalCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L1654">                                            throw new LoaderException();</span>
                                         }
-<span class="pc bpc" id="L1655" title="1 of 2 branches missed.">                                        if (normalCoordinates[1].length() == 0) {</span>
-<span class="nc" id="L1656">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1656" title="1 of 2 branches missed.">                                        if (normalCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L1657">                                            throw new LoaderException();</span>
                                         }
-<span class="pc bpc" id="L1658" title="1 of 2 branches missed.">                                        if (normalCoordinates[2].length() == 0) {</span>
-<span class="nc" id="L1659">                                            throw new LoaderException();</span>
+<span class="pc bpc" id="L1659" title="1 of 2 branches missed.">                                        if (normalCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L1660">                                            throw new LoaderException();</span>
                                         }
 
-<span class="fc" id="L1662">                                        nX = Float.parseFloat(</span>
+<span class="fc" id="L1663">                                        nX = Float.parseFloat(</span>
                                                 normalCoordinates[0]);
-<span class="fc" id="L1664">                                        nY = Float.parseFloat(</span>
+<span class="fc" id="L1665">                                        nY = Float.parseFloat(</span>
                                                 normalCoordinates[1]);
-<span class="fc" id="L1666">                                        nZ = Float.parseFloat(</span>
+<span class="fc" id="L1667">                                        nZ = Float.parseFloat(</span>
                                                 normalCoordinates[2]);
                                     } else {
                                         // unsupported length
-<span class="nc" id="L1670">                                        throw new LoaderException();</span>
+<span class="nc" id="L1671">                                        throw new LoaderException();</span>
                                     }
 
-<span class="fc" id="L1673">                                    addExisting = false;</span>
+<span class="fc" id="L1674">                                    addExisting = false;</span>
                                 }
 
-<span class="fc bfc" id="L1676" title="All 2 branches covered.">                                if (addExisting) {</span>
-<span class="fc" id="L1677">                                    addExistingVertexToChunk(chunkIndex);</span>
+<span class="fc bfc" id="L1677" title="All 2 branches covered.">                                if (addExisting) {</span>
+<span class="fc" id="L1678">                                    addExistingVertexToChunk(chunkIndex);</span>
                                 } else {
-<span class="fc" id="L1679">                                    addNewVertexDataToChunk();</span>
+<span class="fc" id="L1680">                                    addNewVertexDataToChunk();</span>
                                 }
                             }
-<span class="fc" id="L1682">                        }</span>
+<span class="fc" id="L1683">                        }</span>
                         // reset face stream position
-<span class="fc" id="L1684">                        reader.seek(currentStreamPosition);</span>
-<span class="fc" id="L1685">                        currentFace++;</span>
+<span class="fc" id="L1685">                        reader.seek(currentStreamPosition);</span>
+<span class="fc" id="L1686">                        currentFace++;</span>
                     }
 
                     // compute progress
-<span class="pc bpc" id="L1689" title="1 of 4 branches missed.">                    if (loader.listener != null &amp;&amp;</span>
+<span class="pc bpc" id="L1690" title="1 of 4 branches missed.">                    if (loader.listener != null &amp;&amp;</span>
                             (currentFace % progressStep) == 0) {
-<span class="fc" id="L1691">                        loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L1692">                        loader.listener.onLoadProgressChange(loader,</span>
                                 (float) (currentFace) / (float) (numberOfFaces));
                     }
-<span class="fc" id="L1694">                }</span>
-<span class="nc" id="L1695">            } catch (final NumberFormatException e) {</span>
-<span class="nc" id="L1696">                throw new LoaderException(e);</span>
-<span class="fc" id="L1697">            }</span>
+<span class="fc" id="L1695">                }</span>
+<span class="nc" id="L1696">            } catch (final NumberFormatException e) {</span>
+<span class="nc" id="L1697">                throw new LoaderException(e);</span>
+<span class="fc" id="L1698">            }</span>
 
             // trim arrays to store only needed data
-<span class="fc" id="L1700">            trimArrays();</span>
+<span class="fc" id="L1701">            trimArrays();</span>
 
             // Instantiate DataChunk with chunk arrays
-<span class="fc" id="L1703">            final DataChunk dataChunk = new DataChunk();</span>
+<span class="fc" id="L1704">            final DataChunk dataChunk = new DataChunk();</span>
 
-<span class="pc bpc" id="L1705" title="1 of 2 branches missed.">            if (verticesAvailable) {</span>
-<span class="fc" id="L1706">                dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
-<span class="fc" id="L1707">                dataChunk.setMinX(minX);</span>
-<span class="fc" id="L1708">                dataChunk.setMinY(minY);</span>
-<span class="fc" id="L1709">                dataChunk.setMinZ(minZ);</span>
-<span class="fc" id="L1710">                dataChunk.setMaxX(maxX);</span>
-<span class="fc" id="L1711">                dataChunk.setMaxY(maxY);</span>
-<span class="fc" id="L1712">                dataChunk.setMaxZ(maxZ);</span>
+<span class="pc bpc" id="L1706" title="1 of 2 branches missed.">            if (verticesAvailable) {</span>
+<span class="fc" id="L1707">                dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
+<span class="fc" id="L1708">                dataChunk.setMinX(minX);</span>
+<span class="fc" id="L1709">                dataChunk.setMinY(minY);</span>
+<span class="fc" id="L1710">                dataChunk.setMinZ(minZ);</span>
+<span class="fc" id="L1711">                dataChunk.setMaxX(maxX);</span>
+<span class="fc" id="L1712">                dataChunk.setMaxY(maxY);</span>
+<span class="fc" id="L1713">                dataChunk.setMaxZ(maxZ);</span>
             } else {
                 // so it can be garbage collected
-<span class="nc" id="L1715">                coordsInChunkArray = null;</span>
+<span class="nc" id="L1716">                coordsInChunkArray = null;</span>
             }
 
-<span class="fc bfc" id="L1718" title="All 2 branches covered.">            if (textureAvailable) {</span>
-<span class="fc" id="L1719">                dataChunk.setTextureCoordinatesData(textureCoordsInChunkArray);</span>
+<span class="fc bfc" id="L1719" title="All 2 branches covered.">            if (textureAvailable) {</span>
+<span class="fc" id="L1720">                dataChunk.setTextureCoordinatesData(textureCoordsInChunkArray);</span>
             } else {
                 // so it can be garbage collected
-<span class="fc" id="L1722">                textureCoordsInChunkArray = null;</span>
+<span class="fc" id="L1723">                textureCoordsInChunkArray = null;</span>
             }
 
-<span class="fc bfc" id="L1725" title="All 2 branches covered.">            if (currentMaterial != null) {</span>
-<span class="fc" id="L1726">                dataChunk.setMaterial(currentMaterial);</span>
+<span class="fc bfc" id="L1726" title="All 2 branches covered.">            if (currentMaterial != null) {</span>
+<span class="fc" id="L1727">                dataChunk.setMaterial(currentMaterial);</span>
             }
 
-<span class="fc bfc" id="L1729" title="All 2 branches covered.">            if (materialChange) {</span>
-<span class="fc" id="L1730">                currentChunkMaterialName = &quot;&quot;;</span>
-<span class="fc" id="L1731">                currentMaterial = null;</span>
+<span class="fc bfc" id="L1730" title="All 2 branches covered.">            if (materialChange) {</span>
+<span class="fc" id="L1731">                currentChunkMaterialName = &quot;&quot;;</span>
+<span class="fc" id="L1732">                currentMaterial = null;</span>
             }
 
-<span class="pc bpc" id="L1734" title="1 of 2 branches missed.">            if (indicesAvailable) {</span>
-<span class="fc" id="L1735">                dataChunk.setIndicesData(indicesInChunkArray);</span>
+<span class="pc bpc" id="L1735" title="1 of 2 branches missed.">            if (indicesAvailable) {</span>
+<span class="fc" id="L1736">                dataChunk.setIndicesData(indicesInChunkArray);</span>
             } else {
                 // so it can be garbage collected
-<span class="nc" id="L1738">                indicesInChunkArray = null;</span>
+<span class="nc" id="L1739">                indicesInChunkArray = null;</span>
             }
 
-<span class="pc bpc" id="L1741" title="1 of 2 branches missed.">            if (normalsAvailable) {</span>
-<span class="fc" id="L1742">                dataChunk.setNormalsData(normalsInChunkArray);</span>
+<span class="pc bpc" id="L1742" title="1 of 2 branches missed.">            if (normalsAvailable) {</span>
+<span class="fc" id="L1743">                dataChunk.setNormalsData(normalsInChunkArray);</span>
             } else {
                 // so it can be garbage collected
-<span class="nc" id="L1745">                normalsInChunkArray = null;</span>
+<span class="nc" id="L1746">                normalsInChunkArray = null;</span>
             }
 
-<span class="pc bpc" id="L1748" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
+<span class="pc bpc" id="L1749" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
                 // notify iterator finished
-<span class="fc" id="L1750">                listener.onIteratorFinished(this);</span>
+<span class="fc" id="L1751">                listener.onIteratorFinished(this);</span>
             }
 
             // if no more chunks are available, then close input reader
-<span class="fc bfc" id="L1754" title="All 2 branches covered.">            if (!hasNext()) {</span>
-<span class="fc" id="L1755">                reader.close();</span>
+<span class="fc bfc" id="L1755" title="All 2 branches covered.">            if (!hasNext()) {</span>
+<span class="fc" id="L1756">                reader.close();</span>
             }
 
-<span class="fc" id="L1758">            return dataChunk;</span>
+<span class="fc" id="L1759">            return dataChunk;</span>
         }
 
         /**
@@ -1768,24 +1769,24 @@ public class LoaderOBJ extends Loader {
          */
         @SuppressWarnings(&quot;Duplicates&quot;)
         public void fetchVertex(long index) throws LoaderException, IOException {
-<span class="pc bpc" id="L1771" title="1 of 2 branches missed.">            if (index &gt; numberOfVertices) {</span>
-<span class="nc" id="L1772">                throw new LoaderException();</span>
+<span class="pc bpc" id="L1772" title="1 of 2 branches missed.">            if (index &gt; numberOfVertices) {</span>
+<span class="nc" id="L1773">                throw new LoaderException();</span>
             }
 
-<span class="fc" id="L1775">            long startStreamPos = firstVertexStreamPosition;</span>
-<span class="fc" id="L1776">            long startIndex = 0;</span>
+<span class="fc" id="L1776">            long startStreamPos = firstVertexStreamPosition;</span>
+<span class="fc" id="L1777">            long startIndex = 0;</span>
 
-<span class="fc bfc" id="L1778" title="All 2 branches covered.">            if (verticesStreamPositionMap.size() &gt; 0) {</span>
+<span class="fc bfc" id="L1779" title="All 2 branches covered.">            if (verticesStreamPositionMap.size() &gt; 0) {</span>
                 // with floorEntry, we will pick element immediately
                 // before or equal to index if any exists
-<span class="fc" id="L1781">                final Map.Entry&lt;Long, Long&gt; entry =</span>
-<span class="fc" id="L1782">                        verticesStreamPositionMap.floorEntry(index);</span>
-<span class="pc bpc" id="L1783" title="1 of 2 branches missed.">                if (entry != null) {</span>
-<span class="fc" id="L1784">                    final long origIndex = entry.getKey();</span>
-<span class="fc" id="L1785">                    final long pos = entry.getValue();</span>
-<span class="pc bpc" id="L1786" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
-<span class="fc" id="L1787">                        startIndex = origIndex;</span>
-<span class="fc" id="L1788">                        startStreamPos = pos;</span>
+<span class="fc" id="L1782">                final Map.Entry&lt;Long, Long&gt; entry =</span>
+<span class="fc" id="L1783">                        verticesStreamPositionMap.floorEntry(index);</span>
+<span class="pc bpc" id="L1784" title="1 of 2 branches missed.">                if (entry != null) {</span>
+<span class="fc" id="L1785">                    final long origIndex = entry.getKey();</span>
+<span class="fc" id="L1786">                    final long pos = entry.getValue();</span>
+<span class="pc bpc" id="L1787" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
+<span class="fc" id="L1788">                        startIndex = origIndex;</span>
+<span class="fc" id="L1789">                        startStreamPos = pos;</span>
                     }
                 }
             }
@@ -1794,45 +1795,45 @@ public class LoaderOBJ extends Loader {
             // move to next vertex location if reading some vertex located
             // further on the stream. For previous vertex indices, start
             // from beginning
-<span class="fc bfc" id="L1797" title="All 2 branches covered.">            if (reader.getPosition() != startStreamPos) {</span>
-<span class="fc" id="L1798">                reader.seek(startStreamPos);</span>
+<span class="fc bfc" id="L1798" title="All 2 branches covered.">            if (reader.getPosition() != startStreamPos) {</span>
+<span class="fc" id="L1799">                reader.seek(startStreamPos);</span>
             }
 
             // read from stream until start of data of desired vertex
-<span class="fc" id="L1802">            long streamPosition = 0;</span>
-<span class="fc bfc" id="L1803" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
+<span class="fc" id="L1803">            long streamPosition = 0;</span>
+<span class="fc bfc" id="L1804" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
 
                 // when traversing stream of data until reaching desired
                 // index, we add all vertex, texture and normal positions
                 // into maps
                 String str;
-<span class="fc" id="L1809">                boolean end = false;</span>
+<span class="fc" id="L1810">                boolean end = false;</span>
                 do {
-<span class="fc" id="L1811">                    streamPosition = reader.getPosition();</span>
-<span class="fc" id="L1812">                    str = reader.readLine();</span>
-<span class="pc bpc" id="L1813" title="1 of 2 branches missed.">                    if (str == null) {</span>
-<span class="nc" id="L1814">                        end = true;</span>
-<span class="nc" id="L1815">                        break;</span>
+<span class="fc" id="L1812">                    streamPosition = reader.getPosition();</span>
+<span class="fc" id="L1813">                    str = reader.readLine();</span>
+<span class="pc bpc" id="L1814" title="1 of 2 branches missed.">                    if (str == null) {</span>
+<span class="nc" id="L1815">                        end = true;</span>
+<span class="nc" id="L1816">                        break;</span>
                     }
 
-<span class="fc bfc" id="L1818" title="All 2 branches covered.">                    if (str.startsWith(&quot;v &quot;)) {</span>
+<span class="fc bfc" id="L1819" title="All 2 branches covered.">                    if (str.startsWith(&quot;v &quot;)) {</span>
                         // line contains vertex coordinates, so we store
                         // stream position into corresponding map and exit
                         // while loop
-<span class="fc" id="L1822">                        addVertexPositionToMap(i, streamPosition);</span>
-<span class="fc" id="L1823">                        break;</span>
+<span class="fc" id="L1823">                        addVertexPositionToMap(i, streamPosition);</span>
+<span class="fc" id="L1824">                        break;</span>
                     }
                 } while (true); // read until end of file when str == null
 
                 // unexpected end
-<span class="pc bpc" id="L1828" title="1 of 2 branches missed.">                if (end) {</span>
-<span class="nc" id="L1829">                    throw new LoaderException();</span>
+<span class="pc bpc" id="L1829" title="1 of 2 branches missed.">                if (end) {</span>
+<span class="nc" id="L1830">                    throw new LoaderException();</span>
                 }
             }
 
             // seek to last streamPosition which contains the desired data
-<span class="fc" id="L1834">            reader.seek(streamPosition);</span>
-<span class="fc" id="L1835">        }</span>
+<span class="fc" id="L1835">            reader.seek(streamPosition);</span>
+<span class="fc" id="L1836">        }</span>
 
         /**
          * Fetches texture data in the file using provided index. Index refers
@@ -1845,24 +1846,24 @@ public class LoaderOBJ extends Loader {
         @SuppressWarnings(&quot;Duplicates&quot;)
         public void fetchTexture(final long index) throws LoaderException,
                 IOException {
-<span class="pc bpc" id="L1848" title="1 of 2 branches missed.">            if (index &gt; numberOfTextureCoords) {</span>
-<span class="nc" id="L1849">                throw new LoaderException();</span>
+<span class="pc bpc" id="L1849" title="1 of 2 branches missed.">            if (index &gt; numberOfTextureCoords) {</span>
+<span class="nc" id="L1850">                throw new LoaderException();</span>
             }
 
-<span class="fc" id="L1852">            long startStreamPos = firstTextureCoordStreamPosition;</span>
-<span class="fc" id="L1853">            long startIndex = 0;</span>
+<span class="fc" id="L1853">            long startStreamPos = firstTextureCoordStreamPosition;</span>
+<span class="fc" id="L1854">            long startIndex = 0;</span>
 
-<span class="fc bfc" id="L1855" title="All 2 branches covered.">            if (textureCoordsStreamPositionMap.size() &gt; 0) {</span>
+<span class="fc bfc" id="L1856" title="All 2 branches covered.">            if (textureCoordsStreamPositionMap.size() &gt; 0) {</span>
                 // with floorEntry, we will pick element immediately
                 // before or equal to index if any exists
-<span class="fc" id="L1858">                final Map.Entry&lt;Long, Long&gt; entry =</span>
-<span class="fc" id="L1859">                        textureCoordsStreamPositionMap.floorEntry(index);</span>
-<span class="pc bpc" id="L1860" title="1 of 2 branches missed.">                if (entry != null) {</span>
-<span class="fc" id="L1861">                    final long origIndex = entry.getKey();</span>
-<span class="fc" id="L1862">                    final long pos = entry.getValue();</span>
-<span class="pc bpc" id="L1863" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
-<span class="fc" id="L1864">                        startIndex = origIndex;</span>
-<span class="fc" id="L1865">                        startStreamPos = pos;</span>
+<span class="fc" id="L1859">                final Map.Entry&lt;Long, Long&gt; entry =</span>
+<span class="fc" id="L1860">                        textureCoordsStreamPositionMap.floorEntry(index);</span>
+<span class="pc bpc" id="L1861" title="1 of 2 branches missed.">                if (entry != null) {</span>
+<span class="fc" id="L1862">                    final long origIndex = entry.getKey();</span>
+<span class="fc" id="L1863">                    final long pos = entry.getValue();</span>
+<span class="pc bpc" id="L1864" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
+<span class="fc" id="L1865">                        startIndex = origIndex;</span>
+<span class="fc" id="L1866">                        startStreamPos = pos;</span>
                     }
                 }
             }
@@ -1871,45 +1872,45 @@ public class LoaderOBJ extends Loader {
             // otherwise move to next texture vertex located further on the
             // stream. For previous texture vertex indices, start from
             // beginning
-<span class="pc bpc" id="L1874" title="1 of 2 branches missed.">            if (reader.getPosition() != startStreamPos) {</span>
-<span class="fc" id="L1875">                reader.seek(startStreamPos);</span>
+<span class="pc bpc" id="L1875" title="1 of 2 branches missed.">            if (reader.getPosition() != startStreamPos) {</span>
+<span class="fc" id="L1876">                reader.seek(startStreamPos);</span>
             }
 
             // read from stream until start of data of desired texture vertex
-<span class="fc" id="L1879">            long streamPosition = 0;</span>
-<span class="fc bfc" id="L1880" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
+<span class="fc" id="L1880">            long streamPosition = 0;</span>
+<span class="fc bfc" id="L1881" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
 
                 // when traversing stream of data until reaching desired
                 // index, we add all vertex, texture and normal positions
                 // into maps
                 String str;
-<span class="fc" id="L1886">                boolean end = false;</span>
+<span class="fc" id="L1887">                boolean end = false;</span>
                 do {
-<span class="fc" id="L1888">                    streamPosition = reader.getPosition();</span>
-<span class="fc" id="L1889">                    str = reader.readLine();</span>
-<span class="pc bpc" id="L1890" title="1 of 2 branches missed.">                    if (str == null) {</span>
-<span class="nc" id="L1891">                        end = true;</span>
-<span class="nc" id="L1892">                        break;</span>
+<span class="fc" id="L1889">                    streamPosition = reader.getPosition();</span>
+<span class="fc" id="L1890">                    str = reader.readLine();</span>
+<span class="pc bpc" id="L1891" title="1 of 2 branches missed.">                    if (str == null) {</span>
+<span class="nc" id="L1892">                        end = true;</span>
+<span class="nc" id="L1893">                        break;</span>
                     }
 
-<span class="fc bfc" id="L1895" title="All 2 branches covered.">                    if (str.startsWith(&quot;vt &quot;)) {</span>
+<span class="fc bfc" id="L1896" title="All 2 branches covered.">                    if (str.startsWith(&quot;vt &quot;)) {</span>
                         // line contains texture coordinates, so we store
                         // stream position into corresponding map and exit
                         // while loop
-<span class="fc" id="L1899">                        addTextureCoordPositionToMap(i, streamPosition);</span>
-<span class="fc" id="L1900">                        break;</span>
+<span class="fc" id="L1900">                        addTextureCoordPositionToMap(i, streamPosition);</span>
+<span class="fc" id="L1901">                        break;</span>
                     }
                 } while (true); // read until end of file when str == null
 
                 // unexpected end
-<span class="pc bpc" id="L1905" title="1 of 2 branches missed.">                if (end) {</span>
-<span class="nc" id="L1906">                    throw new LoaderException();</span>
+<span class="pc bpc" id="L1906" title="1 of 2 branches missed.">                if (end) {</span>
+<span class="nc" id="L1907">                    throw new LoaderException();</span>
                 }
             }
 
             // seek to last streamPosition which contains the desired data
-<span class="fc" id="L1911">            reader.seek(streamPosition);</span>
-<span class="fc" id="L1912">        }</span>
+<span class="fc" id="L1912">            reader.seek(streamPosition);</span>
+<span class="fc" id="L1913">        }</span>
 
         /**
          * Fetches normal data in the file using provided index. Index refers
@@ -1921,24 +1922,24 @@ public class LoaderOBJ extends Loader {
          */
         @SuppressWarnings(&quot;Duplicates&quot;)
         public void fetchNormal(final long index) throws LoaderException, IOException {
-<span class="pc bpc" id="L1924" title="1 of 2 branches missed.">            if (index &gt; numberOfNormals) {</span>
-<span class="nc" id="L1925">                throw new LoaderException();</span>
+<span class="pc bpc" id="L1925" title="1 of 2 branches missed.">            if (index &gt; numberOfNormals) {</span>
+<span class="nc" id="L1926">                throw new LoaderException();</span>
             }
 
-<span class="fc" id="L1928">            long startStreamPos = firstNormalStreamPosition;</span>
-<span class="fc" id="L1929">            long startIndex = 0;</span>
+<span class="fc" id="L1929">            long startStreamPos = firstNormalStreamPosition;</span>
+<span class="fc" id="L1930">            long startIndex = 0;</span>
 
-<span class="fc bfc" id="L1931" title="All 2 branches covered.">            if (normalsStreamPositionMap.size() &gt; 0) {</span>
+<span class="fc bfc" id="L1932" title="All 2 branches covered.">            if (normalsStreamPositionMap.size() &gt; 0) {</span>
                 // with floorEntry, we will pick element immediately before or
                 // equal to index if any exists
-<span class="fc" id="L1934">                final Map.Entry&lt;Long, Long&gt; entry =</span>
-<span class="fc" id="L1935">                        normalsStreamPositionMap.floorEntry(index);</span>
-<span class="pc bpc" id="L1936" title="1 of 2 branches missed.">                if (entry != null) {</span>
-<span class="fc" id="L1937">                    final long origIndex = entry.getKey();</span>
-<span class="fc" id="L1938">                    final long pos = entry.getValue();</span>
-<span class="pc bpc" id="L1939" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
-<span class="fc" id="L1940">                        startIndex = origIndex;</span>
-<span class="fc" id="L1941">                        startStreamPos = pos;</span>
+<span class="fc" id="L1935">                final Map.Entry&lt;Long, Long&gt; entry =</span>
+<span class="fc" id="L1936">                        normalsStreamPositionMap.floorEntry(index);</span>
+<span class="pc bpc" id="L1937" title="1 of 2 branches missed.">                if (entry != null) {</span>
+<span class="fc" id="L1938">                    final long origIndex = entry.getKey();</span>
+<span class="fc" id="L1939">                    final long pos = entry.getValue();</span>
+<span class="pc bpc" id="L1940" title="2 of 4 branches missed.">                    if ((origIndex &lt;= index) &amp;&amp; (pos &gt;= 0)) {</span>
+<span class="fc" id="L1941">                        startIndex = origIndex;</span>
+<span class="fc" id="L1942">                        startStreamPos = pos;</span>
                     }
                 }
             }
@@ -1946,44 +1947,44 @@ public class LoaderOBJ extends Loader {
             // if we need to read next normal, don't do anything, otherwise
             // move to next normal located further on the stream.
             // For previous normals indices, start from beginning
-<span class="pc bpc" id="L1949" title="1 of 2 branches missed.">            if (reader.getPosition() != startStreamPos) {</span>
-<span class="fc" id="L1950">                reader.seek(startStreamPos);</span>
+<span class="pc bpc" id="L1950" title="1 of 2 branches missed.">            if (reader.getPosition() != startStreamPos) {</span>
+<span class="fc" id="L1951">                reader.seek(startStreamPos);</span>
             }
 
             // read from stream until start of data of desired normal
-<span class="fc" id="L1954">            long streamPosition = 0;</span>
-<span class="fc bfc" id="L1955" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
+<span class="fc" id="L1955">            long streamPosition = 0;</span>
+<span class="fc bfc" id="L1956" title="All 2 branches covered.">            for (long i = startIndex; i &lt;= index; i++) {</span>
 
                 // when traversing stream of data until reaching desired
                 // index, we add all vertex, texture and normal positions
                 // into maps
                 String str;
-<span class="fc" id="L1961">                boolean end = false;</span>
+<span class="fc" id="L1962">                boolean end = false;</span>
                 do {
-<span class="fc" id="L1963">                    streamPosition = reader.getPosition();</span>
-<span class="fc" id="L1964">                    str = reader.readLine();</span>
-<span class="pc bpc" id="L1965" title="1 of 2 branches missed.">                    if (str == null) {</span>
-<span class="nc" id="L1966">                        end = true;</span>
-<span class="nc" id="L1967">                        break;</span>
+<span class="fc" id="L1964">                    streamPosition = reader.getPosition();</span>
+<span class="fc" id="L1965">                    str = reader.readLine();</span>
+<span class="pc bpc" id="L1966" title="1 of 2 branches missed.">                    if (str == null) {</span>
+<span class="nc" id="L1967">                        end = true;</span>
+<span class="nc" id="L1968">                        break;</span>
                     }
 
-<span class="fc bfc" id="L1970" title="All 2 branches covered.">                    if (str.startsWith(&quot;vn &quot;)) {</span>
+<span class="fc bfc" id="L1971" title="All 2 branches covered.">                    if (str.startsWith(&quot;vn &quot;)) {</span>
                         // line contains normal, so we store stream position
                         // into corresponding map and exit while loop
-<span class="fc" id="L1973">                        addNormalPositionToMap(i, streamPosition);</span>
-<span class="fc" id="L1974">                        break;</span>
+<span class="fc" id="L1974">                        addNormalPositionToMap(i, streamPosition);</span>
+<span class="fc" id="L1975">                        break;</span>
                     }
                 } while (true); // read until end of file when str == null
 
                 // unexpected end
-<span class="pc bpc" id="L1979" title="1 of 2 branches missed.">                if (end) {</span>
-<span class="nc" id="L1980">                    throw new LoaderException();</span>
+<span class="pc bpc" id="L1980" title="1 of 2 branches missed.">                if (end) {</span>
+<span class="nc" id="L1981">                    throw new LoaderException();</span>
                 }
             }
 
             // seek to last streamPosition which contains the desired data
-<span class="fc" id="L1985">            reader.seek(streamPosition);</span>
-<span class="fc" id="L1986">        }</span>
+<span class="fc" id="L1986">            reader.seek(streamPosition);</span>
+<span class="fc" id="L1987">        }</span>
 
         /**
          * Internal method to decompose a an array of vertices forming a polygon
@@ -2000,55 +2001,55 @@ public class LoaderOBJ extends Loader {
          */
         private Set&lt;String[]&gt; buildTriangulatedIndices(
                 final List&lt;VertexOBJ&gt; vertices) throws TriangulatorException {
-<span class="fc" id="L2003">            final List&lt;Point3D&gt; polygonVertices = new ArrayList&lt;&gt;(</span>
-<span class="fc" id="L2004">                    vertices.size());</span>
-<span class="fc bfc" id="L2005" title="All 2 branches covered.">            for (final VertexOBJ v : vertices) {</span>
-<span class="pc bpc" id="L2006" title="1 of 2 branches missed.">                if (v.getVertex() == null) {</span>
-<span class="nc" id="L2007">                    throw new TriangulatorException();</span>
+<span class="fc" id="L2004">            final List&lt;Point3D&gt; polygonVertices = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L2005">                    vertices.size());</span>
+<span class="fc bfc" id="L2006" title="All 2 branches covered.">            for (final VertexOBJ v : vertices) {</span>
+<span class="pc bpc" id="L2007" title="1 of 2 branches missed.">                if (v.getVertex() == null) {</span>
+<span class="nc" id="L2008">                    throw new TriangulatorException();</span>
                 }
-<span class="fc" id="L2009">                polygonVertices.add(v.getVertex());</span>
-<span class="fc" id="L2010">            }</span>
-<span class="fc" id="L2011">            final List&lt;int[]&gt; indices = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L2012">            final Triangulator3D triangulator = Triangulator3D.create();</span>
-<span class="fc" id="L2013">            final List&lt;Triangle3D&gt; triangles = triangulator.triangulate(</span>
+<span class="fc" id="L2010">                polygonVertices.add(v.getVertex());</span>
+<span class="fc" id="L2011">            }</span>
+<span class="fc" id="L2012">            final List&lt;int[]&gt; indices = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L2013">            final Triangulator3D triangulator = Triangulator3D.create();</span>
+<span class="fc" id="L2014">            final List&lt;Triangle3D&gt; triangles = triangulator.triangulate(</span>
                     polygonVertices, indices);
 
-<span class="fc" id="L2016">            final Set&lt;String[]&gt; result = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L2017">            final Set&lt;String[]&gt; result = new HashSet&lt;&gt;();</span>
             String[] face;
-<span class="fc" id="L2018">            int counter = 0;</span>
+<span class="fc" id="L2019">            int counter = 0;</span>
             int[] triangleIndices;
             int index;
             VertexOBJ vertex;
             StringBuilder builder;
-<span class="fc bfc" id="L2023" title="All 2 branches covered.">            for (final Triangle3D ignored : triangles) {</span>
-<span class="fc" id="L2024">                triangleIndices = indices.get(counter);</span>
-<span class="fc" id="L2025">                face = new String[Triangle3D.NUM_VERTICES];</span>
-<span class="fc bfc" id="L2026" title="All 2 branches covered.">                for (int i = 0; i &lt; Triangle3D.NUM_VERTICES; i++) {</span>
-<span class="fc" id="L2027">                    index = triangleIndices[i];</span>
-<span class="fc" id="L2028">                    vertex = vertices.get(index);</span>
-<span class="fc" id="L2029">                    builder = new StringBuilder();</span>
-<span class="pc bpc" id="L2030" title="1 of 2 branches missed.">                    if (vertex.isVertexIndexAvailable()) {</span>
-<span class="fc" id="L2031">                        builder.append(vertex.getVertexIndex());</span>
+<span class="fc bfc" id="L2024" title="All 2 branches covered.">            for (final Triangle3D ignored : triangles) {</span>
+<span class="fc" id="L2025">                triangleIndices = indices.get(counter);</span>
+<span class="fc" id="L2026">                face = new String[Triangle3D.NUM_VERTICES];</span>
+<span class="fc bfc" id="L2027" title="All 2 branches covered.">                for (int i = 0; i &lt; Triangle3D.NUM_VERTICES; i++) {</span>
+<span class="fc" id="L2028">                    index = triangleIndices[i];</span>
+<span class="fc" id="L2029">                    vertex = vertices.get(index);</span>
+<span class="fc" id="L2030">                    builder = new StringBuilder();</span>
+<span class="pc bpc" id="L2031" title="1 of 2 branches missed.">                    if (vertex.isVertexIndexAvailable()) {</span>
+<span class="fc" id="L2032">                        builder.append(vertex.getVertexIndex());</span>
                     }
-<span class="pc bpc" id="L2033" title="1 of 2 branches missed.">                    if (vertex.isTextureIndexAvailable() ||</span>
-<span class="nc bnc" id="L2034" title="All 2 branches missed.">                            vertex.isNormalIndexAvailable()) {</span>
-<span class="fc" id="L2035">                        builder.append(&quot;/&quot;);</span>
-<span class="pc bpc" id="L2036" title="1 of 2 branches missed.">                        if (vertex.isTextureIndexAvailable()) {</span>
-<span class="fc" id="L2037">                            builder.append(vertex.getTextureIndex());</span>
+<span class="pc bpc" id="L2034" title="1 of 2 branches missed.">                    if (vertex.isTextureIndexAvailable() ||</span>
+<span class="nc bnc" id="L2035" title="All 2 branches missed.">                            vertex.isNormalIndexAvailable()) {</span>
+<span class="fc" id="L2036">                        builder.append(&quot;/&quot;);</span>
+<span class="pc bpc" id="L2037" title="1 of 2 branches missed.">                        if (vertex.isTextureIndexAvailable()) {</span>
+<span class="fc" id="L2038">                            builder.append(vertex.getTextureIndex());</span>
                         }
-<span class="pc bpc" id="L2039" title="1 of 2 branches missed.">                        if (vertex.isNormalIndexAvailable()) {</span>
-<span class="fc" id="L2040">                            builder.append(&quot;/&quot;);</span>
-<span class="fc" id="L2041">                            builder.append(vertex.getNormalIndex());</span>
+<span class="pc bpc" id="L2040" title="1 of 2 branches missed.">                        if (vertex.isNormalIndexAvailable()) {</span>
+<span class="fc" id="L2041">                            builder.append(&quot;/&quot;);</span>
+<span class="fc" id="L2042">                            builder.append(vertex.getNormalIndex());</span>
                         }
                     }
 
-<span class="fc" id="L2045">                    face[i] = builder.toString();</span>
+<span class="fc" id="L2046">                    face[i] = builder.toString();</span>
                 }
-<span class="fc" id="L2047">                counter++;</span>
-<span class="fc" id="L2048">                result.add(face);</span>
-<span class="fc" id="L2049">            }</span>
+<span class="fc" id="L2048">                counter++;</span>
+<span class="fc" id="L2049">                result.add(face);</span>
+<span class="fc" id="L2050">            }</span>
 
-<span class="fc" id="L2051">            return result;</span>
+<span class="fc" id="L2052">            return result;</span>
         }
 
         /**
@@ -2069,125 +2070,125 @@ public class LoaderOBJ extends Loader {
 
             VertexOBJ tmpVertex;
             Point3D point;
-<span class="fc" id="L2072">            final List&lt;VertexOBJ&gt; vertices = new ArrayList&lt;&gt;(values.length);</span>
+<span class="fc" id="L2073">            final List&lt;VertexOBJ&gt; vertices = new ArrayList&lt;&gt;(values.length);</span>
 
             // keep current stream position for next face
-<span class="fc" id="L2075">            final long tempPosition = reader.getPosition();</span>
+<span class="fc" id="L2076">            final long tempPosition = reader.getPosition();</span>
 
-<span class="fc bfc" id="L2077" title="All 2 branches covered.">            for (final String value : values) {</span>
+<span class="fc bfc" id="L2078" title="All 2 branches covered.">            for (final String value : values) {</span>
 
-<span class="fc" id="L2079">                tmpVertex = new VertexOBJ();</span>
-<span class="fc" id="L2080">                point = Point3D.create();</span>
-<span class="fc" id="L2081">                tmpVertex.setVertex(point);</span>
+<span class="fc" id="L2080">                tmpVertex = new VertexOBJ();</span>
+<span class="fc" id="L2081">                point = Point3D.create();</span>
+<span class="fc" id="L2082">                tmpVertex.setVertex(point);</span>
 
-<span class="fc" id="L2083">                final String[] indices = value.split(&quot;/&quot;);</span>
+<span class="fc" id="L2084">                final String[] indices = value.split(&quot;/&quot;);</span>
 
-<span class="pc bpc" id="L2085" title="2 of 4 branches missed.">                if (indices.length &gt;= 1 &amp;&amp; (indices[0].length() != 0)) {</span>
-<span class="fc" id="L2086">                    vertexIndex = Integer.parseInt(indices[0]) - 1;</span>
-<span class="fc" id="L2087">                    tmpVertex.setVertexIndex(vertexIndex + 1);</span>
-<span class="fc" id="L2088">                    fetchVertex(vertexIndex);</span>
-<span class="fc" id="L2089">                    vertexStreamPosition = reader.getPosition();</span>
+<span class="pc bpc" id="L2086" title="2 of 4 branches missed.">                if (indices.length &gt;= 1 &amp;&amp; (indices[0].length() != 0)) {</span>
+<span class="fc" id="L2087">                    vertexIndex = Integer.parseInt(indices[0]) - 1;</span>
+<span class="fc" id="L2088">                    tmpVertex.setVertexIndex(vertexIndex + 1);</span>
+<span class="fc" id="L2089">                    fetchVertex(vertexIndex);</span>
+<span class="fc" id="L2090">                    vertexStreamPosition = reader.getPosition();</span>
 
-<span class="fc" id="L2091">                    String vertexLine = reader.readLine();</span>
-<span class="pc bpc" id="L2092" title="1 of 2 branches missed.">                    if (!vertexLine.startsWith(&quot;v &quot;)) {</span>
-<span class="nc" id="L2093">                        throw new LoaderException();</span>
+<span class="fc" id="L2092">                    String vertexLine = reader.readLine();</span>
+<span class="pc bpc" id="L2093" title="1 of 2 branches missed.">                    if (!vertexLine.startsWith(&quot;v &quot;)) {</span>
+<span class="nc" id="L2094">                        throw new LoaderException();</span>
                     }
-<span class="fc" id="L2095">                    vertexLine = vertexLine.substring(&quot;v &quot;.length()).trim();</span>
-<span class="fc" id="L2096">                    final String[] vertexCoordinates = vertexLine.split(&quot; &quot;);</span>
+<span class="fc" id="L2096">                    vertexLine = vertexLine.substring(&quot;v &quot;.length()).trim();</span>
+<span class="fc" id="L2097">                    final String[] vertexCoordinates = vertexLine.split(&quot; &quot;);</span>
 
-<span class="pc bpc" id="L2098" title="1 of 2 branches missed.">                    if (vertexCoordinates.length == 4) {</span>
+<span class="pc bpc" id="L2099" title="1 of 2 branches missed.">                    if (vertexCoordinates.length == 4) {</span>
                         // homogeneous coordinates x, y, z, w
                         // ensure that vertex coordinates are not empty
-<span class="nc bnc" id="L2101" title="All 2 branches missed.">                        if (vertexCoordinates[0].length() == 0) {</span>
-<span class="nc" id="L2102">                            throw new LoaderException();</span>
+<span class="nc bnc" id="L2102" title="All 2 branches missed.">                        if (vertexCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L2103">                            throw new LoaderException();</span>
                         }
-<span class="nc bnc" id="L2104" title="All 2 branches missed.">                        if (vertexCoordinates[1].length() == 0) {</span>
-<span class="nc" id="L2105">                            throw new LoaderException();</span>
+<span class="nc bnc" id="L2105" title="All 2 branches missed.">                        if (vertexCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L2106">                            throw new LoaderException();</span>
                         }
-<span class="nc bnc" id="L2107" title="All 2 branches missed.">                        if (vertexCoordinates[2].length() == 0) {</span>
-<span class="nc" id="L2108">                            throw new LoaderException();</span>
+<span class="nc bnc" id="L2108" title="All 2 branches missed.">                        if (vertexCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L2109">                            throw new LoaderException();</span>
                         }
-<span class="nc bnc" id="L2110" title="All 2 branches missed.">                        if (vertexCoordinates[3].length() == 0) {</span>
-<span class="nc" id="L2111">                            throw new LoaderException();</span>
+<span class="nc bnc" id="L2111" title="All 2 branches missed.">                        if (vertexCoordinates[3].length() == 0) {</span>
+<span class="nc" id="L2112">                            throw new LoaderException();</span>
                         }
 
                         try {
-<span class="nc" id="L2115">                            point.setHomogeneousCoordinates(</span>
-<span class="nc" id="L2116">                                    Double.parseDouble(vertexCoordinates[0]),</span>
-<span class="nc" id="L2117">                                    Double.parseDouble(vertexCoordinates[1]),</span>
-<span class="nc" id="L2118">                                    Double.parseDouble(vertexCoordinates[2]),</span>
-<span class="nc" id="L2119">                                    Double.parseDouble(vertexCoordinates[3]));</span>
-<span class="nc" id="L2120">                        } catch (final NumberFormatException e) {</span>
+<span class="nc" id="L2116">                            point.setHomogeneousCoordinates(</span>
+<span class="nc" id="L2117">                                    Double.parseDouble(vertexCoordinates[0]),</span>
+<span class="nc" id="L2118">                                    Double.parseDouble(vertexCoordinates[1]),</span>
+<span class="nc" id="L2119">                                    Double.parseDouble(vertexCoordinates[2]),</span>
+<span class="nc" id="L2120">                                    Double.parseDouble(vertexCoordinates[3]));</span>
+<span class="nc" id="L2121">                        } catch (final NumberFormatException e) {</span>
                             // some vertex coordinate value could not be parsed
-<span class="nc" id="L2122">                            throw new LoaderException(e);</span>
-<span class="nc" id="L2123">                        }</span>
-<span class="pc bpc" id="L2124" title="1 of 2 branches missed.">                    } else if (vertexCoordinates.length &gt;= 3) {</span>
+<span class="nc" id="L2123">                            throw new LoaderException(e);</span>
+<span class="nc" id="L2124">                        }</span>
+<span class="pc bpc" id="L2125" title="1 of 2 branches missed.">                    } else if (vertexCoordinates.length &gt;= 3) {</span>
                         // inhomogeneous coordinates x, y, z
                         // ensure that vertex coordinate are not empty
-<span class="pc bpc" id="L2127" title="1 of 2 branches missed.">                        if (vertexCoordinates[0].length() == 0) {</span>
-<span class="nc" id="L2128">                            throw new LoaderException();</span>
+<span class="pc bpc" id="L2128" title="1 of 2 branches missed.">                        if (vertexCoordinates[0].length() == 0) {</span>
+<span class="nc" id="L2129">                            throw new LoaderException();</span>
                         }
-<span class="pc bpc" id="L2130" title="1 of 2 branches missed.">                        if (vertexCoordinates[1].length() == 0) {</span>
-<span class="nc" id="L2131">                            throw new LoaderException();</span>
+<span class="pc bpc" id="L2131" title="1 of 2 branches missed.">                        if (vertexCoordinates[1].length() == 0) {</span>
+<span class="nc" id="L2132">                            throw new LoaderException();</span>
                         }
-<span class="pc bpc" id="L2133" title="1 of 2 branches missed.">                        if (vertexCoordinates[2].length() == 0) {</span>
-<span class="nc" id="L2134">                            throw new LoaderException();</span>
+<span class="pc bpc" id="L2134" title="1 of 2 branches missed.">                        if (vertexCoordinates[2].length() == 0) {</span>
+<span class="nc" id="L2135">                            throw new LoaderException();</span>
                         }
 
                         try {
-<span class="fc" id="L2138">                            point.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L2139">                                    Double.parseDouble(vertexCoordinates[0]),</span>
-<span class="fc" id="L2140">                                    Double.parseDouble(vertexCoordinates[1]),</span>
-<span class="fc" id="L2141">                                    Double.parseDouble(vertexCoordinates[2]));</span>
-<span class="nc" id="L2142">                        } catch (final NumberFormatException e) {</span>
+<span class="fc" id="L2139">                            point.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L2140">                                    Double.parseDouble(vertexCoordinates[0]),</span>
+<span class="fc" id="L2141">                                    Double.parseDouble(vertexCoordinates[1]),</span>
+<span class="fc" id="L2142">                                    Double.parseDouble(vertexCoordinates[2]));</span>
+<span class="nc" id="L2143">                        } catch (final NumberFormatException e) {</span>
                             // some vertex coordinate value could not be parsed
-<span class="nc" id="L2144">                            throw new LoaderException(e);</span>
-<span class="fc" id="L2145">                        }</span>
+<span class="nc" id="L2145">                            throw new LoaderException(e);</span>
+<span class="fc" id="L2146">                        }</span>
                     } else {
                         // unsupported length
-<span class="nc" id="L2148">                        throw new LoaderException();</span>
+<span class="nc" id="L2149">                        throw new LoaderException();</span>
                     }
                 }
-<span class="pc bpc" id="L2151" title="2 of 4 branches missed.">                if (indices.length &gt;= 2 &amp;&amp; (indices[1].length() != 0)) {</span>
-<span class="fc" id="L2152">                    tmpVertex.setTextureIndex(</span>
-<span class="fc" id="L2153">                            Integer.parseInt(indices[1]));</span>
+<span class="pc bpc" id="L2152" title="2 of 4 branches missed.">                if (indices.length &gt;= 2 &amp;&amp; (indices[1].length() != 0)) {</span>
+<span class="fc" id="L2153">                    tmpVertex.setTextureIndex(</span>
+<span class="fc" id="L2154">                            Integer.parseInt(indices[1]));</span>
                 }
-<span class="pc bpc" id="L2155" title="2 of 4 branches missed.">                if (indices.length &gt;= 3 &amp;&amp; (indices[2].length() != 0)) {</span>
-<span class="fc" id="L2156">                    tmpVertex.setNormalIndex(</span>
-<span class="fc" id="L2157">                            Integer.parseInt(indices[2]));</span>
+<span class="pc bpc" id="L2156" title="2 of 4 branches missed.">                if (indices.length &gt;= 3 &amp;&amp; (indices[2].length() != 0)) {</span>
+<span class="fc" id="L2157">                    tmpVertex.setNormalIndex(</span>
+<span class="fc" id="L2158">                            Integer.parseInt(indices[2]));</span>
                 }
 
-<span class="fc" id="L2160">                vertices.add(tmpVertex);</span>
+<span class="fc" id="L2161">                vertices.add(tmpVertex);</span>
             }
 
-<span class="fc" id="L2163">            reader.seek(tempPosition);</span>
-<span class="fc" id="L2164">            return vertices;</span>
+<span class="fc" id="L2164">            reader.seek(tempPosition);</span>
+<span class="fc" id="L2165">            return vertices;</span>
         }
 
         /**
          * Initializes arrays forming current chunk of data.
          */
         private void initChunkArrays() {
-<span class="fc" id="L2171">            coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];</span>
-<span class="fc" id="L2172">            textureCoordsInChunkArray =</span>
-<span class="fc" id="L2173">                    new float[loader.maxVerticesInChunk * 2];</span>
-<span class="fc" id="L2174">            normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];</span>
-<span class="fc" id="L2175">            indicesInChunkArray = new int[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2172">            coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];</span>
+<span class="fc" id="L2173">            textureCoordsInChunkArray =</span>
+<span class="fc" id="L2174">                    new float[loader.maxVerticesInChunk * 2];</span>
+<span class="fc" id="L2175">            normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];</span>
+<span class="fc" id="L2176">            indicesInChunkArray = new int[loader.maxVerticesInChunk];</span>
 
-<span class="fc" id="L2177">            originalVertexIndicesInChunkArray =</span>
-<span class="fc" id="L2178">                    new long[loader.maxVerticesInChunk];</span>
-<span class="fc" id="L2179">            originalTextureIndicesInChunkArray =</span>
-<span class="fc" id="L2180">                    new long[loader.maxVerticesInChunk];</span>
-<span class="fc" id="L2181">            originalNormalIndicesInChunkArray =</span>
-<span class="fc" id="L2182">                    new long[loader.maxVerticesInChunk];</span>
-<span class="fc" id="L2183">            verticesInChunk = 0;</span>
-<span class="fc" id="L2184">            indicesInChunk = 0;</span>
-<span class="fc" id="L2185">            indicesInChunkSize = loader.maxVerticesInChunk;</span>
+<span class="fc" id="L2178">            originalVertexIndicesInChunkArray =</span>
+<span class="fc" id="L2179">                    new long[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2180">            originalTextureIndicesInChunkArray =</span>
+<span class="fc" id="L2181">                    new long[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2182">            originalNormalIndicesInChunkArray =</span>
+<span class="fc" id="L2183">                    new long[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L2184">            verticesInChunk = 0;</span>
+<span class="fc" id="L2185">            indicesInChunk = 0;</span>
+<span class="fc" id="L2186">            indicesInChunkSize = loader.maxVerticesInChunk;</span>
 
-<span class="fc" id="L2187">            vertexIndicesMap.clear();</span>
-<span class="fc" id="L2188">            textureCoordsIndicesMap.clear();</span>
-<span class="fc" id="L2189">            normalsIndicesMap.clear();</span>
-<span class="fc" id="L2190">        }</span>
+<span class="fc" id="L2188">            vertexIndicesMap.clear();</span>
+<span class="fc" id="L2189">            textureCoordsIndicesMap.clear();</span>
+<span class="fc" id="L2190">            normalsIndicesMap.clear();</span>
+<span class="fc" id="L2191">        }</span>
 
         /**
          * Searches vertex index in current chunk of data by using the index
@@ -2200,14 +2201,14 @@ public class LoaderOBJ extends Loader {
          */
         private int searchVertexIndexInChunk(final long originalIndex) {
             // returns chunk index array position where index is found
-<span class="fc" id="L2203">            final Integer chunkIndex = vertexIndicesMap.get(originalIndex);</span>
+<span class="fc" id="L2204">            final Integer chunkIndex = vertexIndicesMap.get(originalIndex);</span>
 
-<span class="fc bfc" id="L2205" title="All 2 branches covered.">            if (chunkIndex == null) {</span>
-<span class="fc" id="L2206">                return -1;</span>
+<span class="fc bfc" id="L2206" title="All 2 branches covered.">            if (chunkIndex == null) {</span>
+<span class="fc" id="L2207">                return -1;</span>
             }
 
             // returns index of vertex in chunk
-<span class="fc" id="L2210">            return indicesInChunkArray[chunkIndex];</span>
+<span class="fc" id="L2211">            return indicesInChunkArray[chunkIndex];</span>
         }
 
         /**
@@ -2221,7 +2222,7 @@ public class LoaderOBJ extends Loader {
          * found.
          */
         private int searchTextureCoordIndexInChunk(final long originalIndex) {
-<span class="nc" id="L2224">            return searchVertexIndexInChunk(originalIndex);</span>
+<span class="nc" id="L2225">            return searchVertexIndexInChunk(originalIndex);</span>
         }
 
         /**
@@ -2234,7 +2235,7 @@ public class LoaderOBJ extends Loader {
          * @return normal index used in current chunk of data or -1 if not found.
          */
         private int searchNormalIndexInChunk(final long originalIndex) {
-<span class="fc" id="L2237">            return searchVertexIndexInChunk(originalIndex);</span>
+<span class="fc" id="L2238">            return searchVertexIndexInChunk(originalIndex);</span>
         }
 
         /**
@@ -2245,15 +2246,15 @@ public class LoaderOBJ extends Loader {
          */
         private void addVertexPositionToMap(final long originalIndex,
                                             final long streamPosition) {
-<span class="pc bpc" id="L2248" title="1 of 2 branches missed.">            if (verticesStreamPositionMap.size() &gt; loader.maxStreamPositions) {</span>
+<span class="pc bpc" id="L2249" title="1 of 2 branches missed.">            if (verticesStreamPositionMap.size() &gt; loader.maxStreamPositions) {</span>
                 // Map is full. Remove 1st item before adding a new one
-<span class="nc" id="L2250">                final Long origIndex = verticesStreamPositionMap.firstKey();</span>
-<span class="nc" id="L2251">                verticesStreamPositionMap.remove(origIndex);</span>
+<span class="nc" id="L2251">                final Long origIndex = verticesStreamPositionMap.firstKey();</span>
+<span class="nc" id="L2252">                verticesStreamPositionMap.remove(origIndex);</span>
             }
             // add new item
-<span class="fc" id="L2254">            verticesStreamPositionMap.put(originalIndex,</span>
-<span class="fc" id="L2255">                    streamPosition);</span>
-<span class="fc" id="L2256">        }</span>
+<span class="fc" id="L2255">            verticesStreamPositionMap.put(originalIndex,</span>
+<span class="fc" id="L2256">                    streamPosition);</span>
+<span class="fc" id="L2257">        }</span>
 
         /**
          * Add texture coordinate position to cache of file positions.
@@ -2264,16 +2265,16 @@ public class LoaderOBJ extends Loader {
          */
         private void addTextureCoordPositionToMap(final long originalIndex,
                                                   final long streamPosition) {
-<span class="fc" id="L2267">            if (textureCoordsStreamPositionMap.size() &gt;</span>
-<span class="pc bpc" id="L2268" title="1 of 2 branches missed.">                    loader.maxStreamPositions) {</span>
+<span class="fc" id="L2268">            if (textureCoordsStreamPositionMap.size() &gt;</span>
+<span class="pc bpc" id="L2269" title="1 of 2 branches missed.">                    loader.maxStreamPositions) {</span>
                 // Map is full. Remove 1st item before adding a new one
-<span class="nc" id="L2270">                final Long origIndex = textureCoordsStreamPositionMap.firstKey();</span>
-<span class="nc" id="L2271">                textureCoordsStreamPositionMap.remove(origIndex);</span>
+<span class="nc" id="L2271">                final Long origIndex = textureCoordsStreamPositionMap.firstKey();</span>
+<span class="nc" id="L2272">                textureCoordsStreamPositionMap.remove(origIndex);</span>
             }
             // add new item
-<span class="fc" id="L2274">            textureCoordsStreamPositionMap.put(originalIndex,</span>
-<span class="fc" id="L2275">                    streamPosition);</span>
-<span class="fc" id="L2276">        }</span>
+<span class="fc" id="L2275">            textureCoordsStreamPositionMap.put(originalIndex,</span>
+<span class="fc" id="L2276">                    streamPosition);</span>
+<span class="fc" id="L2277">        }</span>
 
         /**
          * Add normal coordinate to cache of file positions.
@@ -2284,87 +2285,87 @@ public class LoaderOBJ extends Loader {
          */
         private void addNormalPositionToMap(final long originalIndex,
                                             final long streamPosition) {
-<span class="pc bpc" id="L2287" title="1 of 2 branches missed.">            if (normalsStreamPositionMap.size() &gt; loader.maxStreamPositions) {</span>
+<span class="pc bpc" id="L2288" title="1 of 2 branches missed.">            if (normalsStreamPositionMap.size() &gt; loader.maxStreamPositions) {</span>
                 // Map is full. Remove 1st item before adding a new one
-<span class="nc" id="L2289">                final Long origIndex = normalsStreamPositionMap.firstKey();</span>
-<span class="nc" id="L2290">                normalsStreamPositionMap.remove(origIndex);</span>
+<span class="nc" id="L2290">                final Long origIndex = normalsStreamPositionMap.firstKey();</span>
+<span class="nc" id="L2291">                normalsStreamPositionMap.remove(origIndex);</span>
             }
             // add new item
-<span class="fc" id="L2293">            normalsStreamPositionMap.put(originalIndex,</span>
-<span class="fc" id="L2294">                    streamPosition);</span>
-<span class="fc" id="L2295">        }</span>
+<span class="fc" id="L2294">            normalsStreamPositionMap.put(originalIndex,</span>
+<span class="fc" id="L2295">                    streamPosition);</span>
+<span class="fc" id="L2296">        }</span>
 
         /**
          * Adds data of last vertex being loaded to current chunk of data as a
          * new vertex.
          */
         private void addNewVertexDataToChunk() {
-<span class="fc" id="L2302">            int pos = 3 * verticesInChunk;</span>
-<span class="fc" id="L2303">            int textPos = 2 * verticesInChunk;</span>
+<span class="fc" id="L2303">            int pos = 3 * verticesInChunk;</span>
+<span class="fc" id="L2304">            int textPos = 2 * verticesInChunk;</span>
 
-<span class="fc" id="L2305">            coordsInChunkArray[pos] = coordX;</span>
-<span class="fc" id="L2306">            normalsInChunkArray[pos] = nX;</span>
-<span class="fc" id="L2307">            textureCoordsInChunkArray[textPos] = textureU;</span>
+<span class="fc" id="L2306">            coordsInChunkArray[pos] = coordX;</span>
+<span class="fc" id="L2307">            normalsInChunkArray[pos] = nX;</span>
+<span class="fc" id="L2308">            textureCoordsInChunkArray[textPos] = textureU;</span>
 
-<span class="fc" id="L2309">            pos++;</span>
-<span class="fc" id="L2310">            textPos++;</span>
+<span class="fc" id="L2310">            pos++;</span>
+<span class="fc" id="L2311">            textPos++;</span>
 
-<span class="fc" id="L2312">            coordsInChunkArray[pos] = coordY;</span>
-<span class="fc" id="L2313">            normalsInChunkArray[pos] = nY;</span>
-<span class="fc" id="L2314">            textureCoordsInChunkArray[textPos] = textureV;</span>
+<span class="fc" id="L2313">            coordsInChunkArray[pos] = coordY;</span>
+<span class="fc" id="L2314">            normalsInChunkArray[pos] = nY;</span>
+<span class="fc" id="L2315">            textureCoordsInChunkArray[textPos] = textureV;</span>
 
-<span class="fc" id="L2316">            pos++;</span>
+<span class="fc" id="L2317">            pos++;</span>
 
-<span class="fc" id="L2318">            coordsInChunkArray[pos] = coordZ;</span>
-<span class="fc" id="L2319">            normalsInChunkArray[pos] = nZ;</span>
+<span class="fc" id="L2319">            coordsInChunkArray[pos] = coordZ;</span>
+<span class="fc" id="L2320">            normalsInChunkArray[pos] = nZ;</span>
 
             // update bounding box values
-<span class="fc bfc" id="L2322" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
-<span class="fc" id="L2323">                minX = coordX;</span>
+<span class="fc bfc" id="L2323" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
+<span class="fc" id="L2324">                minX = coordX;</span>
             }
-<span class="fc bfc" id="L2325" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
-<span class="fc" id="L2326">                minY = coordY;</span>
+<span class="fc bfc" id="L2326" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
+<span class="fc" id="L2327">                minY = coordY;</span>
             }
-<span class="fc bfc" id="L2328" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
-<span class="fc" id="L2329">                minZ = coordZ;</span>
+<span class="fc bfc" id="L2329" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
+<span class="fc" id="L2330">                minZ = coordZ;</span>
             }
 
-<span class="fc bfc" id="L2332" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
-<span class="fc" id="L2333">                maxX = coordX;</span>
+<span class="fc bfc" id="L2333" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
+<span class="fc" id="L2334">                maxX = coordX;</span>
             }
-<span class="fc bfc" id="L2335" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
-<span class="fc" id="L2336">                maxY = coordY;</span>
+<span class="fc bfc" id="L2336" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
+<span class="fc" id="L2337">                maxY = coordY;</span>
             }
-<span class="fc bfc" id="L2338" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
-<span class="fc" id="L2339">                maxZ = coordZ;</span>
+<span class="fc bfc" id="L2339" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
+<span class="fc" id="L2340">                maxZ = coordZ;</span>
             }
 
             // if arrays of indices become full, we need to resize them
-<span class="fc bfc" id="L2343" title="All 2 branches covered.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
-<span class="fc" id="L2344">                increaseIndicesArraySize();</span>
+<span class="fc bfc" id="L2344" title="All 2 branches covered.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
+<span class="fc" id="L2345">                increaseIndicesArraySize();</span>
             }
-<span class="fc" id="L2346">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
-<span class="fc" id="L2347">            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;</span>
-<span class="fc" id="L2348">            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;</span>
-<span class="fc" id="L2349">            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;</span>
+<span class="fc" id="L2347">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
+<span class="fc" id="L2348">            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;</span>
+<span class="fc" id="L2349">            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;</span>
+<span class="fc" id="L2350">            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;</span>
             // store original indices in maps so we can search chunk index by
             // original indices of vertices, texture or normal
-<span class="fc" id="L2352">            vertexIndicesMap.put((long) vertexIndex,</span>
-<span class="fc" id="L2353">                    indicesInChunk);</span>
-<span class="fc" id="L2354">            textureCoordsIndicesMap.put((long) textureIndex,</span>
-<span class="fc" id="L2355">                    indicesInChunk);</span>
-<span class="fc" id="L2356">            normalsIndicesMap.put((long) normalIndex,</span>
-<span class="fc" id="L2357">                    indicesInChunk);</span>
+<span class="fc" id="L2353">            vertexIndicesMap.put((long) vertexIndex,</span>
+<span class="fc" id="L2354">                    indicesInChunk);</span>
+<span class="fc" id="L2355">            textureCoordsIndicesMap.put((long) textureIndex,</span>
+<span class="fc" id="L2356">                    indicesInChunk);</span>
+<span class="fc" id="L2357">            normalsIndicesMap.put((long) normalIndex,</span>
+<span class="fc" id="L2358">                    indicesInChunk);</span>
 
             // store vertex, texture and normal stream positions
-<span class="fc" id="L2360">            addVertexPositionToMap(vertexIndex, vertexStreamPosition);</span>
-<span class="fc" id="L2361">            addTextureCoordPositionToMap(textureIndex,</span>
+<span class="fc" id="L2361">            addVertexPositionToMap(vertexIndex, vertexStreamPosition);</span>
+<span class="fc" id="L2362">            addTextureCoordPositionToMap(textureIndex,</span>
                     textureCoordStreamPosition);
-<span class="fc" id="L2363">            addNormalPositionToMap(normalIndex, normalStreamPosition);</span>
+<span class="fc" id="L2364">            addNormalPositionToMap(normalIndex, normalStreamPosition);</span>
 
-<span class="fc" id="L2365">            verticesInChunk++;</span>
-<span class="fc" id="L2366">            indicesInChunk++;</span>
-<span class="fc" id="L2367">        }</span>
+<span class="fc" id="L2366">            verticesInChunk++;</span>
+<span class="fc" id="L2367">            indicesInChunk++;</span>
+<span class="fc" id="L2368">        }</span>
 
         /**
          * Adds index to current chunk of data referring to a previously
@@ -2374,102 +2375,102 @@ public class LoaderOBJ extends Loader {
          */
         private void addExistingVertexToChunk(final int existingIndex) {
             // if arrays of indices become full, we need to resize them
-<span class="fc bfc" id="L2377" title="All 2 branches covered.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
-<span class="fc" id="L2378">                increaseIndicesArraySize();</span>
+<span class="fc bfc" id="L2378" title="All 2 branches covered.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
+<span class="fc" id="L2379">                increaseIndicesArraySize();</span>
             }
-<span class="fc" id="L2380">            indicesInChunkArray[indicesInChunk] = existingIndex;</span>
-<span class="fc" id="L2381">            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;</span>
-<span class="fc" id="L2382">            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;</span>
-<span class="fc" id="L2383">            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;</span>
+<span class="fc" id="L2381">            indicesInChunkArray[indicesInChunk] = existingIndex;</span>
+<span class="fc" id="L2382">            originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;</span>
+<span class="fc" id="L2383">            originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;</span>
+<span class="fc" id="L2384">            originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;</span>
 
-<span class="fc" id="L2385">            indicesInChunk++;</span>
-<span class="fc" id="L2386">        }</span>
+<span class="fc" id="L2386">            indicesInChunk++;</span>
+<span class="fc" id="L2387">        }</span>
 
         /**
          * Increases size of arrays of data. This method is called when needed.
          */
         private void increaseIndicesArraySize() {
-<span class="fc" id="L2392">            final int newIndicesInChunkSize = indicesInChunkSize +</span>
-<span class="fc" id="L2393">                    loader.maxVerticesInChunk;</span>
-<span class="fc" id="L2394">            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
-<span class="fc" id="L2395">            final long[] newOriginalVertexIndicesInChunkArray =</span>
+<span class="fc" id="L2393">            final int newIndicesInChunkSize = indicesInChunkSize +</span>
+<span class="fc" id="L2394">                    loader.maxVerticesInChunk;</span>
+<span class="fc" id="L2395">            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
+<span class="fc" id="L2396">            final long[] newOriginalVertexIndicesInChunkArray =</span>
                     new long[newIndicesInChunkSize];
-<span class="fc" id="L2397">            final long[] newOriginalTextureIndicesInChunkArray =</span>
+<span class="fc" id="L2398">            final long[] newOriginalTextureIndicesInChunkArray =</span>
                     new long[newIndicesInChunkSize];
-<span class="fc" id="L2399">            final long[] newOriginalNormalIndicesInChunkArray =</span>
+<span class="fc" id="L2400">            final long[] newOriginalNormalIndicesInChunkArray =</span>
                     new long[newIndicesInChunkSize];
 
             // copy contents of old array
-<span class="fc" id="L2403">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,</span>
+<span class="fc" id="L2404">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,</span>
                     indicesInChunkSize);
-<span class="fc" id="L2405">            System.arraycopy(originalVertexIndicesInChunkArray, 0,</span>
+<span class="fc" id="L2406">            System.arraycopy(originalVertexIndicesInChunkArray, 0,</span>
                     newOriginalVertexIndicesInChunkArray, 0,
                     indicesInChunkSize);
-<span class="fc" id="L2408">            System.arraycopy(originalTextureIndicesInChunkArray, 0,</span>
+<span class="fc" id="L2409">            System.arraycopy(originalTextureIndicesInChunkArray, 0,</span>
                     newOriginalTextureIndicesInChunkArray, 0,
                     indicesInChunkSize);
-<span class="fc" id="L2411">            System.arraycopy(originalNormalIndicesInChunkArray, 0,</span>
+<span class="fc" id="L2412">            System.arraycopy(originalNormalIndicesInChunkArray, 0,</span>
                     newOriginalNormalIndicesInChunkArray, 0,
                     indicesInChunkSize);
 
             // set new arrays and new size
-<span class="fc" id="L2416">            indicesInChunkArray = newIndicesInChunkArray;</span>
-<span class="fc" id="L2417">            originalVertexIndicesInChunkArray =</span>
+<span class="fc" id="L2417">            indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="fc" id="L2418">            originalVertexIndicesInChunkArray =</span>
                     newOriginalVertexIndicesInChunkArray;
-<span class="fc" id="L2419">            originalTextureIndicesInChunkArray =</span>
+<span class="fc" id="L2420">            originalTextureIndicesInChunkArray =</span>
                     newOriginalTextureIndicesInChunkArray;
-<span class="fc" id="L2421">            originalNormalIndicesInChunkArray =</span>
+<span class="fc" id="L2422">            originalNormalIndicesInChunkArray =</span>
                     newOriginalNormalIndicesInChunkArray;
-<span class="fc" id="L2423">            indicesInChunkSize = newIndicesInChunkSize;</span>
-<span class="fc" id="L2424">        }</span>
+<span class="fc" id="L2424">            indicesInChunkSize = newIndicesInChunkSize;</span>
+<span class="fc" id="L2425">        }</span>
 
         /**
          * Trims arrays of data to reduce size of arrays to fit chunk data. This
          * method is loaded just before copying data to chunk being returned.
          */
         private void trimArrays() {
-<span class="pc bpc" id="L2431" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
-<span class="fc" id="L2432">                final int elems = verticesInChunk * 3;</span>
-<span class="fc" id="L2433">                final int textElems = verticesInChunk * 2;</span>
+<span class="pc bpc" id="L2432" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
+<span class="fc" id="L2433">                final int elems = verticesInChunk * 3;</span>
+<span class="fc" id="L2434">                final int textElems = verticesInChunk * 2;</span>
 
-<span class="fc" id="L2435">                final float[] newCoordsInChunkArray = new float[elems];</span>
-<span class="fc" id="L2436">                final float[] newTextureCoordsInChunkArray = new float[elems];</span>
-<span class="fc" id="L2437">                final float[] newNormalsInChunkArray = new float[elems];</span>
+<span class="fc" id="L2436">                final float[] newCoordsInChunkArray = new float[elems];</span>
+<span class="fc" id="L2437">                final float[] newTextureCoordsInChunkArray = new float[elems];</span>
+<span class="fc" id="L2438">                final float[] newNormalsInChunkArray = new float[elems];</span>
 
                 // copy contents of old arrays
-<span class="fc" id="L2440">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
+<span class="fc" id="L2441">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
                         0, elems);
-<span class="fc" id="L2442">                System.arraycopy(textureCoordsInChunkArray, 0,</span>
+<span class="fc" id="L2443">                System.arraycopy(textureCoordsInChunkArray, 0,</span>
                         newTextureCoordsInChunkArray, 0, textElems);
-<span class="fc" id="L2444">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,</span>
+<span class="fc" id="L2445">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,</span>
                         0, elems);
 
                 // set new arrays
-<span class="fc" id="L2448">                coordsInChunkArray = newCoordsInChunkArray;</span>
-<span class="fc" id="L2449">                textureCoordsInChunkArray = newTextureCoordsInChunkArray;</span>
-<span class="fc" id="L2450">                normalsInChunkArray = newNormalsInChunkArray;</span>
-<span class="fc" id="L2451">            } else {</span>
+<span class="fc" id="L2449">                coordsInChunkArray = newCoordsInChunkArray;</span>
+<span class="fc" id="L2450">                textureCoordsInChunkArray = newTextureCoordsInChunkArray;</span>
+<span class="fc" id="L2451">                normalsInChunkArray = newNormalsInChunkArray;</span>
+<span class="fc" id="L2452">            } else {</span>
                 // allow garbage collection
-<span class="nc" id="L2453">                coordsInChunkArray = null;</span>
-<span class="nc" id="L2454">                textureCoordsInChunkArray = null;</span>
-<span class="nc" id="L2455">                normalsInChunkArray = null;</span>
+<span class="nc" id="L2454">                coordsInChunkArray = null;</span>
+<span class="nc" id="L2455">                textureCoordsInChunkArray = null;</span>
+<span class="nc" id="L2456">                normalsInChunkArray = null;</span>
             }
 
-<span class="pc bpc" id="L2458" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
-<span class="fc" id="L2459">                final int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
-<span class="fc" id="L2460">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
+<span class="pc bpc" id="L2459" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
+<span class="fc" id="L2460">                final int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
+<span class="fc" id="L2461">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
                         0, indicesInChunk);
 
                 // set new array
-<span class="fc" id="L2464">                indicesInChunkArray = newIndicesInChunkArray;</span>
-<span class="fc" id="L2465">            } else {</span>
+<span class="fc" id="L2465">                indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="fc" id="L2466">            } else {</span>
                 // allow garbage collection
-<span class="nc" id="L2467">                indicesInChunkArray = null;</span>
-<span class="nc" id="L2468">                originalVertexIndicesInChunkArray = null;</span>
-<span class="nc" id="L2469">                originalTextureIndicesInChunkArray = null;</span>
-<span class="nc" id="L2470">                originalNormalIndicesInChunkArray = null;</span>
+<span class="nc" id="L2468">                indicesInChunkArray = null;</span>
+<span class="nc" id="L2469">                originalVertexIndicesInChunkArray = null;</span>
+<span class="nc" id="L2470">                originalTextureIndicesInChunkArray = null;</span>
+<span class="nc" id="L2471">                originalNormalIndicesInChunkArray = null;</span>
             }
-<span class="fc" id="L2472">        }</span>
+<span class="fc" id="L2473">        }</span>
 
         /**
          * Set ups loader iterator. This method is called when constructing
@@ -2481,107 +2482,107 @@ public class LoaderOBJ extends Loader {
         private void setUp() throws IOException, LoaderException {
             String str;
             long streamPosition;
-<span class="fc" id="L2484">            numberOfVertices = numberOfTextureCoords = numberOfNormals =</span>
+<span class="fc" id="L2485">            numberOfVertices = numberOfTextureCoords = numberOfNormals =</span>
                     numberOfFaces = 0;
 
             do {
-<span class="fc" id="L2488">                streamPosition = reader.getPosition();</span>
-<span class="fc" id="L2489">                str = reader.readLine();</span>
-<span class="fc bfc" id="L2490" title="All 2 branches covered.">                if (str == null) {</span>
-<span class="fc" id="L2491">                    break;</span>
+<span class="fc" id="L2489">                streamPosition = reader.getPosition();</span>
+<span class="fc" id="L2490">                str = reader.readLine();</span>
+<span class="fc bfc" id="L2491" title="All 2 branches covered.">                if (str == null) {</span>
+<span class="fc" id="L2492">                    break;</span>
                 }
 
-<span class="fc bfc" id="L2494" title="All 2 branches covered.">                if (str.startsWith(&quot;#&quot;)) {</span>
+<span class="fc bfc" id="L2495" title="All 2 branches covered.">                if (str.startsWith(&quot;#&quot;)) {</span>
                     // line is a comment, so we should add it to the list of
                     // comments
-<span class="fc" id="L2497">                    loader.comments.add(str.substring(&quot;#&quot;.length()).trim());</span>
-<span class="fc bfc" id="L2498" title="All 2 branches covered.">                } else if (str.startsWith(&quot;vt &quot;)) {</span>
+<span class="fc" id="L2498">                    loader.comments.add(str.substring(&quot;#&quot;.length()).trim());</span>
+<span class="fc bfc" id="L2499" title="All 2 branches covered.">                } else if (str.startsWith(&quot;vt &quot;)) {</span>
                     // line contains texture coordinates, so we keep its stream
                     // position and indicate that chunks will contain texture
                     // coordinates
-<span class="fc bfc" id="L2502" title="All 2 branches covered.">                    if (!firstTextureCoordStreamPositionAvailable) {</span>
-<span class="fc" id="L2503">                        firstTextureCoordStreamPosition = streamPosition;</span>
-<span class="fc" id="L2504">                        firstTextureCoordStreamPositionAvailable = true;</span>
-<span class="fc" id="L2505">                        textureAvailable = true;</span>
+<span class="fc bfc" id="L2503" title="All 2 branches covered.">                    if (!firstTextureCoordStreamPositionAvailable) {</span>
+<span class="fc" id="L2504">                        firstTextureCoordStreamPosition = streamPosition;</span>
+<span class="fc" id="L2505">                        firstTextureCoordStreamPositionAvailable = true;</span>
+<span class="fc" id="L2506">                        textureAvailable = true;</span>
                     }
-<span class="fc" id="L2507">                    numberOfTextureCoords++;</span>
-<span class="fc bfc" id="L2508" title="All 2 branches covered.">                } else if (str.startsWith(&quot;vn &quot;)) {</span>
+<span class="fc" id="L2508">                    numberOfTextureCoords++;</span>
+<span class="fc bfc" id="L2509" title="All 2 branches covered.">                } else if (str.startsWith(&quot;vn &quot;)) {</span>
                     // line contains normal, so we keep its stream position and
                     // indicate that chunks will contain normals
-<span class="fc bfc" id="L2511" title="All 2 branches covered.">                    if (!firstNormalStreamPositionAvailable) {</span>
-<span class="fc" id="L2512">                        firstNormalStreamPosition = streamPosition;</span>
-<span class="fc" id="L2513">                        firstNormalStreamPositionAvailable = true;</span>
-<span class="fc" id="L2514">                        normalsAvailable = true;</span>
+<span class="fc bfc" id="L2512" title="All 2 branches covered.">                    if (!firstNormalStreamPositionAvailable) {</span>
+<span class="fc" id="L2513">                        firstNormalStreamPosition = streamPosition;</span>
+<span class="fc" id="L2514">                        firstNormalStreamPositionAvailable = true;</span>
+<span class="fc" id="L2515">                        normalsAvailable = true;</span>
                     }
-<span class="fc" id="L2516">                    numberOfNormals++;</span>
-<span class="fc bfc" id="L2517" title="All 2 branches covered.">                } else if (str.startsWith(&quot;v &quot;)) {</span>
+<span class="fc" id="L2517">                    numberOfNormals++;</span>
+<span class="fc bfc" id="L2518" title="All 2 branches covered.">                } else if (str.startsWith(&quot;v &quot;)) {</span>
                     // line contains vertex coordinates, so we keep its stream
                     // position and indicate that chunks will contain vertex
                     // coordinates
-<span class="fc bfc" id="L2521" title="All 2 branches covered.">                    if (!firstVertexStreamPositionAvailable) {</span>
-<span class="fc" id="L2522">                        firstVertexStreamPosition = streamPosition;</span>
-<span class="fc" id="L2523">                        firstVertexStreamPositionAvailable = true;</span>
-<span class="fc" id="L2524">                        verticesAvailable = true;</span>
+<span class="fc bfc" id="L2522" title="All 2 branches covered.">                    if (!firstVertexStreamPositionAvailable) {</span>
+<span class="fc" id="L2523">                        firstVertexStreamPosition = streamPosition;</span>
+<span class="fc" id="L2524">                        firstVertexStreamPositionAvailable = true;</span>
+<span class="fc" id="L2525">                        verticesAvailable = true;</span>
                     }
-<span class="fc" id="L2526">                    numberOfVertices++;</span>
-<span class="fc bfc" id="L2527" title="All 2 branches covered.">                } else if (str.startsWith(&quot;f &quot;)) {</span>
+<span class="fc" id="L2527">                    numberOfVertices++;</span>
+<span class="fc bfc" id="L2528" title="All 2 branches covered.">                } else if (str.startsWith(&quot;f &quot;)) {</span>
                     // line contains face definition, so we keep its stream
                     // position and indicate that chunks will contain indices
-<span class="fc bfc" id="L2530" title="All 2 branches covered.">                    if (!firstFaceStreamPositionAvailable) {</span>
-<span class="fc" id="L2531">                        firstFaceStreamPosition = streamPosition;</span>
-<span class="fc" id="L2532">                        firstFaceStreamPositionAvailable = true;</span>
-<span class="fc" id="L2533">                        indicesAvailable = true;</span>
+<span class="fc bfc" id="L2531" title="All 2 branches covered.">                    if (!firstFaceStreamPositionAvailable) {</span>
+<span class="fc" id="L2532">                        firstFaceStreamPosition = streamPosition;</span>
+<span class="fc" id="L2533">                        firstFaceStreamPositionAvailable = true;</span>
+<span class="fc" id="L2534">                        indicesAvailable = true;</span>
                     }
 
-<span class="fc" id="L2536">                    numberOfFaces++;</span>
+<span class="fc" id="L2537">                    numberOfFaces++;</span>
 
-<span class="fc bfc" id="L2538" title="All 2 branches covered.">                } else if (str.startsWith(&quot;mtllib &quot;)) {</span>
+<span class="fc bfc" id="L2539" title="All 2 branches covered.">                } else if (str.startsWith(&quot;mtllib &quot;)) {</span>
                     // a material library is found
-<span class="fc" id="L2540">                    final String path = str.substring(&quot;mtllib &quot;.length()).trim();</span>
-<span class="pc bpc" id="L2541" title="1 of 2 branches missed.">                    if (loader.listener instanceof LoaderListenerOBJ) {</span>
-<span class="fc" id="L2542">                        final LoaderListenerOBJ loaderListener =</span>
+<span class="fc" id="L2541">                    final String path = str.substring(&quot;mtllib &quot;.length()).trim();</span>
+<span class="pc bpc" id="L2542" title="1 of 2 branches missed.">                    if (loader.listener instanceof LoaderListenerOBJ) {</span>
+<span class="fc" id="L2543">                        final LoaderListenerOBJ loaderListener =</span>
                                 (LoaderListenerOBJ) loader.listener;
-<span class="fc" id="L2544">                        materialLoader =</span>
-<span class="fc" id="L2545">                                loaderListener.onMaterialLoaderRequested(loader,</span>
+<span class="fc" id="L2545">                        materialLoader =</span>
+<span class="fc" id="L2546">                                loaderListener.onMaterialLoaderRequested(loader,</span>
                                         path);
-<span class="fc" id="L2547">                    } else {</span>
-<span class="nc" id="L2548">                        materialLoader = new MaterialLoaderOBJ(new File(path));</span>
+<span class="fc" id="L2548">                    } else {</span>
+<span class="nc" id="L2549">                        materialLoader = new MaterialLoaderOBJ(new File(path));</span>
                     }
 
                     // now load library of materials
                     try {
-<span class="fc bfc" id="L2553" title="All 2 branches covered.">                        if (materialLoader != null) {</span>
-<span class="fc" id="L2554">                            loader.materials = materialLoader.load();</span>
+<span class="fc bfc" id="L2554" title="All 2 branches covered.">                        if (materialLoader != null) {</span>
+<span class="fc" id="L2555">                            loader.materials = materialLoader.load();</span>
                             // to release file resources
-<span class="fc" id="L2556">                            materialLoader.close();</span>
+<span class="fc" id="L2557">                            materialLoader.close();</span>
                         }
-<span class="nc" id="L2558">                    } catch (final LoaderException e) {</span>
-<span class="nc" id="L2559">                        throw e;</span>
-<span class="nc" id="L2560">                    } catch (final Exception e) {</span>
-<span class="nc" id="L2561">                        throw new LoaderException(e);</span>
-<span class="fc" id="L2562">                    }</span>
+<span class="nc" id="L2559">                    } catch (final LoaderException e) {</span>
+<span class="nc" id="L2560">                        throw e;</span>
+<span class="nc" id="L2561">                    } catch (final Exception e) {</span>
+<span class="nc" id="L2562">                        throw new LoaderException(e);</span>
+<span class="fc" id="L2563">                    }</span>
 
-<span class="fc bfc" id="L2564" title="All 4 branches covered.">                } else if (str.startsWith(USEMTL) &amp;&amp; !firstMaterialStreamPositionAvailable) {</span>
-<span class="fc" id="L2565">                    firstMaterialStreamPositionAvailable = true;</span>
-<span class="fc" id="L2566">                    firstMaterialStreamPosition = streamPosition;</span>
-<span class="fc" id="L2567">                    materialsAvailable = true;</span>
+<span class="fc bfc" id="L2565" title="All 4 branches covered.">                } else if (str.startsWith(USEMTL) &amp;&amp; !firstMaterialStreamPositionAvailable) {</span>
+<span class="fc" id="L2566">                    firstMaterialStreamPositionAvailable = true;</span>
+<span class="fc" id="L2567">                    firstMaterialStreamPosition = streamPosition;</span>
+<span class="fc" id="L2568">                    materialsAvailable = true;</span>
                 }
 
                 // ignore any other line
             } while (true); // read until end of file when str == null
 
             // move to first face tream position
-<span class="pc bpc" id="L2574" title="1 of 2 branches missed.">            if (!firstFaceStreamPositionAvailable) {</span>
-<span class="nc" id="L2575">                throw new LoaderException();</span>
+<span class="pc bpc" id="L2575" title="1 of 2 branches missed.">            if (!firstFaceStreamPositionAvailable) {</span>
+<span class="nc" id="L2576">                throw new LoaderException();</span>
             }
 
-<span class="pc bpc" id="L2578" title="1 of 4 branches missed.">            if (materialsAvailable &amp;&amp;</span>
+<span class="pc bpc" id="L2579" title="1 of 4 branches missed.">            if (materialsAvailable &amp;&amp;</span>
                     firstMaterialStreamPosition &lt; firstFaceStreamPosition) {
-<span class="fc" id="L2580">                reader.seek(firstMaterialStreamPosition);</span>
+<span class="fc" id="L2581">                reader.seek(firstMaterialStreamPosition);</span>
             } else {
-<span class="fc" id="L2582">                reader.seek(firstFaceStreamPosition);</span>
+<span class="fc" id="L2583">                reader.seek(firstFaceStreamPosition);</span>
             }
-<span class="fc" id="L2584">        }</span>
+<span class="fc" id="L2585">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
