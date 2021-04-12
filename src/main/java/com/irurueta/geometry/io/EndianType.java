@@ -21,11 +21,11 @@ package com.irurueta.geometry.io;
 public enum EndianType {
     /**
      * Big endian or natural order.
-     * */
-    BIG_ENDIAN_TYPE,    
-    
+     */
+    BIG_ENDIAN_TYPE,
+
     /**
      * Little endian or reversed order.
-     * */
-    LITTLE_ENDIAN_TYPE  
+     */
+    LITTLE_ENDIAN_TYPE
 }

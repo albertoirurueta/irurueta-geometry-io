@@ -23,112 +23,122 @@ import java.io.File;
  * a chunk of data has been loaded, etc.
  */
 public interface MeshWriterListener {
-    
+
     /**
      * Notifies when writing starts.
+     *
      * @param writer reference to writer.
      */
-    void onWriteStart(MeshWriter writer);
-    
+    void onWriteStart(final MeshWriter writer);
+
     /**
      * Notifies when writing ends.
+     *
      * @param writer reference to writer.
      */
-    void onWriteEnd(MeshWriter writer);
-    
+    void onWriteEnd(final MeshWriter writer);
+
     /**
      * Notifies progress changes during writing.
-     * @param writer reference to writer.
+     *
+     * @param writer   reference to writer.
      * @param progress progress amount as a value between 0.0 and 1.0.
      */
-    void onWriteProgressChange(MeshWriter writer, float progress);
-    
+    void onWriteProgressChange(final MeshWriter writer, final float progress);
+
     /**
      * Called when a chunk of data is available.
+     *
      * @param writer reference to writer.
-     * @param chunk chunk of data that has been loaded.
+     * @param chunk  chunk of data that has been loaded.
      */
-    void onChunkAvailable(MeshWriter writer, DataChunk chunk);
-    
+    void onChunkAvailable(final MeshWriter writer, final DataChunk chunk);
+
     /**
      * Called when a material file is needed. A path used as a hint to locate
-     * such file will be provided, and using that path the File must be 
+     * such file will be provided, and using that path the File must be
      * retrieved (by any means, such as downloading from a remote location or
      * uncompressing from a file, etc).
-     * Returned file will be handled by the callee of this method. If a 
+     * Returned file will be handled by the callee of this method. If a
      * temporary file is created copying the contents of the file from a remote
      * location, then it will be the responsibility of the callee to delete the
      * temporary file.
+     *
      * @param writer reference to writer.
-     * @param path path where material file is supposed to be found.
+     * @param path   path where material file is supposed to be found.
      * @return File containing the material file.
      */
-    File onMaterialFileRequested(MeshWriter writer, String path);
-    
+    File onMaterialFileRequested(final MeshWriter writer, final String path);
+
     /**
      * Called when a texture needs to be validated.
      * Provided texture data will contain the path that can be used as a hint to
      * locate the texture image. The texture image file can be retrieved by
      * any means, such as downloading form a remote location or uncompressing
      * from a file, etc.
-     * Returned file will be handled by the callee of this method. If a 
+     * Returned file will be handled by the callee of this method. If a
      * temporary file is created copying the contents of the original texture
      * (or modifying such texture by transcoding it or resizing it), then it
      * will be the responsibility of the callee to delete the temporary file.
-     * @param writer reference to writer.
+     *
+     * @param writer  reference to writer.
      * @param texture reference to texture.
      * @return File containing texture to be validated.
      */
-    File onValidateTexture(MeshWriter writer, Texture texture);
-    
+    File onValidateTexture(final MeshWriter writer, final Texture texture);
+
     /**
      * Called when texture has been validated.
      * This method is called so that the callee has a chance to remove the
      * texture file if needed.
+     *
      * @param writer reference to writer.
-     * @param f reference to texture file that has been validated. If this file
-     * was meant to be temporary, this method gives a chance to remove it 
-     * because it will no longer be needed.
+     * @param f      reference to texture file that has been validated. If this file
+     *               was meant to be temporary, this method gives a chance to remove it
+     *               because it will no longer be needed.
      */
-    void onDidValidateTexture(MeshWriter writer, File f);
-    
+    void onDidValidateTexture(final MeshWriter writer, final File f);
+
     /**
      * Called when texture data is found in a binary file.
-     * This method should create a temporary file where such data will be 
+     * This method should create a temporary file where such data will be
      * copied to.
-     * @param writer reference to writer.
-     * @param textureWidth texture image width in pixels.
+     *
+     * @param writer        reference to writer.
+     * @param textureWidth  texture image width in pixels.
      * @param textureHeight texture image height in pixels.
      * @return File where texture data will be copied to.
      */
-    File onTextureReceived(MeshWriter writer, int textureWidth,
-            int textureHeight);
-    
+    File onTextureReceived(final MeshWriter writer, final int textureWidth,
+                           final int textureHeight);
+
     /**
-     * Called when texture data of a binary file has been copied to temporal 
+     * Called when texture data of a binary file has been copied to temporal
      * file and is available for processing.
      * This method gives the callee a chance to transcode, transform or resize
      * the texture image as needed.
-     * @param writer reference to writer.
-     * @param textureFile file that contains texture image data read from stream.
-     * @param textureWidth texture image width in pixels.
+     *
+     * @param writer        reference to writer.
+     * @param textureFile   file that contains texture image data read from stream.
+     * @param textureWidth  texture image width in pixels.
      * @param textureHeight texture image height in pixels.
      * @return converted image transcoded into JPG format or resized if
      * needed, otherwise textureFile can be returned if no changes are needed.
      */
-    File onTextureDataAvailable(MeshWriter writer, File textureFile,
-            int textureWidth, int textureHeight);
-    
+    File onTextureDataAvailable(final MeshWriter writer, final File textureFile,
+                                final int textureWidth, final int textureHeight);
+
     /**
      * Called when texture data has already been processed for a binary file.
      * This method gives a chance to remove any temporal texture image as it
      * will no longer be needed.
-     * @param writer reference to writer.
-     * @param textureFile file that contains texture image data that can be
-     * removed.
-     * @param textureWidth texture image width in pixels.
+     *
+     * @param writer        reference to writer.
+     * @param textureFile   file that contains texture image data that can be
+     *                      removed.
+     * @param textureWidth  texture image width in pixels.
      * @param textureHeight texture image height in pixels.
      */
-    void onTextureDataProcessed(MeshWriter writer, File textureFile,
-            int textureWidth, int textureHeight);
+    void onTextureDataProcessed(final MeshWriter writer, final File textureFile,
+                                final int textureWidth, final int textureHeight);
 }

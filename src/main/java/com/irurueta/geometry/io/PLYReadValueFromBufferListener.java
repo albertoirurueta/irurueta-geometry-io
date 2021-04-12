@@ -18,14 +18,15 @@ package com.irurueta.geometry.io;
 import java.nio.ByteBuffer;
 
 /**
- * Listener to read a value contained within the byte read buffer and transform 
+ * Listener to read a value contained within the byte read buffer and transform
  * it into the appropriate data type.
  */
 public interface PLYReadValueFromBufferListener {
-    
+
     /**
      * Reads a value from the byte read buffer.
+     *
      * @param buffer Byte buffer.
      */
-    void readValueFromBuffer(ByteBuffer buffer);
+    void readValueFromBuffer(final ByteBuffer buffer);
 }

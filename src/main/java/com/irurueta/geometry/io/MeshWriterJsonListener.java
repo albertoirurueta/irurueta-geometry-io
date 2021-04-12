@@ -22,24 +22,26 @@ import java.io.File;
  * This listener provides additional methods to handle textures.
  */
 public interface MeshWriterJsonListener extends MeshWriterListener {
-    
+
     /**
      * Handles texture to write URL where it will be located.
-     * @param writer reference to writer.
-     * @param texture reference to texture being processed.
+     *
+     * @param writer      reference to writer.
+     * @param texture     reference to texture being processed.
      * @param textureFile reference to file containing texture.
      * @return URL where texture can be located.
      */
-    String onRemoteTextureUrlRequested(MeshWriterJson writer,
-            Texture texture, File textureFile);
-    
+    String onRemoteTextureUrlRequested(final MeshWriterJson writer,
+                                       final Texture texture, final File textureFile);
+
     /**
      * Handles texture to write ID to fetch it.
-     * @param writer reference to writer.
-     * @param texture reference to texture being processed.
+     *
+     * @param writer      reference to writer.
+     * @param texture     reference to texture being processed.
      * @param textureFile reference to file containing texture
      * @return ID to locate texture.
      */
-    String onRemoteTextureIdRequested(MeshWriterJson writer,
-            Texture texture, File textureFile);
+    String onRemoteTextureIdRequested(final MeshWriterJson writer,
+                                      final Texture texture, final File textureFile);
 }

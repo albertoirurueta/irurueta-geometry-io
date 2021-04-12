@@ -16,26 +16,12 @@
 
 package com.irurueta.geometry.io;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class IlluminationTest {
-    
-    public IlluminationTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testValue() {
         assertEquals(Illumination.COLOR_AND_AMBIENT_OFF.value(), 0);
@@ -55,13 +41,13 @@ public class IlluminationTest {
         assertEquals(Illumination.REFLECTION_ON_AND_RAY_TRACE_OFF.value(), 8);
         assertEquals(Illumination.
                 TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_OFF.value(), 9);
-        assertEquals(Illumination.CAST_SHADOWS_ONTO_INVISIBLE_SURFACES.value(), 
-                10);        
+        assertEquals(Illumination.CAST_SHADOWS_ONTO_INVISIBLE_SURFACES.value(),
+                10);
     }
 
     @Test
     public void testForValue() {
-        assertEquals(Illumination.forValue(0), 
+        assertEquals(Illumination.forValue(0),
                 Illumination.COLOR_AND_AMBIENT_OFF);
         assertEquals(Illumination.forValue(1),
                 Illumination.COLOR_AND_AMBIENT_ON);

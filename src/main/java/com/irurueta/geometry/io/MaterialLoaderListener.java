@@ -16,28 +16,31 @@
 package com.irurueta.geometry.io;
 
 /**
- * Interface of listener in charge of notifying when material loading starts, 
+ * Interface of listener in charge of notifying when material loading starts,
  * ends or to notify loading progress.
  */
 public interface MaterialLoaderListener {
     /**
      * This method is called when a MaterialLoader starts decoding a file
+     *
      * @param loader Loader decoding a material file.
      */
-    void onLoadStart(MaterialLoader loader);
-    
+    void onLoadStart(final MaterialLoader loader);
+
     /**
      * This method is called when a MaterialLoader ends decoding a file
+     *
      * @param loader Loader decoding a material file.
      */
-    void onLoadEnd(MaterialLoader loader);
-    
+    void onLoadEnd(final MaterialLoader loader);
+
     /**
      * This method is called when texture validation is needed, to ensure that
      * a texture file is in a recognized image format.
-     * @param loader Loader decoding a material file.
+     *
+     * @param loader  Loader decoding a material file.
      * @param texture A texture.
      * @return true if texture is valid, false otherwise.
      */
-    boolean onValidateTexture(MaterialLoader loader, Texture texture);
+    boolean onValidateTexture(final MaterialLoader loader, final Texture texture);
 }

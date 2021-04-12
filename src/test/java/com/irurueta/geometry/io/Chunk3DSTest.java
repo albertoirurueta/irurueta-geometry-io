@@ -16,31 +16,17 @@
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class Chunk3DSTest {
-    
+
     private static final int MIN_VALUE = 0;
     private static final int MAX_VALUE = 1000;
-    
-    public Chunk3DSTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstants() {
         assertEquals(Chunk3DS.NULL_CHUNK, 0x0000);
@@ -52,14 +38,14 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.CMAGIC, 0xC23D);
         assertEquals(Chunk3DS.M3D_VERSION, 0x0002);
         assertEquals(Chunk3DS.M3D_KFVERSION, 0x0005);
-        
+
         assertEquals(Chunk3DS.COLOR_F, 0x0010);
         assertEquals(Chunk3DS.COLOR_24, 0x0011);
         assertEquals(Chunk3DS.LIN_COLOR_24, 0x0012);
         assertEquals(Chunk3DS.LIN_COLOR_F, 0x0013);
         assertEquals(Chunk3DS.INT_PERCENTAGE, 0x0030);
         assertEquals(Chunk3DS.FLOAT_PERCENTAGE, 0x0031);
-        
+
         assertEquals(Chunk3DS.MDATA, 0x3D3D);
         assertEquals(Chunk3DS.MESH_VERSION, 0x3D3E);
         assertEquals(Chunk3DS.MASTER_SCALE, 0x0100);
@@ -86,7 +72,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.USE_FOG, 0x2201);
         assertEquals(Chunk3DS.USE_LAYER_FOG, 0x2303);
         assertEquals(Chunk3DS.USE_DISTANCE_CUE, 0x2301);
-        
+
         assertEquals(Chunk3DS.MAT_ENTRY, 0xAFFF);
         assertEquals(Chunk3DS.MAT_NAME, 0xA000);
         assertEquals(Chunk3DS.MAT_AMBIENT, 0xA010);
@@ -155,7 +141,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.MAT_MAP_RCOL, 0xA364);
         assertEquals(Chunk3DS.MAT_MAP_GCOL, 0xA366);
         assertEquals(Chunk3DS.MAT_MAP_BCOL, 0xA368);
-        
+
         assertEquals(Chunk3DS.NAMED_OBJECT, 0x4000);
         assertEquals(Chunk3DS.N_DIRECT_LIGHT, 0x4600);
         assertEquals(Chunk3DS.DL_OFF, 0x4620);
@@ -197,7 +183,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.MESH_MATRIX, 0x4160);
         assertEquals(Chunk3DS.MESH_COLOR, 0x4165);
         assertEquals(Chunk3DS.MESH_TEXTURE_INFO, 0x4170);
-        
+
         assertEquals(Chunk3DS.KFDATA, 0xB000);
         assertEquals(Chunk3DS.KFHDR, 0xB00A);
         assertEquals(Chunk3DS.KFSEG, 0xB008);
@@ -225,7 +211,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.HOT_TRACK_TAG, 0xB027);
         assertEquals(Chunk3DS.FALL_TRACK_TAG, 0xB028);
         assertEquals(Chunk3DS.HIDE_TRACK_TAG, 0xB029);
-        
+
         assertEquals(Chunk3DS.POLY_2D, 0x5000);
         assertEquals(Chunk3DS.SHAPE_OK, 0x5010);
         assertEquals(Chunk3DS.SHAPE_NOT_OK, 0x5011);
@@ -242,7 +228,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.YZ_CURVE, 0x6080);
         assertEquals(Chunk3DS.INTERPCT, 0x6090);
         assertEquals(Chunk3DS.DEFORM_LIMIT, 0x60A0);
-        
+
         assertEquals(Chunk3DS.USE_CONTOUR, 0x6100);
         assertEquals(Chunk3DS.USE_TWEEN, 0x6110);
         assertEquals(Chunk3DS.USE_SCALE, 0x6120);
@@ -250,7 +236,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.USE_TEETER, 0x6140);
         assertEquals(Chunk3DS.USE_FIT, 0x6150);
         assertEquals(Chunk3DS.USE_BEVEL, 0x6160);
-        
+
         assertEquals(Chunk3DS.DEFAULT_VIEW, 0x3000);
         assertEquals(Chunk3DS.VIEW_TOP, 0x3010);
         assertEquals(Chunk3DS.VIEW_BOTTOM, 0x3020);
@@ -261,7 +247,7 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.VIEW_USER, 0x3070);
         assertEquals(Chunk3DS.VIEW_CAMERA, 0x3080);
         assertEquals(Chunk3DS.VIEW_WINDOW, 0x3090);
-        
+
         assertEquals(Chunk3DS.VIEWPORT_LAYOUT_OLD, 0x7000);
         assertEquals(Chunk3DS.VIEWPORT_DATA_OLD, 0x7010);
         assertEquals(Chunk3DS.VIEWPORT_LAYOUT, 0x7001);
@@ -270,12 +256,12 @@ public class Chunk3DSTest {
         assertEquals(Chunk3DS.VIEWPORT_SIZE, 0x7020);
         assertEquals(Chunk3DS.NETWORK_VIEW, 0x7030);
     }
-    
+
     @Test
     public void testConstructor() {
-        Chunk3DS chunk = new Chunk3DS();
-        
-        //check default values
+        final Chunk3DS chunk = new Chunk3DS();
+
+        // check default values
         assertEquals(chunk.getChunkId(), -1);
         assertFalse(chunk.isChunkIdAvailable());
         assertEquals(chunk.getSize(), -1);
@@ -285,79 +271,79 @@ public class Chunk3DSTest {
         assertEquals(chunk.getEndStreamPosition(), -1);
         assertFalse(chunk.isEndStreamPositionAvailable());
     }
-    
+
     @Test
     public void testGetSetChunkIdAndAvailability() {
-        Chunk3DS chunk = new Chunk3DS();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int id = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
-        
-        //check default value
+        final Chunk3DS chunk = new Chunk3DS();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int id = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+
+        // check default value
         assertEquals(chunk.getChunkId(), -1);
         assertFalse(chunk.isChunkIdAvailable());
-        
-        //set new value
+
+        // set new value
         chunk.setChunkId(id);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(chunk.getChunkId(), id);
         assertTrue(chunk.isChunkIdAvailable());
     }
-        
+
     @Test
     public void testGetSetSizeAndAvailability() {
-        Chunk3DS chunk = new Chunk3DS();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int size = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
-        
-        //check default value
+        final Chunk3DS chunk = new Chunk3DS();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int size = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+
+        // check default value
         assertEquals(chunk.getSize(), -1);
         assertFalse(chunk.isSizeAvailable());
-        
-        //set new value
+
+        // set new value
         chunk.setSize(size);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(chunk.getSize(), size);
         assertTrue(chunk.isSizeAvailable());
     }
-    
+
     @Test
     public void testGetSetStartStreamPositionAndAvailability() {
-        Chunk3DS chunk = new Chunk3DS();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
-        
-        //check default value
+        final Chunk3DS chunk = new Chunk3DS();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+
+        // check default value
         assertEquals(chunk.getStartStreamPosition(), -1);
         assertFalse(chunk.isStartStreamPositionAvailable());
-        
-        //set new value
+
+        // set new value
         chunk.setStartStreamPosition(pos);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(chunk.getStartStreamPosition(), pos);
         assertTrue(chunk.isStartStreamPositionAvailable());
     }
-    
+
     @Test
     public void testGetSetEndStreamPositionAndAvailability() {
-        Chunk3DS chunk = new Chunk3DS();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
-        
-        //check default value
+        final Chunk3DS chunk = new Chunk3DS();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+
+        // check default value
         assertEquals(chunk.getEndStreamPosition(), -1);
         assertFalse(chunk.isEndStreamPositionAvailable());
-        
-        //set new value
+
+        // set new value
         chunk.setEndStreamPosition(pos);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(chunk.getEndStreamPosition(), pos);
         assertTrue(chunk.isEndStreamPositionAvailable());
     }

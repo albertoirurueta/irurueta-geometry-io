@@ -18,14 +18,13 @@ package com.irurueta.geometry.io;
 /**
  * Defines a material in a 3D Studio Max file.
  */
-@SuppressWarnings("WeakerAccess")
 public class Material3DS extends Material {
-    
+
     /**
      * Material name.
      */
     private String materialName;
-    
+
     /**
      * Constructor.
      */
@@ -33,18 +32,20 @@ public class Material3DS extends Material {
         super();
         materialName = null;
     }
-    
+
     /**
      * Constructor.
+     *
      * @param materialName material name.
      */
-    public Material3DS(String materialName) {
+    public Material3DS(final String materialName) {
         super();
         this.materialName = materialName;
     }
-    
+
     /**
      * Returns material name.
+     *
      * @return material name.
      */
     public String getMaterialName() {
@@ -53,14 +54,16 @@ public class Material3DS extends Material {
 
     /**
      * Sets material name.
+     *
      * @param materialName material name to be set.
      */
-    public void setMaterialName(String materialName) {
+    public void setMaterialName(final String materialName) {
         this.materialName = materialName;
-    }    
-    
+    }
+
     /**
      * Indicates if material name has been set and is available.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isMaterialNameAvailable() {

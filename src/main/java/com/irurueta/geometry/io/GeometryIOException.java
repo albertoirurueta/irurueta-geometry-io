@@ -18,39 +18,40 @@ package com.irurueta.geometry.io;
 /**
  * Base class for exceptions in this package.
  */
-@SuppressWarnings("WeakerAccess")
 public class GeometryIOException extends Exception {
-    
+
     /**
      * Constructor.
-     */    
+     */
     public GeometryIOException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */    
-    public GeometryIOException(String message) {
+     */
+    public GeometryIOException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */    
-    public GeometryIOException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public GeometryIOException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */    
-    public GeometryIOException(Throwable cause) {
+     */
+    public GeometryIOException(final Throwable cause) {
         super(cause);
     }
-    
 }

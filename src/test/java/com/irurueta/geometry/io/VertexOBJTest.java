@@ -17,36 +17,22 @@ package com.irurueta.geometry.io;
 
 import com.irurueta.geometry.Point3D;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class VertexOBJTest {
-    
+
     private static final int MIN_INDEX = 0;
     private static final int MAX_INDEX = 1000;
-    
-    public VertexOBJTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
-        VertexOBJ vertex = new VertexOBJ();
-        
-        //test default values
+        final VertexOBJ vertex = new VertexOBJ();
+
+        // test default values
         assertNull(vertex.getVertex());
         assertFalse(vertex.isVertexAvailable());
         assertEquals(vertex.getVertexIndex(), -1);
@@ -56,77 +42,77 @@ public class VertexOBJTest {
         assertEquals(vertex.getTextureIndex(), -1);
         assertFalse(vertex.isTextureIndexAvailable());
     }
-    
+
     @Test
     public void testGetSetVertex() {
-        VertexOBJ vertex = new VertexOBJ();
-        
-        Point3D point = Point3D.create();
-        
-        //check default value
+        final VertexOBJ vertex = new VertexOBJ();
+
+        final Point3D point = Point3D.create();
+
+        // check default value
         assertNull(vertex.getVertex());
         assertFalse(vertex.isVertexAvailable());
-        
-        //set vertex
+
+        // set vertex
         vertex.setVertex(point);
-        //check correctness
+        // check correctness
         assertSame(vertex.getVertex(), point);
         assertTrue(vertex.isVertexAvailable());
     }
-    
+
     @Test
     public void testGetSetVertexIndex() {
-        VertexOBJ vertex = new VertexOBJ();
-        
-        //check default value
+        final VertexOBJ vertex = new VertexOBJ();
+
+        // check default value
         assertEquals(vertex.getVertexIndex(), -1);
         assertFalse(vertex.isVertexIndexAvailable());
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int vertexIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
-        
-        //set value
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int vertexIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
+
+        // set value
         vertex.setVertexIndex(vertexIndex);
-        //check correctness
+        // check correctness
         assertEquals(vertex.getVertexIndex(), vertexIndex);
         assertTrue(vertex.isVertexIndexAvailable());
     }
-    
+
     @Test
     public void testGetSetNormalIndex() {
-        VertexOBJ vertex = new VertexOBJ();
-        
-        //check default value
+        final VertexOBJ vertex = new VertexOBJ();
+
+        // check default value
         assertEquals(vertex.getNormalIndex(), -1);
         assertFalse(vertex.isNormalIndexAvailable());
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int normalIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
-        
-        //set value
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int normalIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
+
+        // set value
         vertex.setNormalIndex(normalIndex);
-        //check correctness
+        // check correctness
         assertEquals(vertex.getNormalIndex(), normalIndex);
         assertTrue(vertex.isNormalIndexAvailable());
     }
-    
+
     @Test
     public void testGetSetTextureIndex() {
-        VertexOBJ vertex = new VertexOBJ();
-        
-        //check default value
+        final VertexOBJ vertex = new VertexOBJ();
+
+        // check default value
         assertEquals(vertex.getNormalIndex(), -1);
         assertFalse(vertex.isTextureIndexAvailable());
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int textureIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
-        
-        //set value
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int textureIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
+
+        // set value
         vertex.setTextureIndex(textureIndex);
-        //check correctness
+        // check correctness
         assertEquals(vertex.getTextureIndex(), textureIndex);
         assertTrue(vertex.isTextureIndexAvailable());
     }

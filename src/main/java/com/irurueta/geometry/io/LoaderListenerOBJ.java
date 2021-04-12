@@ -16,8 +16,8 @@
 package com.irurueta.geometry.io;
 
 public interface LoaderListenerOBJ extends LoaderListener {
-    
-    //Returns a material loader if one is found, or null otherwise
-    MaterialLoaderOBJ onMaterialLoaderRequested(LoaderOBJ loader,
-            String path);
+
+    // Returns a material loader if one is found, or null otherwise
+    MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader,
+                                                final String path);
 }

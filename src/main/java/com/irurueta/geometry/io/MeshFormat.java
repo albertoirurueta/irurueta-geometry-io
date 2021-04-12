@@ -23,22 +23,22 @@ public enum MeshFormat {
      * Ply format.
      */
     MESH_FORMAT_PLY,
-    
+
     /**
      * OBJ format.
      */
     MESH_FORMAT_OBJ,
-    
+
     /**
      * 3DS format.
      */
     MESH_FORMAT_3DS,
-    
+
     /**
      * STL format.
      */
     MESH_FORMAT_STL,
-    
+
     /**
      * Binary v2 format.
      */

@@ -20,80 +20,83 @@ import java.io.File;
 /**
  * Contains data related to a texture.
  */
-@SuppressWarnings("WeakerAccess")
 public class Texture {
-    
+
     /**
      * Path to file containing texture image in any of the supported formats.
      */
-    private String fileName;
-    
+    private final String fileName;
+
     /**
      * Reference to file actually containing the texture image.
      */
     private File file;
-    
+
     /**
      * With of texture image expressed in pixels.
      */
     private int width;
-    
+
     /**
      * Height of texture image expressed in pixels.
      */
     private int height;
-    
+
     /**
      * Indicates if texture is valid or not. A texture will be considered to be
      * invalid when its image cannot be loaded because the file cannot be found,
      * it is corrupted or its format is not supported.
      */
-    private boolean valid;  
-    
+    private boolean valid;
+
     /**
-     * Id assigned to this texture. Id must be unique so that texture can be 
+     * Id assigned to this texture. Id must be unique so that texture can be
      * uniquely identified.
      */
-    private int id;
-    
+    private final int id;
+
     /**
      * Constructor.
+     *
      * @param id id to be set for this texture.
      */
-    public Texture(int id) {
+    public Texture(final int id) {
         this.fileName = "";
         this.id = id;
         file = null;
         width = height = -1;
-        valid = false;                
+        valid = false;
     }
-    
+
     /**
      * COnstructor.
-     * @param fileName path to file containing texture image in any of the 
-     * supported formats.
-     * @param id id to be set for this texture.
+     *
+     * @param fileName path to file containing texture image in any of the
+     *                 supported formats.
+     * @param id       id to be set for this texture.
      */
-    public Texture(String fileName, int id) {
+    public Texture(final String fileName, final int id) {
         this.fileName = fileName;
         this.id = id;
         file = new File(fileName);
         width = height = -1;
-        valid = false;        
+        valid = false;
     }
-    
+
     /**
      * Returns path to file containing texture image in any of the supported
      * formats.
+     *
      * @return path to file containing texture image in any of the supported
      * formats.
      */
     public String getFileName() {
         return fileName;
     }
-    
+
     /**
      * Indicates if file name has been provided or not.
+     *
      * @return true if file names has been provided, false otherwise.
      */
     public boolean isFileNameAvailable() {
@@ -101,104 +104,116 @@ public class Texture {
     }
 
     /**
-     * Returns id assigned to this texture. Id must be unique so that texture 
+     * Returns id assigned to this texture. Id must be unique so that texture
      * can be uniquely identified.
+     *
      * @return id assigned to this texture.
      */
     public int getId() {
         return id;
     }
-    
+
     /**
      * Returns reference to file actually containing the texture image.
+     *
      * @return reference to file actually containing the texture image.
      */
     public File getFile() {
         return file;
     }
-    
+
     /**
      * Sets file containing the texture image.
+     *
      * @param file file containing the texture image.
      */
-    public void setFile(File file) {
+    public void setFile(final File file) {
         this.file = file;
     }
-    
+
     /**
      * Indicates if file containing the texture image has already been provided.
+     *
      * @return true if file containing the texture image is available, false
      * otherwise.
      */
     public boolean isFileAvailable() {
         return file != null;
     }
-    
+
     /**
      * Returns texture image width expressed in pixels.
+     *
      * @return texture image width expressed in pixels.
      */
     public int getWidth() {
         return width;
     }
-    
+
     /**
      * Sets texture image width expressed in pixels.
+     *
      * @param width texture image width to be set and expressed in pixels.
      */
-    public void setWidth(int width) {
+    public void setWidth(final int width) {
         this.width = width;
     }
-    
+
     /**
      * Indicates whether width has been provided (when its value is positive).
+     *
      * @return true if width is available, false otherwise.
      */
     public boolean isWidthAvailable() {
         return width >= 0;
     }
-    
+
     /**
      * Returns texture image height expressed in pixels.
+     *
      * @return texture image height expressed in pixels.
      */
     public int getHeight() {
         return height;
     }
-    
+
     /**
      * Sets texture image height expressed in pixels.
+     *
      * @param height texture image height to be set and expressed in pixels.
      */
-    public void setHeight(int height) {
+    public void setHeight(final int height) {
         this.height = height;
     }
-    
+
     /**
      * Indicates whether height has been provided (when its value is positive).
+     *
      * @return true if height is available, false otherwise.
      */
     public boolean isHeightAvailable() {
         return height >= 0;
     }
-    
+
     /**
      * Indicates if texture is valid or not. A texture will be considered to be
      * invalid when its image cannot be loaded because the file cannot be found,
      * it is corrupted or its format is not supported.
+     *
      * @return true if texture is valid, false otherwise.
      */
     public boolean isValid() {
         return valid;
     }
-    
+
     /**
      * Specifies whether a texture is valid or not. A texture will be considered
      * to be invalid when its image cannot be loaded because the file cannot be
      * found, it is corrupted or its format is not supported.
+     *
      * @param valid whether texture is to be set as valid or not.
      */
-    public void setValid(boolean valid) {
+    public void setValid(final boolean valid) {
         this.valid = valid;
     }
 }

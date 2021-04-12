@@ -18,21 +18,21 @@ package com.irurueta.geometry.io;
 /**
  * Implementation of a material for an OBJ file.
  */
-@SuppressWarnings("WeakerAccess")
 public class MaterialOBJ extends Material {
-    
+
     /**
      * Material name.
      */
     private String materialName;
-    
-    public MaterialOBJ(String materialName) {
+
+    public MaterialOBJ(final String materialName) {
         super();
         this.materialName = materialName;
     }
-    
+
     /**
      * Returns material name.
+     *
      * @return material name.
      */
     public String getMaterialName() {
@@ -41,14 +41,16 @@ public class MaterialOBJ extends Material {
 
     /**
      * Sets material name.
+     *
      * @param materialName material name.
      */
-    public void setMaterialName(String materialName) {
+    public void setMaterialName(final String materialName) {
         this.materialName = materialName;
-    }    
-    
+    }
+
     /**
      * Indicates if material name is available.
+     *
      * @return true if material name is available, false otherwise.
      */
     public boolean isMaterialNameAvailable() {

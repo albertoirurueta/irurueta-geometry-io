@@ -22,30 +22,29 @@ import java.util.List;
  * This class contains elements of the header of a PLY file.
  * The header of a ply file is stored in text form at the beginning of the file.
  */
-@SuppressWarnings("WeakerAccess")
 public class HeaderPLY {
     /**
      * Indicates storage mode of the file. This can be either binary big-endian,
      * binary little-endian or ascii text.
      */
     private PLYStorageMode storageMode;
-    
+
     /**
      * List containing all the elements forming the data of the file.
      */
-    private List<ElementPLY> elements;
-    
+    private final List<ElementPLY> elements;
+
     /**
      * List containing all the string comments that the author might have stored
      * in the file.
      */
-    private List<String> comments;
-    
+    private final List<String> comments;
+
     /**
      * List of strings containing addition object information.
      */
-    private List<String> objInfos;
-    
+    private final List<String> objInfos;
+
     /**
      * Constructor
      */
@@ -55,55 +54,61 @@ public class HeaderPLY {
         comments = new LinkedList<>();
         objInfos = new LinkedList<>();
     }
-    
+
     /**
      * Returns storage mode of this file.
+     *
      * @return Storage mode of this file.
      */
     public PLYStorageMode getStorageMode() {
         return storageMode;
     }
-    
+
     /**
      * Sets storage mode of this file.
+     *
      * @param storageMode Storage mode to be set.
      */
-    public void setStorageMode(PLYStorageMode storageMode) {
+    public void setStorageMode(final PLYStorageMode storageMode) {
         this.storageMode = storageMode;
     }
-    
+
     /**
      * Returns the structure of all the elements forming the data of this file.
+     *
      * @return All the elements forming the data of this file.
      */
     public List<ElementPLY> getElements() {
         return elements;
     }
-    
+
     /**
      * Returns a list of strings containing all the comments set by the author
      * of this file.
+     *
      * @return Comments of this file.
      */
     public List<String> getComments() {
         return comments;
     }
-    
+
     /**
      * Returns list of strings containing additional object information.
+     *
      * @return Additional object information.
      */
     public List<String> getObjInfos() {
         return objInfos;
     }
-    
+
     /**
      * Converts header data into string format ready to be saved on a PLY file.
+     *
      * @return Header data into string format.
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("ply\n");
+        final StringBuilder builder = new StringBuilder("ply\n");
 
         if (storageMode != null) {
             builder.append("format ");
@@ -121,29 +126,29 @@ public class HeaderPLY {
                     break;
             }
         }
-        
-        //add version
+
+        // add version
         builder.append("1.0\n");
-        
-        //add comments
-        for (String comment : comments) {
+
+        // add comments
+        for (final String comment : comments) {
             builder.append("comment ").append(comment).append("\n");
         }
-        
-        //add obj_infos
-        for (String objInfo : objInfos) {
+
+        // add obj_infos
+        for (final String objInfo : objInfos) {
             builder.append("obj_info ").append(objInfo).append("\n");
         }
-        
-        //add elements
-        for (ElementPLY element : elements) {
-            //NOTE: elements already contain carrier return on their textual
-            //representation
+
+        // dd elements
+        for (final ElementPLY element : elements) {
+            // NOTE: elements already contain carrier return on their textual
+            // representation
             builder.append(element.toString());
         }
-        
+
         builder.append("end_header\n");
-        
+
         return builder.toString();
     }
 }

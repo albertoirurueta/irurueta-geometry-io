@@ -22,7 +22,8 @@ package com.irurueta.geometry.io;
 public interface LoaderIteratorListener {
     /**
      * Method called when a loader iterator has no more data to be read.
+     *
      * @param iterator Iterator loading a file.
      */
-    void onIteratorFinished(LoaderIterator iterator);
+    void onIteratorFinished(final LoaderIterator iterator);
 }

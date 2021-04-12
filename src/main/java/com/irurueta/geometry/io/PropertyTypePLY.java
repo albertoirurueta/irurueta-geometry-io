@@ -23,10 +23,10 @@ public enum PropertyTypePLY {
      * Scalar type for single valued elements, such as vertex coordinates.
      */
     PROPERTY_PLY_SCALAR,
-        
+
     /**
      * List type for array valued elements, such as faces containing vertex
      * indexes forming polygons.
-     */    
-    PROPERTY_PLY_LIST    
+     */
+    PROPERTY_PLY_LIST
 }

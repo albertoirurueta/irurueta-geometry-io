@@ -24,18 +24,20 @@ public interface LoaderIterator {
 
     /**
      * Returns boolean indicating if there is more data to be read.
+     *
      * @return True if there are more chunks to be read, false otherwise.
      */
     boolean hasNext();
-    
+
     /**
      * Reads next chunk of data on the file.
-     * @return Chunk of data containing vertices, indices, colors, textures, 
+     *
+     * @return Chunk of data containing vertices, indices, colors, textures,
      * etc.
      * @throws NotAvailableException Raised if no more chunks are available.
-     * @throws LoaderException Raised if file cannot be read because it is 
-     * either corrupted or cannot be interpreted.
-     * @throws IOException if an I/O error occurs.
+     * @throws LoaderException       Raised if file cannot be read because it is
+     *                               either corrupted or cannot be interpreted.
+     * @throws IOException           if an I/O error occurs.
      */
     DataChunk next() throws NotAvailableException, LoaderException, IOException;
 }

@@ -15,28 +15,14 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class Loader3DSTest {
-    
-    public Loader3DSTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
-    public void testChunkIds(){
+    public void testChunkIds() {
         assertEquals(Loader3DS.ID_MAIN_CHUNK, 0x4D4D);
         assertEquals(Loader3DS.ID_3D_EDITOR_CHUNK, 0x3D3D);
         assertEquals(Loader3DS.ID_OBJECT_BLOCK, 0x4000);

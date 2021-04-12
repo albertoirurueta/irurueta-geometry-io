@@ -17,7 +17,6 @@ package com.irurueta.geometry.io;
 
 import java.io.IOException;
 
-@SuppressWarnings("WeakerAccess")
 public class Chunk3DS {
     public static final int NULL_CHUNK = 0x0000;
     public static final int M3DMAGIC = 0x4D4D;
@@ -28,14 +27,14 @@ public class Chunk3DS {
     public static final int CMAGIC = 0xC23D;
     public static final int M3D_VERSION = 0x0002;
     public static final int M3D_KFVERSION = 0x0005;
-    
+
     public static final int COLOR_F = 0x0010;
     public static final int COLOR_24 = 0x0011;
     public static final int LIN_COLOR_24 = 0x0012;
     public static final int LIN_COLOR_F = 0x0013;
     public static final int INT_PERCENTAGE = 0x0030;
     public static final int FLOAT_PERCENTAGE = 0x0031;
-    
+
     public static final int MDATA = 0x3D3D;
     public static final int MESH_VERSION = 0x3D3E;
     public static final int MASTER_SCALE = 0x0100;
@@ -62,7 +61,7 @@ public class Chunk3DS {
     public static final int USE_FOG = 0x2201;
     public static final int USE_LAYER_FOG = 0x2303;
     public static final int USE_DISTANCE_CUE = 0x2301;
-    
+
     public static final int MAT_ENTRY = 0xAFFF;
     public static final int MAT_NAME = 0xA000;
     public static final int MAT_AMBIENT = 0xA010;
@@ -131,7 +130,7 @@ public class Chunk3DS {
     public static final int MAT_MAP_RCOL = 0xA364;
     public static final int MAT_MAP_GCOL = 0xA366;
     public static final int MAT_MAP_BCOL = 0xA368;
-    
+
     public static final int NAMED_OBJECT = 0x4000;
     public static final int N_DIRECT_LIGHT = 0x4600;
     public static final int DL_OFF = 0x4620;
@@ -173,7 +172,7 @@ public class Chunk3DS {
     public static final int MESH_MATRIX = 0x4160;
     public static final int MESH_COLOR = 0x4165;
     public static final int MESH_TEXTURE_INFO = 0x4170;
-    
+
     public static final int KFDATA = 0xB000;
     public static final int KFHDR = 0xB00A;
     public static final int KFSEG = 0xB008;
@@ -201,7 +200,7 @@ public class Chunk3DS {
     public static final int HOT_TRACK_TAG = 0xB027;
     public static final int FALL_TRACK_TAG = 0xB028;
     public static final int HIDE_TRACK_TAG = 0xB029;
-    
+
     public static final int POLY_2D = 0x5000;
     public static final int SHAPE_OK = 0x5010;
     public static final int SHAPE_NOT_OK = 0x5011;
@@ -218,7 +217,7 @@ public class Chunk3DS {
     public static final int YZ_CURVE = 0x6080;
     public static final int INTERPCT = 0x6090;
     public static final int DEFORM_LIMIT = 0x60A0;
-    
+
     public static final int USE_CONTOUR = 0x6100;
     public static final int USE_TWEEN = 0x6110;
     public static final int USE_SCALE = 0x6120;
@@ -226,7 +225,7 @@ public class Chunk3DS {
     public static final int USE_TEETER = 0x6140;
     public static final int USE_FIT = 0x6150;
     public static final int USE_BEVEL = 0x6160;
-    
+
     public static final int DEFAULT_VIEW = 0x3000;
     public static final int VIEW_TOP = 0x3010;
     public static final int VIEW_BOTTOM = 0x3020;
@@ -237,7 +236,7 @@ public class Chunk3DS {
     public static final int VIEW_USER = 0x3070;
     public static final int VIEW_CAMERA = 0x3080;
     public static final int VIEW_WINDOW = 0x3090;
-    
+
     public static final int VIEWPORT_LAYOUT_OLD = 0x7000;
     public static final int VIEWPORT_DATA_OLD = 0x7010;
     public static final int VIEWPORT_LAYOUT = 0x7001;
@@ -245,70 +244,72 @@ public class Chunk3DS {
     public static final int VIEWPORT_DATA_3 = 0x7012;
     public static final int VIEWPORT_SIZE = 0x7020;
     public static final int NETWORK_VIEW = 0x7030;
-    
-    
-    private int chunkId; //uint16
-    private long size; //uint32
-    
+
+    // uint16
+    private int chunkId;
+
+    // uint32
+    private long size;
+
     private long startStreamPosition;
     private long endStreamPosition;
-    
-    public Chunk3DS(){
+
+    public Chunk3DS() {
         chunkId = -1;
         size = startStreamPosition = endStreamPosition = -1;
     }
-    
-    public int getChunkId(){
+
+    public int getChunkId() {
         return chunkId;
     }
-    
-    public void setChunkId(int chunkId){
+
+    public void setChunkId(final int chunkId) {
         this.chunkId = chunkId;
     }
-    
-    public boolean isChunkIdAvailable(){
+
+    public boolean isChunkIdAvailable() {
         return chunkId >= 0;
     }
-    
-    public long getSize(){
+
+    public long getSize() {
         return size;
     }
-    
-    public void setSize(long size){
+
+    public void setSize(final long size) {
         this.size = size;
     }
-    
-    public boolean isSizeAvailable(){
+
+    public boolean isSizeAvailable() {
         return size >= 0;
     }
-    
-    public long getStartStreamPosition(){
+
+    public long getStartStreamPosition() {
         return startStreamPosition;
     }
-    
-    public void setStartStreamPosition(long startStreamPosition){
+
+    public void setStartStreamPosition(final long startStreamPosition) {
         this.startStreamPosition = startStreamPosition;
     }
-    
-    public boolean isStartStreamPositionAvailable(){
+
+    public boolean isStartStreamPositionAvailable() {
         return startStreamPosition >= 0;
     }
-    
-    public long getEndStreamPosition(){
+
+    public long getEndStreamPosition() {
         return endStreamPosition;
     }
-    
-    public void setEndStreamPosition(long endStreamPosition){
+
+    public void setEndStreamPosition(final long endStreamPosition) {
         this.endStreamPosition = endStreamPosition;
     }
-    
-    public boolean isEndStreamPositionAvailable(){
+
+    public boolean isEndStreamPositionAvailable() {
         return endStreamPosition >= 0;
     }
-    
-    public static Chunk3DS load(AbstractFileReaderAndWriter reader)
-        throws IOException{
-        Chunk3DS chunk = new Chunk3DS();
+
+    public static Chunk3DS load(final AbstractFileReaderAndWriter reader)
+            throws IOException {
+        final Chunk3DS chunk = new Chunk3DS();
         chunk.startStreamPosition = reader.getPosition();
         chunk.chunkId = reader.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE);
         chunk.size = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);

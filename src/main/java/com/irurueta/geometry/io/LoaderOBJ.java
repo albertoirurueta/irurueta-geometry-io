@@ -22,14 +22,20 @@ import com.irurueta.geometry.TriangulatorException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Loads an OBJ file.
  * If a LoaderListenerOBJ is provided, this class might also attempt to load the
  * associated material file if available.
  */
-@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class LoaderOBJ extends Loader {
 
     /**
@@ -84,13 +90,13 @@ public class LoaderOBJ extends Loader {
      * graphic layers such as OpenGL.
      */
     private LoaderIteratorOBJ loaderIterator;
-    
+
     /**
-     * Maximum number of vertices allowed in a chunk. Once this value is 
+     * Maximum number of vertices allowed in a chunk. Once this value is
      * exceeded when loading a file, a new chunk of data is created.
      */
     private int maxVerticesInChunk;
-    
+
     /**
      * To allow faster file loading, it might be allowed to repeat points in a
      * chunk. When representing data graphically, this has no visual.
@@ -98,23 +104,23 @@ public class LoaderOBJ extends Loader {
      * a trade off between loading speed and memory usage.
      */
     private boolean allowDuplicateVerticesInChunk;
-    
+
     /**
      * Maximum number of file stream positions to be cached.
-     * This class keeps a cache of positions in the file to allow faster file 
+     * This class keeps a cache of positions in the file to allow faster file
      * loading at the expense of larger memory usage.
-     * If the geometry of a file reuses a large number of points, keeping a 
+     * If the geometry of a file reuses a large number of points, keeping a
      * large cache will increase the speed of loading a file, otherwise the
      * impact of this parameter will be low.
      * The default value will work fine for most cases.
      */
     private long maxStreamPositions;
-    
+
     /**
      * List containing comments contained in the file.
      */
-    private List<String> comments;    
-    
+    private final List<String> comments;
+
     /**
      * Collection of materials contained in the material's file associated to an
      * OBJ file.
@@ -129,29 +135,30 @@ public class LoaderOBJ extends Loader {
      * failed.
      */
     private boolean continueIfTriangulationError;
-    
+
     /**
      * Constructor.
      */
     public LoaderOBJ() {
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk = 
+        allowDuplicateVerticesInChunk =
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
+     *
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
+     *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(int maxVerticesInChunk) {
+    public LoaderOBJ(final int maxVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         allowDuplicateVerticesInChunk =
@@ -160,21 +167,22 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
+     *
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
+     *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(int maxVerticesInChunk, 
-            boolean allowDuplicateVerticesInChunk) {
+    public LoaderOBJ(final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;
@@ -182,23 +190,25 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
-     * @param maxStreamPositions Maximum number of file stream positions to be 
-     * cached.
+     *
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
+     * @param maxStreamPositions            Maximum number of file stream positions to be
+     *                                      cached.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
+     *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
+    public LoaderOBJ(final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk,
+                     final long maxStreamPositions) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;
@@ -206,13 +216,14 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
+     *
      * @param f file to be loaded.
      * @throws IOException if an I/O error occurs.
      */
-    public LoaderOBJ(File f) throws IOException {
+    public LoaderOBJ(final File f) throws IOException {
         super(f);
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
@@ -222,18 +233,19 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
+     *
+     * @param f                  file to be loaded.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(File f, int maxVerticesInChunk) 
+    public LoaderOBJ(final File f, final int maxVerticesInChunk)
             throws IOException {
         super(f);
         loaderIterator = null;
@@ -244,23 +256,24 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
+     *
+     * @param f                             file to be loaded.
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(File f, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk)
+    public LoaderOBJ(final File f, final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk)
             throws IOException {
         super(f);
         loaderIterator = null;
@@ -270,25 +283,27 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
-     * @param maxStreamPositions Maximum number of file stream positions to be 
-     * cached.
+     *
+     * @param f                             file to be loaded.
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
+     * @param maxStreamPositions            Maximum number of file stream positions to be
+     *                                      cached.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(File f, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
+    public LoaderOBJ(final File f, final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk,
+                     final long maxStreamPositions)
             throws IOException {
         super(f);
         loaderIterator = null;
@@ -298,33 +313,35 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
+     *                 loading process starts or finishes.
      */
-    public LoaderOBJ(LoaderListener listener) {
+    public LoaderOBJ(final LoaderListener listener) {
         super(listener);
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk = 
+        allowDuplicateVerticesInChunk =
                 DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
+     *
+     * @param listener           listener to be notified of loading progress and when
+     *                           loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
+     *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk) {
+    public LoaderOBJ(final LoaderListener listener, final int maxVerticesInChunk) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -334,23 +351,24 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
+     *
+     * @param listener                      listener to be notified of loading progress and when
+     *                                      loading process starts or finishes.
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
+     *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk, 
-            boolean allowDuplicateVerticesInChunk) {
+    public LoaderOBJ(final LoaderListener listener, final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -359,25 +377,27 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
-     * @param maxStreamPositions Maximum number of file stream positions to be 
-     * cached.
+     *
+     * @param listener                      listener to be notified of loading progress and when
+     *                                      loading process starts or finishes.
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
+     * @param maxStreamPositions            Maximum number of file stream positions to be
+     *                                      cached.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
+     *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(LoaderListener listener, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
+    public LoaderOBJ(final LoaderListener listener, final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk,
+                     final long maxStreamPositions) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -386,15 +406,17 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
+     *
+     * @param f        file to be loaded.
      * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
+     *                 loading process starts or finishes.
      * @throws IOException if an I/O error occurs.
      */
-    public LoaderOBJ(File f, LoaderListener listener) throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener)
+            throws IOException {
         super(f, listener);
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
@@ -404,21 +426,22 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
+     *
+     * @param f                  file to be loaded.
+     * @param listener           listener to be notified of loading progress and when
+     *                           loading process starts or finishes.
+     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk.
+     *                           Once this value is exceeded when loading a file, a new chunk of data is
+     *                           created.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk) 
-            throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener,
+                     final int maxVerticesInChunk) throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -428,26 +451,27 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
+     *
+     * @param f                             file to be loaded.
+     * @param listener                      listener to be notified of loading progress and when
+     *                                      loading process starts or finishes.
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk)
-            throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener,
+                     final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk) throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -456,28 +480,30 @@ public class LoaderOBJ extends Loader {
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
     }
-    
+
     /**
      * Constructor.
-     * @param f file to be loaded.
-     * @param listener listener to be notified of loading progress and when
-     * loading process starts or finishes.
-     * @param maxVerticesInChunk Maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
-     * created.
-     * @param allowDuplicateVerticesInChunk  indicates if repeated vertices in a
-     * chunk are allowed to provide faster file loading. When representing data 
-     * graphically, this has no visual consequences but chunks will take up more
-     * memory. 
-     * @param maxStreamPositions Maximum number of file stream positions to be 
-     * cached.
+     *
+     * @param f                             file to be loaded.
+     * @param listener                      listener to be notified of loading progress and when
+     *                                      loading process starts or finishes.
+     * @param maxVerticesInChunk            Maximum number of vertices allowed in a chunk.
+     *                                      Once this value is exceeded when loading a file, a new chunk of data is
+     *                                      created.
+     * @param allowDuplicateVerticesInChunk indicates if repeated vertices in a
+     *                                      chunk are allowed to provide faster file loading. When representing data
+     *                                      graphically, this has no visual consequences but chunks will take up more
+     *                                      memory.
+     * @param maxStreamPositions            Maximum number of file stream positions to be
+     *                                      cached.
      * @throws IllegalArgumentException if maximum number of vertices allowed in
-     * a chunk is lower than 1.
-     * @throws IOException if an I/O error occurs.
+     *                                  a chunk is lower than 1.
+     * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(File f, LoaderListener listener, int maxVerticesInChunk,
-            boolean allowDuplicateVerticesInChunk, long maxStreamPositions)
-            throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener,
+                     final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk,
+                     final long maxStreamPositions) throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -491,6 +517,7 @@ public class LoaderOBJ extends Loader {
      * Returns maximum number of vertices allowed in a chunk.
      * Once this value is exceeded when loading a file, a new chunk of data is
      * created.
+     *
      * @return maximum number of vertices allowed in a chunk.
      */
     public int getMaxVerticesInChunk() {
@@ -498,14 +525,15 @@ public class LoaderOBJ extends Loader {
     }
 
     /**
-     * Sets maximum number of vertices allowed in a chunk. 
-     * Once this value is exceeded when loading a file, a new chunk of data is 
+     * Sets maximum number of vertices allowed in a chunk.
+     * Once this value is exceeded when loading a file, a new chunk of data is
      * created.
+     *
      * @param maxVerticesInChunk maximum allowed number of vertices to be set.
      * @throws IllegalArgumentException if provided value is lower than 1.
-     * @throws LockedException if this loader is currently loading a file.
+     * @throws LockedException          if this loader is currently loading a file.
      */
-    public void setMaxVerticesInChunk(int maxVerticesInChunk)
+    public void setMaxVerticesInChunk(final int maxVerticesInChunk)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -517,6 +545,7 @@ public class LoaderOBJ extends Loader {
      * Returns boolean indicating if repeated vertices in a chunk are allowed to
      * provide faster file loading. When representing data graphically, this has
      * no visual consequences but chunks will take up more memory.
+     *
      * @return true if duplicate vertices are allowed, false otherwise.
      */
     public boolean areDuplicateVerticesInChunkAllowed() {
@@ -524,13 +553,14 @@ public class LoaderOBJ extends Loader {
     }
 
     /**
-     * Sets boolean indicating if repeated vertices in a chunk are allowed to 
+     * Sets boolean indicating if repeated vertices in a chunk are allowed to
      * provide faster file loading. When representing data graphically, this has
-     * no visual consequences but chunks will take up more memory. 
+     * no visual consequences but chunks will take up more memory.
+     *
      * @param allow true if duplicate vertices are allowed, false otherwise.
      * @throws LockedException if this loader is currently loading a file.
      */
-    public void setAllowDuplicateVerticesInChunk(boolean allow)
+    public void setAllowDuplicateVerticesInChunk(final boolean allow)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -546,6 +576,7 @@ public class LoaderOBJ extends Loader {
      * large cache will increase the speed of loading a file, otherwise the
      * impact of this parameter will be low.
      * The default value will work fine for most cases.
+     *
      * @return maximum number of file stream positions to be cached.
      */
     public long getMaxStreamPositions() {
@@ -554,52 +585,56 @@ public class LoaderOBJ extends Loader {
 
     /**
      * Sets maximum number of file stream positions to be cached.
-     * This class keeps a cache of positions in the file to allow faster file 
+     * This class keeps a cache of positions in the file to allow faster file
      * loading at the expense of larger memory usage.
-     * If the geometry of a file reuses a large number of points, keeping a 
+     * If the geometry of a file reuses a large number of points, keeping a
      * large cache will increase the speed of loading a file, otherwise the
      * impact of this parameter will be low.
      * The default value will work fine for most cases.
+     *
      * @param maxStreamPositions maximum number of file stream positions to be
-     * set.
+     *                           set.
      * @throws IllegalArgumentException if provided value is lower than 1.
-     * @throws LockedException if this loader is currently loading a file.
+     * @throws LockedException          if this loader is currently loading a file.
      */
-    public void setMaxStreamPositions(long maxStreamPositions)
+    public void setMaxStreamPositions(final long maxStreamPositions)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        internalSetMaxStreamPositions(maxStreamPositions);        
+        internalSetMaxStreamPositions(maxStreamPositions);
     }
 
     /**
-     * Returns boolean indicating if file loading should continue even if the 
-     * triangulation of a polygon fails. The triangulation of a polygon might 
-     * fail if the polygon is degenerate or has invalid numerical values such as 
+     * Returns boolean indicating if file loading should continue even if the
+     * triangulation of a polygon fails. The triangulation of a polygon might
+     * fail if the polygon is degenerate or has invalid numerical values such as
      * NaN of infinity.
-     * @return If true, loading will continue but the result will lack the 
+     *
+     * @return If true, loading will continue but the result will lack the
      * polygons that failed.
      */
     public boolean isContinueIfTriangulationError() {
         return continueIfTriangulationError;
     }
-    
+
     /**
      * Sets boolean indicating if file loading should continue even if the
      * triangulation of a polygon fails. The triangulation of a polygon might
      * fail if the polygon is degenerate or has invalid numerical values such as
      * NaN or infinity.
-     * @param continueIfTriangulationError if ture, loading will continue but 
-     * the result will lack the polygons that failed.
+     *
+     * @param continueIfTriangulationError if ture, loading will continue but
+     *                                     the result will lack the polygons that failed.
      */
     public void setContinueIfTriangulationError(
-            boolean continueIfTriangulationError) {
+            final boolean continueIfTriangulationError) {
         this.continueIfTriangulationError = continueIfTriangulationError;
     }
-    
+
     /**
      * Returns a list of the comments contained in the file.
+     *
      * @return list of the comments contained in the file.
      */
     public List<String> getComments() {
@@ -609,6 +644,7 @@ public class LoaderOBJ extends Loader {
     /**
      * Gets collection of materials contained in the materials file associated to an
      * OBJ file.
+     *
      * @return collection of material.
      */
     public Set<Material> getMaterials() {
@@ -618,8 +654,9 @@ public class LoaderOBJ extends Loader {
     /**
      * If loader is ready to start loading a file.
      * This is true once a file has been provided.
+     *
      * @return true if ready to start loading a file, false otherwise.
-     */    
+     */
     @Override
     public boolean isReady() {
         return hasFile();
@@ -627,20 +664,22 @@ public class LoaderOBJ extends Loader {
 
     /**
      * Returns mesh format supported by this class, which is MESH_FORMAT_OBJ.
+     *
      * @return mesh format supported by this class.
-     */    
+     */
     @Override
     public MeshFormat getMeshFormat() {
         return MeshFormat.MESH_FORMAT_OBJ;
     }
 
     /**
-     * Determines if provided file is a valid file that can be read by this 
+     * Determines if provided file is a valid file that can be read by this
      * loader.
+     *
      * @return true if file is valid, false otherwise.
      * @throws LockedException raised if this instance is already locked.
-     * @throws IOException if an I/O error occurs..
-     */    
+     * @throws IOException     if an I/O error occurs..
+     */
     @Override
     public boolean isValidFile() throws LockedException, IOException {
         if (!hasFile()) {
@@ -656,28 +695,29 @@ public class LoaderOBJ extends Loader {
      * Starts the loading process of provided file.
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
+     *
      * @return a loader iterator to read the file in a step by step process.
-     * @throws LockedException raised if this instance is already locked.
+     * @throws LockedException   raised if this instance is already locked.
      * @throws NotReadyException raised if this instance is not yet ready.
-     * @throws IOException if an I/O error occurs.
-     * @throws LoaderException if file is corrupted or cannot be interpreted.
-     */        
+     * @throws IOException       if an I/O error occurs.
+     * @throws LoaderException   if file is corrupted or cannot be interpreted.
+     */
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException, 
+    public LoaderIterator load() throws LockedException, NotReadyException,
             IOException, LoaderException {
-        
+
         if (isLocked()) {
             throw new LockedException();
         }
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         setLocked(true);
         if (listener != null) {
             listener.onLoadStart(this);
         }
-        
+
         loaderIterator = new LoaderIteratorOBJ(this);
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
@@ -687,10 +727,11 @@ public class LoaderOBJ extends Loader {
      * Internal method to set maximum number of vertices allowed in a chunk.
      * This method is reused both in the constructor and in the setter of
      * maximum number of vertices allowed in a chunk.
+     *
      * @param maxVerticesInChunk maximum allowed number of vertices to be set.
-     * @throws IllegalArgumentException  if provided value is lower than 1.
+     * @throws IllegalArgumentException if provided value is lower than 1.
      */
-    private void internalSetMaxVerticesInChunk(int maxVerticesInChunk) {
+    private void internalSetMaxVerticesInChunk(final int maxVerticesInChunk) {
         if (maxVerticesInChunk < MIN_MAX_VERTICES_IN_CHUNK) {
             throw new IllegalArgumentException();
         }
@@ -703,11 +744,12 @@ public class LoaderOBJ extends Loader {
      * cached.
      * This method is reused both in the constructor and in the setter of
      * maximum number stream positions.
+     *
      * @param maxStreamPositions maximum number of file stream positions to be
-     * cached.
+     *                           cached.
      * @throws IllegalArgumentException if provided value is lower than 1.
      */
-    private void internalSetMaxStreamPositions(long maxStreamPositions) {
+    private void internalSetMaxStreamPositions(final long maxStreamPositions) {
         if (maxStreamPositions < MIN_STREAM_POSITIONS) {
             throw new IllegalArgumentException();
         }
@@ -718,74 +760,76 @@ public class LoaderOBJ extends Loader {
     /**
      * Internal listener to be notified when loading process finishes.
      * This listener is used to free resources when loading process finishes.
-     */    
+     */
     private class LoaderIteratorListenerImpl implements LoaderIteratorListener {
 
         /**
          * Reference to Loader loading an OBJ file.
          */
-        private LoaderOBJ loader;
-        
+        private final LoaderOBJ loader;
+
         /**
          * Constructor.
+         *
          * @param loader reference to Loader.
          */
-        public LoaderIteratorListenerImpl(LoaderOBJ loader) {
+        public LoaderIteratorListenerImpl(final LoaderOBJ loader) {
             this.loader = loader;
         }
-        
+
         /**
          * Method to be notified when the loading process finishes.
+         *
          * @param iterator iterator loading the file in chunks.
-         */        
+         */
         @Override
-        public void onIteratorFinished(LoaderIterator iterator) {
-            //because iterator is finished, we should allow subsequent calls to 
-            //load method
+        public void onIteratorFinished(final LoaderIterator iterator) {
+            // because iterator is finished, we should allow subsequent calls to
+            // load method
             try {
-                reader.seek(0); //attempt restart stream to initial position
-            } catch (Exception ignore) {
-                //this is a best effort operation, if it fails it is ignored
+                // attempt restart stream to initial position
+                reader.seek(0);
+            } catch (final Exception ignore) {
+                // this is a best effort operation, if it fails it is ignored
             }
 
-
-            //on subsequent calls
+            // on subsequent calls
             if (listener != null) {
                 listener.onLoadEnd(loader);
             }
             setLocked(false);
-        }        
+        }
     }
 
     /**
      * Loader iterator in charge of loading file data in small chunks.
-     * Usually data is divided in chunks small enough that can be directly 
-     * loaded by graphical layers such as OpenGL (which has a limit of 65535 
-     * indices when using Vertex Buffer Objects, which increase graphical 
+     * Usually data is divided in chunks small enough that can be directly
+     * loaded by graphical layers such as OpenGL (which has a limit of 65535
+     * indices when using Vertex Buffer Objects, which increase graphical
      * performance).
-     */    
+     */
     private class LoaderIteratorOBJ implements LoaderIterator {
 
         /**
          * Reference to loader loading OBJ file.
          */
-        private LoaderOBJ loader;
-        
+        private final LoaderOBJ loader;
+
         /**
          * X coordinate of the latest point that has been read.
          */
         private float coordX;
-        
+
         /**
          * Y coordinate of the latest point that has been read.
          */
         private float coordY;
-        
+
         /**
          * Z coordinate of the latest point that has been read.
          */
         private float coordZ;
-        
+
         /**
          * U texture coordinate of the latest point that has been read.
          * U coordinate refers to the horizontal axis in the texture image and
@@ -794,7 +838,7 @@ public class LoaderOBJ extends Loader {
          * textures.
          */
         private float textureU;
-        
+
         /**
          * V texture coordinate of the latest point that has been read.
          * V coordinate refers to the vertical axis in the texture image and
@@ -803,317 +847,318 @@ public class LoaderOBJ extends Loader {
          * textures.
          */
         private float textureV;
-        
+
         /**
          * X coordinate of the latest point normal that has been read.
          */
         private float nX;
-        
+
         /**
          * Y coordinate of the latest point normal that has been read.
          */
         private float nY;
-        
+
         /**
          * Z coordinate of the latest point normal that has been read.
          */
         private float nZ;
-        
+
         /**
          * Vertex index in the file of the latest point that has been read.
          */
         private int vertexIndex;
-        
+
         /**
          * Texture index in the file of the latest point that has been read.
          */
         private int textureIndex;
-        
+
         /**
          * Normal index in the file of the latest point that has been read.
          */
         private int normalIndex;
-        
-        //coordinates for bounding box in a chunk
+
+        // coordinates for bounding box in a chunk
+
         /**
          * X coordinate of the minimum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
          */
         private float minX;
-        
+
         /**
          * Y coordinate of the minimum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
          */
         private float minY;
-        
+
         /**
          * Z coordinate of the minimum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
          */
         private float minZ;
-        
+
         /**
          * X coordinate of the maximum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
          */
         private float maxX;
-        
+
         /**
          * Y coordinate of the maximum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
          */
         private float maxY;
-        
+
         /**
          * Z coordinate of the maximum point forming the bounding box in a chunk
          * of data. This value will be updated while the chunk is being filled.
          */
         private float maxZ;
-        
+
         /**
          * Indicates if vertices have been loaded and must be added to current
          * chunk being loaded.
          */
         private boolean verticesAvailable;
-        
+
         /**
          * Indicates if texture coordinates have been loaded and must be added
          * to current chunk being loaded.
          */
         private boolean textureAvailable;
-        
+
         /**
          * Indicates if normals have been loaded and must be added to current
          * chunk being loaded.
          */
         private boolean normalsAvailable;
-        
+
         /**
          * Indicates if indices have been loaded and must be added to current
          * chunk being loaded.
          */
         private boolean indicesAvailable;
-        
+
         /**
          * Indicates if materials have been loaded and must be added to current
          * chunk being loaded.
          */
         private boolean materialsAvailable;
-        
+
         /**
          * Number of vertices that have been loaded in current chunk.
          */
         private long numberOfVertices;
-        
+
         /**
          * Number of texture coordinates that have been loaded in current chunk.
          */
         private long numberOfTextureCoords;
-        
+
         /**
          * Number of normals that have been loaded in current chunk.
          */
         private long numberOfNormals;
-        
+
         /**
          * Number of faces (i.e. polygons) that have been loaded in current
          * chunk.
          */
         private long numberOfFaces;
-        
+
         /**
          * Index of current face (i.e. polygon) that has been loaded.
          */
         private long currentFace;
-        
+
         /**
-         * Position of first vertex in the file. This is stored to reduce 
+         * Position of first vertex in the file. This is stored to reduce
          * fetching time when parsing the OBJ file.
          */
         private long firstVertexStreamPosition;
-        
+
         /**
          * Indicates if first vertex position has been found.
          */
         private boolean firstVertexStreamPositionAvailable;
-        
+
         /**
          * Position of first texture coordinate in the file. This is stored to
          * reduce fetching time when parsing the OBJ file.
          */
         private long firstTextureCoordStreamPosition;
-        
+
         /**
          * Indicates if first texture coordinate has been found.
          */
         private boolean firstTextureCoordStreamPositionAvailable;
-        
+
         /**
          * Position of first normal coordinate in the file. This is stored to
          * reduce fetching time when parsing the OBJ file.
          */
         private long firstNormalStreamPosition;
-        
+
         /**
          * Indicates if first normal coordinate has been found.
          */
         private boolean firstNormalStreamPositionAvailable;
-        
+
         /**
          * Position of first face (i.e. polygon) in the file. This is stored to
          * reduce fetching time when parsing the OBJ file.
          */
         private long firstFaceStreamPosition;
-        
+
         /**
          * Indicates if first face has been found.
          */
         private boolean firstFaceStreamPositionAvailable;
-        
+
         /**
          * Indicates location of first material in the file. This is stored to
          * reduce fetching time when parsing the OBJ file.
          */
         private long firstMaterialStreamPosition;
-        
+
         /**
          * Indicates if first material has been found.
          */
         private boolean firstMaterialStreamPositionAvailable;
-        
+
         /**
          * Contains position where file is currently being loaded.
          */
         private long currentStreamPosition;
-        
+
         /**
          * Reference to the listener of this loader iterator. This listener will
          * be notified when the loading process finishes so that resources can
          * be freed.
-         */        
+         */
         private LoaderIteratorListener listener;
-        
+
         /**
          * Array containing vertices coordinates to be added to current chunk
          * of data.
          */
         private float[] coordsInChunkArray;
-        
+
         /**
          * Array containing texture coordinates to be added to current chunk of
          * data.
          */
         private float[] textureCoordsInChunkArray;
-        
+
         /**
          * Array containing normal coordinates to be added to current chunk of
          * data.
          */
-        private float[] normalsInChunkArray;        
-        
+        private float[] normalsInChunkArray;
+
         /**
          * Array containing indices to be added to current chunk of data. Notice
          * that this indices are not the original indices appearing in the file.
-         * Instead, they are indices referring to data in current chunk, 
-         * accounting for duplicate points, etc. This way, indices in a chunk 
+         * Instead, they are indices referring to data in current chunk,
+         * accounting for duplicate points, etc. This way, indices in a chunk
          * can be directly used to draw the chunk of data by the graphical layer.
          */
         private int[] indicesInChunkArray;
-        
+
         /**
          * Array containing vertex indices as they appear in the OBJ file.
          * These indices are only used to fetch data, they will never appear in
          * resulting chunk of data.
          */
         private long[] originalVertexIndicesInChunkArray;
-        
+
         /**
          * Array containing texture indices as they appear in the OBJ file.
          * These indices are only used to fetch data, they will never appear in
          * resulting chunk of data.
          */
         private long[] originalTextureIndicesInChunkArray;
-        
+
         /**
          * Array containing normal indices as they appear in the OBJ file.
          * These indices are only used to fetch data, they will never appear in
          * resulting chunk of data.
          */
         private long[] originalNormalIndicesInChunkArray;
-        
+
         /**
          * Map to relate vertex indices in a file respect to chunk indices.
          */
-        private TreeMap<Long, Integer> vertexIndicesMap;
-        
+        private final TreeMap<Long, Integer> vertexIndicesMap;
+
         /**
          * Map to relate texture coordinates indices in a file respect to chunk
          * indices.
          */
-        private TreeMap<Long, Integer> textureCoordsIndicesMap;
-        
+        private final TreeMap<Long, Integer> textureCoordsIndicesMap;
+
         /**
          * Map to relate normals coordinates indices in a file respect to chunk
          * indices.
          */
-        private TreeMap<Long, Integer> normalsIndicesMap;
-        
+        private final TreeMap<Long, Integer> normalsIndicesMap;
+
         /**
          * Map to cache vertex positions in a file.
          */
-        private TreeMap<Long, Long> verticesStreamPositionMap;
-        
+        private final TreeMap<Long, Long> verticesStreamPositionMap;
+
         /**
          * Map to cache texture coordinates positions in a file.
          */
-        private TreeMap<Long, Long> textureCoordsStreamPositionMap;
-        
+        private final TreeMap<Long, Long> textureCoordsStreamPositionMap;
+
         /**
          * Map to cache normals coordinates positions in a file.
          */
-        private TreeMap<Long, Long> normalsStreamPositionMap;
-        
+        private final TreeMap<Long, Long> normalsStreamPositionMap;
+
         /**
          * Number of vertices stored in chunk.
          */
         private int verticesInChunk;
-        
+
         /**
          * Number of indices stored in chunk.
          */
         private int indicesInChunk;
-        
+
         /**
          * Size of indices stored in chunk.
          */
         private int indicesInChunkSize;
-        
+
         /**
          * Vertex position in file.
          */
         private long vertexStreamPosition;
-        
+
         /**
          * Texture coordinate position in file.
          */
         private long textureCoordStreamPosition;
-        
+
         /**
          * Normal coordinate position in file.
          */
         private long normalStreamPosition;
-        
+
         /**
          * Name of current material of data being loaded.
          */
         private String currentChunkMaterialName;
-        
+
         /**
          * Reference to current material of data being loaded.
          */
         private MaterialOBJ currentMaterial;
-        
+
         /**
          * Reference to material loader in charge of loading the associated MTL
          * of file to this OBJ file.
@@ -1122,19 +1167,20 @@ public class LoaderOBJ extends Loader {
 
         /**
          * Constructor.
+         *
          * @param loader reference to loader loading binary file.
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException     if an I/O error occurs.
          * @throws LoaderException if file data is corrupt or cannot be
-         * understood.
+         *                         understood.
          */
-        public LoaderIteratorOBJ(LoaderOBJ loader) throws IOException, 
+        public LoaderIteratorOBJ(final LoaderOBJ loader) throws IOException,
                 LoaderException {
             this.loader = loader;
             nX = nY = nZ = 1.0f;
             vertexIndex = textureIndex = normalIndex = 0;
-            verticesAvailable = textureAvailable = normalsAvailable = 
+            verticesAvailable = textureAvailable = normalsAvailable =
                     indicesAvailable = materialsAvailable = false;
-            numberOfVertices = numberOfTextureCoords = numberOfNormals = 
+            numberOfVertices = numberOfTextureCoords = numberOfNormals =
                     numberOfFaces = 0;
             currentFace = 0;
             firstVertexStreamPosition = 0;
@@ -1153,58 +1199,61 @@ public class LoaderOBJ extends Loader {
             textureCoordsInChunkArray = null;
             normalsInChunkArray = null;
             indicesInChunkArray = null;
-            
+
             originalVertexIndicesInChunkArray = null;
             originalTextureIndicesInChunkArray = null;
             originalNormalIndicesInChunkArray = null;
-            
+
             vertexIndicesMap = new TreeMap<>();
             textureCoordsIndicesMap = new TreeMap<>();
             normalsIndicesMap = new TreeMap<>();
-            
+
             verticesStreamPositionMap = new TreeMap<>();
             textureCoordsStreamPositionMap = new TreeMap<>();
             normalsStreamPositionMap = new TreeMap<>();
-                        
+
             verticesInChunk = indicesInChunk = 0;
             indicesInChunkSize = 0;
-            
+
             vertexStreamPosition = 0;
             textureCoordStreamPosition = 0;
             normalStreamPosition = 0;
-            
+
             minX = minY = minZ = Float.MAX_VALUE;
             maxX = maxY = maxZ = -Float.MAX_VALUE;
-            
+
             currentChunkMaterialName = "";
-            
+
             materialLoader = null;
-                    
+
             setUp();
         }
-        
+
         /**
          * Method to set listener of this loader iterator.
          * This listener will be notified when the loading process finishes.
+         *
          * @param listener listener of this loader iterator.
-         */        
-        public void setListener(LoaderIteratorListener listener) {
+         */
+        public void setListener(final LoaderIteratorListener listener) {
             this.listener = listener;
         }
-        
+
         /**
          * Returns listener of this loader iterator.
          * This listener will be notified when the loading process finishes.
+         *
          * @return listener of this loader iterator.
-         */        
+         */
         public LoaderIteratorListener getListener() {
             return listener;
         }
 
         /**
          * Indicates if there is another chunk of data to be loaded.
+         *
          * @return true if there is another chunk of data, false otherwise.
-         */        
+         */
         @Override
         public boolean hasNext() {
             return currentFace < numberOfFaces;
@@ -1212,65 +1261,65 @@ public class LoaderOBJ extends Loader {
 
         /**
          * Loads and returns next chunk of data, if available.
+         *
          * @return next chunk of data.
          * @throws NotAvailableException thrown if no more data is available.
-         * @throws LoaderException if file data is corrupt or cannot be 
-         * understood.
-         * @throws IOException if an I/O error occurs.
-         */        
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
         @Override
-        @SuppressWarnings("Duplicates")
-        public DataChunk next() throws NotAvailableException, LoaderException, 
+        public DataChunk next() throws NotAvailableException, LoaderException,
                 IOException {
-            
+
             if (reader == null) {
                 throw new IOException();
             }
-            
+
             if (!hasNext()) {
                 throw new NotAvailableException();
             }
-            
+
             initChunkArrays();
-            
-            //reset chunk bounding box values
+
+            // reset chunk bounding box values
             minX = minY = minZ = Float.MAX_VALUE;
             maxX = maxY = maxZ = -Float.MAX_VALUE;
-            
-            
-            long progressStep = Math.max(
-                    (long)(LoaderOBJ.PROGRESS_DELTA * numberOfFaces), 1);            
-            
+
+
+            final long progressStep = Math.max(
+                    (long) (LoaderOBJ.PROGRESS_DELTA * numberOfFaces), 1);
+
             boolean materialChange = false;
 
             try {
-                while ((currentFace < numberOfFaces) && !materialChange) {
+                while (currentFace < numberOfFaces) { // && !materialChange
 
-                    long faceStreamPos = reader.getPosition();
+                    final long faceStreamPos = reader.getPosition();
                     String str = reader.readLine();
                     if ((str == null) && (currentFace < (numberOfFaces - 1))) {
-                        //unexpected end of file
+                        // unexpected end of file
                         throw new LoaderException();
                     } else if (str == null) {
                         break;
                     }
 
-                    //check if line corresponds to face or material, otherwise,
-                    //ignore
+                    // check if line corresponds to face or material, otherwise,
+                    // ignore
                     if (str.startsWith(USEMTL)) {
 
                         if (currentChunkMaterialName.equals("")) {
                             currentChunkMaterialName = str.substring(
                                     USEMTL.length()).trim();
-                            //search current material on material library
+                            // search current material on material library
                             currentMaterial = null;
                             if (materialLoader != null) {
                                 currentMaterial = materialLoader.getMaterialByName(
                                         currentChunkMaterialName);
                             }
                         } else {
-                            //stop reading this chunk and reset position to
-                            //beginning of line so that usemtl is read again
+                            // stop reading this chunk and reset position to
+                            // beginning of line so that usemtl is read again
                             materialChange = true;
                             reader.seek(faceStreamPos);
                             break;
@@ -1278,30 +1327,30 @@ public class LoaderOBJ extends Loader {
 
                     } else if (str.startsWith("f ")) {
 
-                        //line is a face, so we keep data after "f"
+                        // line is a face, so we keep data after "f"
                         str = str.substring("f ".length()).trim();
-                        //retrieve words in data
-                        String[] valuesTemp = str.split(" ");
-                        Set<String[]> valuesSet = new HashSet<>();
+                        // retrieve words in data
+                        final String[] valuesTemp = str.split(" ");
+                        final Set<String[]> valuesSet = new HashSet<>();
 
-                        //check that each face contains three elements to define a
-                        //triangle only
+                        // check that each face contains three elements to define a
+                        // triangle only
                         if (valuesTemp.length == 3) {
                             valuesSet.add(valuesTemp);
 
                         } else if (valuesTemp.length > 3) {
-                            //if instead of a triangle we have a polygon then we
-                            //to divide valuesTemp into a set of values forming
-                            //triangles
-                            List<VertexOBJ> verticesList =
+                            // if instead of a triangle we have a polygon then we
+                            // to divide valuesTemp into a set of values forming
+                            // triangles
+                            final List<VertexOBJ> verticesList =
                                     getFaceValues(valuesTemp);
                             try {
                                 valuesSet.addAll(buildTriangulatedIndices(
                                         verticesList));
-                            } catch (TriangulatorException e) {
-                                //triangulation failed for some reason, but
-                                //file reading continues if configured like that
-                                //(by default it is)
+                            } catch (final TriangulatorException e) {
+                                // triangulation failed for some reason, but
+                                // file reading continues if configured like that
+                                // (by default it is)
                                 if (!continueIfTriangulationError) {
                                     throw new LoaderException(e);
                                 }
@@ -1311,29 +1360,29 @@ public class LoaderOBJ extends Loader {
                         }
 
 
-                        //each word corresponds to a vertex/texture/normal index,
-                        //so we check if such number of indices can be added into
-                        //this chunk
+                        // each word corresponds to a vertex/texture/normal index,
+                        // so we check if such number of indices can be added into
+                        // this chunk
                         if ((verticesInChunk + valuesSet.size() * 3) >
-                                loader.maxVerticesInChunk) { //values.length
-                            //no more vertices can be added to chunk so we reset
-                            //stream to start on current face
+                                loader.maxVerticesInChunk) { // values.length
+                            // no more vertices can be added to chunk so we reset
+                            // stream to start on current face
                             reader.seek(faceStreamPos);
                             break;
                         }
 
-                        //keep current stream position for next face
+                        // keep current stream position for next face
                         currentStreamPosition = reader.getPosition();
 
-                        for (String[] values : valuesSet) {
+                        for (final String[] values : valuesSet) {
 
-                            //otherwise values can be added into chunk, so we read
-                            //vertex index, texture index and normal index
-                            for (String value : values) {
-                                //vslue can be of the form v/vt/vn, where v stands
-                                //for vertex index, vt for texture index and vn for
-                                //normal index, and where vt and vn are optional
-                                String[] indices = value.split("/");
+                            // otherwise values can be added into chunk, so we read
+                            // vertex index, texture index and normal index
+                            for (final String value : values) {
+                                // value can be of the form v/vt/vn, where v stands
+                                // for vertex index, vt for texture index and vn for
+                                // normal index, and where vt and vn are optional
+                                final String[] indices = value.split("/");
                                 boolean addExistingVertexCoords = false;
                                 boolean addExistingTextureCoords = false;
                                 boolean addExistingNormal = false;
@@ -1344,60 +1393,60 @@ public class LoaderOBJ extends Loader {
                                 boolean addExisting;
                                 int chunkIndex = 0;
 
-                                //first check if vertex has to be added as new or
-                                //not
+                                // first check if vertex has to be added as new or
+                                // not
                                 if (indices.length >= 1 &&
                                         (indices[0].length() != 0)) {
                                     indicesAvailable = true;
-                                    //indices start at 1 in OBJ
+                                    // indices start at 1 in OBJ
                                     vertexIndex = Integer.parseInt(indices[0]) - 1;
 
-                                    //determine if vertex coordinates have to be
-                                    //added as new or they can be reused from an
-                                    //existing vertex
+                                    // determine if vertex coordinates have to be
+                                    // added as new or they can be reused from an
+                                    // existing vertex
                                     addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk &&
                                             (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) >= 0;
                                 }
                                 if (indices.length >= 2 &&
                                         (indices[1].length() != 0)) {
                                     textureAvailable = true;
-                                    //indices start at 1 in OBJ
+                                    // indices start at 1 in OBJ
                                     textureIndex = Integer.parseInt(indices[1]) - 1;
 
-                                    //determine if texture coordinates have to be
-                                    //added as new or they can be reused from an
-                                    //existing vertex
+                                    // determine if texture coordinates have to be
+                                    // added as new or they can be reused from an
+                                    // existing vertex
                                     addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk &&
                                             (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) >= 0;
                                 }
                                 if (indices.length >= 3 && (indices[2].length() != 0)) {
                                     normalsAvailable = true;
-                                    //indices start at 1 in OBJ
+                                    // indices start at 1 in OBJ
                                     normalIndex = Integer.parseInt(indices[2]) - 1;
 
-                                    //determine if normal coordinates have to be
-                                    //added as new or they can be reused from an
-                                    //existing vertex
+                                    // determine if normal coordinates have to be
+                                    // added as new or they can be reused from an
+                                    // existing vertex
                                     addExistingNormal = !loader.allowDuplicateVerticesInChunk &&
                                             (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) >= 0;
                                 }
 
-                                //if either vertex coordinates, texture coordinates
-                                //or normal indicate that a new vertex needs to be
-                                //added, then do so, only if all three use an
-                                //existing vertex into chunk use that existing
-                                //vertex. Also, in case that existing vertex is
-                                //added, if chunk indices of existing vertex,
-                                //texture and normal are not the same add as a new
-                                //vertex into chunk
+                                // if either vertex coordinates, texture coordinates
+                                // or normal indicate that a new vertex needs to be
+                                // added, then do so, only if all three use an
+                                // existing vertex into chunk use that existing
+                                // vertex. Also, in case that existing vertex is
+                                // added, if chunk indices of existing vertex,
+                                // texture and normal are not the same add as a new
+                                // vertex into chunk
 
-                                //if some chunk index is found, set add existing to
-                                //true
+                                // if some chunk index is found, set add existing to
+                                // true
                                 addExisting = (vertexCoordsChunkIndex >= 0) ||
                                         (textureCoordsChunkIndex >= 0) ||
                                         (normalChunkIndex >= 0);
-                                //ensure that if index is present an existing vertex
-                                //in chunk exists
+                                // ensure that if index is present an existing vertex
+                                // in chunk exists
                                 if (indices.length >= 1 &&
                                         (indices[0].length() != 0)) {
                                     addExisting &= addExistingVertexCoords;
@@ -1412,8 +1461,8 @@ public class LoaderOBJ extends Loader {
                                 }
 
                                 if (addExisting) {
-                                    //if finally an existing vertex is added, set
-                                    //chunk index
+                                    // if finally an existing vertex is added, set
+                                    // chunk index
                                     if (vertexCoordsChunkIndex >= 0) {
                                         chunkIndex = vertexCoordsChunkIndex;
                                     }
@@ -1428,29 +1477,29 @@ public class LoaderOBJ extends Loader {
 
                                 if (indices.length >= 1 &&
                                         (indices[0].length() != 0) && !addExistingVertexCoords) {
-                                    //new vertex needs to be added into chunk,
-                                    //so we need to read vertex data
+                                    // new vertex needs to be added into chunk,
+                                    // so we need to read vertex data
 
-                                    //fetch vertex data position
+                                    // fetch vertex data position
                                     fetchVertex(vertexIndex);
                                     vertexStreamPosition = reader.getPosition();
 
-                                    //read all vertex data
+                                    // read all vertex data
                                     String vertexLine = reader.readLine();
                                     if (!vertexLine.startsWith("v ")) {
                                         throw new LoaderException();
                                     }
                                     vertexLine = vertexLine.substring(
                                             "v ".length()).trim();
-                                    //retrieve words in vertexLine, which contain
-                                    //vertex coordinates either as x, y, z or x,
-                                    //y, z, w
-                                    String[] vertexCoordinates =
+                                    // retrieve words in vertexLine, which contain
+                                    // vertex coordinates either as x, y, z or x,
+                                    // y, z, w
+                                    final String[] vertexCoordinates =
                                             vertexLine.split(" ");
                                     if (vertexCoordinates.length == 4) {
-                                        //homogeneous coordinates x, y, z, w
+                                        // homogeneous coordinates x, y, z, w
 
-                                        //check that values are valid
+                                        // check that values are valid
                                         if (vertexCoordinates[0].length() == 0) {
                                             throw new LoaderException();
                                         }
@@ -1464,7 +1513,7 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        float w = Float.parseFloat(
+                                        final float w = Float.parseFloat(
                                                 vertexCoordinates[3]);
                                         coordX = Float.parseFloat(
                                                 vertexCoordinates[0]) / w;
@@ -1474,9 +1523,9 @@ public class LoaderOBJ extends Loader {
                                                 vertexCoordinates[2]) / w;
 
                                     } else if (vertexCoordinates.length >= 3) {
-                                        //inhomogeneous coordinates x, y, z
+                                        // inhomogeneous coordinates x, y, z
 
-                                        //check that values are valid
+                                        // check that values are valid
                                         if (vertexCoordinates[0].length() == 0) {
                                             throw new LoaderException();
                                         }
@@ -1495,37 +1544,37 @@ public class LoaderOBJ extends Loader {
                                                 vertexCoordinates[2]);
 
                                     } else {
-                                        throw new LoaderException(); //unsupported length
+                                        throw new LoaderException(); // unsupported length
                                     }
 
                                     addExisting = false;
                                 }
                                 if (indices.length >= 2 &&
                                         (indices[1].length() != 0) && !addExistingTextureCoords) {
-                                    //new texture values need to be added into
-                                    //chunk, so we need to read texture
-                                    //coordinates data
+                                    // new texture values need to be added into
+                                    // chunk, so we need to read texture
+                                    // coordinates data
 
-                                    //fetch texture data position
+                                    // fetch texture data position
                                     fetchTexture(textureIndex);
                                     textureCoordStreamPosition =
                                             reader.getPosition();
 
-                                    //read all texture data
+                                    // read all texture data
                                     String textureLine = reader.readLine();
                                     if (!textureLine.startsWith("vt ")) {
                                         throw new LoaderException();
                                     }
                                     textureLine = textureLine.substring(
                                             "vt ".length()).trim();
-                                    //retrieve words in textureLine, which contain
-                                    //texture coordinates either as u, w or u, v, w
-                                    String[] textureCoordinates =
+                                    // retrieve words in textureLine, which contain
+                                    // texture coordinates either as u, w or u, v, w
+                                    final String[] textureCoordinates =
                                             textureLine.split(" ");
                                     if (textureCoordinates.length == 3) {
-                                        //homogeneous coordinates u, v, w
+                                        // homogeneous coordinates u, v, w
 
-                                        //check that values are valid
+                                        // check that values are valid
                                         if (textureCoordinates[0].length() == 0) {
                                             throw new LoaderException();
                                         }
@@ -1536,7 +1585,7 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        float w = Float.parseFloat(
+                                        final float w = Float.parseFloat(
                                                 textureCoordinates[2]);
 
                                         textureU = Float.parseFloat(
@@ -1555,9 +1604,9 @@ public class LoaderOBJ extends Loader {
                                         }
 
                                     } else if (textureCoordinates.length >= 2) {
-                                        //inhomogeneous coordinates u, v
+                                        // inhomogeneous coordinates u, v
 
-                                        //check that values are valid
+                                        // check that values are valid
                                         if (textureCoordinates[0].length() == 0) {
                                             throw new LoaderException();
                                         }
@@ -1570,35 +1619,36 @@ public class LoaderOBJ extends Loader {
                                         textureV = Float.parseFloat(
                                                 textureCoordinates[1]);
                                     } else {
-                                        throw new LoaderException(); //unsupported length
+                                        // unsupported length
+                                        throw new LoaderException();
                                     }
 
                                     addExisting = false;
                                 }
                                 if (indices.length >= 3 &&
                                         (indices[2].length() != 0) && !addExistingNormal) {
-                                    //new normal needs to be added into chunk,
-                                    //so we need to read vertex data
+                                    // new normal needs to be added into chunk,
+                                    // so we need to read vertex data
 
-                                    //fetch normal data position
+                                    // fetch normal data position
                                     fetchNormal(normalIndex);
                                     normalStreamPosition = reader.getPosition();
 
-                                    //read all normal data
+                                    // read all normal data
                                     String normalLine = reader.readLine();
                                     if (!normalLine.startsWith("vn ")) {
                                         throw new LoaderException();
                                     }
                                     normalLine = normalLine.substring(
                                             "vn ".length()).trim();
-                                    //retrieve words in normalLine, which must
-                                    //contain normal coordinates as x, y, z
-                                    String[] normalCoordinates =
+                                    // retrieve words in normalLine, which must
+                                    // contain normal coordinates as x, y, z
+                                    final String[] normalCoordinates =
                                             normalLine.split(" ");
                                     if (normalCoordinates.length == 3) {
-                                        //normal coordinates x, y, z
+                                        // normal coordinates x, y, z
 
-                                        //check that values are valid
+                                        // check that values are valid
                                         if (normalCoordinates[0].length() == 0) {
                                             throw new LoaderException();
                                         }
@@ -1616,7 +1666,8 @@ public class LoaderOBJ extends Loader {
                                         nZ = Float.parseFloat(
                                                 normalCoordinates[2]);
                                     } else {
-                                        throw new LoaderException(); //unsupported length
+                                        // unsupported length
+                                        throw new LoaderException();
                                     }
 
                                     addExisting = false;
@@ -1629,28 +1680,28 @@ public class LoaderOBJ extends Loader {
                                 }
                             }
                         }
-                        //reset face stream position
+                        // reset face stream position
                         reader.seek(currentStreamPosition);
                         currentFace++;
                     }
 
-                    //compute progress
+                    // compute progress
                     if (loader.listener != null &&
                             (currentFace % progressStep) == 0) {
                         loader.listener.onLoadProgressChange(loader,
                                 (float) (currentFace) / (float) (numberOfFaces));
                     }
                 }
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 throw new LoaderException(e);
             }
-            
-            //trim arrays to store only needed data
+
+            // trim arrays to store only needed data
             trimArrays();
-            
-            //Instantiate DataChunk with chunk arrays
-            DataChunk dataChunk = new DataChunk();
-            
+
+            // Instantiate DataChunk with chunk arrays
+            final DataChunk dataChunk = new DataChunk();
+
             if (verticesAvailable) {
                 dataChunk.setVerticesCoordinatesData(coordsInChunkArray);
                 dataChunk.setMinX(minX);
@@ -1660,42 +1711,46 @@ public class LoaderOBJ extends Loader {
                 dataChunk.setMaxY(maxY);
                 dataChunk.setMaxZ(maxZ);
             } else {
-                coordsInChunkArray = null; //so it can be garbage collected
+                // so it can be garbage collected
+                coordsInChunkArray = null;
             }
-            
+
             if (textureAvailable) {
                 dataChunk.setTextureCoordinatesData(textureCoordsInChunkArray);
             } else {
-                textureCoordsInChunkArray = null; //so it can be garbage collected
+                // so it can be garbage collected
+                textureCoordsInChunkArray = null;
             }
-                        
+
             if (currentMaterial != null) {
                 dataChunk.setMaterial(currentMaterial);
             }
-           
+
             if (materialChange) {
                 currentChunkMaterialName = "";
                 currentMaterial = null;
             }
-            
+
             if (indicesAvailable) {
                 dataChunk.setIndicesData(indicesInChunkArray);
             } else {
-                indicesInChunkArray = null; //so it can be garbage collected
+                // so it can be garbage collected
+                indicesInChunkArray = null;
             }
-            
+
             if (normalsAvailable) {
                 dataChunk.setNormalsData(normalsInChunkArray);
             } else {
-                normalsInChunkArray = null; //so it can be garbage collected
+                // so it can be garbage collected
+                normalsInChunkArray = null;
             }
-            
+
             if (!hasNext() && listener != null) {
-                //notify iterator finished
+                // notify iterator finished
                 listener.onIteratorFinished(this);
             }
-            
-            //if no more chunks are available, then close input reader
+
+            // if no more chunks are available, then close input reader
             if (!hasNext()) {
                 reader.close();
             }
@@ -1706,199 +1761,50 @@ public class LoaderOBJ extends Loader {
         /**
          * Fetches vertex data in the file using provided index. Index refers
          * to indices contained in OBJ file.
+         *
          * @param index index corresponding to vertex being fetched.
          * @throws LoaderException if data is corrupted or cannot be understood.
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException     if an I/O error occurs.
          */
         @SuppressWarnings("Duplicates")
         public void fetchVertex(long index) throws LoaderException, IOException {
             if (index > numberOfVertices) {
                 throw new LoaderException();
             }
-            
+
             long startStreamPos = firstVertexStreamPosition;
             long startIndex = 0;
-            
+
             if (verticesStreamPositionMap.size() > 0) {
-                //with floorEntry, we will pick element immediately
-                //before or equal to index if any exists
-                Map.Entry<Long, Long> entry =
+                // with floorEntry, we will pick element immediately
+                // before or equal to index if any exists
+                final Map.Entry<Long, Long> entry =
                         verticesStreamPositionMap.floorEntry(index);
                 if (entry != null) {
-                    long origIndex = entry.getKey();
-                    long pos = entry.getValue();
-                    if((origIndex <= index) && (pos >= 0)){
-                        startIndex = origIndex;
-                        startStreamPos = pos;
-                    }
-                }
-            }
-                
-            //if we need to read next vertex, don't do anything, otherwise
-            //move to next vertex location if reading some vertex located
-            //further on the stream. For previous vertex indices, start
-            //from beginning
-            if (reader.getPosition() != startStreamPos) {
-                reader.seek(startStreamPos);
-            }
-                
-            //read from stream until start of data of desired vertex
-            long streamPosition = 0;            
-            for (long i = startIndex; i <= index; i++) {
-                    
-                //when traversing stream of data until reaching desired
-                //index, we add all vertex, texture and normal positions 
-                //into maps
-                String str;
-                boolean end = false;
-                do {
-                    streamPosition = reader.getPosition();
-                    str = reader.readLine();
-                    if (str == null) {
-                        end = true;
-                        break;
-                    }
-                     
-                    if (str.startsWith("v ")) {
-                        //line contains vertex coordinates, so we store 
-                        //stream position into corresponding map and exit
-                        //while loop
-                        addVertexPositionToMap(i, streamPosition);
-                        break;
-                    }
-                } while (true); //read until end of file when str == null
-                    
-                //unexpected end
-                if (end) {
-                    throw new LoaderException();
-                }
-            }
-            
-            //seek to last streamPosition which contains the desired data
-            reader.seek(streamPosition);
-        }
-        
-        /**
-         * Fetches texture data in the file using provided index. Index refers
-         * to indices contained in OBJ file.
-         * @param index index corresponding to texture being fetched.
-         * @throws LoaderException if data is corrupted or cannot be understood.
-         * @throws IOException if an I/O error occurs.
-         */
-        @SuppressWarnings("Duplicates")
-        public void fetchTexture(long index) throws LoaderException, 
-                IOException {
-            if (index > numberOfTextureCoords) {
-                throw new LoaderException();
-            }
-            
-            long startStreamPos = firstTextureCoordStreamPosition;
-            long startIndex = 0;
-            
-            if (textureCoordsStreamPositionMap.size() > 0) {
-                //with floorEntry, we will pick element immediately
-                //before or equal to index if any exists
-                Map.Entry<Long, Long> entry =
-                        textureCoordsStreamPositionMap.floorEntry(index);
-                if (entry != null) {
-                    long origIndex = entry.getKey();
-                    long pos = entry.getValue();
-                    if((origIndex <= index) && (pos >= 0)){
-                        startIndex = origIndex;
-                        startStreamPos = pos;
-                    }
-                }
-            }
-                
-            //if we need to read next texture vertex, don't do anything, 
-            //otherwise move to next texture vertex located further on the
-            //stream. For previous texture vertex indices, start from
-            //beginning
-            if (reader.getPosition() != startStreamPos) {
-                reader.seek(startStreamPos);
-            }
-                
-            //read from stream until start of data of desired texture vertex
-            long streamPosition = 0;            
-            for (long i = startIndex; i <= index; i++) {
-                    
-                //when traversing stream of data until reaching desired
-                //index, we add all vertex, texture and normal positions
-                //into maps                
-                String str;
-                boolean end = false;
-                do {
-                    streamPosition = reader.getPosition();
-                    str = reader.readLine();
-                    if (str == null) {
-                        end = true;
-                        break;
-                    }
-                     
-                    if (str.startsWith("vt ")) {
-                        //line contains texture coordinates, so we store
-                        //stream position into corresponding map and exit
-                        //while loop
-                        addTextureCoordPositionToMap(i, streamPosition);
-                        break;
-                    }
-                } while (true); //read until end of file when str == null
-                    
-                //unexpected end
-                if (end) {
-                    throw new LoaderException();
-                }
-            }
-            
-            //seek to last streamPosition which contains the desired data
-            reader.seek(streamPosition);            
-        }
-        
-        /**
-         * Fetches normal data in the file using provided index. Index refers
-         * to indices contained in OBJ file.
-         * @param index index corresponding to normal being fetched.
-         * @throws LoaderException if data is corrupted or cannot be understood.
-         * @throws IOException if an I/O error occurs.
-         */
-        @SuppressWarnings("Duplicates")
-        public void fetchNormal(long index) throws LoaderException, IOException {
-            if (index > numberOfNormals) {
-                throw new LoaderException();
-            }
-            
-            long startStreamPos = firstNormalStreamPosition;
-            long startIndex = 0;
-            
-            if (normalsStreamPositionMap.size() > 0) {
-                //with floorEntry, we will pick element immediately before or
-                //equal to index if any exists
-                Map.Entry<Long, Long> entry =
-                        normalsStreamPositionMap.floorEntry(index);
-                if (entry != null) {
-                    long origIndex = entry.getKey();
-                    long pos = entry.getValue();
+                    final long origIndex = entry.getKey();
+                    final long pos = entry.getValue();
                     if ((origIndex <= index) && (pos >= 0)) {
                         startIndex = origIndex;
                         startStreamPos = pos;
                     }
                 }
             }
-                
-            //if we need to read next normal, don't do anything, otherwise
-            //move to next normal located further on the stream.
-            //For previous normals indices, start from beginning
+
+            // if we need to read next vertex, don't do anything, otherwise
+            // move to next vertex location if reading some vertex located
+            // further on the stream. For previous vertex indices, start
+            // from beginning
             if (reader.getPosition() != startStreamPos) {
                 reader.seek(startStreamPos);
             }
-                
-            //read from stream until start of data of desired normal
+
+            // read from stream until start of data of desired vertex
             long streamPosition = 0;
             for (long i = startIndex; i <= index; i++) {
-                
-                //when traversing stream of data until reaching desired
-                //index, we add all vertex, texture and normal positions
-                //into maps                
+
+                // when traversing stream of data until reaching desired
+                // index, we add all vertex, texture and normal positions
+                // into maps
                 String str;
                 boolean end = false;
                 do {
@@ -1908,23 +1814,175 @@ public class LoaderOBJ extends Loader {
                         end = true;
                         break;
                     }
-                    
-                    if (str.startsWith("vn ")) {
-                        //line contains normal, so we store stream position
-                        //into corresponding map and exit while loop
-                        addNormalPositionToMap(i, streamPosition);
+
+                    if (str.startsWith("v ")) {
+                        // line contains vertex coordinates, so we store
+                        // stream position into corresponding map and exit
+                        // while loop
+                        addVertexPositionToMap(i, streamPosition);
                         break;
                     }
-                } while (true); //read until end of file when str == null
-                
-                //unexpected end
+                } while (true); // read until end of file when str == null
+
+                // unexpected end
                 if (end) {
                     throw new LoaderException();
                 }
             }
-            
-            //seek to last streamPosition which contains the desired data
-            reader.seek(streamPosition);                        
+
+            // seek to last streamPosition which contains the desired data
+            reader.seek(streamPosition);
+        }
+
+        /**
+         * Fetches texture data in the file using provided index. Index refers
+         * to indices contained in OBJ file.
+         *
+         * @param index index corresponding to texture being fetched.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         * @throws IOException     if an I/O error occurs.
+         */
+        @SuppressWarnings("Duplicates")
+        public void fetchTexture(final long index) throws LoaderException,
+                IOException {
+            if (index > numberOfTextureCoords) {
+                throw new LoaderException();
+            }
+
+            long startStreamPos = firstTextureCoordStreamPosition;
+            long startIndex = 0;
+
+            if (textureCoordsStreamPositionMap.size() > 0) {
+                // with floorEntry, we will pick element immediately
+                // before or equal to index if any exists
+                final Map.Entry<Long, Long> entry =
+                        textureCoordsStreamPositionMap.floorEntry(index);
+                if (entry != null) {
+                    final long origIndex = entry.getKey();
+                    final long pos = entry.getValue();
+                    if ((origIndex <= index) && (pos >= 0)) {
+                        startIndex = origIndex;
+                        startStreamPos = pos;
+                    }
+                }
+            }
+
+            // if we need to read next texture vertex, don't do anything,
+            // otherwise move to next texture vertex located further on the
+            // stream. For previous texture vertex indices, start from
+            // beginning
+            if (reader.getPosition() != startStreamPos) {
+                reader.seek(startStreamPos);
+            }
+
+            // read from stream until start of data of desired texture vertex
+            long streamPosition = 0;
+            for (long i = startIndex; i <= index; i++) {
+
+                // when traversing stream of data until reaching desired
+                // index, we add all vertex, texture and normal positions
+                // into maps
+                String str;
+                boolean end = false;
+                do {
+                    streamPosition = reader.getPosition();
+                    str = reader.readLine();
+                    if (str == null) {
+                        end = true;
+                        break;
+                    }
+
+                    if (str.startsWith("vt ")) {
+                        // line contains texture coordinates, so we store
+                        // stream position into corresponding map and exit
+                        // while loop
+                        addTextureCoordPositionToMap(i, streamPosition);
+                        break;
+                    }
+                } while (true); // read until end of file when str == null
+
+                // unexpected end
+                if (end) {
+                    throw new LoaderException();
+                }
+            }
+
+            // seek to last streamPosition which contains the desired data
+            reader.seek(streamPosition);
+        }
+
+        /**
+         * Fetches normal data in the file using provided index. Index refers
+         * to indices contained in OBJ file.
+         *
+         * @param index index corresponding to normal being fetched.
+         * @throws LoaderException if data is corrupted or cannot be understood.
+         * @throws IOException     if an I/O error occurs.
+         */
+        @SuppressWarnings("Duplicates")
+        public void fetchNormal(final long index) throws LoaderException, IOException {
+            if (index > numberOfNormals) {
+                throw new LoaderException();
+            }
+
+            long startStreamPos = firstNormalStreamPosition;
+            long startIndex = 0;
+
+            if (normalsStreamPositionMap.size() > 0) {
+                // with floorEntry, we will pick element immediately before or
+                // equal to index if any exists
+                final Map.Entry<Long, Long> entry =
+                        normalsStreamPositionMap.floorEntry(index);
+                if (entry != null) {
+                    final long origIndex = entry.getKey();
+                    final long pos = entry.getValue();
+                    if ((origIndex <= index) && (pos >= 0)) {
+                        startIndex = origIndex;
+                        startStreamPos = pos;
+                    }
+                }
+            }
+
+            // if we need to read next normal, don't do anything, otherwise
+            // move to next normal located further on the stream.
+            // For previous normals indices, start from beginning
+            if (reader.getPosition() != startStreamPos) {
+                reader.seek(startStreamPos);
+            }
+
+            // read from stream until start of data of desired normal
+            long streamPosition = 0;
+            for (long i = startIndex; i <= index; i++) {
+
+                // when traversing stream of data until reaching desired
+                // index, we add all vertex, texture and normal positions
+                // into maps
+                String str;
+                boolean end = false;
+                do {
+                    streamPosition = reader.getPosition();
+                    str = reader.readLine();
+                    if (str == null) {
+                        end = true;
+                        break;
+                    }
+
+                    if (str.startsWith("vn ")) {
+                        // line contains normal, so we store stream position
+                        // into corresponding map and exit while loop
+                        addNormalPositionToMap(i, streamPosition);
+                        break;
+                    }
+                } while (true); // read until end of file when str == null
+
+                // unexpected end
+                if (end) {
+                    throw new LoaderException();
+                }
+            }
+
+            // seek to last streamPosition which contains the desired data
+            reader.seek(streamPosition);
         }
 
         /**
@@ -1932,36 +1990,37 @@ public class LoaderOBJ extends Loader {
          * in a set of arrays of vertices corresponding to triangles after
          * triangulation of the polygon. This method is used to triangulate
          * polygons with more than 3 vertices contained in the file.
+         *
          * @param vertices list of vertices forming a polygon to be triangulated.
          * @return a set containing arrays of indices of vertices (in string
          * format) corresponding to the triangles forming the polygon after the
          * triangulation.
          * @throws TriangulatorException if triangulation fails (because polygon
-         * is degenerate or contains invalid values such as NaN or infinity).
+         *                               is degenerate or contains invalid values such as NaN or infinity).
          */
-        private Set<String []> buildTriangulatedIndices(
-                List<VertexOBJ> vertices) throws TriangulatorException {
-            List<Point3D> polygonVertices = new ArrayList<>(
+        private Set<String[]> buildTriangulatedIndices(
+                final List<VertexOBJ> vertices) throws TriangulatorException {
+            final List<Point3D> polygonVertices = new ArrayList<>(
                     vertices.size());
-            for (VertexOBJ v : vertices) {
+            for (final VertexOBJ v : vertices) {
                 if (v.getVertex() == null) {
                     throw new TriangulatorException();
                 }
                 polygonVertices.add(v.getVertex());
             }
-            List<int[]> indices = new ArrayList<>();
-            Triangulator3D triangulator = Triangulator3D.create();
-            List<Triangle3D> triangles = triangulator.triangulate(
+            final List<int[]> indices = new ArrayList<>();
+            final Triangulator3D triangulator = Triangulator3D.create();
+            final List<Triangle3D> triangles = triangulator.triangulate(
                     polygonVertices, indices);
 
-            Set<String[]> result = new HashSet<>();
+            final Set<String[]> result = new HashSet<>();
             String[] face;
             int counter = 0;
             int[] triangleIndices;
             int index;
             VertexOBJ vertex;
             StringBuilder builder;
-            for (Triangle3D ignored : triangles) {
+            for (final Triangle3D ignored : triangles) {
                 triangleIndices = indices.get(counter);
                 face = new String[Triangle3D.NUM_VERTICES];
                 for (int i = 0; i < Triangle3D.NUM_VERTICES; i++) {
@@ -1996,31 +2055,32 @@ public class LoaderOBJ extends Loader {
          * This method reads a line containing face (i.e. polygon) indices of
          * vertices and fetches those vertices coordinates and associated data
          * such as texture coordinates or normal coordinates.
+         *
          * @param values a string containing vertex indices forming a polygon.
-         * Note that indices refer to the values contained in OBJ file, not the
-         * indices in the chunk of data.
+         *               Note that indices refer to the values contained in OBJ file, not the
+         *               indices in the chunk of data.
          * @return a list of vertices forming a face (i.e, polygon).
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException     if an I/O error occurs.
          * @throws LoaderException if loading fails because data is corrupted or
-         * cannot be interpreted.
+         *                         cannot be interpreted.
          */
-        private List<VertexOBJ> getFaceValues(String [] values)
+        private List<VertexOBJ> getFaceValues(final String[] values)
                 throws IOException, LoaderException {
 
             VertexOBJ tmpVertex;
             Point3D point;
-            List<VertexOBJ> vertices = new ArrayList<>(values.length);
+            final List<VertexOBJ> vertices = new ArrayList<>(values.length);
 
-            //keep current stream position for next face
-            long tempPosition = reader.getPosition();
+            // keep current stream position for next face
+            final long tempPosition = reader.getPosition();
 
-            for (String value : values) {
+            for (final String value : values) {
 
                 tmpVertex = new VertexOBJ();
                 point = Point3D.create();
                 tmpVertex.setVertex(point);
 
-                String[] indices = value.split("/");
+                final String[] indices = value.split("/");
 
                 if (indices.length >= 1 && (indices[0].length() != 0)) {
                     vertexIndex = Integer.parseInt(indices[0]) - 1;
@@ -2033,11 +2093,11 @@ public class LoaderOBJ extends Loader {
                         throw new LoaderException();
                     }
                     vertexLine = vertexLine.substring("v ".length()).trim();
-                    String[] vertexCoordinates = vertexLine.split(" ");
+                    final String[] vertexCoordinates = vertexLine.split(" ");
 
                     if (vertexCoordinates.length == 4) {
-                        //homogeneous coordinates x, y, z, w
-                        //ensure that vertex coordinates are not empty
+                        // homogeneous coordinates x, y, z, w
+                        // ensure that vertex coordinates are not empty
                         if (vertexCoordinates[0].length() == 0) {
                             throw new LoaderException();
                         }
@@ -2057,13 +2117,13 @@ public class LoaderOBJ extends Loader {
                                     Double.parseDouble(vertexCoordinates[1]),
                                     Double.parseDouble(vertexCoordinates[2]),
                                     Double.parseDouble(vertexCoordinates[3]));
-                        } catch (NumberFormatException e) {
-                            //some vertex coordinate value could not be parsed
+                        } catch (final NumberFormatException e) {
+                            // some vertex coordinate value could not be parsed
                             throw new LoaderException(e);
                         }
                     } else if (vertexCoordinates.length >= 3) {
-                        //inhomogeneous coordinates x, y, z
-                        //ensure that vertex coordinate are not empty
+                        // inhomogeneous coordinates x, y, z
+                        // ensure that vertex coordinate are not empty
                         if (vertexCoordinates[0].length() == 0) {
                             throw new LoaderException();
                         }
@@ -2079,12 +2139,13 @@ public class LoaderOBJ extends Loader {
                                     Double.parseDouble(vertexCoordinates[0]),
                                     Double.parseDouble(vertexCoordinates[1]),
                                     Double.parseDouble(vertexCoordinates[2]));
-                        } catch (NumberFormatException e) {
-                            //some vertex coordinate value could not be parsed
+                        } catch (final NumberFormatException e) {
+                            // some vertex coordinate value could not be parsed
                             throw new LoaderException(e);
                         }
                     } else {
-                        throw new LoaderException(); //unsupported length
+                        // unsupported length
+                        throw new LoaderException();
                     }
                 }
                 if (indices.length >= 2 && (indices[1].length() != 0)) {
@@ -2133,18 +2194,19 @@ public class LoaderOBJ extends Loader {
          * used in the OBJ file.
          * This method searches within the cached indices which relate indices
          * in the chunk of data respect to indices in the OBJ file.
+         *
          * @param originalIndex vertex index used in the OBJ file.
          * @return vertex index used in current chunk of data or -1 if not found.
          */
-        private int searchVertexIndexInChunk(long originalIndex) {
-            //returns chunk index array position where index is found
-            Integer chunkIndex = vertexIndicesMap.get(originalIndex);
+        private int searchVertexIndexInChunk(final long originalIndex) {
+            // returns chunk index array position where index is found
+            final Integer chunkIndex = vertexIndicesMap.get(originalIndex);
 
             if (chunkIndex == null) {
                 return -1;
             }
 
-            //returns index of vertex in chunk
+            // returns index of vertex in chunk
             return indicesInChunkArray[chunkIndex];
         }
 
@@ -2153,11 +2215,12 @@ public class LoaderOBJ extends Loader {
          * used in the OBJ file.
          * This method searches within the cached indices which relate indices
          * in the chunk of data respect to indices in the OBJ file.
+         *
          * @param originalIndex texture index used in the OBJ file.
          * @return texture index used in current chunk of data or -1 if not
          * found.
          */
-        private int searchTextureCoordIndexInChunk(long originalIndex) {
+        private int searchTextureCoordIndexInChunk(final long originalIndex) {
             return searchVertexIndexInChunk(originalIndex);
         }
 
@@ -2166,63 +2229,67 @@ public class LoaderOBJ extends Loader {
          * used in the OBJ file.
          * This method searches within the cached indices which relate indices
          * in the chunk of data respect to indices in the OBJ file.
+         *
          * @param originalIndex normal index used in the OBJ file.
          * @return normal index used in current chunk of data or -1 if not found.
          */
-        private int searchNormalIndexInChunk(long originalIndex) {
+        private int searchNormalIndexInChunk(final long originalIndex) {
             return searchVertexIndexInChunk(originalIndex);
         }
 
         /**
          * Add vertex position to cache of file positions.
-         * @param originalIndex vertex index used in OBJ file.
+         *
+         * @param originalIndex  vertex index used in OBJ file.
          * @param streamPosition stream position where vertex is located.
          */
-        private void addVertexPositionToMap(long originalIndex,
-                                            long streamPosition) {
+        private void addVertexPositionToMap(final long originalIndex,
+                                            final long streamPosition) {
             if (verticesStreamPositionMap.size() > loader.maxStreamPositions) {
-                //Map is full. Remove 1st item before adding a new one
-                Long origIndex = verticesStreamPositionMap.firstKey();
+                // Map is full. Remove 1st item before adding a new one
+                final Long origIndex = verticesStreamPositionMap.firstKey();
                 verticesStreamPositionMap.remove(origIndex);
             }
-            //add new item
+            // add new item
             verticesStreamPositionMap.put(originalIndex,
                     streamPosition);
         }
 
         /**
          * Add texture coordinate position to cache of file positions.
-         * @param originalIndex texture coordinate index used in OBJ file.
+         *
+         * @param originalIndex  texture coordinate index used in OBJ file.
          * @param streamPosition stream position where texture coordinate is
-         * located.
+         *                       located.
          */
-        private void addTextureCoordPositionToMap(long originalIndex,
-                                                  long streamPosition) {
+        private void addTextureCoordPositionToMap(final long originalIndex,
+                                                  final long streamPosition) {
             if (textureCoordsStreamPositionMap.size() >
                     loader.maxStreamPositions) {
-                //Map is full. Remove 1st item before adding a new one
-                Long origIndex = textureCoordsStreamPositionMap.firstKey();
+                // Map is full. Remove 1st item before adding a new one
+                final Long origIndex = textureCoordsStreamPositionMap.firstKey();
                 textureCoordsStreamPositionMap.remove(origIndex);
             }
-            //add new item
+            // add new item
             textureCoordsStreamPositionMap.put(originalIndex,
                     streamPosition);
         }
 
         /**
          * Add normal coordinate to cache of file positions.
-         * @param originalIndex normal coordinate index used in OBJ file.
+         *
+         * @param originalIndex  normal coordinate index used in OBJ file.
          * @param streamPosition stream position where normal coordinate is
-         * located.
+         *                       located.
          */
-        private void addNormalPositionToMap(long originalIndex,
-                                            long streamPosition) {
+        private void addNormalPositionToMap(final long originalIndex,
+                                            final long streamPosition) {
             if (normalsStreamPositionMap.size() > loader.maxStreamPositions) {
-                //Map is full. Remove 1st item before adding a new one
-                Long origIndex = normalsStreamPositionMap.firstKey();
+                // Map is full. Remove 1st item before adding a new one
+                final Long origIndex = normalsStreamPositionMap.firstKey();
                 normalsStreamPositionMap.remove(origIndex);
             }
-            //add new item
+            // add new item
             normalsStreamPositionMap.put(originalIndex,
                     streamPosition);
         }
@@ -2251,7 +2318,7 @@ public class LoaderOBJ extends Loader {
             coordsInChunkArray[pos] = coordZ;
             normalsInChunkArray[pos] = nZ;
 
-            //update bounding box values
+            // update bounding box values
             if (coordX < minX) {
                 minX = coordX;
             }
@@ -2272,7 +2339,7 @@ public class LoaderOBJ extends Loader {
                 maxZ = coordZ;
             }
 
-            //if arrays of indices become full, we need to resize them
+            // if arrays of indices become full, we need to resize them
             if (indicesInChunk >= indicesInChunkSize) {
                 increaseIndicesArraySize();
             }
@@ -2280,8 +2347,8 @@ public class LoaderOBJ extends Loader {
             originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;
             originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;
             originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
-            //store original indices in maps so we can search chunk index by
-            //original indices of vertices, texture or normal
+            // store original indices in maps so we can search chunk index by
+            // original indices of vertices, texture or normal
             vertexIndicesMap.put((long) vertexIndex,
                     indicesInChunk);
             textureCoordsIndicesMap.put((long) textureIndex,
@@ -2289,7 +2356,7 @@ public class LoaderOBJ extends Loader {
             normalsIndicesMap.put((long) normalIndex,
                     indicesInChunk);
 
-            //store vertex, texture and normal stream positions
+            // store vertex, texture and normal stream positions
             addVertexPositionToMap(vertexIndex, vertexStreamPosition);
             addTextureCoordPositionToMap(textureIndex,
                     textureCoordStreamPosition);
@@ -2302,10 +2369,11 @@ public class LoaderOBJ extends Loader {
         /**
          * Adds index to current chunk of data referring to a previously
          * existing vertex in the chunk.
+         *
          * @param existingIndex index of vertex that already exists in the chunk.
          */
-        private void addExistingVertexToChunk(int existingIndex) {
-            //if arrays of indices become full, we need to resize them
+        private void addExistingVertexToChunk(final int existingIndex) {
+            // if arrays of indices become full, we need to resize them
             if (indicesInChunk >= indicesInChunkSize) {
                 increaseIndicesArraySize();
             }
@@ -2321,17 +2389,17 @@ public class LoaderOBJ extends Loader {
          * Increases size of arrays of data. This method is called when needed.
          */
         private void increaseIndicesArraySize() {
-            int newIndicesInChunkSize = indicesInChunkSize +
+            final int newIndicesInChunkSize = indicesInChunkSize +
                     loader.maxVerticesInChunk;
-            int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
-            long[] newOriginalVertexIndicesInChunkArray =
+            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
+            final long[] newOriginalVertexIndicesInChunkArray =
                     new long[newIndicesInChunkSize];
-            long[] newOriginalTextureIndicesInChunkArray =
+            final long[] newOriginalTextureIndicesInChunkArray =
                     new long[newIndicesInChunkSize];
-            long[] newOriginalNormalIndicesInChunkArray =
+            final long[] newOriginalNormalIndicesInChunkArray =
                     new long[newIndicesInChunkSize];
 
-            //copy contents of old array
+            // copy contents of old array
             System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,
                     indicesInChunkSize);
             System.arraycopy(originalVertexIndicesInChunkArray, 0,
@@ -2344,7 +2412,7 @@ public class LoaderOBJ extends Loader {
                     newOriginalNormalIndicesInChunkArray, 0,
                     indicesInChunkSize);
 
-            //set new arrays and new size
+            // set new arrays and new size
             indicesInChunkArray = newIndicesInChunkArray;
             originalVertexIndicesInChunkArray =
                     newOriginalVertexIndicesInChunkArray;
@@ -2361,14 +2429,14 @@ public class LoaderOBJ extends Loader {
          */
         private void trimArrays() {
             if (verticesInChunk > 0) {
-                int elems = verticesInChunk * 3;
-                int textElems = verticesInChunk * 2;
+                final int elems = verticesInChunk * 3;
+                final int textElems = verticesInChunk * 2;
 
-                float[] newCoordsInChunkArray = new float[elems];
-                float[] newTextureCoordsInChunkArray = new float[elems];
-                float[] newNormalsInChunkArray = new float[elems];
+                final float[] newCoordsInChunkArray = new float[elems];
+                final float[] newTextureCoordsInChunkArray = new float[elems];
+                final float[] newNormalsInChunkArray = new float[elems];
 
-                //copy contents of old arrays
+                // copy contents of old arrays
                 System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,
                         0, elems);
                 System.arraycopy(textureCoordsInChunkArray, 0,
@@ -2376,26 +2444,26 @@ public class LoaderOBJ extends Loader {
                 System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,
                         0, elems);
 
-                //set new arrays
+                // set new arrays
                 coordsInChunkArray = newCoordsInChunkArray;
                 textureCoordsInChunkArray = newTextureCoordsInChunkArray;
                 normalsInChunkArray = newNormalsInChunkArray;
             } else {
-                //allow garbage collection
+                // allow garbage collection
                 coordsInChunkArray = null;
                 textureCoordsInChunkArray = null;
                 normalsInChunkArray = null;
             }
 
             if (indicesInChunk > 0) {
-                int[] newIndicesInChunkArray = new int[indicesInChunk];
+                final int[] newIndicesInChunkArray = new int[indicesInChunk];
                 System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,
                         0, indicesInChunk);
 
-                //set new array
+                // set new array
                 indicesInChunkArray = newIndicesInChunkArray;
             } else {
-                //allow garbage collection
+                // allow garbage collection
                 indicesInChunkArray = null;
                 originalVertexIndicesInChunkArray = null;
                 originalTextureIndicesInChunkArray = null;
@@ -2406,7 +2474,8 @@ public class LoaderOBJ extends Loader {
         /**
          * Set ups loader iterator. This method is called when constructing
          * this iterator.
-         * @throws IOException if an I/O error occurs.
+         *
+         * @throws IOException     if an I/O error occurs.
          * @throws LoaderException if data is corrupted or cannot be understood.
          */
         private void setUp() throws IOException, LoaderException {
@@ -2423,13 +2492,13 @@ public class LoaderOBJ extends Loader {
                 }
 
                 if (str.startsWith("#")) {
-                    //line is a comment, so we should add it to the list of
-                    //comments
+                    // line is a comment, so we should add it to the list of
+                    // comments
                     loader.comments.add(str.substring("#".length()).trim());
                 } else if (str.startsWith("vt ")) {
-                    //line contains texture coordinates, so we keep its stream
-                    //position and indicate that chunks will contain texture
-                    //coordinates
+                    // line contains texture coordinates, so we keep its stream
+                    // position and indicate that chunks will contain texture
+                    // coordinates
                     if (!firstTextureCoordStreamPositionAvailable) {
                         firstTextureCoordStreamPosition = streamPosition;
                         firstTextureCoordStreamPositionAvailable = true;
@@ -2437,8 +2506,8 @@ public class LoaderOBJ extends Loader {
                     }
                     numberOfTextureCoords++;
                 } else if (str.startsWith("vn ")) {
-                    //line contains normal, so we keep its stream position and
-                    //indicate that chunks will contain normals
+                    // line contains normal, so we keep its stream position and
+                    // indicate that chunks will contain normals
                     if (!firstNormalStreamPositionAvailable) {
                         firstNormalStreamPosition = streamPosition;
                         firstNormalStreamPositionAvailable = true;
@@ -2446,9 +2515,9 @@ public class LoaderOBJ extends Loader {
                     }
                     numberOfNormals++;
                 } else if (str.startsWith("v ")) {
-                    //line contains vertex coordinates, so we keep its stream
-                    //position and indicate that chunks will contain vertex
-                    //coordinates
+                    // line contains vertex coordinates, so we keep its stream
+                    // position and indicate that chunks will contain vertex
+                    // coordinates
                     if (!firstVertexStreamPositionAvailable) {
                         firstVertexStreamPosition = streamPosition;
                         firstVertexStreamPositionAvailable = true;
@@ -2456,8 +2525,8 @@ public class LoaderOBJ extends Loader {
                     }
                     numberOfVertices++;
                 } else if (str.startsWith("f ")) {
-                    //line contains face definition, so we keep its stream
-                    //position and indicate that chunks will contain indices
+                    // line contains face definition, so we keep its stream
+                    // position and indicate that chunks will contain indices
                     if (!firstFaceStreamPositionAvailable) {
                         firstFaceStreamPosition = streamPosition;
                         firstFaceStreamPositionAvailable = true;
@@ -2467,11 +2536,11 @@ public class LoaderOBJ extends Loader {
                     numberOfFaces++;
 
                 } else if (str.startsWith("mtllib ")) {
-                    //a material library is found
-                    String path = str.substring("mtllib ".length()).trim();
+                    // a material library is found
+                    final String path = str.substring("mtllib ".length()).trim();
                     if (loader.listener instanceof LoaderListenerOBJ) {
-                        LoaderListenerOBJ loaderListener =
-                                (LoaderListenerOBJ)loader.listener;
+                        final LoaderListenerOBJ loaderListener =
+                                (LoaderListenerOBJ) loader.listener;
                         materialLoader =
                                 loaderListener.onMaterialLoaderRequested(loader,
                                         path);
@@ -2479,15 +2548,16 @@ public class LoaderOBJ extends Loader {
                         materialLoader = new MaterialLoaderOBJ(new File(path));
                     }
 
-                    //now load library of materials
+                    // now load library of materials
                     try {
                         if (materialLoader != null) {
                             loader.materials = materialLoader.load();
-                            materialLoader.close(); //to release file resources
+                            // to release file resources
+                            materialLoader.close();
                         }
-                    } catch (LoaderException e) {
+                    } catch (final LoaderException e) {
                         throw e;
-                    } catch(Exception e) {
+                    } catch (final Exception e) {
                         throw new LoaderException(e);
                     }
 
@@ -2497,10 +2567,10 @@ public class LoaderOBJ extends Loader {
                     materialsAvailable = true;
                 }
 
-                //ignore any other line
-            } while (true); //read until end of file when str == null
+                // ignore any other line
+            } while (true); // read until end of file when str == null
 
-            //move to first face tream position
+            // move to first face tream position
             if (!firstFaceStreamPositionAvailable) {
                 throw new LoaderException();
             }

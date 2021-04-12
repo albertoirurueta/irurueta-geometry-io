@@ -24,15 +24,15 @@ public enum PLYStorageMode {
      * preserved (high bytes come first).
      */
     PLY_BIG_ENDIAN,
-    
+
     /**
      * Binary little-endian. When using little-endian natural binary order of
      * data is reversed (low bytes come first).
      */
     PLY_LITTLE_ENDIAN,
-    
+
     /**
-     * ASCII text. Data is stored in readable text format. This format might 
+     * ASCII text. Data is stored in readable text format. This format might
      * loose precision for floating point data.
      */
     PLY_ASCII

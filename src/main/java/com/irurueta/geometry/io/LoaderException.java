@@ -20,36 +20,39 @@ package com.irurueta.geometry.io;
  * corrupted or cannot be interpreted.
  */
 public class LoaderException extends GeometryIOException {
-    
+
     /**
      * Constructor.
-     */        
+     */
     public LoaderException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
-     */        
-    public LoaderException(String message) {
+     */
+    public LoaderException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
-     */        
-    public LoaderException(String message, Throwable cause) {
+     * @param cause   Instance containing the cause of the exception.
+     */
+    public LoaderException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
-     */        
-    public LoaderException(Throwable cause) {
+     */
+    public LoaderException(final Throwable cause) {
         super(cause);
     }
 }

@@ -22,22 +22,25 @@ package com.irurueta.geometry.io;
 public interface LoaderListener {
     /**
      * This method is called when a Loader starts decoding a file.
+     *
      * @param loader Loader decoding a file.
      */
-    void onLoadStart(Loader loader);
-    
+    void onLoadStart(final Loader loader);
+
     /**
      * This method is called when a Loader ends decoding a file.
+     *
      * @param loader Loader decoding a file.
      */
-    void onLoadEnd(Loader loader);
-    
+    void onLoadEnd(final Loader loader);
+
     /**
-     * This method is called each time a substantial amount of the file is 
+     * This method is called each time a substantial amount of the file is
      * loaded.
-     * @param loader Loader decoding a file.
+     *
+     * @param loader   Loader decoding a file.
      * @param progress Amount of progress that has been decoded. Progress is
-     * within the range 0.0 and 1.0.
+     *                 within the range 0.0 and 1.0.
      */
-    void onLoadProgressChange(Loader loader, float progress);
+    void onLoadProgressChange(final Loader loader, final float progress);
 }

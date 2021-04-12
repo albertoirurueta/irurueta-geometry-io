@@ -15,49 +15,35 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class HeaderPLYTest {
-    
-    public HeaderPLYTest() { }
 
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
     @Test
     public void testConstructor() {
-        HeaderPLY header = new HeaderPLY();
-        
+        final HeaderPLY header = new HeaderPLY();
+
         assertEquals(header.getStorageMode(), PLYStorageMode.PLY_ASCII);
         assertTrue(header.getElements().isEmpty());
         assertTrue(header.getComments().isEmpty());
         assertTrue(header.getObjInfos().isEmpty());
     }
-    
+
     @Test
     public void testToString() {
-        HeaderPLY header = new HeaderPLY();
-        
-        String name = "name";
-        long number = 2143245;
-        
-        PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
-        ElementPLY element = new ElementPLY(name, number, property);     
+        final HeaderPLY header = new HeaderPLY();
+
+        final String name = "name";
+        final long number = 2143245;
+
+        final PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
+        final ElementPLY element = new ElementPLY(name, number, property);
         header.getElements().add(element);
 
-        assertEquals(header.toString(), "ply\nformat ascii 1.0\n" + 
+        assertEquals(header.toString(), "ply\nformat ascii 1.0\n" +
                 element.toString() + "end_header\n");
     }
 }

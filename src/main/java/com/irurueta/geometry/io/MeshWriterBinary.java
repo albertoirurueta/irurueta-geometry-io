@@ -15,111 +15,123 @@
  */
 package com.irurueta.geometry.io;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Reads a 3D object and converts it into custom binary format.
  */
-@SuppressWarnings("WeakerAccess")
 public class MeshWriterBinary extends MeshWriter {
-    
+
     /**
      * Version of the binary file supported by this class.
      */
     public static final byte VERSION = 2;
-    
+
     /**
      * Buffer size to write data into output stream.
      */
     public static final int BUFFER_SIZE = 1024;
-    
+
     /**
      * Stream to write binary data to output.
      */
     private DataOutputStream dataStream;
-    
+
     /**
      * Constructor.
+     *
      * @param loader loader to load a 3D file.
      * @param stream stream where transcoded data will be written to.
      */
-    public MeshWriterBinary(Loader loader, OutputStream stream) {
+    public MeshWriterBinary(final Loader loader, final OutputStream stream) {
         super(loader, stream);
     }
-    
+
     /**
      * Constructor.
-     * @param loader loader to load a 3D file.
-     * @param stream stream where transcoded data will be written to.
+     *
+     * @param loader   loader to load a 3D file.
+     * @param stream   stream where transcoded data will be written to.
      * @param listener listener to be notified of progress changes or when
-     * transcoding process starts or finishes.
+     *                 transcoding process starts or finishes.
      */
-    public MeshWriterBinary(Loader loader, OutputStream stream, 
-            MeshWriterListener listener) {
+    public MeshWriterBinary(final Loader loader, final OutputStream stream,
+                            final MeshWriterListener listener) {
         super(loader, stream, listener);
     }
 
     /**
      * Processes input file provided to loader and writes it transcoded into
      * output stream.
-     * @throws LoaderException if 3D file loading fails.
-     * @throws IOException if an I/O error occurs.
+     *
+     * @throws LoaderException   if 3D file loading fails.
+     * @throws IOException       if an I/O error occurs.
      * @throws NotReadyException if mesh writer is not ready because either a
-     * loader has not been provided or an output stream has not been provided.
-     * @throws LockedException if this mesh writer is locked processing a file.
+     *                           loader has not been provided or an output stream has not been provided.
+     * @throws LockedException   if this mesh writer is locked processing a file.
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
-    @SuppressWarnings("all")
-    public void write() throws LoaderException, IOException, NotReadyException, 
+    public void write() throws LoaderException, IOException, NotReadyException,
             LockedException {
-        
+
         if (!isReady()) {
             throw new NotReadyException();
         }
         if (isLocked()) {
             throw new LockedException();
         }
-        
+
         try {
             dataStream = new DataOutputStream(new BufferedOutputStream(stream));
-            
+
             locked = true;
             if (listener != null) {
                 listener.onWriteStart(this);
             }
-            
+
             try {
                 loader.setListener(this.internalListeners);
-            } catch (LockedException ignore) { }
+            } catch (LockedException ignore) {
+            }
 
-            //write version
+            // write version
             dataStream.writeByte(VERSION);
-            
-            LoaderIterator iter = loader.load();
-            
-            float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, 
-                    minZ = Float.MAX_VALUE, maxX = -Float.MAX_VALUE, 
-                    maxY = -Float.MAX_VALUE, maxZ = -Float.MAX_VALUE;
-            
+
+            final LoaderIterator iter = loader.load();
+
+            float minX = Float.MAX_VALUE;
+            float minY = Float.MAX_VALUE;
+            float minZ = Float.MAX_VALUE;
+            float maxX = -Float.MAX_VALUE;
+            float maxY = -Float.MAX_VALUE;
+            float maxZ = -Float.MAX_VALUE;
+
             while (iter.hasNext()) {
-                DataChunk chunk = iter.next();
+                final DataChunk chunk = iter.next();
                 if (listener != null) {
                     listener.onChunkAvailable(this, chunk);
                 }
-                
-                float[] coords = chunk.getVerticesCoordinatesData();
-                short[] colors = chunk.getColorData();
-                int[] indices = chunk.getIndicesData();
-                float[] textureCoords = chunk.getTextureCoordiantesData();
-                float[] normals = chunk.getNormalsData();
-                int colorComponents = chunk.getColorComponents();
-                
-                boolean coordsAvailable = (coords != null);
-                boolean colorsAvailable = (colors != null);
-                boolean indicesAvailable = (indices != null);
-                boolean textureCoordsAvailable = (textureCoords != null);
-                boolean normalsAvailable = (normals != null);
-                        
+
+                final float[] coords = chunk.getVerticesCoordinatesData();
+                final short[] colors = chunk.getColorData();
+                final int[] indices = chunk.getIndicesData();
+                final float[] textureCoords = chunk.getTextureCoordiantesData();
+                final float[] normals = chunk.getNormalsData();
+                final int colorComponents = chunk.getColorComponents();
+
+                final boolean coordsAvailable = (coords != null);
+                final boolean colorsAvailable = (colors != null);
+                final boolean indicesAvailable = (indices != null);
+                final boolean textureCoordsAvailable = (textureCoords != null);
+                final boolean normalsAvailable = (normals != null);
+
                 if (chunk.getMinX() < minX) {
                     minX = chunk.getMinX();
                 }
@@ -129,7 +141,7 @@ public class MeshWriterBinary extends MeshWriter {
                 if (chunk.getMinZ() < minZ) {
                     minZ = chunk.getMinZ();
                 }
-                
+
                 if (chunk.getMaxX() > maxX) {
                     maxX = chunk.getMaxX();
                 }
@@ -139,385 +151,425 @@ public class MeshWriterBinary extends MeshWriter {
                 if (chunk.getMaxZ() > maxZ) {
                     maxZ = chunk.getMaxZ();
                 }
-                
-                //compute size of material in bytes
-                Material material = chunk.getMaterial();
-                int materialSizeInBytes = 1; //boolean indicating availability 
-                                            //of material
+
+                // compute size of material in bytes
+                final Material material = chunk.getMaterial();
+                // boolean indicating availability
+                // of material
+                int materialSizeInBytes = 1;
+
                 if (material != null) {
-                    //material id (int)
+                    // material id (int)
                     materialSizeInBytes += Integer.SIZE / 8;
-                    //ambient color (RGB) -> 3 bytes
-                    materialSizeInBytes += 1; //boolean indicating availability
+                    // ambient color (RGB) -> 3 bytes
+
+                    //boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isAmbientColorAvailable()) {
-                        materialSizeInBytes += 3; //RGB components
+                        // RGB components
+                        materialSizeInBytes += 3;
                     }
-                    //diffuse color
-                    materialSizeInBytes += 1; //boolean indicating availability
+
+                    // diffuse color
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isDiffuseColorAvailable()) {
-                        materialSizeInBytes += 3; //RGB components
-                    }                    
-                    //specular color
-                    materialSizeInBytes += 1; //boolean indicating availability
+                        // RGB components
+                        materialSizeInBytes += 3;
+                    }
+
+                    // specular color
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isSpecularColorAvailable()) {
-                        materialSizeInBytes += 3; //RGB components
-                    }                    
-                    //specular coefficient (float)
-                    materialSizeInBytes += 1; //boolean indicating availability
+                        // RGB components
+                        materialSizeInBytes += 3;
+                    }
+
+                    // specular coefficient (float)
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isSpecularCoefficientAvailable()) {
                         materialSizeInBytes += Float.SIZE / 8;
-                    }       
-                    
-                    //ambient texture map
-                    materialSizeInBytes += 1; //boolean indicating availability
+                    }
+
+                    // ambient texture map
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isAmbientTextureMapAvailable()) {
-                        //id of texture (int)
+                        // id of texture (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture width (int)
+                        // texture width (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture height (int)
+                        // texture height (int)
                         materialSizeInBytes += Integer.SIZE / 8;
                     }
-                    
-                    //diffuse texture map
-                    materialSizeInBytes += 1; //boolean indicating availability
+
+                    // diffuse texture map
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isDiffuseTextureMapAvailable()) {
-                        //id of texture (int)
+                        // id of texture (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture width (int)
+                        // texture width (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture height (int)
-                        materialSizeInBytes += Integer.SIZE / 8;                        
+                        // texture height (int)
+                        materialSizeInBytes += Integer.SIZE / 8;
                     }
-                    
-                    //specular texture map
-                    materialSizeInBytes += 1; //boolean indicating availability
+
+                    // specular texture map
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isSpecularTextureMapAvailable()) {
-                        //id of texture (int)
+                        // id of texture (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture width (int)
+                        // texture width (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture height (int)
-                        materialSizeInBytes += Integer.SIZE / 8;                        
+                        // texture height (int)
+                        materialSizeInBytes += Integer.SIZE / 8;
                     }
-                    
-                    //alpha texture map
-                    materialSizeInBytes += 1; //boolean indicating availability
+
+                    // alpha texture map
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isAlphaTextureMapAvailable()) {
-                        //id of texture (int)
+                        // id of texture (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture width (int)
+                        // texture width (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture height (int)
-                        materialSizeInBytes += Integer.SIZE / 8;                        
+                        // texture height (int)
+                        materialSizeInBytes += Integer.SIZE / 8;
                     }
-                    
-                    //bump texture map
-                    materialSizeInBytes += 1; //boolean indicating availability
+
+                    // bump texture map
+
+                    // boolean indicating availability
+                    materialSizeInBytes += 1;
                     if (material.isBumpTextureMapAvailable()) {
-                        //id of texture (int)
+                        // id of texture (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture width (int)
+                        // texture width (int)
                         materialSizeInBytes += Integer.SIZE / 8;
-                        //texture height (int)
-                        materialSizeInBytes += Integer.SIZE / 8;                        
+                        // texture height (int)
+                        materialSizeInBytes += Integer.SIZE / 8;
                     }
-                    
-                    //transparency
-                    materialSizeInBytes += 1; //availability
+
+                    // transparency
+
+                    // availability
+                    materialSizeInBytes += 1;
                     if (material.isTransparencyAvailable()) {
-                        materialSizeInBytes += 1;   //one byte 0-255 of 
-                                                    //transparency
+                        // one byte 0-255 of
+                        // transparency
+                        materialSizeInBytes += 1;
                     }
-                    
-                    //enum of illumination(int)
-                    materialSizeInBytes += 1; //boolean containing availability
+
+                    // enum of illumination(int)
+                    // boolean containing availability
+                    materialSizeInBytes += 1;
                     if (material.isIlluminationAvailable()) {
                         materialSizeInBytes += Integer.SIZE / 8;
                     }
                 }
-                
-                //compute size of chunk data in bytes
-                int coordsSizeInBytes = 0, colorsSizeInBytes = 0, 
-                        indicesSizeInBytes = 0, textureCoordsSizeInBytes = 0,
-                        normalsSizeInBytes = 0;
-                
-                if(coordsAvailable) 
+
+                // compute size of chunk data in bytes
+                int coordsSizeInBytes = 0;
+                int colorsSizeInBytes = 0;
+                int indicesSizeInBytes = 0;
+                int textureCoordsSizeInBytes = 0;
+                int normalsSizeInBytes = 0;
+
+                if (coordsAvailable) {
                     coordsSizeInBytes = coords.length * Float.SIZE / 8;
-                if(colorsAvailable)
-                    colorsSizeInBytes = colors.length;
-                if(indicesAvailable)
-                    indicesSizeInBytes = indices.length * Short.SIZE / 8;
-                if(textureCoordsAvailable)
-                    textureCoordsSizeInBytes = textureCoords.length * 
-                            Float.SIZE / 8;
-                if(normalsAvailable)
-                    normalsSizeInBytes = normals.length * Float.SIZE / 8;
-                
-                int chunkSize = materialSizeInBytes + coordsSizeInBytes + 
-                        colorsSizeInBytes + indicesSizeInBytes + 
-                        textureCoordsSizeInBytes + normalsSizeInBytes + 
-                        + (5 * Integer.SIZE / 8) + //sizes
-                        (6 * Float.SIZE / 8); //min/max values
+                }
                 if (colorsAvailable) {
-                    chunkSize += Integer.SIZE / 8; //bytes for number of color components
+                    colorsSizeInBytes = colors.length;
                 }
-                
-                //indicate that no more textures follow                
+                if (indicesAvailable) {
+                    indicesSizeInBytes = indices.length * Short.SIZE / 8;
+                }
+                if (textureCoordsAvailable) {
+                    textureCoordsSizeInBytes = textureCoords.length *
+                            Float.SIZE / 8;
+                }
+                if (normalsAvailable) {
+                    normalsSizeInBytes = normals.length * Float.SIZE / 8;
+                }
+
+                int chunkSize = materialSizeInBytes + coordsSizeInBytes +
+                        colorsSizeInBytes + indicesSizeInBytes +
+                        textureCoordsSizeInBytes + normalsSizeInBytes +
+                        +(5 * Integer.SIZE / 8) + // sizes
+                        (6 * Float.SIZE / 8); // min/max values
+                if (colorsAvailable) {
+                    // bytes for number of color components
+                    chunkSize += Integer.SIZE / 8;
+                }
+
+                // indicate that no more textures follow
                 if (!ignoreTextureValidation) {
-                    //byte below is written only once after all textures and
-                    //before all vertex data
+                    // byte below is written only once after all textures and
+                    // before all vertex data
                     dataStream.writeBoolean(false);
-                    ignoreTextureValidation = true; //so that no more textures are 
-                                                //written into stream
+
+                    // so that no more textures are
+                    // written into stream
+                    ignoreTextureValidation = true;
                 }
-                
-                //write total chunk size
+
+                // write total chunk size
                 dataStream.writeInt(chunkSize);
-                
-                //indicate material availability
+
+                // indicate material availability
                 dataStream.writeBoolean(material != null);
                 if (material != null) {
-                    //material id
+                    // material id
                     dataStream.writeInt(material.getId());
-                    
-                    //ambient color
+
+                    // ambient color
                     dataStream.writeBoolean(material.isAmbientColorAvailable());
                     if (material.isAmbientColorAvailable()) {
-                        byte b = (byte)(material.getAmbientRedColor() & 0x00ff);
+                        byte b = (byte) (material.getAmbientRedColor() & 0x00ff);
                         dataStream.writeByte(b);
-                        b = (byte)(material.getAmbientGreenColor() & 0x00ff);
+                        b = (byte) (material.getAmbientGreenColor() & 0x00ff);
                         dataStream.writeByte(b);
-                        b = (byte)(material.getAmbientBlueColor() & 0x00ff);
+                        b = (byte) (material.getAmbientBlueColor() & 0x00ff);
                         dataStream.writeByte(b);
                     }
-                    
-                    //diffuse color
+
+                    // diffuse color
                     dataStream.writeBoolean(material.isDiffuseColorAvailable());
                     if (material.isDiffuseColorAvailable()) {
-                        byte b = (byte)(material.getDiffuseRedColor() & 0x00ff);
+                        byte b = (byte) (material.getDiffuseRedColor() & 0x00ff);
                         dataStream.writeByte(b);
-                        b = (byte)(material.getDiffuseGreenColor() & 0x00ff);
+                        b = (byte) (material.getDiffuseGreenColor() & 0x00ff);
                         dataStream.writeByte(b);
-                        b = (byte)(material.getDiffuseBlueColor() & 0x00ff);
+                        b = (byte) (material.getDiffuseBlueColor() & 0x00ff);
                         dataStream.writeByte(b);
                     }
-                    
-                    //specular color
+
+                    // specular color
                     dataStream.writeBoolean(material.
                             isSpecularColorAvailable());
                     if (material.isSpecularColorAvailable()) {
-                        byte b = (byte)(material.getSpecularRedColor() & 
+                        byte b = (byte) (material.getSpecularRedColor() &
                                 0x00ff);
                         dataStream.writeByte(b);
-                        b = (byte)(material.getSpecularGreenColor() & 0x00ff);
+                        b = (byte) (material.getSpecularGreenColor() & 0x00ff);
                         dataStream.writeByte(b);
-                        b = (byte)(material.getSpecularBlueColor() & 0x00ff);
+                        b = (byte) (material.getSpecularBlueColor() & 0x00ff);
                         dataStream.writeByte(b);
                     }
-                    
-                    //specular coefficient (float)
+
+                    // specular coefficient (float)
                     dataStream.writeBoolean(
                             material.isSpecularCoefficientAvailable());
                     if (material.isSpecularCoefficientAvailable()) {
                         dataStream.writeFloat(
                                 material.getSpecularCoefficient());
                     }
-                    
-                    //ambient texture map
+
+                    // ambient texture map
                     dataStream.writeBoolean(
                             material.isAmbientTextureMapAvailable());
                     if (material.isAmbientTextureMapAvailable()) {
-                        Texture tex = material.getAmbientTextureMap();
-                        //texture id
+                        final Texture tex = material.getAmbientTextureMap();
+                        // texture id
                         dataStream.writeInt(tex.getId());
-                        //texture width
+                        // texture width
                         dataStream.writeInt(tex.getWidth());
-                        //texture height
+                        // texture height
                         dataStream.writeInt(tex.getHeight());
                     }
-                    
-                    //diffuse texture map
+
+                    // diffuse texture map
                     dataStream.writeBoolean(
                             material.isDiffuseTextureMapAvailable());
                     if (material.isDiffuseTextureMapAvailable()) {
-                        Texture tex = material.getDiffuseTextureMap();
-                        //texture id
+                        final Texture tex = material.getDiffuseTextureMap();
+                        // texture id
                         dataStream.writeInt(tex.getId());
-                        //texture width
+                        // texture width
                         dataStream.writeInt(tex.getWidth());
-                        //texture height
-                        dataStream.writeInt(tex.getHeight());                        
+                        // texture height
+                        dataStream.writeInt(tex.getHeight());
                     }
-                    
-                    //specular texture map
+
+                    // specular texture map
                     dataStream.writeBoolean(
                             material.isSpecularTextureMapAvailable());
                     if (material.isSpecularTextureMapAvailable()) {
-                        Texture tex = material.getSpecularTextureMap();
-                        //texture id
+                        final Texture tex = material.getSpecularTextureMap();
+                        // texture id
                         dataStream.writeInt(tex.getId());
-                        //texture width
+                        // texture width
                         dataStream.writeInt(tex.getWidth());
-                        //texture height
+                        // texture height
                         dataStream.writeInt(tex.getHeight());
                     }
-                    
-                    //alpha texture map
+
+                    // alpha texture map
                     dataStream.writeBoolean(
                             material.isAlphaTextureMapAvailable());
                     if (material.isAlphaTextureMapAvailable()) {
-                        Texture tex = material.getAlphaTextureMap();
-                        //texture id
+                        final Texture tex = material.getAlphaTextureMap();
+                        // texture id
                         dataStream.writeInt(tex.getId());
-                        //texture width
+                        // texture width
                         dataStream.writeInt(tex.getWidth());
-                        //texture height
+                        // texture height
                         dataStream.writeInt(tex.getHeight());
                     }
-                    
-                    //bump texture map
+
+                    // bump texture map
                     dataStream.writeBoolean(
                             material.isBumpTextureMapAvailable());
                     if (material.isBumpTextureMapAvailable()) {
-                        Texture tex = material.getBumpTextureMap();
-                        //texture id
+                        final Texture tex = material.getBumpTextureMap();
+                        // texture id
                         dataStream.writeInt(tex.getId());
-                        //texture width
+                        // texture width
                         dataStream.writeInt(tex.getWidth());
-                        //texture height
+                        // texture height
                         dataStream.writeInt(tex.getHeight());
                     }
-                    
+
                     dataStream.writeBoolean(material.isTransparencyAvailable());
                     if (material.isTransparencyAvailable()) {
-                        byte b = (byte)(material.getTransparency() & 0x00ff);
+                        final byte b = (byte) (material.getTransparency() & 0x00ff);
                         dataStream.writeByte(b);
                     }
-                    
+
                     dataStream.writeBoolean(material.isIlluminationAvailable());
                     if (material.isIlluminationAvailable()) {
                         dataStream.writeInt(material.getIllumination().value());
                     }
                 }
-                
-                
-                //write coords size
-                dataStream.writeInt(coordsSizeInBytes);                    
-                //write coords
+
+                // write coords size
+                dataStream.writeInt(coordsSizeInBytes);
+                // write coords
                 if (coordsAvailable) {
-                    for (float coord : coords) {
+                    for (final float coord : coords) {
                         dataStream.writeFloat(coord);
                     }
                 }
 
-                //write colors size
-                dataStream.writeInt(colorsSizeInBytes);                    
-                //write colors                
+                // write colors size
+                dataStream.writeInt(colorsSizeInBytes);
+                // write colors
                 if (colorsAvailable) {
                     int i = 0;
                     while (i < colors.length) {
-                        byte b = (byte)(colors[i] & 0x00ff);
+                        final byte b = (byte) (colors[i] & 0x00ff);
                         dataStream.writeByte(b);
                         i++;
                     }
                     dataStream.writeInt(colorComponents);
                 }
 
-                //write indices size
+                // write indices size
                 dataStream.writeInt(indicesSizeInBytes);
-                //write indices                
+                // write indices
                 if (indicesAvailable) {
-                    for (int index : indices) {
-                        short s = (short) (index & 0x0000ffff);
+                    for (final int index : indices) {
+                        final short s = (short) (index & 0x0000ffff);
                         dataStream.writeShort(s);
                     }
                 }
 
-                //write texture coords
+                // write texture coords
                 dataStream.writeInt(textureCoordsSizeInBytes);
-                //write texture coords                
+                // write texture coords
                 if (textureCoordsAvailable) {
-                    for (float textureCoord : textureCoords) {
+                    for (final float textureCoord : textureCoords) {
                         dataStream.writeFloat(textureCoord);
                     }
-                }                
+                }
 
-                //write normals
+                // write normals
                 dataStream.writeInt(normalsSizeInBytes);
-                //write normals                
+                // write normals
                 if (normalsAvailable) {
-                    for (float normal : normals) {
+                    for (final float normal : normals) {
                         dataStream.writeFloat(normal);
                     }
-                }                
-                
-                //write min/max x, y, z
+                }
+
+                // write min/max x, y, z
                 dataStream.writeFloat(chunk.getMinX());
                 dataStream.writeFloat(chunk.getMinY());
                 dataStream.writeFloat(chunk.getMinZ());
-                
+
                 dataStream.writeFloat(chunk.getMaxX());
                 dataStream.writeFloat(chunk.getMaxY());
                 dataStream.writeFloat(chunk.getMaxZ());
 
                 dataStream.flush();
-                
-                //to avoid out of memory errors we attempt to force garbage
-                //collection if possible
+
+                // to avoid out of memory errors we attempt to force garbage
+                // collection if possible
                 System.gc();
             }
-            
+
             if (listener != null) {
                 listener.onWriteEnd(this);
             }
             locked = false;
-            
-        } catch (LoaderException | IOException e) {
+
+        } catch (final LoaderException | IOException e) {
             throw e;
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             throw new LoaderException(e);
         }
-    }    
+    }
 
     /**
-     * Processes texture file. By reading provided texture file that has been 
+     * Processes texture file. By reading provided texture file that has been
      * created in a temporal location and embedding it into resulting output
      * stream.
-     * @param texture reference to texture that uses texture image.
+     *
+     * @param texture     reference to texture that uses texture image.
      * @param textureFile file containing texture image. File will usually be
-     * created in a temporal location.
+     *                    created in a temporal location.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    protected void processTextureFile(Texture texture, File textureFile) 
+    protected void processTextureFile(final Texture texture, final File textureFile)
             throws IOException {
         if (!textureFile.exists()) {
             return;
         }
-                
-        //write boolean to true indicating that a texture follows
+
+        // write boolean to true indicating that a texture follows
         dataStream.writeBoolean(true);
-        
-        //write int containing texture id
-        int textureId = texture.getId();
+
+        // write int containing texture id
+        final int textureId = texture.getId();
         dataStream.writeInt(textureId);
-        
-        //write int containing image width
-        int width = texture.getWidth();
+
+        // write int containing image width
+        final int width = texture.getWidth();
         dataStream.writeInt(width);
-        
-        //write int containing image height
-        int height = texture.getHeight();
+
+        // write int containing image height
+        final int height = texture.getHeight();
         dataStream.writeInt(height);
-        
-        //write length of texture file in bytes
-        long length = textureFile.length();
+
+        // write length of texture file in bytes
+        final long length = textureFile.length();
         dataStream.writeLong(length);
-        
-        //write file data
-        try (InputStream textureStream = new FileInputStream(textureFile)) {
-            byte[] buffer = new byte[BUFFER_SIZE];
+
+        // write file data
+        try (final InputStream textureStream = new FileInputStream(textureFile)) {
+            final byte[] buffer = new byte[BUFFER_SIZE];
             int n;
             while ((n = textureStream.read(buffer)) > 0) {
                 dataStream.write(buffer, 0, n);
