@@ -216,7 +216,7 @@ com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderItera
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceUint16ReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.BinaryLittleEndianUshortReadValueFromStreamListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.NXushortReadValueFromBufferListener,17,0,0,0,3,0,2,0,2,0
-com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY,207,859,57,65,49,283,46,48,0,32
+com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY,203,863,56,66,48,284,45,49,0,32
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.FaceDoubleReadValueFromBufferListener,19,0,0,0,4,0,2,0,2,0
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,NotReadyException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-geometry-io,com.irurueta.geometry.io,LoaderPLY.LoaderIteratorPLY.AsciiFloat64ReadValueFromStreamListener,37,0,4,0,9,0,4,0,2,0
