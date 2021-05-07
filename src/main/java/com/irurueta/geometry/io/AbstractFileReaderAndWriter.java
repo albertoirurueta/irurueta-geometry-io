@@ -78,7 +78,7 @@ public abstract class AbstractFileReaderAndWriter implements Closeable {
 
     /**
      * Writes the specified byte to this file. The write starts at the current
-     * fiel pointer.
+     * file pointer.
      *
      * @param b the byte to be written.
      * @throws IOException if an I/O error occurs.
@@ -472,7 +472,7 @@ public abstract class AbstractFileReaderAndWriter implements Closeable {
     public abstract void writeShort(final short v) throws IOException;
 
     /**
-     * Writes a short to the file as two bytes using provided enadian type.
+     * Writes a short to the file as two bytes using provided endian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte
      * order is reversed.

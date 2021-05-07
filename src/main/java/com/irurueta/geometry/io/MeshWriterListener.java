@@ -122,7 +122,7 @@ public interface MeshWriterListener {
      * @param textureFile   file that contains texture image data read from stream.
      * @param textureWidth  texture image width in pixels.
      * @param textureHeight texture image height in pixels.
-     * @return converted image transcoded into JPG format or resized if
+     * @return converted image trans-coded into JPG format or resized if
      * needed, otherwise textureFile can be returned if no changes are needed.
      */
     File onTextureDataAvailable(final MeshWriter writer, final File textureFile,

@@ -570,7 +570,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
 
         // set new value
         final long value = 1000000;
-        loader.setFileSizeLimitToKeepInMemoery(value);
+        loader.setFileSizeLimitToKeepInMemory(value);
         // and check correctness
         assertEquals(loader.getFileSizeLimitToKeepInMemory(), value);
     }
@@ -727,7 +727,6 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    @SuppressWarnings("Duplicates")
     public void testLoadAndIterate()
             throws IllegalArgumentException, LockedException, NotReadyException,
             IOException, LoaderException, NotAvailableException {
@@ -1262,13 +1261,13 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             final float[] asciiVertices = asciiChunk.getVerticesCoordinatesData();
             final short[] asciiColors = asciiChunk.getColorData();
             final int[] asciiIndices = asciiChunk.getIndicesData();
-            final float[] asciiTextureCoords = asciiChunk.getTextureCoordiantesData();
+            final float[] asciiTextureCoords = asciiChunk.getTextureCoordinatesData();
             final float[] asciiNormals = asciiChunk.getNormalsData();
 
             final float[] binaryVertices = binaryChunk.getVerticesCoordinatesData();
             final short[] binaryColors = binaryChunk.getColorData();
             final int[] binaryIndices = binaryChunk.getIndicesData();
-            final float[] binaryTextureCoords = binaryChunk.getTextureCoordiantesData();
+            final float[] binaryTextureCoords = binaryChunk.getTextureCoordinatesData();
             final float[] binaryNormals = binaryChunk.getNormalsData();
 
             final int arraySize = asciiVertices.length;
@@ -1423,7 +1422,6 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         checkLocked((LoaderPLY) loader);
     }
 
-    @SuppressWarnings("Duplicates")
     private void checkLocked(final LoaderPLY loader) {
         if (!loader.isLocked()) {
             lockedValid = false;

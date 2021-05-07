@@ -26,14 +26,14 @@ import java.io.OutputStream;
 public abstract class MeshWriter {
 
     /**
-     * Loader to load a file to be transcoded.
+     * Loader to load a file to be trans-coded.
      */
-    protected Loader loader;
+    protected final Loader loader;
 
     /**
-     * Stream where transcoded data will be written to.
+     * Stream where trans-coded data will be written to.
      */
-    protected OutputStream stream;
+    protected final OutputStream stream;
 
     /**
      * Listener to be notified when transcoding process starts, stops or when
@@ -56,13 +56,13 @@ public abstract class MeshWriter {
      * Internal class implementing specific listeners for some specific loader
      * implementations.
      */
-    Listeners internalListeners;
+    final Listeners internalListeners;
 
     /**
      * Constructor.
      *
      * @param loader loader to load a 3D file.
-     * @param stream stream where transcoded data will be written to.
+     * @param stream stream where trans-coded data will be written to.
      */
     protected MeshWriter(final Loader loader, final OutputStream stream) {
         this.loader = loader;
@@ -77,7 +77,7 @@ public abstract class MeshWriter {
      * Constructor.
      *
      * @param loader   loader to load a 3D file.
-     * @param stream   stream where transcoded data will be written to.
+     * @param stream   stream where trans-coded data will be written to.
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
@@ -102,9 +102,9 @@ public abstract class MeshWriter {
     }
 
     /**
-     * Returns stream where transcoded data will be written to.
+     * Returns stream where trans-coded data will be written to.
      *
-     * @return stream where transcoded data will be written to.
+     * @return stream where trans-coded data will be written to.
      */
     public OutputStream getStream() {
         return stream;
@@ -264,7 +264,7 @@ public abstract class MeshWriter {
          * @param textureId          id assigned to the texture.
          * @param textureImageWidth  width of texture image.
          * @param textureImageHeight height of texture image.
-         * @return converted image transcoded into JPG format or resized if
+         * @return converted image trans-coded into JPG format or resized if
          * needed, or input textureFile if no changes are needed.
          */
         @Override

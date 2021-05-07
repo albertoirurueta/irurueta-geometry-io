@@ -44,6 +44,6 @@ public class HeaderPLYTest {
         header.getElements().add(element);
 
         assertEquals(header.toString(), "ply\nformat ascii 1.0\n" +
-                element.toString() + "end_header\n");
+                element + "end_header\n");
     }
 }

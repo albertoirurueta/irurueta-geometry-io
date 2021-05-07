@@ -69,7 +69,7 @@ public class Texture {
     }
 
     /**
-     * COnstructor.
+     * Constructor.
      *
      * @param fileName path to file containing texture image in any of the
      *                 supported formats.
@@ -100,7 +100,7 @@ public class Texture {
      * @return true if file names has been provided, false otherwise.
      */
     public boolean isFileNameAvailable() {
-        return fileName != null;
+        return !fileName.isEmpty();
     }
 
     /**

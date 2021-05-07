@@ -247,6 +247,77 @@ public class MaterialLoaderOBJTest implements MaterialLoaderListener {
         assertNull(loader.getMaterialByTextureMapName(""));
     }
 
+    @Test
+    public void testIsSetTextureValidationEnabled() {
+        final MaterialLoaderOBJ loader = new MaterialLoaderOBJ();
+
+        // check default value
+        assertTrue(loader.isTextureValidationEnabled());
+
+        // set new value
+        loader.setTextureValidationEnabled(false);
+
+        // check
+        assertFalse(loader.isTextureValidationEnabled());
+    }
+
+    @Test
+    public void testGetFileSizeLimitToKeepInMemory() throws LockedException {
+        final MaterialLoaderOBJ loader = new MaterialLoaderOBJ();
+
+        // check default value
+        assertEquals(loader.getFileSizeLimitToKeepInMemory(),
+                MaterialLoaderOBJ.DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY);
+
+        // set new value
+        loader.setFileSizeLimitToKeepInMemory(
+                MaterialLoaderOBJ.DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY / 2);
+
+        // check
+        assertEquals(MaterialLoaderOBJ.DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY / 2,
+                loader.getFileSizeLimitToKeepInMemory());
+    }
+
+    @Test
+    public void testGetSetListener() throws LockedException {
+        final MaterialLoaderOBJ loader = new MaterialLoaderOBJ();
+
+        // check default value
+        assertNull(loader.getListener());
+
+        // set new value
+        loader.setListener(this);
+
+        // check
+        assertSame(this, loader.getListener());
+    }
+
+    @Test
+    public void testSetFile() throws LockedException, IOException {
+        final MaterialLoaderOBJ loader = new MaterialLoaderOBJ();
+
+        // check
+        assertFalse(loader.hasFile());
+
+        // set file
+        final File f = new File("./src/test/java/com/irurueta/geometry/io/potro.mtl");
+        loader.setFile(f);
+
+        // check
+        assertTrue(loader.hasFile());
+
+        // set file again
+        loader.setFile(f);
+
+        assertTrue(loader.hasFile());
+
+        // release file resources
+        loader.close();
+
+        assertFalse(loader.hasFile());
+
+    }
+
     @Override
     public void onLoadStart(final MaterialLoader loader) {
         // test locked exception because loader is loading

@@ -26,10 +26,15 @@ public class DataChunkTest {
         final DataChunk chunk = new DataChunk();
 
         assertNull(chunk.getVerticesCoordinatesData());
+        assertFalse(chunk.isVerticesCoordinatesDataAvailable());
         assertNull(chunk.getColorData());
+        assertFalse(chunk.isColorDataAvailable());
         assertNull(chunk.getIndicesData());
-        assertNull(chunk.getTextureCoordiantesData());
+        assertFalse(chunk.isIndicesDataAvailable());
+        assertNull(chunk.getTextureCoordinatesData());
+        assertFalse(chunk.isTextureCoordinatesDataAvailable());
         assertNull(chunk.getNormalsData());
+        assertFalse(chunk.isNormalsDataAvailable());
 
         assertEquals(chunk.getColorComponents(),
                 DataChunk.DEFAULT_COLOR_COMPONENTS);
@@ -48,6 +53,7 @@ public class DataChunkTest {
         final DataChunk chunk = new DataChunk();
 
         assertNull(chunk.getVerticesCoordinatesData());
+        assertFalse(chunk.isVerticesCoordinatesDataAvailable());
 
         // set data
         final float[] data = new float[1024];
@@ -55,6 +61,7 @@ public class DataChunkTest {
 
         // check correctness
         assertEquals(chunk.getVerticesCoordinatesData(), data);
+        assertTrue(chunk.isVerticesCoordinatesDataAvailable());
     }
 
     @Test
@@ -62,6 +69,7 @@ public class DataChunkTest {
         final DataChunk chunk = new DataChunk();
 
         assertNull(chunk.getColorData());
+        assertFalse(chunk.isColorDataAvailable());
 
         // set data
         final short[] data = new short[1024];
@@ -69,6 +77,7 @@ public class DataChunkTest {
 
         // check correctness
         assertEquals(chunk.getColorData(), data);
+        assertTrue(chunk.isColorDataAvailable());
     }
 
     @Test
@@ -76,6 +85,7 @@ public class DataChunkTest {
         final DataChunk chunk = new DataChunk();
 
         assertNull(chunk.getIndicesData());
+        assertFalse(chunk.isIndicesDataAvailable());
 
         // set data
         final int[] data = new int[1024];
@@ -83,20 +93,23 @@ public class DataChunkTest {
 
         // check correctness
         assertEquals(chunk.getIndicesData(), data);
+        assertTrue(chunk.isIndicesDataAvailable());
     }
 
     @Test
     public void testGetSetTextureCoordinatesData() {
         final DataChunk chunk = new DataChunk();
 
-        assertNull(chunk.getTextureCoordiantesData());
+        assertNull(chunk.getTextureCoordinatesData());
+        assertFalse(chunk.isTextureCoordinatesDataAvailable());
 
         // set data
         final float[] data = new float[1024];
         chunk.setTextureCoordinatesData(data);
 
         // check correctness
-        assertEquals(chunk.getTextureCoordiantesData(), data);
+        assertEquals(chunk.getTextureCoordinatesData(), data);
+        assertTrue(chunk.isTextureCoordinatesDataAvailable());
     }
 
     @Test
@@ -104,6 +117,7 @@ public class DataChunkTest {
         final DataChunk chunk = new DataChunk();
 
         assertNull(chunk.getNormalsData());
+        assertFalse(chunk.isNormalsDataAvailable());
 
         // set data
         final float[] data = new float[1024];
@@ -111,6 +125,7 @@ public class DataChunkTest {
 
         // check correctness
         assertEquals(chunk.getNormalsData(), data);
+        assertTrue(chunk.isNormalsDataAvailable());
     }
 
     @Test

@@ -137,7 +137,7 @@ public abstract class Loader implements Closeable {
 
     /**
      * Sets maximum size (in bytes) to determine whether a file is completely
-     * chached in memory (if lower than maximum size), or if it is just streamed
+     * cached in memory (if lower than maximum size), or if it is just streamed
      * (if greater than maximum size).
      *
      * @param fileSizeLimitToKeepInMemory maximum size to determine whether file
@@ -145,7 +145,7 @@ public abstract class Loader implements Closeable {
      * @throws LockedException if loader is locked because it is currently
      *                         processing a file.
      */
-    public void setFileSizeLimitToKeepInMemoery(
+    public void setFileSizeLimitToKeepInMemory(
             final long fileSizeLimitToKeepInMemory) throws LockedException {
         if (isLocked()) {
             throw new LockedException();

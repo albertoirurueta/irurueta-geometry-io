@@ -75,7 +75,7 @@ public class Loader3DS extends Loader {
 
     private long meshVersion = DEFAULT_MESH_VERSION;
     private float masterScale = DEFAULT_MASTER_SCALE;
-    private float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;
+    private final float[] constructionPlane = DEFAULT_CONSTRUCTION_PLANE;
     private int keyfRevision;
     private String name;
     private int frames;
@@ -83,7 +83,7 @@ public class Loader3DS extends Loader {
     private int segmentTo;
     private int currentFrame;
 
-    private short[] ambientColor = DEFAULT_AMBIENT_COLOR;
+    private final short[] ambientColor = DEFAULT_AMBIENT_COLOR;
     private Set<Material> materials;
 
     //TODO: to be modified when implementation is finished
@@ -141,13 +141,12 @@ public class Loader3DS extends Loader {
     }
 
     @Override
-    public boolean isValidFile() throws LockedException, IOException {
+    public boolean isValidFile() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException,
-            IOException, LoaderException {
+    public LoaderIterator load() throws IOException, LoaderException {
 
         // load first chunk and ensure it is the start chunk
         setLocked(true);

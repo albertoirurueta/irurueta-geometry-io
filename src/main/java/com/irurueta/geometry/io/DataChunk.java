@@ -276,7 +276,7 @@ public class DataChunk {
      *
      * @return Array containing texture coordinates in a texture image.
      */
-    public float[] getTextureCoordiantesData() {
+    public float[] getTextureCoordinatesData() {
         return textureCoords;
     }
 

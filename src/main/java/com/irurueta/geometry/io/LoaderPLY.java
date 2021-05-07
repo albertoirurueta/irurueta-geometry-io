@@ -1446,17 +1446,6 @@ public class LoaderPLY extends Loader {
         }
 
         /**
-         * Gets listener that notifies when this iterator has finished loading
-         * the PLY file.
-         *
-         * @return listener to notify when this iterator has finished loading
-         * the PLY file.
-         */
-        public LoaderIteratorListener getListener() {
-            return listener;
-        }
-
-        /**
          * Indicates if there are still more chunks of data to be read on this
          * PLY file.
          *
@@ -3111,7 +3100,6 @@ public class LoaderPLY extends Loader {
              *                               is not available.
              */
             @Override
-            @SuppressWarnings("Duplicates")
             public void fetch(final long index)
                     throws LoaderException, IOException, NotAvailableException {
 

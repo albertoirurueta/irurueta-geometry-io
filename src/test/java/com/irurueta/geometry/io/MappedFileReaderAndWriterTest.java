@@ -466,7 +466,7 @@ public class MappedFileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsigedShort() throws IOException {
+    public void testReadWriteUnsignedShort() throws IOException {
         final File f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 

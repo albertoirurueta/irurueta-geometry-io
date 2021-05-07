@@ -563,16 +563,6 @@ public class LoaderSTL extends Loader {
         }
 
         /**
-         * Returns listener of this loader iterator.
-         * This listener will be notified when the loading process finishes
-         *
-         * @return listener of this loader iterator.
-         */
-        public LoaderIteratorListener getListener() {
-            return listener;
-        }
-
-        /**
          * Indicates if there is another chunk of data to be loaded.
          *
          * @return true if there is another chunk of data, false otherwise.
@@ -836,24 +826,6 @@ public class LoaderSTL extends Loader {
             }
 
             return dataChunk;
-        }
-
-        /**
-         * Returns name of 3D object.
-         *
-         * @return name of 3D object.
-         */
-        public String getSolidName() {
-            return solidName;
-        }
-
-        /**
-         * Gets number of vertices contained in the file.
-         *
-         * @return number of vertices contained in the file.
-         */
-        public long getNumberOfVertices() {
-            return numberOfVertices;
         }
 
         /**

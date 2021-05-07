@@ -176,7 +176,7 @@ public abstract class MaterialLoader implements Closeable {
      * @return True if material file has already been provided, false otherwise.
      */
     public boolean hasFile() {
-        return (reader != null);
+        return reader != null;
     }
 
     /**

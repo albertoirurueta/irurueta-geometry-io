@@ -66,6 +66,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
@@ -91,6 +93,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
@@ -126,6 +130,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
@@ -160,6 +166,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
@@ -207,6 +215,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -235,6 +245,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -270,6 +282,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -304,6 +318,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader.getListener());
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -361,7 +377,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
-
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
@@ -386,6 +403,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
 
         try {
             loader.isValidFile();
@@ -421,6 +440,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
 
         try {
             loader.isValidFile();
@@ -455,6 +476,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
 
         try {
             loader.isValidFile();
@@ -498,6 +521,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -523,6 +548,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -557,6 +584,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -592,6 +621,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(loader.getListener(), listener);
         assertEquals(loader.isContinueIfTriangulationError(),
                 LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
@@ -718,6 +749,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         }
     }
 
+    @Test
+    public void testIsSetContinueIfTriangulationError() {
+        final LoaderOBJ loader = new LoaderOBJ();
+
+        assertTrue(loader.isContinueIfTriangulationError());
+
+        loader.setContinueIfTriangulationError(false);
+
+        assertFalse(loader.isContinueIfTriangulationError());
+    }
 
     @Test
     public void testIsValidFile() throws LockedException, IOException {
@@ -754,7 +795,6 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    @SuppressWarnings("Duplicates")
     public void testLoadAndIterate() throws IllegalArgumentException, LockedException,
             NotReadyException, IOException, LoaderException, NotAvailableException {
 
@@ -791,13 +831,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             final DataChunk plyChunk = plyIt.next();
 
             final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordiantesData();
+            final float[] objTexture = objChunk.getTextureCoordinatesData();
             final short[] objColors = objChunk.getColorData();
             final float[] objNormals = objChunk.getNormalsData();
             final int[] objIndices = objChunk.getIndicesData();
 
             final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordiantesData();
+            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
             final short[] plyColors = plyChunk.getColorData();
             final float[] plyNormals = plyChunk.getNormalsData();
             final int[] plyIndices = plyChunk.getIndicesData();
@@ -910,13 +950,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             final DataChunk plyChunk = plyIt.next();
 
             final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordiantesData();
+            final float[] objTexture = objChunk.getTextureCoordinatesData();
             final short[] objColors = objChunk.getColorData();
             final float[] objNormals = objChunk.getNormalsData();
             final int[] objIndices = objChunk.getIndicesData();
 
             final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordiantesData();
+            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
             final short[] plyColors = plyChunk.getColorData();
             final float[] plyNormals = plyChunk.getNormalsData();
             final int[] plyIndices = plyChunk.getIndicesData();
@@ -1018,13 +1058,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             final DataChunk plyChunk = plyIt.next();
 
             final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordiantesData();
+            final float[] objTexture = objChunk.getTextureCoordinatesData();
             final short[] objColors = objChunk.getColorData();
             final float[] objNormals = objChunk.getNormalsData();
             final int[] objIndices = objChunk.getIndicesData();
 
             final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordiantesData();
+            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
             final short[] plyColors = plyChunk.getColorData();
             final float[] plyNormals = plyChunk.getNormalsData();
             final int[] plyIndices = plyChunk.getIndicesData();
@@ -1137,13 +1177,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             final DataChunk plyChunk = plyIt.next();
 
             final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordiantesData();
+            final float[] objTexture = objChunk.getTextureCoordinatesData();
             final short[] objColors = objChunk.getColorData();
             final float[] objNormals = objChunk.getNormalsData();
             final int[] objIndices = objChunk.getIndicesData();
 
             final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordiantesData();
+            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
             final short[] plyColors = plyChunk.getColorData();
             final float[] plyNormals = plyChunk.getNormalsData();
             final int[] plyIndices = plyChunk.getIndicesData();
@@ -1237,7 +1277,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             resetListener();
 
             final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordiantesData();
+            final float[] objTexture = objChunk.getTextureCoordinatesData();
             final short[] objColors = objChunk.getColorData();
             final float[] objNormals = objChunk.getNormalsData();
             final int[] objIndices = objChunk.getIndicesData();
@@ -1292,7 +1332,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             resetListener();
 
             final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordiantesData();
+            final float[] objTexture = objChunk.getTextureCoordinatesData();
             final short[] objColors = objChunk.getColorData();
             final float[] objNormals = objChunk.getNormalsData();
             final int[] objIndices = objChunk.getIndicesData();
@@ -1303,8 +1343,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             final int nVerticesInChunk = objVertices.length / 3;
 
-            for (final int objIndice : objIndices) {
-                assertTrue(objIndice < nVerticesInChunk);
+            for (final int objIndex : objIndices) {
+                assertTrue(objIndex < nVerticesInChunk);
             }
 
             // check bounding box values

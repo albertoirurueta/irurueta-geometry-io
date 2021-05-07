@@ -407,13 +407,13 @@ public class LoaderSTLTest implements LoaderListener {
             resetListener();
 
             final float[] binVertices = binChunk.getVerticesCoordinatesData();
-            final float[] binTexture = binChunk.getTextureCoordiantesData();
+            final float[] binTexture = binChunk.getTextureCoordinatesData();
             final short[] binColors = binChunk.getColorData();
             final float[] binNormals = binChunk.getNormalsData();
             final int[] binIndices = binChunk.getIndicesData();
 
             final float[] asciiVertices = asciiChunk.getVerticesCoordinatesData();
-            final float[] asciiTexture = asciiChunk.getTextureCoordiantesData();
+            final float[] asciiTexture = asciiChunk.getTextureCoordinatesData();
             final short[] asciiColors = asciiChunk.getColorData();
             final float[] asciiNormals = asciiChunk.getNormalsData();
             final int[] asciiIndices = asciiChunk.getIndicesData();

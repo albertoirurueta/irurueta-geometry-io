@@ -1240,16 +1240,6 @@ public class LoaderOBJ extends Loader {
         }
 
         /**
-         * Returns listener of this loader iterator.
-         * This listener will be notified when the loading process finishes.
-         *
-         * @return listener of this loader iterator.
-         */
-        public LoaderIteratorListener getListener() {
-            return listener;
-        }
-
-        /**
          * Indicates if there is another chunk of data to be loaded.
          *
          * @return true if there is another chunk of data, false otherwise.
@@ -1767,7 +1757,6 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if data is corrupted or cannot be understood.
          * @throws IOException     if an I/O error occurs.
          */
-        @SuppressWarnings("Duplicates")
         public void fetchVertex(long index) throws LoaderException, IOException {
             if (index > numberOfVertices) {
                 throw new LoaderException();
@@ -1843,7 +1832,6 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if data is corrupted or cannot be understood.
          * @throws IOException     if an I/O error occurs.
          */
-        @SuppressWarnings("Duplicates")
         public void fetchTexture(final long index) throws LoaderException,
                 IOException {
             if (index > numberOfTextureCoords) {
@@ -1920,7 +1908,6 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if data is corrupted or cannot be understood.
          * @throws IOException     if an I/O error occurs.
          */
-        @SuppressWarnings("Duplicates")
         public void fetchNormal(final long index) throws LoaderException, IOException {
             if (index > numberOfNormals) {
                 throw new LoaderException();

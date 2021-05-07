@@ -54,7 +54,7 @@ public class TextureTest {
         // check correctness
         assertTrue(tex.getFileName().isEmpty());
         assertEquals(tex.getId(), id);
-        assertTrue(tex.isFileNameAvailable());
+        assertFalse(tex.isFileNameAvailable());
         assertNull(tex.getFile());
         assertFalse(tex.isFileAvailable());
         assertEquals(tex.getWidth(), -1);

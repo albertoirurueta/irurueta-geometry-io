@@ -85,7 +85,7 @@ public class MeshWriterJson extends MeshWriter {
      * Constructor.
      *
      * @param loader loader to load a 3D file.
-     * @param stream stream where transcoded data will be written to.
+     * @param stream stream where trans-coded data will be written to.
      */
     public MeshWriterJson(final Loader loader, final OutputStream stream) {
         super(loader, stream);
@@ -99,7 +99,7 @@ public class MeshWriterJson extends MeshWriter {
      * Constructor.
      *
      * @param loader   loader to load a 3D file.
-     * @param stream   stream where transcoded data will be written to.
+     * @param stream   stream where trans-coded data will be written to.
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
@@ -228,7 +228,7 @@ public class MeshWriterJson extends MeshWriter {
     }
 
     /**
-     * Processes input file provided to loader and writes it transcoded into
+     * Processes input file provided to loader and writes it trans-coded into
      * output stream.
      *
      * @throws LoaderException   if 3D file loading fails.
@@ -286,7 +286,7 @@ public class MeshWriterJson extends MeshWriter {
                 final float[] coords = chunk.getVerticesCoordinatesData();
                 final short[] colors = chunk.getColorData();
                 final int[] indices = chunk.getIndicesData();
-                final float[] textureCoords = chunk.getTextureCoordiantesData();
+                final float[] textureCoords = chunk.getTextureCoordinatesData();
                 final float[] normals = chunk.getNormalsData();
 
                 final Material material = chunk.getMaterial();

@@ -611,14 +611,14 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             assertArrayEquals(normals, otherNormals, 0.0f);
         }
 
-        assertTrue((chunk.getTextureCoordiantesData() != null &&
-                otherChunk.getTextureCoordiantesData() != null) ||
-                (chunk.getTextureCoordiantesData() == null &&
-                        otherChunk.getTextureCoordiantesData() == null));
-        if (chunk.getTextureCoordiantesData() != null) {
+        assertTrue((chunk.getTextureCoordinatesData() != null &&
+                otherChunk.getTextureCoordinatesData() != null) ||
+                (chunk.getTextureCoordinatesData() == null &&
+                        otherChunk.getTextureCoordinatesData() == null));
+        if (chunk.getTextureCoordinatesData() != null) {
             // texture coordinates available
-            final float[] texCoords = chunk.getTextureCoordiantesData();
-            final float[] otherTexCoords = chunk.getTextureCoordiantesData();
+            final float[] texCoords = chunk.getTextureCoordinatesData();
+            final float[] otherTexCoords = chunk.getTextureCoordinatesData();
             assertEquals(texCoords.length, otherTexCoords.length);
             assertArrayEquals(texCoords, otherTexCoords, 0.0f);
         }
@@ -686,7 +686,6 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
     // Loader
     @Override
-    @SuppressWarnings("Duplicates")
     public void onLoadStart(final Loader loader) {
         if (loader instanceof LoaderBinary) {
             if (startCounter != 0) {
@@ -699,7 +698,6 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Override
-    @SuppressWarnings("Duplicates")
     public void onLoadEnd(final Loader loader) {
         if (loader instanceof LoaderBinary) {
             if (endCounter != 0) {

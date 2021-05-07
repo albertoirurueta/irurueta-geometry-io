@@ -18,6 +18,7 @@ package com.irurueta.geometry.io;
 /**
  * Utility methods for I/O operations.
  */
+@SuppressWarnings("SameParameterValue")
 public class Util {
 
     /**
@@ -193,7 +194,7 @@ public class Util {
     /**
      * Converts provided value from provided endian type to machine native
      * endian type (in Java native endian type is always big endian).
-     * Little endian puts hight bytes last, so byte order has to be reversed to
+     * Little endian puts high bytes last, so byte order has to be reversed to
      * convert to native machine endian. Big endian preserves natural byte order
      * (high bytes first).
      *
@@ -473,7 +474,7 @@ public class Util {
     /**
      * Converts provided value from provided endian type to machine native
      * endian type (in Java native endian type is always big endian).
-     * Little endian puts hight bytes last, so byte order has to be reversed to
+     * Little endian puts high bytes last, so byte order has to be reversed to
      * convert to native machine endian. Big endian preserves natural byte order
      * (high bytes first).
      *

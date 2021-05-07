@@ -337,16 +337,6 @@ public class LoaderBinary extends Loader {
         }
 
         /**
-         * Returns listener of this loader iterator.
-         * This listener will be notified when the loading process finishes.
-         *
-         * @return listener of this loader iterator.
-         */
-        public LoaderIteratorListener getListener() {
-            return listener;
-        }
-
-        /**
          * Method to set listener of this loader iterator.
          * This listener will be notified when the loading process finishes.
          *
