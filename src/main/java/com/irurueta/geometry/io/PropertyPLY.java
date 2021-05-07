@@ -127,8 +127,6 @@ public class PropertyPLY {
      * Property type (either scalar or list).
      *
      * @return property type.
-     * @throws NotAvailableException Raised if property type has not yet been
-     *                               provided and is not available for retrieval.
      */
     public PropertyTypePLY getPropertyType() {
         return type;
