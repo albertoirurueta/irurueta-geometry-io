@@ -130,21 +130,8 @@ public class PropertyPLY {
      * @throws NotAvailableException Raised if property type has not yet been
      *                               provided and is not available for retrieval.
      */
-    public PropertyTypePLY getPropertyType() throws NotAvailableException {
-        if (!isPropertyTypeAvailable()) {
-            throw new NotAvailableException();
-        }
+    public PropertyTypePLY getPropertyType() {
         return type;
-    }
-
-    /**
-     * Determines whether property type has been provided and is available for
-     * retrieval.
-     *
-     * @return True if property type has been provided, false otherwise.
-     */
-    public boolean isPropertyTypeAvailable() {
-        return true;
     }
 
     /**

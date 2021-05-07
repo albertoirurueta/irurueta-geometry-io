@@ -303,7 +303,7 @@ public class MeshWriterBinary extends MeshWriter {
                 int chunkSize = materialSizeInBytes + coordsSizeInBytes +
                         colorsSizeInBytes + indicesSizeInBytes +
                         textureCoordsSizeInBytes + normalsSizeInBytes +
-                        +(5 * Integer.SIZE / 8) + // sizes
+                        (5 * Integer.SIZE / 8) + // sizes
                         (6 * Float.SIZE / 8); // min/max values
                 if (colorsAvailable) {
                     // bytes for number of color components

@@ -38,7 +38,6 @@ public class PropertyPLYTest {
         assertFalse(property.isNameAvailable());
         assertEquals(property.getPropertyType(),
                 PropertyTypePLY.PROPERTY_PLY_SCALAR);
-        assertTrue(property.isPropertyTypeAvailable());
         try {
             property.getLengthType();
             fail("NotAvailableException not thrown");
@@ -80,7 +79,6 @@ public class PropertyPLYTest {
         assertTrue(property.isNameAvailable());
         assertEquals(property.getPropertyType(),
                 PropertyTypePLY.PROPERTY_PLY_SCALAR);
-        assertTrue(property.isPropertyTypeAvailable());
         try {
             property.getLengthType();
             fail("NotAvailableException not thrown");
@@ -123,7 +121,6 @@ public class PropertyPLYTest {
         assertTrue(property.isNameAvailable());
         assertEquals(property.getPropertyType(),
                 PropertyTypePLY.PROPERTY_PLY_LIST);
-        assertTrue(property.isPropertyTypeAvailable());
         assertEquals(property.getLengthType(), DataTypePLY.PLY_UCHAR);
         assertTrue(property.isLengthTypeAvailable());
         assertEquals(property.getValueType(), DataTypePLY.PLY_UINT);
