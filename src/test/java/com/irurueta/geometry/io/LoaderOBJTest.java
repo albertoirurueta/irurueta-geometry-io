@@ -670,7 +670,6 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertTrue(loader.isReady());
     }
 
-
     @Test
     public void testGetSetListener() throws LockedException {
         final LoaderOBJ loader = new LoaderOBJ();
