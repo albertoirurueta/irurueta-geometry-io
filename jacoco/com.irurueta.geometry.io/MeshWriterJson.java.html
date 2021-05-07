@@ -85,7 +85,7 @@ public class MeshWriterJson extends MeshWriter {
      * Constructor.
      *
      * @param loader loader to load a 3D file.
-     * @param stream stream where transcoded data will be written to.
+     * @param stream stream where trans-coded data will be written to.
      */
     public MeshWriterJson(final Loader loader, final OutputStream stream) {
 <span class="fc" id="L91">        super(loader, stream);</span>
@@ -99,7 +99,7 @@ public class MeshWriterJson extends MeshWriter {
      * Constructor.
      *
      * @param loader   loader to load a 3D file.
-     * @param stream   stream where transcoded data will be written to.
+     * @param stream   stream where trans-coded data will be written to.
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
@@ -228,7 +228,7 @@ public class MeshWriterJson extends MeshWriter {
 <span class="fc" id="L228">    }</span>
 
     /**
-     * Processes input file provided to loader and writes it transcoded into
+     * Processes input file provided to loader and writes it trans-coded into
      * output stream.
      *
      * @throws LoaderException   if 3D file loading fails.
@@ -286,7 +286,7 @@ public class MeshWriterJson extends MeshWriter {
 <span class="fc" id="L286">                final float[] coords = chunk.getVerticesCoordinatesData();</span>
 <span class="fc" id="L287">                final short[] colors = chunk.getColorData();</span>
 <span class="fc" id="L288">                final int[] indices = chunk.getIndicesData();</span>
-<span class="fc" id="L289">                final float[] textureCoords = chunk.getTextureCoordiantesData();</span>
+<span class="fc" id="L289">                final float[] textureCoords = chunk.getTextureCoordinatesData();</span>
 <span class="fc" id="L290">                final float[] normals = chunk.getNormalsData();</span>
 
 <span class="fc" id="L292">                final Material material = chunk.getMaterial();</span>

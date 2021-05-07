@@ -22,22 +22,22 @@ public class PropertyPLY {
     /**
      * Name of the property.
      */
-    String name;
+    final String name;
 
     /**
      * Property type (either scalar or list).
      */
-    PropertyTypePLY type;
+    final PropertyTypePLY type;
 
     /**
      * Data type of the value indicating length of the array for list properties.
      */
-    DataTypePLY lengthType;
+    final DataTypePLY lengthType;
 
     /**
      * Data type for the values contained within this property.
      */
-    DataTypePLY valueType;
+    final DataTypePLY valueType;
 
     /**
      * Listener to read the value of this property contained within the byte
@@ -144,7 +144,7 @@ public class PropertyPLY {
      * @return True if property type has been provided, false otherwise.
      */
     public boolean isPropertyTypeAvailable() {
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        return (type != null);</span>
+<span class="fc" id="L147">        return true;</span>
     }
 
     /**
@@ -228,7 +228,7 @@ public class PropertyPLY {
             // add value data type
 <span class="fc" id="L229">            builder.append(valueType.getValue()).append(&quot; &quot;);</span>
 
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        } else if (type == PropertyTypePLY.PROPERTY_PLY_LIST) {</span>
+<span class="pc bpc" id="L231" title="2 of 4 branches missed.">        } else if (type == PropertyTypePLY.PROPERTY_PLY_LIST &amp;&amp; lengthType != null) {</span>
             // indicate it is a list by adding length data type and values
             // data type
 <span class="fc" id="L234">            builder.append(&quot;list &quot;).append(lengthType.getValue()).append(</span>

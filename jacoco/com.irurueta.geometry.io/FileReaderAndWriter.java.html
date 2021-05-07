@@ -146,7 +146,7 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**
      * Writes the specified byte to this file. The write starts at the current
-     * fiel pointer.
+     * file pointer.
      *
      * @param b the byte to be written.
      * @throws IOException if an I/O error occurs.

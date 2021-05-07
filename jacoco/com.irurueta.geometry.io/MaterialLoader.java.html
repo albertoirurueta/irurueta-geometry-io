@@ -163,12 +163,12 @@ public abstract class MaterialLoader implements Closeable {
      */
     public void setFileSizeLimitToKeepInMemory(
             final long fileSizeLimitToKeepInMemory) throws LockedException {
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L167">            throw new LockedException();</span>
         }
 
-<span class="nc" id="L170">        this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;</span>
-<span class="nc" id="L171">    }</span>
+<span class="fc" id="L170">        this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;</span>
+<span class="fc" id="L171">    }</span>
 
     /**
      * Indicates whether a material file to be loaded has already been set.
@@ -176,7 +176,7 @@ public abstract class MaterialLoader implements Closeable {
      * @return True if material file has already been provided, false otherwise.
      */
     public boolean hasFile() {
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        return (reader != null);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        return reader != null;</span>
     }
 
     /**
@@ -191,23 +191,23 @@ public abstract class MaterialLoader implements Closeable {
     @SuppressWarnings(&quot;DuplicatedCode&quot;)
     public void setFile(final File f)
             throws LockedException, IOException {
-<span class="nc bnc" id="L194" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L195">            throw new LockedException();</span>
         }
-<span class="nc" id="L197">        file = f;</span>
+<span class="fc" id="L197">        file = f;</span>
 
-<span class="nc bnc" id="L199" title="All 2 branches missed.">        if (reader != null) {</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (reader != null) {</span>
             // close previous file
-<span class="nc" id="L201">            reader.close();</span>
+<span class="fc" id="L201">            reader.close();</span>
         }
 
-<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
-<span class="nc" id="L205">            reader = new MappedFileReaderAndWriter(f,</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L205">            reader = new MappedFileReaderAndWriter(f,</span>
                     FileChannel.MapMode.READ_ONLY);
         } else {
 <span class="nc" id="L208">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
         }
-<span class="nc" id="L210">    }</span>
+<span class="fc" id="L210">    }</span>
 
     /**
      * Closes file provided to this loader.
@@ -240,8 +240,8 @@ public abstract class MaterialLoader implements Closeable {
      *                                 otherwise.
      */
     public void setTextureValidationEnabled(final boolean textureValidationEnabled) {
-<span class="nc" id="L243">        this.textureValidationEnabled = textureValidationEnabled;</span>
-<span class="nc" id="L244">    }</span>
+<span class="fc" id="L243">        this.textureValidationEnabled = textureValidationEnabled;</span>
+<span class="fc" id="L244">    }</span>
 
     /**
      * Determines whether this instance is locked.
@@ -287,11 +287,11 @@ public abstract class MaterialLoader implements Closeable {
      */
     public void setListener(final MaterialLoaderListener listener)
             throws LockedException {
-<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L291">            throw new LockedException();</span>
         }
-<span class="nc" id="L293">        this.listener = listener;</span>
-<span class="nc" id="L294">    }</span>
+<span class="fc" id="L293">        this.listener = listener;</span>
+<span class="fc" id="L294">    }</span>
 
     /**
      * Determines whether enough parameters have been set so that the loading

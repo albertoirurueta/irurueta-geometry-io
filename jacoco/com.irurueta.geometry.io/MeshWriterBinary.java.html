@@ -47,7 +47,7 @@ public class MeshWriterBinary extends MeshWriter {
      * Constructor.
      *
      * @param loader loader to load a 3D file.
-     * @param stream stream where transcoded data will be written to.
+     * @param stream stream where trans-coded data will be written to.
      */
     public MeshWriterBinary(final Loader loader, final OutputStream stream) {
 <span class="fc" id="L53">        super(loader, stream);</span>
@@ -57,7 +57,7 @@ public class MeshWriterBinary extends MeshWriter {
      * Constructor.
      *
      * @param loader   loader to load a 3D file.
-     * @param stream   stream where transcoded data will be written to.
+     * @param stream   stream where trans-coded data will be written to.
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
@@ -67,7 +67,7 @@ public class MeshWriterBinary extends MeshWriter {
 <span class="fc" id="L67">    }</span>
 
     /**
-     * Processes input file provided to loader and writes it transcoded into
+     * Processes input file provided to loader and writes it trans-coded into
      * output stream.
      *
      * @throws LoaderException   if 3D file loading fails.
@@ -119,7 +119,7 @@ public class MeshWriterBinary extends MeshWriter {
 <span class="fc" id="L119">                final float[] coords = chunk.getVerticesCoordinatesData();</span>
 <span class="fc" id="L120">                final short[] colors = chunk.getColorData();</span>
 <span class="fc" id="L121">                final int[] indices = chunk.getIndicesData();</span>
-<span class="fc" id="L122">                final float[] textureCoords = chunk.getTextureCoordiantesData();</span>
+<span class="fc" id="L122">                final float[] textureCoords = chunk.getTextureCoordinatesData();</span>
 <span class="fc" id="L123">                final float[] normals = chunk.getNormalsData();</span>
 <span class="fc" id="L124">                final int colorComponents = chunk.getColorComponents();</span>
 
