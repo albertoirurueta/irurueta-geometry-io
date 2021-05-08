@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2017 - 2021</copyright>
     <item>
-      <title>File: 52,
-             Errors: 940,
+      <title>File: 51,
+             Errors: 791,
              Warnings: 0,
              Infos: 0
       </title>
@@ -308,20 +308,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://bitbucket.org/alberto_irurueta/irurueta-geometry-io/checkstyle.html#com.irurueta.geometry.io.Loader3DS.java">com/irurueta/geometry/io/Loader3DS.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  149
                 </td>
               </tr>
                           <tr>

@@ -166,8 +166,8 @@ public class PropertyPLY {
      *                               provided and is not available for retrieval.
      */
     public DataTypePLY getValueType() throws NotAvailableException {
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (!isValueTypeAvailable()) {</span>
-<span class="nc" id="L170">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (!isValueTypeAvailable()) {</span>
+<span class="fc" id="L170">            throw new NotAvailableException();</span>
         }
 <span class="fc" id="L172">        return valueType;</span>
     }
@@ -180,7 +180,7 @@ public class PropertyPLY {
      * is available for retrieval, false otherwise.
      */
     public boolean isValueTypeAvailable() {
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        return (valueType != null);</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        return (valueType != null);</span>
     }
 
     /**
