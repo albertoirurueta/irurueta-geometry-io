@@ -30,11 +30,6 @@ public enum MeshFormat {
     MESH_FORMAT_OBJ,
 
     /**
-     * 3DS format.
-     */
-    MESH_FORMAT_3DS,
-
-    /**
      * STL format.
      */
     MESH_FORMAT_STL,

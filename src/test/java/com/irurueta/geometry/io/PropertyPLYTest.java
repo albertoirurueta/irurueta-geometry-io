@@ -269,4 +269,24 @@ public class PropertyPLYTest {
         assertEquals(property.getReadLengthValueFromStreamListener(), listener);
         assertTrue(property.isReadLengthValueFromStreamListenerAvailable());
     }
+
+    @Test
+    public void testGetValueType() throws NotAvailableException {
+        // test when value type available
+        PropertyPLY property = new PropertyPLY("name",
+                DataTypePLY.PLY_FLOAT);
+
+        assertTrue(property.isValueTypeAvailable());
+        assertEquals(DataTypePLY.PLY_FLOAT, property.getValueType());
+
+        // test when value type not available
+        property = new PropertyPLY("name", null);
+
+        assertFalse(property.isValueTypeAvailable());
+        try {
+            property.getValueType();
+            fail("NotAvailableException expected but not thrown");
+        } catch (final NotAvailableException ignore) {
+        }
+    }
 }
