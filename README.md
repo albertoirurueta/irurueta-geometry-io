@@ -1,7 +1,7 @@
 # irurueta-geometry-io
 Reads, writes and converts 3D files into different formats
 
-[![Build Status](https://travis-ci.org/albertoirurueta/irurueta-geometry-io.svg?branch=master)](https://travis-ci.org/albertoirurueta/irurueta-geometry-io)
+[![Build Status](https://travis-ci.com/albertoirurueta/irurueta-geometry-io.svg?branch=master)](https://travis-ci.com/albertoirurueta/irurueta-geometry-io)
 
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-geometry-io&metric=bugs)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-geometry-io)
