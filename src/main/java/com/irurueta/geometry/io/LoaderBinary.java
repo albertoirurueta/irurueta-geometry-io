@@ -414,15 +414,15 @@ public class LoaderBinary extends Loader {
                     // red
                     b = reader.readByte();
                     material.setAmbientRedColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                     // green
                     b = reader.readByte();
                     material.setAmbientGreenColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                     // blue
                     b = reader.readByte();
                     material.setAmbientBlueColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
@@ -431,15 +431,15 @@ public class LoaderBinary extends Loader {
                     // red
                     b = reader.readByte();
                     material.setDiffuseRedColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                     // green
                     b = reader.readByte();
                     material.setDiffuseGreenColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                     // blue
                     b = reader.readByte();
                     material.setDiffuseBlueColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
@@ -448,15 +448,15 @@ public class LoaderBinary extends Loader {
                     // red
                     b = reader.readByte();
                     material.setSpecularRedColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                     // green
                     b = reader.readByte();
                     material.setSpecularGreenColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                     // blue
                     b = reader.readByte();
                     material.setSpecularBlueColor(
-                            (short) (((int) b) & 0x000000ff));
+                            (short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
@@ -517,7 +517,7 @@ public class LoaderBinary extends Loader {
                 if (reader.readBoolean()) {
                     // transparency is available
                     final byte b = reader.readByte();
-                    material.setTransparency((short) (((int) b) & 0x000000ff));
+                    material.setTransparency((short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
@@ -601,7 +601,7 @@ public class LoaderBinary extends Loader {
                 reader.read(bytes);
                 for (int i = 0; i < colorsSizeInBytes; i++) {
                     // convert signed bytes into unsigned bytes stored in shorts
-                    colors[i] = (short) (((int) bytes[i]) & 0x000000ff);
+                    colors[i] = (short) (bytes[i] & 0x000000ff);
                 }
                 chunk.setColorData(colors);
 
@@ -650,9 +650,9 @@ public class LoaderBinary extends Loader {
                 int secondByte;
                 int counter = 0;
                 for (int i = 0; i < indicesLength; i++) {
-                    firstByte = ((int) bytes[counter]) & 0x000000ff;
+                    firstByte = bytes[counter] & 0x000000ff;
                     counter++;
-                    secondByte = ((int) bytes[counter]) & 0x000000ff;
+                    secondByte = bytes[counter] & 0x000000ff;
                     counter++;
                     indices[i] = firstByte << 8 | secondByte;
                 }

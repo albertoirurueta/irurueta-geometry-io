@@ -708,8 +708,7 @@ public class LoaderSTL extends Loader {
                                 (reader.getPosition() - previousPos) >= progressStep) {
                             previousPos = reader.getPosition();
                             loader.listener.onLoadProgressChange(loader,
-                                    (float) (reader.getPosition()) /
-                                            (float) (fileLength));
+                                    (float) (reader.getPosition()) / fileLength);
                         }
 
                     } while (!endOfFileReached);
@@ -771,8 +770,7 @@ public class LoaderSTL extends Loader {
                                         progressStep) {
                             previousPos = reader.getPosition();
                             loader.listener.onLoadProgressChange(loader,
-                                    (float) (reader.getPosition()) /
-                                            (float) (fileLength));
+                                    (float) (reader.getPosition()) / fileLength);
                         }
 
                         if (verticesInChunk + VERTICES_PER_TRIANGLE >=
