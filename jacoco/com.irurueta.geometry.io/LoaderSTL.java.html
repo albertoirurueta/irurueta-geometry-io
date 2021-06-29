@@ -708,124 +708,122 @@ public class LoaderSTL extends Loader {
 <span class="fc bfc" id="L708" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;= progressStep) {</span>
 <span class="fc" id="L709">                            previousPos = reader.getPosition();</span>
 <span class="fc" id="L710">                            loader.listener.onLoadProgressChange(loader,</span>
-<span class="fc" id="L711">                                    (float) (reader.getPosition()) /</span>
-                                            (float) (fileLength));
+<span class="fc" id="L711">                                    (float) (reader.getPosition()) / fileLength);</span>
                         }
 
-<span class="pc bpc" id="L715" title="1 of 2 branches missed.">                    } while (!endOfFileReached);</span>
+<span class="pc bpc" id="L714" title="1 of 2 branches missed.">                    } while (!endOfFileReached);</span>
 
-<span class="fc" id="L717">                } else {</span>
+<span class="fc" id="L716">                } else {</span>
                     do {
                         // read vertex data (triangle normal, triangle vertices
                         // and two bytes attribute byte count
 
                         // read vertex normals
-<span class="fc" id="L723">                        nX = reader.readFloat(</span>
+<span class="fc" id="L722">                        nX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L725">                        nY = reader.readFloat(</span>
+<span class="fc" id="L724">                        nY = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L727">                        nZ = reader.readFloat(</span>
+<span class="fc" id="L726">                        nZ = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
                         // read 1st vertex coordinates of triangle
-<span class="fc" id="L731">                        coordX = reader.readFloat(</span>
+<span class="fc" id="L730">                        coordX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L733">                        coordY = reader.readFloat(</span>
+<span class="fc" id="L732">                        coordY = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L735">                        coordZ = reader.readFloat(</span>
+<span class="fc" id="L734">                        coordZ = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
                         // add coordinates into chunk arrays
-<span class="fc" id="L739">                        addNewVertexDataToChunk();</span>
+<span class="fc" id="L738">                        addNewVertexDataToChunk();</span>
 
                         // read 2nd vertex coordinates of triangle
-<span class="fc" id="L742">                        coordX = reader.readFloat(</span>
+<span class="fc" id="L741">                        coordX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L744">                        coordY = reader.readFloat(</span>
+<span class="fc" id="L743">                        coordY = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L746">                        coordZ = reader.readFloat(</span>
+<span class="fc" id="L745">                        coordZ = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
                         // add coordinates into chunk arrays
-<span class="fc" id="L750">                        addNewVertexDataToChunk();</span>
+<span class="fc" id="L749">                        addNewVertexDataToChunk();</span>
 
                         // read 3rd vertex coordinates of triangle
-<span class="fc" id="L753">                        coordX = reader.readFloat(</span>
+<span class="fc" id="L752">                        coordX = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L755">                        coordY = reader.readFloat(</span>
+<span class="fc" id="L754">                        coordY = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
-<span class="fc" id="L757">                        coordZ = reader.readFloat(</span>
+<span class="fc" id="L756">                        coordZ = reader.readFloat(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
                         // add coordinates into chunk arrays
-<span class="fc" id="L761">                        addNewVertexDataToChunk();</span>
+<span class="fc" id="L760">                        addNewVertexDataToChunk();</span>
 
-<span class="fc" id="L763">                        int attributeByteCount = reader.readUnsignedShort(</span>
+<span class="fc" id="L762">                        int attributeByteCount = reader.readUnsignedShort(</span>
                                 EndianType.LITTLE_ENDIAN_TYPE);
 
-<span class="fc" id="L766">                        currentTriangle++;</span>
+<span class="fc" id="L765">                        currentTriangle++;</span>
 
                         // compute progress
-<span class="pc bpc" id="L769" title="1 of 2 branches missed.">                        if ((loader.listener != null) &amp;&amp;</span>
-<span class="fc bfc" id="L770" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;=</span>
+<span class="pc bpc" id="L768" title="1 of 2 branches missed.">                        if ((loader.listener != null) &amp;&amp;</span>
+<span class="fc bfc" id="L769" title="All 2 branches covered.">                                (reader.getPosition() - previousPos) &gt;=</span>
                                         progressStep) {
-<span class="fc" id="L772">                            previousPos = reader.getPosition();</span>
-<span class="fc" id="L773">                            loader.listener.onLoadProgressChange(loader,</span>
-<span class="fc" id="L774">                                    (float) (reader.getPosition()) /</span>
-                                            (float) (fileLength));
+<span class="fc" id="L771">                            previousPos = reader.getPosition();</span>
+<span class="fc" id="L772">                            loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L773">                                    (float) (reader.getPosition()) / fileLength);</span>
                         }
 
-<span class="fc" id="L778">                        if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
-<span class="fc bfc" id="L779" title="All 2 branches covered.">                                loader.maxVerticesInChunk) {</span>
+<span class="fc" id="L776">                        if (verticesInChunk + VERTICES_PER_TRIANGLE &gt;=</span>
+<span class="fc bfc" id="L777" title="All 2 branches covered.">                                loader.maxVerticesInChunk) {</span>
                             // no more triangles vertices can be added to this
                             // chunk
-<span class="fc" id="L782">                            endOfChunk = true;</span>
-<span class="fc" id="L783">                            break;</span>
+<span class="fc" id="L780">                            endOfChunk = true;</span>
+<span class="fc" id="L781">                            break;</span>
                         }
 
-<span class="pc bpc" id="L786" title="1 of 4 branches missed.">                    } while (!reader.isEndOfStream() &amp;&amp;</span>
+<span class="pc bpc" id="L784" title="1 of 4 branches missed.">                    } while (!reader.isEndOfStream() &amp;&amp;</span>
                             currentTriangle &lt; numberOfTriangles);
 
                     // file ended before all triangles were read
-<span class="pc bpc" id="L790" title="1 of 4 branches missed.">                    if (currentTriangle &lt; numberOfTriangles &amp;&amp; !endOfChunk) {</span>
-<span class="nc" id="L791">                        throw new LoaderException();</span>
+<span class="pc bpc" id="L788" title="1 of 4 branches missed.">                    if (currentTriangle &lt; numberOfTriangles &amp;&amp; !endOfChunk) {</span>
+<span class="nc" id="L789">                        throw new LoaderException();</span>
                     }
                 }
-<span class="nc" id="L794">            } catch (final IOException | LoaderException e) {</span>
-<span class="nc" id="L795">                throw e;</span>
-<span class="nc" id="L796">            } catch (final Exception e) {</span>
-<span class="nc" id="L797">                throw new LoaderException(e);</span>
-<span class="fc" id="L798">            }</span>
+<span class="nc" id="L792">            } catch (final IOException | LoaderException e) {</span>
+<span class="nc" id="L793">                throw e;</span>
+<span class="nc" id="L794">            } catch (final Exception e) {</span>
+<span class="nc" id="L795">                throw new LoaderException(e);</span>
+<span class="fc" id="L796">            }</span>
 
             // trim arrays to store only needed data
-<span class="fc" id="L801">            trimArrays();</span>
+<span class="fc" id="L799">            trimArrays();</span>
 
             // Instantiate DataChunk with chunk arrays
-<span class="fc" id="L804">            final DataChunk dataChunk = new DataChunk();</span>
+<span class="fc" id="L802">            final DataChunk dataChunk = new DataChunk();</span>
 
-<span class="fc" id="L806">            dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
-<span class="fc" id="L807">            dataChunk.setMinX(minX);</span>
-<span class="fc" id="L808">            dataChunk.setMinY(minY);</span>
-<span class="fc" id="L809">            dataChunk.setMinZ(minZ);</span>
-<span class="fc" id="L810">            dataChunk.setMaxX(maxX);</span>
-<span class="fc" id="L811">            dataChunk.setMaxY(maxY);</span>
-<span class="fc" id="L812">            dataChunk.setMaxZ(maxZ);</span>
+<span class="fc" id="L804">            dataChunk.setVerticesCoordinatesData(coordsInChunkArray);</span>
+<span class="fc" id="L805">            dataChunk.setMinX(minX);</span>
+<span class="fc" id="L806">            dataChunk.setMinY(minY);</span>
+<span class="fc" id="L807">            dataChunk.setMinZ(minZ);</span>
+<span class="fc" id="L808">            dataChunk.setMaxX(maxX);</span>
+<span class="fc" id="L809">            dataChunk.setMaxY(maxY);</span>
+<span class="fc" id="L810">            dataChunk.setMaxZ(maxZ);</span>
 
-<span class="fc" id="L814">            dataChunk.setIndicesData(indicesInChunkArray);</span>
+<span class="fc" id="L812">            dataChunk.setIndicesData(indicesInChunkArray);</span>
 
-<span class="fc" id="L816">            dataChunk.setNormalsData(normalsInChunkArray);</span>
+<span class="fc" id="L814">            dataChunk.setNormalsData(normalsInChunkArray);</span>
 
-<span class="pc bpc" id="L818" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
+<span class="pc bpc" id="L816" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
                 // notify iterator finished
-<span class="fc" id="L820">                listener.onIteratorFinished(this);</span>
+<span class="fc" id="L818">                listener.onIteratorFinished(this);</span>
             }
 
             // if no more chunks are available, then close input reader
-<span class="fc bfc" id="L824" title="All 2 branches covered.">            if (!hasNext()) {</span>
-<span class="fc" id="L825">                reader.close();</span>
+<span class="fc bfc" id="L822" title="All 2 branches covered.">            if (!hasNext()) {</span>
+<span class="fc" id="L823">                reader.close();</span>
             }
 
-<span class="fc" id="L828">            return dataChunk;</span>
+<span class="fc" id="L826">            return dataChunk;</span>
         }
 
         /**
@@ -840,131 +838,131 @@ public class LoaderSTL extends Loader {
             do {
                 // ignore empty words
                 // (line feeds, etc)
-<span class="fc" id="L843">                word = reader.readWord();</span>
-<span class="pc bpc" id="L844" title="1 of 4 branches missed.">            } while (word != null &amp;&amp; word.isEmpty());</span>
-<span class="fc" id="L845">            return word;</span>
+<span class="fc" id="L841">                word = reader.readWord();</span>
+<span class="pc bpc" id="L842" title="1 of 4 branches missed.">            } while (word != null &amp;&amp; word.isEmpty());</span>
+<span class="fc" id="L843">            return word;</span>
         }
 
         /**
          * Initializes arrays forming current chunk of data.
          */
         private void initChunkArrays() {
-<span class="fc" id="L852">            coordsInChunkArray = new float[loader.maxVerticesInChunk *</span>
+<span class="fc" id="L850">            coordsInChunkArray = new float[loader.maxVerticesInChunk *</span>
                     VERTICES_PER_TRIANGLE];
-<span class="fc" id="L854">            normalsInChunkArray = new float[loader.maxVerticesInChunk *</span>
+<span class="fc" id="L852">            normalsInChunkArray = new float[loader.maxVerticesInChunk *</span>
                     VERTICES_PER_TRIANGLE];
-<span class="fc" id="L856">            indicesInChunkArray = new int[loader.maxVerticesInChunk];</span>
+<span class="fc" id="L854">            indicesInChunkArray = new int[loader.maxVerticesInChunk];</span>
 
-<span class="fc" id="L858">            verticesInChunk = indicesInChunk = 0;</span>
-<span class="fc" id="L859">            indicesInChunkSize = loader.maxVerticesInChunk;</span>
-<span class="fc" id="L860">        }</span>
+<span class="fc" id="L856">            verticesInChunk = indicesInChunk = 0;</span>
+<span class="fc" id="L857">            indicesInChunkSize = loader.maxVerticesInChunk;</span>
+<span class="fc" id="L858">        }</span>
 
         /**
          * Adds data of last vertex being loaded to current chunk of data as a
          * new vertex.
          */
         private void addNewVertexDataToChunk() {
-<span class="fc" id="L867">            int pos = 3 * verticesInChunk;</span>
+<span class="fc" id="L865">            int pos = 3 * verticesInChunk;</span>
 
-<span class="fc" id="L869">            coordsInChunkArray[pos] = coordX;</span>
-<span class="fc" id="L870">            normalsInChunkArray[pos] = nX;</span>
+<span class="fc" id="L867">            coordsInChunkArray[pos] = coordX;</span>
+<span class="fc" id="L868">            normalsInChunkArray[pos] = nX;</span>
 
-<span class="fc" id="L872">            pos++;</span>
+<span class="fc" id="L870">            pos++;</span>
 
-<span class="fc" id="L874">            coordsInChunkArray[pos] = coordY;</span>
-<span class="fc" id="L875">            normalsInChunkArray[pos] = nY;</span>
+<span class="fc" id="L872">            coordsInChunkArray[pos] = coordY;</span>
+<span class="fc" id="L873">            normalsInChunkArray[pos] = nY;</span>
 
-<span class="fc" id="L877">            pos++;</span>
+<span class="fc" id="L875">            pos++;</span>
 
-<span class="fc" id="L879">            coordsInChunkArray[pos] = coordZ;</span>
-<span class="fc" id="L880">            normalsInChunkArray[pos] = nZ;</span>
+<span class="fc" id="L877">            coordsInChunkArray[pos] = coordZ;</span>
+<span class="fc" id="L878">            normalsInChunkArray[pos] = nZ;</span>
 
             // update bounding box values
-<span class="fc bfc" id="L883" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
-<span class="fc" id="L884">                minX = coordX;</span>
+<span class="fc bfc" id="L881" title="All 2 branches covered.">            if (coordX &lt; minX) {</span>
+<span class="fc" id="L882">                minX = coordX;</span>
             }
-<span class="fc bfc" id="L886" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
-<span class="fc" id="L887">                minY = coordY;</span>
+<span class="fc bfc" id="L884" title="All 2 branches covered.">            if (coordY &lt; minY) {</span>
+<span class="fc" id="L885">                minY = coordY;</span>
             }
-<span class="fc bfc" id="L889" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
-<span class="fc" id="L890">                minZ = coordZ;</span>
+<span class="fc bfc" id="L887" title="All 2 branches covered.">            if (coordZ &lt; minZ) {</span>
+<span class="fc" id="L888">                minZ = coordZ;</span>
             }
 
-<span class="fc bfc" id="L893" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
-<span class="fc" id="L894">                maxX = coordX;</span>
+<span class="fc bfc" id="L891" title="All 2 branches covered.">            if (coordX &gt; maxX) {</span>
+<span class="fc" id="L892">                maxX = coordX;</span>
             }
-<span class="fc bfc" id="L896" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
-<span class="fc" id="L897">                maxY = coordY;</span>
+<span class="fc bfc" id="L894" title="All 2 branches covered.">            if (coordY &gt; maxY) {</span>
+<span class="fc" id="L895">                maxY = coordY;</span>
             }
-<span class="fc bfc" id="L899" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
-<span class="fc" id="L900">                maxZ = coordZ;</span>
+<span class="fc bfc" id="L897" title="All 2 branches covered.">            if (coordZ &gt; maxZ) {</span>
+<span class="fc" id="L898">                maxZ = coordZ;</span>
             }
 
             // if arrays of indices become full, we need to resize them
-<span class="pc bpc" id="L904" title="1 of 2 branches missed.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
-<span class="nc" id="L905">                increaseIndicesArraySize();</span>
+<span class="pc bpc" id="L902" title="1 of 2 branches missed.">            if (indicesInChunk &gt;= indicesInChunkSize) {</span>
+<span class="nc" id="L903">                increaseIndicesArraySize();</span>
             }
-<span class="fc" id="L907">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
+<span class="fc" id="L905">            indicesInChunkArray[indicesInChunk] = verticesInChunk;</span>
 
-<span class="fc" id="L909">            verticesInChunk++;</span>
-<span class="fc" id="L910">            indicesInChunk++;</span>
-<span class="fc" id="L911">        }</span>
+<span class="fc" id="L907">            verticesInChunk++;</span>
+<span class="fc" id="L908">            indicesInChunk++;</span>
+<span class="fc" id="L909">        }</span>
 
         /**
          * Increases size of arrays of data. This method is called when needed.
          */
         private void increaseIndicesArraySize() {
-<span class="nc" id="L917">            final int newIndicesInChunkSize = indicesInChunkSize +</span>
-<span class="nc" id="L918">                    loader.maxVerticesInChunk;</span>
-<span class="nc" id="L919">            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
+<span class="nc" id="L915">            final int newIndicesInChunkSize = indicesInChunkSize +</span>
+<span class="nc" id="L916">                    loader.maxVerticesInChunk;</span>
+<span class="nc" id="L917">            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];</span>
 
             // copy contents of old array
-<span class="nc" id="L922">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,</span>
+<span class="nc" id="L920">            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,</span>
                     indicesInChunkSize);
 
             // set new arrays and new size
-<span class="nc" id="L926">            indicesInChunkArray = newIndicesInChunkArray;</span>
-<span class="nc" id="L927">            indicesInChunkSize = newIndicesInChunkSize;</span>
-<span class="nc" id="L928">        }</span>
+<span class="nc" id="L924">            indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="nc" id="L925">            indicesInChunkSize = newIndicesInChunkSize;</span>
+<span class="nc" id="L926">        }</span>
 
         /**
          * Trims arrays of data to reduce size of arrays to fit chunk data. This
          * method is loaded just before copying data to chunk being returned.
          */
         private void trimArrays() {
-<span class="pc bpc" id="L935" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
-<span class="fc" id="L936">                final int elems = verticesInChunk * VERTICES_PER_TRIANGLE;</span>
+<span class="pc bpc" id="L933" title="1 of 2 branches missed.">            if (verticesInChunk &gt; 0) {</span>
+<span class="fc" id="L934">                final int elems = verticesInChunk * VERTICES_PER_TRIANGLE;</span>
 
-<span class="fc" id="L938">                final float[] newCoordsInChunkArray = new float[elems];</span>
-<span class="fc" id="L939">                final float[] newNormalsInChunkArray = new float[elems];</span>
+<span class="fc" id="L936">                final float[] newCoordsInChunkArray = new float[elems];</span>
+<span class="fc" id="L937">                final float[] newNormalsInChunkArray = new float[elems];</span>
 
                 // copy contents of old arrays
-<span class="fc" id="L942">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
+<span class="fc" id="L940">                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,</span>
                         0, elems);
-<span class="fc" id="L944">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,</span>
+<span class="fc" id="L942">                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,</span>
                         0, elems);
 
                 // set new arrays
-<span class="fc" id="L948">                coordsInChunkArray = newCoordsInChunkArray;</span>
-<span class="fc" id="L949">                normalsInChunkArray = newNormalsInChunkArray;</span>
-<span class="fc" id="L950">            } else {</span>
+<span class="fc" id="L946">                coordsInChunkArray = newCoordsInChunkArray;</span>
+<span class="fc" id="L947">                normalsInChunkArray = newNormalsInChunkArray;</span>
+<span class="fc" id="L948">            } else {</span>
                 // allow garbage collection
-<span class="nc" id="L952">                coordsInChunkArray = null;</span>
-<span class="nc" id="L953">                normalsInChunkArray = null;</span>
+<span class="nc" id="L950">                coordsInChunkArray = null;</span>
+<span class="nc" id="L951">                normalsInChunkArray = null;</span>
             }
 
-<span class="pc bpc" id="L956" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
-<span class="fc" id="L957">                final int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
-<span class="fc" id="L958">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
+<span class="pc bpc" id="L954" title="1 of 2 branches missed.">            if (indicesInChunk &gt; 0) {</span>
+<span class="fc" id="L955">                final int[] newIndicesInChunkArray = new int[indicesInChunk];</span>
+<span class="fc" id="L956">                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,</span>
                         0, indicesInChunk);
 
                 // set new array
-<span class="fc" id="L962">                indicesInChunkArray = newIndicesInChunkArray;</span>
-<span class="fc" id="L963">            } else {</span>
+<span class="fc" id="L960">                indicesInChunkArray = newIndicesInChunkArray;</span>
+<span class="fc" id="L961">            } else {</span>
                 // allow garbage collection
-<span class="nc" id="L965">                indicesInChunkArray = null;</span>
+<span class="nc" id="L963">                indicesInChunkArray = null;</span>
             }
-<span class="fc" id="L967">        }</span>
+<span class="fc" id="L965">        }</span>
 
         /**
          * Set ups loader iterator. This method is called when constructing
@@ -978,35 +976,35 @@ public class LoaderSTL extends Loader {
             // format
 
             // move to start of file
-<span class="fc" id="L981">            reader.seek(0);</span>
-<span class="fc" id="L982">            final int magicStartLength = ASCII_START.length();</span>
-<span class="fc" id="L983">            final byte[] buffer = new byte[magicStartLength];</span>
-<span class="fc" id="L984">            final int n = reader.read(buffer);</span>
-<span class="pc bpc" id="L985" title="1 of 2 branches missed.">            if (n != magicStartLength) {</span>
-<span class="nc" id="L986">                throw new LoaderException();</span>
+<span class="fc" id="L979">            reader.seek(0);</span>
+<span class="fc" id="L980">            final int magicStartLength = ASCII_START.length();</span>
+<span class="fc" id="L981">            final byte[] buffer = new byte[magicStartLength];</span>
+<span class="fc" id="L982">            final int n = reader.read(buffer);</span>
+<span class="pc bpc" id="L983" title="1 of 2 branches missed.">            if (n != magicStartLength) {</span>
+<span class="nc" id="L984">                throw new LoaderException();</span>
             }
-<span class="fc" id="L988">            final String str = new String(buffer);</span>
+<span class="fc" id="L986">            final String str = new String(buffer);</span>
 
-<span class="fc" id="L990">            isAscii = str.equalsIgnoreCase(ASCII_START);</span>
-<span class="fc bfc" id="L991" title="All 2 branches covered.">            if (isAscii) {</span>
+<span class="fc" id="L988">            isAscii = str.equalsIgnoreCase(ASCII_START);</span>
+<span class="fc bfc" id="L989" title="All 2 branches covered.">            if (isAscii) {</span>
                 // check
-<span class="pc bpc" id="L993" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
-<span class="nc" id="L994">                    throw new LoaderException();</span>
+<span class="pc bpc" id="L991" title="1 of 2 branches missed.">                if (reader.isEndOfStream()) {</span>
+<span class="nc" id="L992">                    throw new LoaderException();</span>
                 }
                 // load solid name
-<span class="fc" id="L997">                solidName = reader.readLine();</span>
+<span class="fc" id="L995">                solidName = reader.readLine();</span>
             } else {
                 // Binary format (always is in little endian form)
 
                 // set position after 80 byte header
-<span class="fc" id="L1002">                reader.seek(BINARY_HEADER_SIZE);</span>
+<span class="fc" id="L1000">                reader.seek(BINARY_HEADER_SIZE);</span>
 
                 // read number of triangles
-<span class="fc" id="L1005">                numberOfTriangles = reader.readUnsignedInt</span>
-<span class="fc" id="L1006">                        (EndianType.LITTLE_ENDIAN_TYPE);</span>
-<span class="fc" id="L1007">                numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;</span>
+<span class="fc" id="L1003">                numberOfTriangles = reader.readUnsignedInt</span>
+<span class="fc" id="L1004">                        (EndianType.LITTLE_ENDIAN_TYPE);</span>
+<span class="fc" id="L1005">                numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;</span>
             }
-<span class="fc" id="L1009">        }</span>
+<span class="fc" id="L1007">        }</span>
 
     }
 }

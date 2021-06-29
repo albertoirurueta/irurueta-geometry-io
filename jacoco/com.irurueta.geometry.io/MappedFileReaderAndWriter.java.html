@@ -297,7 +297,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public short readUnsignedByte() {
 <span class="fc" id="L299">        read = true;</span>
-<span class="fc" id="L300">        return (short) (((((int) buffer.get()) &lt;&lt; 8) &gt;&gt; 8) &amp; 0xff);</span>
+<span class="fc" id="L300">        return (short) (((buffer.get() &lt;&lt; 8) &gt;&gt; 8) &amp; 0xff);</span>
     }
 
     /**

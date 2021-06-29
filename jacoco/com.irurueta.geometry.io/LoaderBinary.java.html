@@ -414,15 +414,15 @@ public class LoaderBinary extends Loader {
                     // red
 <span class="fc" id="L415">                    b = reader.readByte();</span>
 <span class="fc" id="L416">                    material.setAmbientRedColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                     // green
 <span class="fc" id="L419">                    b = reader.readByte();</span>
 <span class="fc" id="L420">                    material.setAmbientGreenColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                     // blue
 <span class="fc" id="L423">                    b = reader.readByte();</span>
 <span class="fc" id="L424">                    material.setAmbientBlueColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                 }
 
 <span class="pc bpc" id="L428" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
@@ -431,15 +431,15 @@ public class LoaderBinary extends Loader {
                     // red
 <span class="fc" id="L432">                    b = reader.readByte();</span>
 <span class="fc" id="L433">                    material.setDiffuseRedColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                     // green
 <span class="fc" id="L436">                    b = reader.readByte();</span>
 <span class="fc" id="L437">                    material.setDiffuseGreenColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                     // blue
 <span class="fc" id="L440">                    b = reader.readByte();</span>
 <span class="fc" id="L441">                    material.setDiffuseBlueColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                 }
 
 <span class="fc bfc" id="L445" title="All 2 branches covered.">                if (reader.readBoolean()) {</span>
@@ -448,15 +448,15 @@ public class LoaderBinary extends Loader {
                     // red
 <span class="fc" id="L449">                    b = reader.readByte();</span>
 <span class="fc" id="L450">                    material.setSpecularRedColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                     // green
 <span class="fc" id="L453">                    b = reader.readByte();</span>
 <span class="fc" id="L454">                    material.setSpecularGreenColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                     // blue
 <span class="fc" id="L457">                    b = reader.readByte();</span>
 <span class="fc" id="L458">                    material.setSpecularBlueColor(</span>
-                            (short) (((int) b) &amp; 0x000000ff));
+                            (short) (b &amp; 0x000000ff));
                 }
 
 <span class="pc bpc" id="L462" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
@@ -517,7 +517,7 @@ public class LoaderBinary extends Loader {
 <span class="pc bpc" id="L517" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
                     // transparency is available
 <span class="nc" id="L519">                    final byte b = reader.readByte();</span>
-<span class="nc" id="L520">                    material.setTransparency((short) (((int) b) &amp; 0x000000ff));</span>
+<span class="nc" id="L520">                    material.setTransparency((short) (b &amp; 0x000000ff));</span>
                 }
 
 <span class="pc bpc" id="L523" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
@@ -601,7 +601,7 @@ public class LoaderBinary extends Loader {
 <span class="fc" id="L601">                reader.read(bytes);</span>
 <span class="fc bfc" id="L602" title="All 2 branches covered.">                for (int i = 0; i &lt; colorsSizeInBytes; i++) {</span>
                     // convert signed bytes into unsigned bytes stored in shorts
-<span class="fc" id="L604">                    colors[i] = (short) (((int) bytes[i]) &amp; 0x000000ff);</span>
+<span class="fc" id="L604">                    colors[i] = (short) (bytes[i] &amp; 0x000000ff);</span>
                 }
 <span class="fc" id="L606">                chunk.setColorData(colors);</span>
 
@@ -650,9 +650,9 @@ public class LoaderBinary extends Loader {
                 int secondByte;
 <span class="fc" id="L651">                int counter = 0;</span>
 <span class="fc bfc" id="L652" title="All 2 branches covered.">                for (int i = 0; i &lt; indicesLength; i++) {</span>
-<span class="fc" id="L653">                    firstByte = ((int) bytes[counter]) &amp; 0x000000ff;</span>
+<span class="fc" id="L653">                    firstByte = bytes[counter] &amp; 0x000000ff;</span>
 <span class="fc" id="L654">                    counter++;</span>
-<span class="fc" id="L655">                    secondByte = ((int) bytes[counter]) &amp; 0x000000ff;</span>
+<span class="fc" id="L655">                    secondByte = bytes[counter] &amp; 0x000000ff;</span>
 <span class="fc" id="L656">                    counter++;</span>
 <span class="fc" id="L657">                    indices[i] = firstByte &lt;&lt; 8 | secondByte;</span>
                 }

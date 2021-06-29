@@ -422,15 +422,15 @@
 <a class="jxr_linenumber" name="L414" href="#L414">414</a>                     <em class="jxr_comment">// red</em>
 <a class="jxr_linenumber" name="L415" href="#L415">415</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L416" href="#L416">416</a>                     material.setAmbientRedColor(
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>                     <em class="jxr_comment">// green</em>
 <a class="jxr_linenumber" name="L419" href="#L419">419</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L420" href="#L420">420</a>                     material.setAmbientGreenColor(
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L422" href="#L422">422</a>                     <em class="jxr_comment">// blue</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L424" href="#L424">424</a>                     material.setAmbientBlueColor(
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L426" href="#L426">426</a>                 }
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
 <a class="jxr_linenumber" name="L428" href="#L428">428</a>                 <strong class="jxr_keyword">if</strong> (reader.readBoolean()) {
@@ -439,15 +439,15 @@
 <a class="jxr_linenumber" name="L431" href="#L431">431</a>                     <em class="jxr_comment">// red</em>
 <a class="jxr_linenumber" name="L432" href="#L432">432</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L433" href="#L433">433</a>                     material.setDiffuseRedColor(
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L435" href="#L435">435</a>                     <em class="jxr_comment">// green</em>
 <a class="jxr_linenumber" name="L436" href="#L436">436</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L437" href="#L437">437</a>                     material.setDiffuseGreenColor(
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L439" href="#L439">439</a>                     <em class="jxr_comment">// blue</em>
 <a class="jxr_linenumber" name="L440" href="#L440">440</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L441" href="#L441">441</a>                     material.setDiffuseBlueColor(
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L443" href="#L443">443</a>                 }
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 
 <a class="jxr_linenumber" name="L445" href="#L445">445</a>                 <strong class="jxr_keyword">if</strong> (reader.readBoolean()) {
@@ -456,15 +456,15 @@
 <a class="jxr_linenumber" name="L448" href="#L448">448</a>                     <em class="jxr_comment">// red</em>
 <a class="jxr_linenumber" name="L449" href="#L449">449</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L450" href="#L450">450</a>                     material.setSpecularRedColor(
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L452" href="#L452">452</a>                     <em class="jxr_comment">// green</em>
 <a class="jxr_linenumber" name="L453" href="#L453">453</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L454" href="#L454">454</a>                     material.setSpecularGreenColor(
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L456" href="#L456">456</a>                     <em class="jxr_comment">// blue</em>
 <a class="jxr_linenumber" name="L457" href="#L457">457</a>                     b = reader.readByte();
 <a class="jxr_linenumber" name="L458" href="#L458">458</a>                     material.setSpecularBlueColor(
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>                             (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>                             (<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L460" href="#L460">460</a>                 }
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 
 <a class="jxr_linenumber" name="L462" href="#L462">462</a>                 <strong class="jxr_keyword">if</strong> (reader.readBoolean()) {
@@ -525,7 +525,7 @@
 <a class="jxr_linenumber" name="L517" href="#L517">517</a>                 <strong class="jxr_keyword">if</strong> (reader.readBoolean()) {
 <a class="jxr_linenumber" name="L518" href="#L518">518</a>                     <em class="jxr_comment">// transparency is available</em>
 <a class="jxr_linenumber" name="L519" href="#L519">519</a>                     <strong class="jxr_keyword">final</strong> byte b = reader.readByte();
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>                     material.setTransparency((<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) b) &amp; 0x000000ff));
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>                     material.setTransparency((<strong class="jxr_keyword">short</strong>) (b &amp; 0x000000ff));
 <a class="jxr_linenumber" name="L521" href="#L521">521</a>                 }
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 
 <a class="jxr_linenumber" name="L523" href="#L523">523</a>                 <strong class="jxr_keyword">if</strong> (reader.readBoolean()) {
@@ -609,7 +609,7 @@
 <a class="jxr_linenumber" name="L601" href="#L601">601</a>                 reader.read(bytes);
 <a class="jxr_linenumber" name="L602" href="#L602">602</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; colorsSizeInBytes; i++) {
 <a class="jxr_linenumber" name="L603" href="#L603">603</a>                     <em class="jxr_comment">// convert signed bytes into unsigned bytes stored in shorts</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>                     colors[i] = (<strong class="jxr_keyword">short</strong>) (((<strong class="jxr_keyword">int</strong>) bytes[i]) &amp; 0x000000ff);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>                     colors[i] = (<strong class="jxr_keyword">short</strong>) (bytes[i] &amp; 0x000000ff);
 <a class="jxr_linenumber" name="L605" href="#L605">605</a>                 }
 <a class="jxr_linenumber" name="L606" href="#L606">606</a>                 chunk.setColorData(colors);
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> 
@@ -658,9 +658,9 @@
 <a class="jxr_linenumber" name="L650" href="#L650">650</a>                 <strong class="jxr_keyword">int</strong> secondByte;
 <a class="jxr_linenumber" name="L651" href="#L651">651</a>                 <strong class="jxr_keyword">int</strong> counter = 0;
 <a class="jxr_linenumber" name="L652" href="#L652">652</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; indicesLength; i++) {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>                     firstByte = ((<strong class="jxr_keyword">int</strong>) bytes[counter]) &amp; 0x000000ff;
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>                     firstByte = bytes[counter] &amp; 0x000000ff;
 <a class="jxr_linenumber" name="L654" href="#L654">654</a>                     counter++;
-<a class="jxr_linenumber" name="L655" href="#L655">655</a>                     secondByte = ((<strong class="jxr_keyword">int</strong>) bytes[counter]) &amp; 0x000000ff;
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>                     secondByte = bytes[counter] &amp; 0x000000ff;
 <a class="jxr_linenumber" name="L656" href="#L656">656</a>                     counter++;
 <a class="jxr_linenumber" name="L657" href="#L657">657</a>                     indices[i] = firstByte &lt;&lt; 8 | secondByte;
 <a class="jxr_linenumber" name="L658" href="#L658">658</a>                 }
