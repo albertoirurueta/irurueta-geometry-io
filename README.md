@@ -20,3 +20,17 @@ Reads, writes and converts 3D files into different formats
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-geometry-io&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-geometry-io)
 
 [Maven Site Report](http://albertoirurueta.github.io/irurueta-geometry-io)
+
+## Usage
+
+Add the following dependency to your project:
+
+Latest release:
+```
+<dependency>
+    <groupId>com.irurueta</groupId>
+    <artifactId>irurueta-geometry-io</artifactId>
+    <version>1.0.0</version>
+    <scope>compile</scope>
+</dependency>
+```

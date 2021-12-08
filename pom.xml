@@ -10,7 +10,7 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
 
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry-io</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -45,6 +45,13 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
         </snapshotRepository>
     </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>maven-central-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- dependencies for unit tests -->
         <dependency>
@@ -63,13 +70,13 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
         <dependency>
             <groupId>com.irurueta</groupId>
             <artifactId>irurueta-statistics</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.irurueta</groupId>
             <artifactId>irurueta-geometry</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -287,6 +294,8 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
+                    <stagingProgressTimeoutMinutes>30</stagingProgressTimeoutMinutes>
                 </configuration>
             </plugin>
         </plugins>
