@@ -1,8 +1,8 @@
 # irurueta-geometry-io
 Reads, writes and converts 3D files into different formats
 
-[![Build Status](https://travis-ci.com/albertoirurueta/irurueta-geometry-io.svg?branch=master)](https://travis-ci.com/albertoirurueta/irurueta-geometry-io)
-
+[![Build Status](https://github.com/albertoirurueta/irurueta-geometry-io/actions/workflows/master.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-geometry-io/actions)
+[![Build Status](https://github.com/albertoirurueta/irurueta-geometry-io/actions/workflows/develop.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-geometry-io/actions)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-geometry-io&metric=bugs)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-geometry-io)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-geometry-io&metric=code_smells)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-geometry-io)
@@ -30,7 +30,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry-io</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -40,7 +40,7 @@ Latest snapshot:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry-io</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
