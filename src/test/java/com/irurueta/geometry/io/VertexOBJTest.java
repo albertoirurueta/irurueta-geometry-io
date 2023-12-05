@@ -35,11 +35,11 @@ public class VertexOBJTest {
         // test default values
         assertNull(vertex.getVertex());
         assertFalse(vertex.isVertexAvailable());
-        assertEquals(vertex.getVertexIndex(), -1);
+        assertEquals(-1, vertex.getVertexIndex());
         assertFalse(vertex.isVertexIndexAvailable());
-        assertEquals(vertex.getNormalIndex(), -1);
+        assertEquals(-1, vertex.getNormalIndex());
         assertFalse(vertex.isNormalIndexAvailable());
-        assertEquals(vertex.getTextureIndex(), -1);
+        assertEquals(-1, vertex.getTextureIndex());
         assertFalse(vertex.isTextureIndexAvailable());
     }
 
@@ -56,7 +56,7 @@ public class VertexOBJTest {
         // set vertex
         vertex.setVertex(point);
         // check correctness
-        assertSame(vertex.getVertex(), point);
+        assertSame(point, vertex.getVertex());
         assertTrue(vertex.isVertexAvailable());
     }
 
@@ -65,7 +65,7 @@ public class VertexOBJTest {
         final VertexOBJ vertex = new VertexOBJ();
 
         // check default value
-        assertEquals(vertex.getVertexIndex(), -1);
+        assertEquals(-1, vertex.getVertexIndex());
         assertFalse(vertex.isVertexIndexAvailable());
 
         // set new value
@@ -75,7 +75,7 @@ public class VertexOBJTest {
         // set value
         vertex.setVertexIndex(vertexIndex);
         // check correctness
-        assertEquals(vertex.getVertexIndex(), vertexIndex);
+        assertEquals(vertexIndex, vertex.getVertexIndex());
         assertTrue(vertex.isVertexIndexAvailable());
     }
 
@@ -84,7 +84,7 @@ public class VertexOBJTest {
         final VertexOBJ vertex = new VertexOBJ();
 
         // check default value
-        assertEquals(vertex.getNormalIndex(), -1);
+        assertEquals(-1, vertex.getNormalIndex());
         assertFalse(vertex.isNormalIndexAvailable());
 
         // set new value
@@ -94,7 +94,7 @@ public class VertexOBJTest {
         // set value
         vertex.setNormalIndex(normalIndex);
         // check correctness
-        assertEquals(vertex.getNormalIndex(), normalIndex);
+        assertEquals(normalIndex, vertex.getNormalIndex());
         assertTrue(vertex.isNormalIndexAvailable());
     }
 
@@ -103,7 +103,7 @@ public class VertexOBJTest {
         final VertexOBJ vertex = new VertexOBJ();
 
         // check default value
-        assertEquals(vertex.getNormalIndex(), -1);
+        assertEquals(-1, vertex.getNormalIndex());
         assertFalse(vertex.isTextureIndexAvailable());
 
         // set new value
@@ -113,7 +113,7 @@ public class VertexOBJTest {
         // set value
         vertex.setTextureIndex(textureIndex);
         // check correctness
-        assertEquals(vertex.getTextureIndex(), textureIndex);
+        assertEquals(textureIndex, vertex.getTextureIndex());
         assertTrue(vertex.isTextureIndexAvailable());
     }
 }

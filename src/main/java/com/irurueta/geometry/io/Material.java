@@ -22,8 +22,8 @@ package com.irurueta.geometry.io;
 public class Material {
 
     /**
-     * Id of material.
-     * This value is generated automatically when loading a 3D file and it is
+     * Material ID.
+     * This value is generated automatically when loading a 3D file, and it is
      * intended to uniquely identify a material.
      */
     private int id = 0;
@@ -131,7 +131,7 @@ public class Material {
 
     /**
      * Returns id of material.
-     * This value is generated automatically when loading a 3D file and it is
+     * This value is generated automatically when loading a 3D file, and it is
      * intended to uniquely identify a material
      *
      * @return id of material.
@@ -142,7 +142,7 @@ public class Material {
 
     /**
      * Sets id of material.
-     * This value must be generated when loading a 3D file and it is intended
+     * This value must be generated when loading a 3D file, and it is intended
      * to uniquely identify a material.
      *
      * @param id id of material to be set.

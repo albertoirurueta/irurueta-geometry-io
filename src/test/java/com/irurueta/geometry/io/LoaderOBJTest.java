@@ -42,8 +42,8 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // test constants are equal to LoaderPLY
         assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK,
                 LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK);
-        assertEquals(!LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                !LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS,
                 LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS);
         assertEquals(LoaderOBJ.MIN_MAX_VERTICES_IN_CHUNK,
@@ -54,18 +54,18 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test empty constructor
         LoaderOBJ loader = new LoaderOBJ();
-        assertEquals(loader.getMaxVerticesInChunk(),
-                LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK,
+                loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS,
+                loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         try {
@@ -82,17 +82,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // test constructor with maxVerticesInChunk
         final int maxVerticesInChunk = 21423;
         loader = new LoaderOBJ(maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         try {
@@ -118,18 +117,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
-        loader = new LoaderOBJ(maxVerticesInChunk,
-                true);
+        loader = new LoaderOBJ(maxVerticesInChunk, true);
         assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         try {
@@ -155,17 +152,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // test constructor with maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
         final long maxStreamPositions = 500;
-        loader = new LoaderOBJ(maxVerticesInChunk,
-                true, maxStreamPositions);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        loader = new LoaderOBJ(maxVerticesInChunk, true, maxStreamPositions);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(), maxStreamPositions);
+        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         try {
@@ -182,15 +178,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // Force IllegalArgumentException
         loader = null;
         try {
-            loader = new LoaderOBJ(0, true,
-                    maxStreamPositions);
+            loader = new LoaderOBJ(0, true, maxStreamPositions);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(loader);
         try {
-            loader = new LoaderOBJ(maxVerticesInChunk,
-                    true, 0);
+            loader = new LoaderOBJ(maxVerticesInChunk, true, 0);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -203,18 +197,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertTrue(f.isFile());
 
         loader = new LoaderOBJ(f);
-        assertEquals(loader.getMaxVerticesInChunk(),
-                LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -234,17 +226,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with file and maxVerticesInChunk
         loader = new LoaderOBJ(f, maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -260,7 +251,6 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertNull(loader);
 
         // Force IllegalArgumentException
-        loader = null;
         try {
             loader = new LoaderOBJ(f, 0);
             fail("IllegalArgumentException expected but not thrown");
@@ -270,18 +260,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with file, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
-        loader = new LoaderOBJ(f, maxVerticesInChunk,
-                true);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        loader = new LoaderOBJ(f, maxVerticesInChunk, true);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -290,8 +278,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // Force FileNotFoundException
         loader = null;
         try {
-            loader = new LoaderOBJ(badF, maxVerticesInChunk,
-                    true);
+            loader = new LoaderOBJ(badF, maxVerticesInChunk, true);
             fail("IOException expected but not thrown");
         } catch (final IOException ignore) {
         }
@@ -307,17 +294,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with file, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderOBJ(f, maxVerticesInChunk,
-                true, maxStreamPositions);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        loader = new LoaderOBJ(f, maxVerticesInChunk, true, maxStreamPositions);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(), maxStreamPositions);
+        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -365,18 +351,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         };
 
         loader = new LoaderOBJ(listener);
-        assertEquals(loader.getMaxVerticesInChunk(),
-                LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         try {
@@ -392,17 +376,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with loader listener and maxVerticesInChunk
         loader = new LoaderOBJ(listener, maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
 
@@ -428,18 +411,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with loader listener, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
-        loader = new LoaderOBJ(listener, maxVerticesInChunk,
-                true);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        loader = new LoaderOBJ(listener, maxVerticesInChunk, true);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
 
@@ -467,15 +448,15 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // allowDuplicateVerticesInChunk and maxStreamPositions
         loader = new LoaderOBJ(listener, maxVerticesInChunk,
                 true, maxStreamPositions);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(), maxStreamPositions);
+        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
 
@@ -509,18 +490,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with file and listener
         loader = new LoaderOBJ(f, listener);
-        assertEquals(loader.getMaxVerticesInChunk(),
-                LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -537,17 +516,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with file, listener and maxVerticesInChunk
         loader = new LoaderOBJ(f, listener, maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -572,18 +550,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // test constructor with file, listener, maxVerticesInChunk
         // and allowDuplicateVerticesInChunk
-        loader = new LoaderOBJ(f, listener, maxVerticesInChunk,
-                true);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        loader = new LoaderOBJ(f, listener, maxVerticesInChunk, true);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -592,8 +568,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // Force FileNotFoundException
         loader = null;
         try {
-            loader = new LoaderOBJ(badF, listener, maxVerticesInChunk,
-                    true);
+            loader = new LoaderOBJ(badF, listener, maxVerticesInChunk, true);
             fail("IOException expected but not thrown");
         } catch (final IOException ignore) {
         }
@@ -601,8 +576,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         // Force IllegalArgumentException
         try {
-            loader = new LoaderOBJ(f, listener, 0,
-                    true);
+            loader = new LoaderOBJ(f, listener, 0, true);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -612,15 +586,15 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         // allowDuplicateVerticesInChunk and maxStreamPositions
         loader = new LoaderOBJ(f, listener, maxVerticesInChunk,
                 true, maxStreamPositions);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(loader.getMaxStreamPositions(), maxStreamPositions);
+        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_OBJ);
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
-        assertEquals(loader.isContinueIfTriangulationError(),
-                LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR);
+        assertEquals(listener, loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
+                loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
@@ -660,54 +634,54 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        LoaderOBJ loader = new LoaderOBJ();
-        assertFalse(loader.hasFile());
-        assertFalse(loader.isReady());
+        try (final LoaderOBJ loader = new LoaderOBJ()) {
+            assertFalse(loader.hasFile());
+            assertFalse(loader.isReady());
 
-        // set file
-        loader.setFile(f);
-        assertTrue(loader.hasFile());
-        assertTrue(loader.isReady());
+            // set file
+            loader.setFile(f);
+            assertTrue(loader.hasFile());
+            assertTrue(loader.isReady());
+        }
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final LoaderOBJ loader = new LoaderOBJ();
-        assertNull(loader.getListener());
+    public void testGetSetListener() throws LockedException, IOException {
+        try (final LoaderOBJ loader = new LoaderOBJ()) {
+            assertNull(loader.getListener());
 
-        final LoaderListener listener = new LoaderListener() {
-            @Override
-            public void onLoadStart(final Loader loader) {
-            }
+            final LoaderListener listener = new LoaderListener() {
+                @Override
+                public void onLoadStart(final Loader loader) {
+                }
 
-            @Override
-            public void onLoadEnd(final Loader loader) {
-            }
+                @Override
+                public void onLoadEnd(final Loader loader) {
+                }
 
-            @Override
-            public void onLoadProgressChange(final Loader loader, final float progress) {
-            }
-        };
+                @Override
+                public void onLoadProgressChange(final Loader loader, final float progress) {
+                }
+            };
 
-        loader.setListener(listener);
-        assertEquals(loader.getListener(), listener);
+            loader.setListener(listener);
+            assertEquals(listener, loader.getListener());
+        }
     }
 
     @Test
-    public void testGetSetMaxVerticesInChunk() throws LockedException {
-        final LoaderOBJ loader = new LoaderOBJ();
-        final int maxVerticesInChunk = 521351;
+    public void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
+        try (final LoaderOBJ loader = new LoaderOBJ()) {
+            final int maxVerticesInChunk = 521351;
 
-        assertEquals(loader.getMaxVerticesInChunk(),
-                LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK);
+            assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
 
-        // set new value
-        loader.setMaxVerticesInChunk(maxVerticesInChunk);
-        // check correctness
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+            // set new value
+            loader.setMaxVerticesInChunk(maxVerticesInChunk);
+            // check correctness
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
 
-        // Force IllegalArgumentException
-        try {
+            // Force IllegalArgumentException
             loader.setMaxVerticesInChunk(0);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
@@ -715,33 +689,33 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testGetSetAllowDuplicateVerticesInChunk() throws LockedException {
-        final LoaderOBJ loader = new LoaderOBJ();
+    public void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
+        try (final LoaderOBJ loader = new LoaderOBJ()) {
 
-        assertEquals(loader.areDuplicateVerticesInChunkAllowed(),
-                LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
+            assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                    loader.areDuplicateVerticesInChunkAllowed());
 
-        // set new value
-        loader.setAllowDuplicateVerticesInChunk(true);
-        // check correctness
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            // set new value
+            loader.setAllowDuplicateVerticesInChunk(true);
+            // check correctness
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+        }
     }
 
     @Test
-    public void testGetSetMaxStreamPositions() throws LockedException {
+    public void testGetSetMaxStreamPositions() throws LockedException, IOException {
         final long maxStreamPositions = 400;
-        final LoaderOBJ loader = new LoaderOBJ();
+        try (final LoaderOBJ loader = new LoaderOBJ()) {
 
-        assertEquals(loader.getMaxStreamPositions(),
-                LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS);
+            assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS,
+                    loader.getMaxStreamPositions());
 
-        // set new value
-        loader.setMaxStreamPositions(maxStreamPositions);
-        // check correctness
-        assertEquals(loader.getMaxStreamPositions(), maxStreamPositions);
+            // set new value
+            loader.setMaxStreamPositions(maxStreamPositions);
+            // check correctness
+            assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
 
-        // Force IllegalArgumentException
-        try {
+            // Force IllegalArgumentException
             loader.setMaxStreamPositions(0);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
@@ -749,14 +723,15 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testIsSetContinueIfTriangulationError() {
-        final LoaderOBJ loader = new LoaderOBJ();
+    public void testIsSetContinueIfTriangulationError() throws IOException {
+        try (final LoaderOBJ loader = new LoaderOBJ()) {
 
-        assertTrue(loader.isContinueIfTriangulationError());
+            assertTrue(loader.isContinueIfTriangulationError());
 
-        loader.setContinueIfTriangulationError(false);
+            loader.setContinueIfTriangulationError(false);
 
-        assertFalse(loader.isContinueIfTriangulationError());
+            assertFalse(loader.isContinueIfTriangulationError());
+        }
     }
 
     @Test
@@ -801,25 +776,17 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         final File filePly = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
 
-        final LoaderPLY plyLoader = new LoaderPLY(filePly,
+        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
                 maxNumberOfVerticesInChunk, false);
-        final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, false); //disable vertex duplicates
-        objLoader.setListener(this);
+             //disable vertex duplicates
+             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
+                     maxNumberOfVerticesInChunk, false)) {
+
+            objLoader.setListener(this);
 
 
-        final LoaderIterator plyIt = plyLoader.load();
-        final LoaderIterator objIt = objLoader.load();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        // check correctness of chunks
-        while (objIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk objChunk = objIt.next();
+            final LoaderIterator plyIt = plyLoader.load();
+            final LoaderIterator objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -827,89 +794,94 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk plyChunk = plyIt.next();
+            // check correctness of chunks
+            while (objIt.hasNext() && plyIt.hasNext()) {
+                final DataChunk objChunk = objIt.next();
 
-            final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordinatesData();
-            final short[] objColors = objChunk.getColorData();
-            final float[] objNormals = objChunk.getNormalsData();
-            final int[] objIndices = objChunk.getIndicesData();
+                assertTrue(isEndValid());
+                assertTrue(isLockedValid());
+                assertTrue(isProgressValid());
+                assertTrue(isStartValid());
+                resetListener();
 
-            final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-            final short[] plyColors = plyChunk.getColorData();
-            final float[] plyNormals = plyChunk.getNormalsData();
-            final int[] plyIndices = plyChunk.getIndicesData();
+                final DataChunk plyChunk = plyIt.next();
 
-            assertEquals(objVertices.length, objNormals.length);
-            assertNull(objTexture);
-            assertNull(objColors);
-            assertEquals(plyVertices.length, plyNormals.length);
-            assertNull(plyTexture);
-            assertNotNull(plyColors);
+                final float[] objVertices = objChunk.getVerticesCoordinatesData();
+                final float[] objTexture = objChunk.getTextureCoordinatesData();
+                final short[] objColors = objChunk.getColorData();
+                final float[] objNormals = objChunk.getNormalsData();
+                final int[] objIndices = objChunk.getIndicesData();
 
-            final int nVerticesInChunk = objVertices.length / 3;
+                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
+                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
+                final short[] plyColors = plyChunk.getColorData();
+                final float[] plyNormals = plyChunk.getNormalsData();
+                final int[] plyIndices = plyChunk.getIndicesData();
 
-            assertEquals(nVerticesInChunk, objVertices.length / 3);
-            assertEquals(nVerticesInChunk, plyVertices.length / 3);
+                assertEquals(objVertices.length, objNormals.length);
+                assertNull(objTexture);
+                assertNull(objColors);
+                assertEquals(plyVertices.length, plyNormals.length);
+                assertNull(plyTexture);
+                assertNotNull(plyColors);
 
-            for (int i = 0; i < nVerticesInChunk; i++) {
-                // check x coordinate
-                assertEquals(objVertices[3 * i], plyVertices[3 * i],
-                        ERROR);
+                final int nVerticesInChunk = objVertices.length / 3;
 
-                // check y coordinate
-                assertEquals(objVertices[3 * i + 1],
-                        plyVertices[3 * i + 1], ERROR);
+                assertEquals(nVerticesInChunk, objVertices.length / 3);
+                assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                // check z coordinate
-                assertEquals(objVertices[3 * i + 2],
-                        plyVertices[3 * i + 2], ERROR);
+                for (int i = 0; i < nVerticesInChunk; i++) {
+                    // check x coordinate
+                    assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
 
-                // check x normal
-                assertEquals(objNormals[3 * i], plyNormals[3 * i],
-                        ERROR);
+                    // check y coordinate
+                    assertEquals(objVertices[3 * i + 1], plyVertices[3 * i + 1], ERROR);
 
-                // check y normal
-                assertEquals(objNormals[3 * i + 1], plyNormals[3 * i + 1],
-                        ERROR);
+                    // check z coordinate
+                    assertEquals(objVertices[3 * i + 2], plyVertices[3 * i + 2], ERROR);
 
-                // check z normal
-                assertEquals(objNormals[3 * i + 2], plyNormals[3 * i + 2],
-                        ERROR);
+                    // check x normal
+                    assertEquals(objNormals[3 * i], plyNormals[3 * i], ERROR);
+
+                    // check y normal
+                    assertEquals(objNormals[3 * i + 1], plyNormals[3 * i + 1], ERROR);
+
+                    // check z normal
+                    assertEquals(objNormals[3 * i + 2], plyNormals[3 * i + 2], ERROR);
+                }
+
+                final int nIndicesInChunk = objIndices.length;
+                assertEquals(nIndicesInChunk, plyIndices.length);
+
+                for (int i = 0; i < nIndicesInChunk; i++) {
+                    assertTrue(objIndices[i] < nVerticesInChunk);
+                    assertTrue(plyIndices[i] < nVerticesInChunk);
+
+                    assertEquals(objIndices[i], plyIndices[i]);
+                }
+
+                // check bounding box values
+                assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
+                assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
+                assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
+                assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
+                assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
+                assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
+
+                assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
+                assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
+                assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
+                assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
+                assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
+                assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
             }
 
-            final int nIndicesInChunk = objIndices.length;
-            assertEquals(nIndicesInChunk, plyIndices.length);
-
-            for (int i = 0; i < nIndicesInChunk; i++) {
-                assertTrue(objIndices[i] < nVerticesInChunk);
-                assertTrue(plyIndices[i] < nVerticesInChunk);
-
-                assertEquals(objIndices[i], plyIndices[i]);
+            if (objIt.hasNext()) {
+                fail("Wrong number of chunks in OBJ");
             }
-
-            // check bounding box values
-            assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
-            assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
-            assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
-            assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
-            assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
-            assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
-
-            assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
-            assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
-            assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
-            assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
-            assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
-            assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
-        }
-
-        if (objIt.hasNext()) {
-            fail("Wrong number of chunks in OBJ");
-        }
-        if (plyIt.hasNext()) {
-            fail("Wrong number of chunks in PLY");
+            if (plyIt.hasNext()) {
+                fail("Wrong number of chunks in PLY");
+            }
         }
     }
 
@@ -921,24 +893,15 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/macbook.obj");
         final File filePly = new File("./src/test/java/com/irurueta/geometry/io/macbook.ply");
 
-        final LoaderPLY plyLoader = new LoaderPLY(filePly,
+        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
                 maxNumberOfVerticesInChunk, true); //enable vertex duplicates
-        final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, true); //enable vertex duplicates
-        objLoader.setListener(this);
+             //enable vertex duplicates
+             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
+                     maxNumberOfVerticesInChunk, true)) {
+            objLoader.setListener(this);
 
-        final LoaderIterator plyIt = plyLoader.load();
-        final LoaderIterator objIt = objLoader.load();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        // check correctness of chunks
-        while (objIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk objChunk = objIt.next();
+            final LoaderIterator plyIt = plyLoader.load();
+            final LoaderIterator objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -946,77 +909,85 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk plyChunk = plyIt.next();
+            // check correctness of chunks
+            while (objIt.hasNext() && plyIt.hasNext()) {
+                final DataChunk objChunk = objIt.next();
 
-            final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordinatesData();
-            final short[] objColors = objChunk.getColorData();
-            final float[] objNormals = objChunk.getNormalsData();
-            final int[] objIndices = objChunk.getIndicesData();
+                assertTrue(isEndValid());
+                assertTrue(isLockedValid());
+                assertTrue(isProgressValid());
+                assertTrue(isStartValid());
+                resetListener();
 
-            final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-            final short[] plyColors = plyChunk.getColorData();
-            final float[] plyNormals = plyChunk.getNormalsData();
-            final int[] plyIndices = plyChunk.getIndicesData();
+                final DataChunk plyChunk = plyIt.next();
 
-            assertEquals(objVertices.length, objNormals.length);
-            assertNull(objTexture);
-            assertNull(objColors);
-            assertEquals(plyVertices.length, plyNormals.length);
-            assertNull(plyTexture);
-            assertNotNull(plyColors);
+                final float[] objVertices = objChunk.getVerticesCoordinatesData();
+                final float[] objTexture = objChunk.getTextureCoordinatesData();
+                final short[] objColors = objChunk.getColorData();
+                final float[] objNormals = objChunk.getNormalsData();
+                final int[] objIndices = objChunk.getIndicesData();
 
-            final int nVerticesInChunk = objVertices.length / 3;
+                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
+                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
+                final short[] plyColors = plyChunk.getColorData();
+                final float[] plyNormals = plyChunk.getNormalsData();
+                final int[] plyIndices = plyChunk.getIndicesData();
 
-            assertEquals(nVerticesInChunk, objVertices.length / 3);
-            assertEquals(nVerticesInChunk, plyVertices.length / 3);
+                assertEquals(objVertices.length, objNormals.length);
+                assertNull(objTexture);
+                assertNull(objColors);
+                assertEquals(plyVertices.length, plyNormals.length);
+                assertNull(plyTexture);
+                assertNotNull(plyColors);
 
-            for (int i = 0; i < nVerticesInChunk; i++) {
-                // check x coordinate
-                assertEquals(objVertices[3 * i], plyVertices[3 * i],
-                        ERROR);
+                final int nVerticesInChunk = objVertices.length / 3;
 
-                // check y coordinate
-                assertEquals(objVertices[3 * i + 1],
-                        plyVertices[3 * i + 1], ERROR);
+                assertEquals(nVerticesInChunk, objVertices.length / 3);
+                assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                // check z coordinate
-                assertEquals(objVertices[3 * i + 2],
-                        plyVertices[3 * i + 2], ERROR);
+                for (int i = 0; i < nVerticesInChunk; i++) {
+                    // check x coordinate
+                    assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
+
+                    // check y coordinate
+                    assertEquals(objVertices[3 * i + 1], plyVertices[3 * i + 1], ERROR);
+
+                    // check z coordinate
+                    assertEquals(objVertices[3 * i + 2], plyVertices[3 * i + 2], ERROR);
+                }
+
+                final int nIndicesInChunk = objIndices.length;
+                assertEquals(nIndicesInChunk, plyIndices.length);
+
+                for (int i = 0; i < nIndicesInChunk; i++) {
+                    assertTrue(objIndices[i] < nVerticesInChunk);
+                    assertTrue(plyIndices[i] < nVerticesInChunk);
+
+                    assertEquals(objIndices[i], plyIndices[i]);
+                }
+
+                // check bounding box values
+                assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
+                assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
+                assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
+                assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
+                assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
+                assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
+
+                assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
+                assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
+                assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
+                assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
+                assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
+                assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
             }
 
-            final int nIndicesInChunk = objIndices.length;
-            assertEquals(nIndicesInChunk, plyIndices.length);
-
-            for (int i = 0; i < nIndicesInChunk; i++) {
-                assertTrue(objIndices[i] < nVerticesInChunk);
-                assertTrue(plyIndices[i] < nVerticesInChunk);
-
-                assertEquals(objIndices[i], plyIndices[i]);
+            if (objIt.hasNext()) {
+                fail("Wrong number of chunks in OBJ");
             }
-
-            // check bounding box values
-            assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
-            assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
-            assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
-            assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
-            assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
-            assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
-
-            assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
-            assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
-            assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
-            assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
-            assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
-            assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
-        }
-
-        if (objIt.hasNext()) {
-            fail("Wrong number of chunks in OBJ");
-        }
-        if (plyIt.hasNext()) {
-            fail("Wrong number of chunks in PLY");
+            if (plyIt.hasNext()) {
+                fail("Wrong number of chunks in PLY");
+            }
         }
     }
 
@@ -1028,25 +999,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/macbook2.obj");
         final File filePly = new File("./src/test/java/com/irurueta/geometry/io/macbook.ply");
 
-        final LoaderPLY plyLoader = new LoaderPLY(filePly,
+        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
                 maxNumberOfVerticesInChunk, false); //disable vertex duplicates
-        final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, false); //disable vertex duplicates
-        objLoader.setListener(this);
+             //disable vertex duplicates
+             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
+                     maxNumberOfVerticesInChunk, false)) {
+            objLoader.setListener(this);
 
 
-        final LoaderIterator plyIt = plyLoader.load();
-        final LoaderIterator objIt = objLoader.load();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        // check correctness of chunks
-        while (objIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk objChunk = objIt.next();
+            final LoaderIterator plyIt = plyLoader.load();
+            final LoaderIterator objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1054,89 +1016,94 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk plyChunk = plyIt.next();
+            // check correctness of chunks
+            while (objIt.hasNext() && plyIt.hasNext()) {
+                final DataChunk objChunk = objIt.next();
 
-            final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordinatesData();
-            final short[] objColors = objChunk.getColorData();
-            final float[] objNormals = objChunk.getNormalsData();
-            final int[] objIndices = objChunk.getIndicesData();
+                assertTrue(isEndValid());
+                assertTrue(isLockedValid());
+                assertTrue(isProgressValid());
+                assertTrue(isStartValid());
+                resetListener();
 
-            final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-            final short[] plyColors = plyChunk.getColorData();
-            final float[] plyNormals = plyChunk.getNormalsData();
-            final int[] plyIndices = plyChunk.getIndicesData();
+                final DataChunk plyChunk = plyIt.next();
 
-            assertEquals(objVertices.length, objNormals.length);
-            assertNull(objTexture);
-            assertNull(objColors);
-            assertEquals(plyVertices.length, plyNormals.length);
-            assertNull(plyTexture);
-            assertNotNull(plyColors);
+                final float[] objVertices = objChunk.getVerticesCoordinatesData();
+                final float[] objTexture = objChunk.getTextureCoordinatesData();
+                final short[] objColors = objChunk.getColorData();
+                final float[] objNormals = objChunk.getNormalsData();
+                final int[] objIndices = objChunk.getIndicesData();
 
-            final int nVerticesInChunk = objVertices.length / 3;
+                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
+                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
+                final short[] plyColors = plyChunk.getColorData();
+                final float[] plyNormals = plyChunk.getNormalsData();
+                final int[] plyIndices = plyChunk.getIndicesData();
 
-            assertEquals(nVerticesInChunk, objVertices.length / 3);
-            assertEquals(nVerticesInChunk, plyVertices.length / 3);
+                assertEquals(objVertices.length, objNormals.length);
+                assertNull(objTexture);
+                assertNull(objColors);
+                assertEquals(plyVertices.length, plyNormals.length);
+                assertNull(plyTexture);
+                assertNotNull(plyColors);
 
-            for (int i = 0; i < nVerticesInChunk; i++) {
-                // check x coordinate
-                assertEquals(objVertices[3 * i], plyVertices[3 * i],
-                        ERROR);
+                final int nVerticesInChunk = objVertices.length / 3;
 
-                // check y coordinate
-                assertEquals(objVertices[3 * i + 1],
-                        plyVertices[3 * i + 1], ERROR);
+                assertEquals(nVerticesInChunk, objVertices.length / 3);
+                assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                // check z coordinate
-                assertEquals(objVertices[3 * i + 2],
-                        plyVertices[3 * i + 2], ERROR);
+                for (int i = 0; i < nVerticesInChunk; i++) {
+                    // check x coordinate
+                    assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
 
-                // check x normal
-                assertEquals(objNormals[3 * i], plyNormals[3 * i],
-                        ERROR);
+                    // check y coordinate
+                    assertEquals(objVertices[3 * i + 1], plyVertices[3 * i + 1], ERROR);
 
-                // check y normal
-                assertEquals(objNormals[3 * i + 1], plyNormals[3 * i + 1],
-                        ERROR);
+                    // check z coordinate
+                    assertEquals(objVertices[3 * i + 2], plyVertices[3 * i + 2], ERROR);
 
-                // check z normal
-                assertEquals(objNormals[3 * i + 2], plyNormals[3 * i + 2],
-                        ERROR);
+                    // check x normal
+                    assertEquals(objNormals[3 * i], plyNormals[3 * i], ERROR);
+
+                    // check y normal
+                    assertEquals(objNormals[3 * i + 1], plyNormals[3 * i + 1], ERROR);
+
+                    // check z normal
+                    assertEquals(objNormals[3 * i + 2], plyNormals[3 * i + 2], ERROR);
+                }
+
+                final int nIndicesInChunk = objIndices.length;
+                assertEquals(nIndicesInChunk, plyIndices.length);
+
+                for (int i = 0; i < nIndicesInChunk; i++) {
+                    assertTrue(objIndices[i] < nVerticesInChunk);
+                    assertTrue(plyIndices[i] < nVerticesInChunk);
+
+                    assertEquals(objIndices[i], plyIndices[i]);
+                }
+
+                // check bounding box values
+                assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
+                assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
+                assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
+                assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
+                assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
+                assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
+
+                assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
+                assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
+                assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
+                assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
+                assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
+                assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
             }
 
-            final int nIndicesInChunk = objIndices.length;
-            assertEquals(nIndicesInChunk, plyIndices.length);
-
-            for (int i = 0; i < nIndicesInChunk; i++) {
-                assertTrue(objIndices[i] < nVerticesInChunk);
-                assertTrue(plyIndices[i] < nVerticesInChunk);
-
-                assertEquals(objIndices[i], plyIndices[i]);
+            if (objIt.hasNext()) {
+                fail("Wrong number of chunks in OBJ");
             }
-
-            // check bounding box values
-            assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
-            assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
-            assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
-            assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
-            assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
-            assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
-
-            assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
-            assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
-            assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
-            assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
-            assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
-            assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
-        }
-
-        if (objIt.hasNext()) {
-            fail("Wrong number of chunks in OBJ");
-        }
-        if (plyIt.hasNext()) {
-            fail("Wrong number of chunks in PLY");
+            if (plyIt.hasNext()) {
+                fail("Wrong number of chunks in PLY");
+            }
         }
     }
 
@@ -1148,24 +1115,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/pitcher.obj");
         final File filePly = new File("./src/test/java/com/irurueta/geometry/io/pitcher.ply");
 
-        final LoaderPLY plyLoader = new LoaderPLY(filePly,
+        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
                 maxNumberOfVerticesInChunk, true); //enable vertex duplicates
-        final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, true); //enable vertex duplicates
-        objLoader.setListener(this);
+             //enable vertex duplicates
+             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
+                     maxNumberOfVerticesInChunk, true)
+        ) {
+            objLoader.setListener(this);
 
-        final LoaderIterator plyIt = plyLoader.load();
-        final LoaderIterator objIt = objLoader.load();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        // check correctness of chunks
-        while (objIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk objChunk = objIt.next();
+            final LoaderIterator plyIt = plyLoader.load();
+            final LoaderIterator objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1173,77 +1132,85 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk plyChunk = plyIt.next();
+            // check correctness of chunks
+            while (objIt.hasNext() && plyIt.hasNext()) {
+                final DataChunk objChunk = objIt.next();
 
-            final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordinatesData();
-            final short[] objColors = objChunk.getColorData();
-            final float[] objNormals = objChunk.getNormalsData();
-            final int[] objIndices = objChunk.getIndicesData();
+                assertTrue(isEndValid());
+                assertTrue(isLockedValid());
+                assertTrue(isProgressValid());
+                assertTrue(isStartValid());
+                resetListener();
 
-            final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-            final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-            final short[] plyColors = plyChunk.getColorData();
-            final float[] plyNormals = plyChunk.getNormalsData();
-            final int[] plyIndices = plyChunk.getIndicesData();
+                final DataChunk plyChunk = plyIt.next();
 
-            assertEquals(objVertices.length, objNormals.length);
-            assertNotNull(objTexture);
-            assertNull(objColors);
-            assertEquals(plyVertices.length, plyNormals.length);
-            assertNull(plyTexture);
-            assertNotNull(plyColors);
+                final float[] objVertices = objChunk.getVerticesCoordinatesData();
+                final float[] objTexture = objChunk.getTextureCoordinatesData();
+                final short[] objColors = objChunk.getColorData();
+                final float[] objNormals = objChunk.getNormalsData();
+                final int[] objIndices = objChunk.getIndicesData();
 
-            final int nVerticesInChunk = objVertices.length / 3;
+                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
+                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
+                final short[] plyColors = plyChunk.getColorData();
+                final float[] plyNormals = plyChunk.getNormalsData();
+                final int[] plyIndices = plyChunk.getIndicesData();
 
-            assertEquals(nVerticesInChunk, objVertices.length / 3);
-            assertEquals(nVerticesInChunk, plyVertices.length / 3);
+                assertEquals(objVertices.length, objNormals.length);
+                assertNotNull(objTexture);
+                assertNull(objColors);
+                assertEquals(plyVertices.length, plyNormals.length);
+                assertNull(plyTexture);
+                assertNotNull(plyColors);
 
-            for (int i = 0; i < nVerticesInChunk; i++) {
-                // check x coordinate
-                assertEquals(objVertices[3 * i], plyVertices[3 * i],
-                        ERROR);
+                final int nVerticesInChunk = objVertices.length / 3;
 
-                // check y coordinate
-                assertEquals(objVertices[3 * i + 1],
-                        plyVertices[3 * i + 1], ERROR);
+                assertEquals(nVerticesInChunk, objVertices.length / 3);
+                assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                // check z coordinate
-                assertEquals(objVertices[3 * i + 2],
-                        plyVertices[3 * i + 2], ERROR);
+                for (int i = 0; i < nVerticesInChunk; i++) {
+                    // check x coordinate
+                    assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
+
+                    // check y coordinate
+                    assertEquals(objVertices[3 * i + 1], plyVertices[3 * i + 1], ERROR);
+
+                    // check z coordinate
+                    assertEquals(objVertices[3 * i + 2], plyVertices[3 * i + 2], ERROR);
+                }
+
+                final int nIndicesInChunk = objIndices.length;
+                assertEquals(nIndicesInChunk, plyIndices.length);
+
+                for (int i = 0; i < nIndicesInChunk; i++) {
+                    assertTrue(objIndices[i] < nVerticesInChunk);
+                    assertTrue(plyIndices[i] < nVerticesInChunk);
+
+                    assertEquals(objIndices[i], plyIndices[i]);
+                }
+
+                // check bounding box values
+                assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
+                assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
+                assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
+                assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
+                assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
+                assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
+
+                assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
+                assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
+                assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
+                assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
+                assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
+                assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
             }
 
-            final int nIndicesInChunk = objIndices.length;
-            assertEquals(nIndicesInChunk, plyIndices.length);
-
-            for (int i = 0; i < nIndicesInChunk; i++) {
-                assertTrue(objIndices[i] < nVerticesInChunk);
-                assertTrue(plyIndices[i] < nVerticesInChunk);
-
-                assertEquals(objIndices[i], plyIndices[i]);
+            if (objIt.hasNext()) {
+                fail("Wrong number of chunks in OBJ");
             }
-
-            // check bounding box values
-            assertEquals(objChunk.getMinX(), plyChunk.getMinX(), ERROR);
-            assertEquals(objChunk.getMinY(), plyChunk.getMinY(), ERROR);
-            assertEquals(objChunk.getMinZ(), plyChunk.getMinZ(), ERROR);
-            assertEquals(objChunk.getMaxX(), plyChunk.getMaxX(), ERROR);
-            assertEquals(objChunk.getMaxY(), plyChunk.getMaxY(), ERROR);
-            assertEquals(objChunk.getMaxZ(), plyChunk.getMaxZ(), ERROR);
-
-            assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
-            assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
-            assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
-            assertTrue(plyChunk.getMinX() <= plyChunk.getMaxX());
-            assertTrue(plyChunk.getMinY() <= plyChunk.getMaxY());
-            assertTrue(plyChunk.getMinZ() <= plyChunk.getMaxZ());
-        }
-
-        if (objIt.hasNext()) {
-            fail("Wrong number of chunks in OBJ");
-        }
-        if (plyIt.hasNext()) {
-            fail("Wrong number of chunks in PLY");
+            if (plyIt.hasNext()) {
+                fail("Wrong number of chunks in PLY");
+            }
         }
     }
 
@@ -1253,21 +1220,12 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         final int maxNumberOfVerticesInChunk = 100000;
         final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/camera.obj");
-        final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, true); //enable vertex duplicates
-        objLoader.setListener(this);
+        //enable vertex duplicates
+        try (final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
+                maxNumberOfVerticesInChunk, true)) {
+            objLoader.setListener(this);
 
-        final LoaderIterator objIt = objLoader.load();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        // check correctness of chunks
-        while (objIt.hasNext()) {
-            final DataChunk objChunk = objIt.next();
+            final LoaderIterator objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1275,30 +1233,41 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertTrue(isStartValid());
             resetListener();
 
-            final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordinatesData();
-            final short[] objColors = objChunk.getColorData();
-            final float[] objNormals = objChunk.getNormalsData();
-            final int[] objIndices = objChunk.getIndicesData();
+            // check correctness of chunks
+            while (objIt.hasNext()) {
+                final DataChunk objChunk = objIt.next();
 
-            assertEquals(objVertices.length, objNormals.length);
-            assertNotNull(objTexture);
-            assertNull(objColors);
+                assertTrue(isEndValid());
+                assertTrue(isLockedValid());
+                assertTrue(isProgressValid());
+                assertTrue(isStartValid());
+                resetListener();
 
-            final int nVerticesInChunk = objVertices.length / 3;
+                final float[] objVertices = objChunk.getVerticesCoordinatesData();
+                final float[] objTexture = objChunk.getTextureCoordinatesData();
+                final short[] objColors = objChunk.getColorData();
+                final float[] objNormals = objChunk.getNormalsData();
+                final int[] objIndices = objChunk.getIndicesData();
 
-            for (final int objIndex : objIndices) {
-                assertTrue(objIndex < nVerticesInChunk);
+                assertEquals(objVertices.length, objNormals.length);
+                assertNotNull(objTexture);
+                assertNull(objColors);
+
+                final int nVerticesInChunk = objVertices.length / 3;
+
+                for (final int objIndex : objIndices) {
+                    assertTrue(objIndex < nVerticesInChunk);
+                }
+
+                // check bounding box values
+                assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
+                assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
+                assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
             }
 
-            // check bounding box values
-            assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
-            assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
-            assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
-        }
-
-        if (objIt.hasNext()) {
-            fail("Wrong number of chunks in OBJ");
+            if (objIt.hasNext()) {
+                fail("Wrong number of chunks in OBJ");
+            }
         }
     }
 
@@ -1308,21 +1277,12 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
         final int maxNumberOfVerticesInChunk = 100000;
         final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/potro.obj");
-        final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, true); //enable vertex duplicates
-        objLoader.setListener(this);
+        //enable vertex duplicates
+        try (final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
+                maxNumberOfVerticesInChunk, true)) {
+            objLoader.setListener(this);
 
-        final LoaderIterator objIt = objLoader.load();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        // check correctness of chunks
-        while (objIt.hasNext()) {
-            final DataChunk objChunk = objIt.next();
+            final LoaderIterator objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1330,30 +1290,41 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertTrue(isStartValid());
             resetListener();
 
-            final float[] objVertices = objChunk.getVerticesCoordinatesData();
-            final float[] objTexture = objChunk.getTextureCoordinatesData();
-            final short[] objColors = objChunk.getColorData();
-            final float[] objNormals = objChunk.getNormalsData();
-            final int[] objIndices = objChunk.getIndicesData();
+            // check correctness of chunks
+            while (objIt.hasNext()) {
+                final DataChunk objChunk = objIt.next();
 
-            assertEquals(objVertices.length, objNormals.length);
-            assertNotNull(objTexture);
-            assertNull(objColors);
+                assertTrue(isEndValid());
+                assertTrue(isLockedValid());
+                assertTrue(isProgressValid());
+                assertTrue(isStartValid());
+                resetListener();
 
-            final int nVerticesInChunk = objVertices.length / 3;
+                final float[] objVertices = objChunk.getVerticesCoordinatesData();
+                final float[] objTexture = objChunk.getTextureCoordinatesData();
+                final short[] objColors = objChunk.getColorData();
+                final float[] objNormals = objChunk.getNormalsData();
+                final int[] objIndices = objChunk.getIndicesData();
 
-            for (final int objIndex : objIndices) {
-                assertTrue(objIndex < nVerticesInChunk);
+                assertEquals(objVertices.length, objNormals.length);
+                assertNotNull(objTexture);
+                assertNull(objColors);
+
+                final int nVerticesInChunk = objVertices.length / 3;
+
+                for (final int objIndex : objIndices) {
+                    assertTrue(objIndex < nVerticesInChunk);
+                }
+
+                // check bounding box values
+                assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
+                assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
+                assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
             }
 
-            // check bounding box values
-            assertTrue(objChunk.getMinX() <= objChunk.getMaxX());
-            assertTrue(objChunk.getMinY() <= objChunk.getMaxY());
-            assertTrue(objChunk.getMinZ() <= objChunk.getMaxZ());
-        }
-
-        if (objIt.hasNext()) {
-            fail("Wrong number of chunks in OBJ");
+            if (objIt.hasNext()) {
+                fail("Wrong number of chunks in OBJ");
+            }
         }
     }
 

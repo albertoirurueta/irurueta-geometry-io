@@ -101,7 +101,7 @@ public class LoaderOBJ extends Loader {
      * To allow faster file loading, it might be allowed to repeat points in a
      * chunk. When representing data graphically, this has no visual.
      * consequences but chunks will take up more memory. This value represents
-     * a trade off between loading speed and memory usage.
+     * a trade-off between loading speed and memory usage.
      */
     private boolean allowDuplicateVerticesInChunk;
 
@@ -696,7 +696,7 @@ public class LoaderOBJ extends Loader {
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
      *
-     * @return a loader iterator to read the file in a step by step process.
+     * @return a loader iterator to read the file in a step-by-step process.
      * @throws LockedException   raised if this instance is already locked.
      * @throws NotReadyException raised if this instance is not yet ready.
      * @throws IOException       if an I/O error occurs.
@@ -790,7 +790,7 @@ public class LoaderOBJ extends Loader {
                 // attempt restart stream to initial position
                 reader.seek(0);
             } catch (final Exception ignore) {
-                // this is a best effort operation, if it fails it is ignored
+                // this is the best effort operation, if it fails it is ignored
             }
 
             // on subsequent calls
@@ -1059,7 +1059,7 @@ public class LoaderOBJ extends Loader {
 
         /**
          * Array containing indices to be added to current chunk of data. Notice
-         * that this indices are not the original indices appearing in the file.
+         * that these indices are not the original indices appearing in the file.
          * Instead, they are indices referring to data in current chunk,
          * accounting for duplicate points, etc. This way, indices in a chunk
          * can be directly used to draw the chunk of data by the graphical layer.
@@ -1298,7 +1298,7 @@ public class LoaderOBJ extends Loader {
                     // ignore
                     if (str.startsWith(USEMTL)) {
 
-                        if (currentChunkMaterialName.equals("")) {
+                        if (currentChunkMaterialName.isEmpty()) {
                             currentChunkMaterialName = str.substring(
                                     USEMTL.length()).trim();
                             // search current material on material library
@@ -1355,7 +1355,7 @@ public class LoaderOBJ extends Loader {
                         // this chunk
                         if ((verticesInChunk + valuesSet.size() * 3) >
                                 loader.maxVerticesInChunk) { // values.length
-                            // no more vertices can be added to chunk so we reset
+                            // no more vertices can be added to chunk, so we reset
                             // stream to start on current face
                             reader.seek(faceStreamPos);
                             break;
@@ -1385,37 +1385,35 @@ public class LoaderOBJ extends Loader {
 
                                 // first check if vertex has to be added as new or
                                 // not
-                                if (indices.length >= 1 &&
-                                        (indices[0].length() != 0)) {
+                                if (indices.length >= 1 && (!indices[0].isEmpty())) {
                                     indicesAvailable = true;
                                     // indices start at 1 in OBJ
                                     vertexIndex = Integer.parseInt(indices[0]) - 1;
 
                                     // determine if vertex coordinates have to be
-                                    // added as new or they can be reused from an
+                                    // added as new, or they can be reused from an
                                     // existing vertex
                                     addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk &&
                                             (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) >= 0;
                                 }
-                                if (indices.length >= 2 &&
-                                        (indices[1].length() != 0)) {
+                                if (indices.length >= 2 && (!indices[1].isEmpty())) {
                                     textureAvailable = true;
                                     // indices start at 1 in OBJ
                                     textureIndex = Integer.parseInt(indices[1]) - 1;
 
                                     // determine if texture coordinates have to be
-                                    // added as new or they can be reused from an
+                                    // added as new, or they can be reused from an
                                     // existing vertex
                                     addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk &&
                                             (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) >= 0;
                                 }
-                                if (indices.length >= 3 && (indices[2].length() != 0)) {
+                                if (indices.length >= 3 && (!indices[2].isEmpty())) {
                                     normalsAvailable = true;
                                     // indices start at 1 in OBJ
                                     normalIndex = Integer.parseInt(indices[2]) - 1;
 
                                     // determine if normal coordinates have to be
-                                    // added as new or they can be reused from an
+                                    // added as new, or they can be reused from an
                                     // existing vertex
                                     addExistingNormal = !loader.allowDuplicateVerticesInChunk &&
                                             (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) >= 0;
@@ -1437,16 +1435,13 @@ public class LoaderOBJ extends Loader {
                                         (normalChunkIndex >= 0);
                                 // ensure that if index is present an existing vertex
                                 // in chunk exists
-                                if (indices.length >= 1 &&
-                                        (indices[0].length() != 0)) {
+                                if (indices.length >= 1 && (!indices[0].isEmpty())) {
                                     addExisting &= addExistingVertexCoords;
                                 }
-                                if (indices.length >= 2 &&
-                                        (indices[1].length() != 0)) {
+                                if (indices.length >= 2 && (!indices[1].isEmpty())) {
                                     addExisting &= addExistingTextureCoords;
                                 }
-                                if (indices.length >= 3 &&
-                                        (indices[2].length() != 0)) {
+                                if (indices.length >= 3 && (!indices[2].isEmpty())) {
                                     addExisting &= addExistingNormal;
                                 }
 
@@ -1465,8 +1460,7 @@ public class LoaderOBJ extends Loader {
                                 }
 
 
-                                if (indices.length >= 1 &&
-                                        (indices[0].length() != 0) && !addExistingVertexCoords) {
+                                if (indices.length >= 1 && (!indices[0].isEmpty()) && !addExistingVertexCoords) {
                                     // new vertex needs to be added into chunk,
                                     // so we need to read vertex data
 
@@ -1490,16 +1484,16 @@ public class LoaderOBJ extends Loader {
                                         // homogeneous coordinates x, y, z, w
 
                                         // check that values are valid
-                                        if (vertexCoordinates[0].length() == 0) {
+                                        if (vertexCoordinates[0].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (vertexCoordinates[1].length() == 0) {
+                                        if (vertexCoordinates[1].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (vertexCoordinates[2].length() == 0) {
+                                        if (vertexCoordinates[2].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (vertexCoordinates[3].length() == 0) {
+                                        if (vertexCoordinates[3].isEmpty()) {
                                             throw new LoaderException();
                                         }
 
@@ -1516,13 +1510,13 @@ public class LoaderOBJ extends Loader {
                                         // inhomogeneous coordinates x, y, z
 
                                         // check that values are valid
-                                        if (vertexCoordinates[0].length() == 0) {
+                                        if (vertexCoordinates[0].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (vertexCoordinates[1].length() == 0) {
+                                        if (vertexCoordinates[1].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (vertexCoordinates[2].length() == 0) {
+                                        if (vertexCoordinates[2].isEmpty()) {
                                             throw new LoaderException();
                                         }
 
@@ -1537,11 +1531,8 @@ public class LoaderOBJ extends Loader {
                                         // unsupported length
                                         throw new LoaderException();
                                     }
-
-                                    addExisting = false;
                                 }
-                                if (indices.length >= 2 &&
-                                        (indices[1].length() != 0) && !addExistingTextureCoords) {
+                                if (indices.length >= 2 && (!indices[1].isEmpty()) && !addExistingTextureCoords) {
                                     // new texture values need to be added into
                                     // chunk, so we need to read texture
                                     // coordinates data
@@ -1566,13 +1557,13 @@ public class LoaderOBJ extends Loader {
                                         // homogeneous coordinates u, v, w
 
                                         // check that values are valid
-                                        if (textureCoordinates[0].length() == 0) {
+                                        if (textureCoordinates[0].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (textureCoordinates[1].length() == 0) {
+                                        if (textureCoordinates[1].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (textureCoordinates[2].length() == 0) {
+                                        if (textureCoordinates[2].isEmpty()) {
                                             throw new LoaderException();
                                         }
 
@@ -1598,10 +1589,10 @@ public class LoaderOBJ extends Loader {
                                         // inhomogeneous coordinates u, v
 
                                         // check that values are valid
-                                        if (textureCoordinates[0].length() == 0) {
+                                        if (textureCoordinates[0].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (textureCoordinates[1].length() == 0) {
+                                        if (textureCoordinates[1].isEmpty()) {
                                             throw new LoaderException();
                                         }
 
@@ -1613,11 +1604,8 @@ public class LoaderOBJ extends Loader {
                                         // unsupported length
                                         throw new LoaderException();
                                     }
-
-                                    addExisting = false;
                                 }
-                                if (indices.length >= 3 &&
-                                        (indices[2].length() != 0) && !addExistingNormal) {
+                                if (indices.length >= 3 && (!indices[2].isEmpty()) && !addExistingNormal) {
                                     // new normal needs to be added into chunk,
                                     // so we need to read vertex data
 
@@ -1640,13 +1628,13 @@ public class LoaderOBJ extends Loader {
                                         // normal coordinates x, y, z
 
                                         // check that values are valid
-                                        if (normalCoordinates[0].length() == 0) {
+                                        if (normalCoordinates[0].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (normalCoordinates[1].length() == 0) {
+                                        if (normalCoordinates[1].isEmpty()) {
                                             throw new LoaderException();
                                         }
-                                        if (normalCoordinates[2].length() == 0) {
+                                        if (normalCoordinates[2].isEmpty()) {
                                             throw new LoaderException();
                                         }
 
@@ -1660,8 +1648,6 @@ public class LoaderOBJ extends Loader {
                                         // unsupported length
                                         throw new LoaderException();
                                     }
-
-                                    addExisting = false;
                                 }
 
                                 if (addExisting) {
@@ -1765,7 +1751,7 @@ public class LoaderOBJ extends Loader {
             long startStreamPos = firstVertexStreamPosition;
             long startIndex = 0;
 
-            if (verticesStreamPositionMap.size() > 0) {
+            if (!verticesStreamPositionMap.isEmpty()) {
                 // with floorEntry, we will pick element immediately
                 // before or equal to index if any exists
                 final Map.Entry<Long, Long> entry =
@@ -1841,7 +1827,7 @@ public class LoaderOBJ extends Loader {
             long startStreamPos = firstTextureCoordStreamPosition;
             long startIndex = 0;
 
-            if (textureCoordsStreamPositionMap.size() > 0) {
+            if (!textureCoordsStreamPositionMap.isEmpty()) {
                 // with floorEntry, we will pick element immediately
                 // before or equal to index if any exists
                 final Map.Entry<Long, Long> entry =
@@ -1916,7 +1902,7 @@ public class LoaderOBJ extends Loader {
             long startStreamPos = firstNormalStreamPosition;
             long startIndex = 0;
 
-            if (normalsStreamPositionMap.size() > 0) {
+            if (!normalsStreamPositionMap.isEmpty()) {
                 // with floorEntry, we will pick element immediately before or
                 // equal to index if any exists
                 final Map.Entry<Long, Long> entry =
@@ -1974,7 +1960,7 @@ public class LoaderOBJ extends Loader {
         }
 
         /**
-         * Internal method to decompose a an array of vertices forming a polygon
+         * Internal method to decompose an array of vertices forming a polygon
          * in a set of arrays of vertices corresponding to triangles after
          * triangulation of the polygon. This method is used to triangulate
          * polygons with more than 3 vertices contained in the file.
@@ -2070,7 +2056,7 @@ public class LoaderOBJ extends Loader {
 
                 final String[] indices = value.split("/");
 
-                if (indices.length >= 1 && (indices[0].length() != 0)) {
+                if (indices.length >= 1 && (!indices[0].isEmpty())) {
                     vertexIndex = Integer.parseInt(indices[0]) - 1;
                     tmpVertex.setVertexIndex(vertexIndex + 1);
                     fetchVertex(vertexIndex);
@@ -2086,16 +2072,16 @@ public class LoaderOBJ extends Loader {
                     if (vertexCoordinates.length == 4) {
                         // homogeneous coordinates x, y, z, w
                         // ensure that vertex coordinates are not empty
-                        if (vertexCoordinates[0].length() == 0) {
+                        if (vertexCoordinates[0].isEmpty()) {
                             throw new LoaderException();
                         }
-                        if (vertexCoordinates[1].length() == 0) {
+                        if (vertexCoordinates[1].isEmpty()) {
                             throw new LoaderException();
                         }
-                        if (vertexCoordinates[2].length() == 0) {
+                        if (vertexCoordinates[2].isEmpty()) {
                             throw new LoaderException();
                         }
-                        if (vertexCoordinates[3].length() == 0) {
+                        if (vertexCoordinates[3].isEmpty()) {
                             throw new LoaderException();
                         }
 
@@ -2112,13 +2098,13 @@ public class LoaderOBJ extends Loader {
                     } else if (vertexCoordinates.length >= 3) {
                         // inhomogeneous coordinates x, y, z
                         // ensure that vertex coordinate are not empty
-                        if (vertexCoordinates[0].length() == 0) {
+                        if (vertexCoordinates[0].isEmpty()) {
                             throw new LoaderException();
                         }
-                        if (vertexCoordinates[1].length() == 0) {
+                        if (vertexCoordinates[1].isEmpty()) {
                             throw new LoaderException();
                         }
-                        if (vertexCoordinates[2].length() == 0) {
+                        if (vertexCoordinates[2].isEmpty()) {
                             throw new LoaderException();
                         }
 
@@ -2136,11 +2122,11 @@ public class LoaderOBJ extends Loader {
                         throw new LoaderException();
                     }
                 }
-                if (indices.length >= 2 && (indices[1].length() != 0)) {
+                if (indices.length >= 2 && (!indices[1].isEmpty())) {
                     tmpVertex.setTextureIndex(
                             Integer.parseInt(indices[1]));
                 }
-                if (indices.length >= 3 && (indices[2].length() != 0)) {
+                if (indices.length >= 3 && (!indices[2].isEmpty())) {
                     tmpVertex.setNormalIndex(
                             Integer.parseInt(indices[2]));
                 }
@@ -2335,7 +2321,7 @@ public class LoaderOBJ extends Loader {
             originalVertexIndicesInChunkArray[indicesInChunk] = vertexIndex;
             originalTextureIndicesInChunkArray[indicesInChunk] = textureIndex;
             originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
-            // store original indices in maps so we can search chunk index by
+            // store original indices in maps, so we can search chunk index by
             // original indices of vertices, texture or normal
             vertexIndicesMap.put((long) vertexIndex,
                     indicesInChunk);
@@ -2460,7 +2446,7 @@ public class LoaderOBJ extends Loader {
         }
 
         /**
-         * Set ups loader iterator. This method is called when constructing
+         * Setups loader iterator. This method is called when constructing
          * this iterator.
          *
          * @throws IOException     if an I/O error occurs.

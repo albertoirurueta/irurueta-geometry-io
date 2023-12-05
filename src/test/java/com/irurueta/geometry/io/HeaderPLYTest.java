@@ -26,7 +26,7 @@ public class HeaderPLYTest {
     public void testConstructor() {
         final HeaderPLY header = new HeaderPLY();
 
-        assertEquals(header.getStorageMode(), PLYStorageMode.PLY_ASCII);
+        assertEquals(PLYStorageMode.PLY_ASCII, header.getStorageMode());
         assertTrue(header.getElements().isEmpty());
         assertTrue(header.getComments().isEmpty());
         assertTrue(header.getObjInfos().isEmpty());
@@ -43,7 +43,6 @@ public class HeaderPLYTest {
         final ElementPLY element = new ElementPLY(name, number, property);
         header.getElements().add(element);
 
-        assertEquals(header.toString(), "ply\nformat ascii 1.0\n" +
-                element + "end_header\n");
+        assertEquals("ply\nformat ascii 1.0\n" + element + "end_header\n", header.toString());
     }
 }

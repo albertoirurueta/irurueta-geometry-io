@@ -85,15 +85,15 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         MeshWriterJson writer = new MeshWriterJson(loader, outStream);
         assertNull(writer.getCharset());
         assertTrue(writer.isDefaultCharsetBeingUsed());
-        assertEquals(writer.isEmbedTexturesEnabled(),
-                MeshWriterJson.DEFAULT_EMBED_TEXTURES);
-        assertEquals(writer.isRemoteTextureUrlEnabled(),
-                MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL);
-        assertEquals(writer.isRemoteTextureIdEnabled(),
-                MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID);
+        assertEquals(MeshWriterJson.DEFAULT_EMBED_TEXTURES,
+                writer.isEmbedTexturesEnabled());
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL,
+                writer.isRemoteTextureUrlEnabled());
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID,
+                writer.isRemoteTextureIdEnabled());
         assertTrue(writer.isReady());
         assertFalse(writer.isLocked());
-        assertEquals(writer.getStream(), outStream);
+        assertEquals(outStream, writer.getStream());
         assertNull(writer.getListener());
 
         final MeshWriterListener listener = new MeshWriterListener() {
@@ -155,8 +155,8 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         assertTrue(writer.isDefaultCharsetBeingUsed());
         assertTrue(writer.isReady());
         assertFalse(writer.isLocked());
-        assertEquals(writer.getStream(), outStream);
-        assertEquals(writer.getListener(), listener);
+        assertEquals(outStream, writer.getStream());
+        assertEquals(listener, writer.getListener());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
@@ -175,9 +175,9 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         assertTrue(writer.isDefaultCharsetBeingUsed());
 
         // set new charset
-        Charset charset = StandardCharsets.ISO_8859_1;
+        final Charset charset = StandardCharsets.ISO_8859_1;
         writer.setCharset(charset);
-        assertEquals(writer.getCharset(), charset);
+        assertEquals(charset, writer.getCharset());
         assertFalse(writer.isDefaultCharsetBeingUsed());
 
         assertTrue(outF.exists());
@@ -194,13 +194,11 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         final FileOutputStream outStream = new FileOutputStream(outF);
 
         final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        assertEquals(writer.isEmbedTexturesEnabled(),
-                MeshWriterJson.DEFAULT_EMBED_TEXTURES);
+        assertEquals(MeshWriterJson.DEFAULT_EMBED_TEXTURES, writer.isEmbedTexturesEnabled());
 
         // set new value
         writer.setEmbedTexturedEnabled(!MeshWriterJson.DEFAULT_EMBED_TEXTURES);
-        assertEquals(writer.isEmbedTexturesEnabled(),
-                !MeshWriterJson.DEFAULT_EMBED_TEXTURES);
+        assertEquals(!MeshWriterJson.DEFAULT_EMBED_TEXTURES, writer.isEmbedTexturesEnabled());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
@@ -216,14 +214,13 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         final FileOutputStream outStream = new FileOutputStream(outF);
 
         final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        assertEquals(writer.isRemoteTextureUrlEnabled(),
-                MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL);
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL,
+                writer.isRemoteTextureUrlEnabled());
 
         // set new value
-        writer.setRemoteTextureUrlEnabled(
-                !MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL);
-        assertEquals(writer.isRemoteTextureUrlEnabled(),
-                !MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL);
+        writer.setRemoteTextureUrlEnabled(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL);
+        assertEquals(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL,
+                writer.isRemoteTextureUrlEnabled());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
@@ -239,14 +236,13 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         final FileOutputStream outStream = new FileOutputStream(outF);
 
         final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        assertEquals(writer.isRemoteTextureIdEnabled(),
-                MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID);
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID,
+                writer.isRemoteTextureIdEnabled());
 
         // set new value
-        writer.setRemoteTextureIdEnabled(
-                !MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID);
-        assertEquals(writer.isRemoteTextureIdEnabled(),
-                !MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID);
+        writer.setRemoteTextureIdEnabled(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID);
+        assertEquals(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID,
+                writer.isRemoteTextureIdEnabled());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
@@ -318,7 +314,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         };
 
         writer.setListener(listener);
-        assertEquals(writer.getListener(), listener);
+        assertEquals(listener, writer.getListener());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());

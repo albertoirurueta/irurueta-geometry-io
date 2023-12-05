@@ -37,16 +37,16 @@ public class ElementPLYTest {
             fail("NotAvailableException not thrown");
         } catch (final NotAvailableException ignore) { }
         assertFalse(element.isNameAvailable());
-        assertEquals(element.getNumberOfInstances(), number);
+        assertEquals(number, element.getNumberOfInstances());
         assertTrue(element.getProperties().isEmpty());
         assertTrue(element.arePropertiesAvailable());
         assertFalse(element.isValidElement());
         
         // constructor with name and number of instances
         element = new ElementPLY(name, number);
-        assertEquals(element.getName(), name);
+        assertEquals(name, element.getName());
         assertTrue(element.isNameAvailable());
-        assertEquals(element.getNumberOfInstances(), number);
+        assertEquals(number, element.getNumberOfInstances());
         assertTrue(element.getProperties().isEmpty());
         assertTrue(element.arePropertiesAvailable());
         assertTrue(element.isValidElement());
@@ -54,9 +54,9 @@ public class ElementPLYTest {
         // constructor with name, number of instances and property
         final PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
         element = new ElementPLY(name, number, property);
-        assertEquals(element.getName(), name);
+        assertEquals(name, element.getName());
         assertTrue(element.isNameAvailable());
-        assertEquals(element.getNumberOfInstances(), number);
+        assertEquals(number, element.getNumberOfInstances());
         assertFalse(element.getProperties().isEmpty());
         assertTrue(element.getProperties().contains(property));
         assertTrue(element.arePropertiesAvailable());
@@ -65,10 +65,10 @@ public class ElementPLYTest {
         // constructor with name, number of instances and property list
         final List<PropertyPLY> properties = new LinkedList<>();
         element = new ElementPLY(name, number, properties);
-        assertEquals(element.getName(), name);
+        assertEquals(name, element.getName());
         assertTrue(element.isNameAvailable());
-        assertEquals(element.getNumberOfInstances(), number);
-        assertEquals(element.getProperties(), properties);
+        assertEquals(number, element.getNumberOfInstances());
+        assertEquals(properties, element.getProperties());
         assertTrue(element.arePropertiesAvailable());
         assertTrue(element.isValidElement());                
     }

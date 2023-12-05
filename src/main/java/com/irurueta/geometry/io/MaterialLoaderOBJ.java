@@ -152,7 +152,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
     }
 
     /**
-     * Parses a line in a MTL file.
+     * Parses a line in an MTL file.
      *
      * @param line line being parsed.
      * @throws LoaderException if line cannot be interpreted.

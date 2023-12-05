@@ -208,7 +208,7 @@ public class PropertyPLY {
 
         final StringBuilder builder = new StringBuilder("property ");
 
-        // depending if property is scalar or list
+        // depending whether property is scalar or list
         if (type == PropertyTypePLY.PROPERTY_PLY_SCALAR) {
             // add value data type
             builder.append(valueType.getValue()).append(" ");

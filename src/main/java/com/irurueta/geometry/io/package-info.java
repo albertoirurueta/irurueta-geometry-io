@@ -26,6 +26,6 @@
  * <p>
  * Writer implementations allow reading a 3D file using a Loader and write it
  * to provided output stream using the format implemented by the specific Writer
- * being used (i.e. JSON, binary, etc)
+ * being used (i.e. JSON, binary, etc.)
  */
 package com.irurueta.geometry.io;

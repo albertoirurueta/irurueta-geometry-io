@@ -40,7 +40,7 @@ import java.util.TreeMap;
  * This class needs random access to file positions, and for that reason it
  * cannot be used with streams.
  * This class is based in the work of:
- * http://w3.impa.br/~diego/software/rply/
+ * <a href="http://w3.impa.br/~diego/software/rply/">http://w3.impa.br/~diego/software/rply/</a>
  */
 public class LoaderPLY extends Loader {
     /**
@@ -54,7 +54,7 @@ public class LoaderPLY extends Loader {
     /**
      * Constant defining maximum number of vertices to be stored in a single
      * data chunk.
-     * By default this is the maximum values stored in a short 65535. This is
+     * By default, this is the maximum values stored in a short 65535. This is
      * so that data chunks can be compatible with technologies such as openGL
      * where vertex indices are short values, and hence only 65535 vertices can
      * be indexed at a time.
@@ -73,7 +73,7 @@ public class LoaderPLY extends Loader {
      * chunk. By allowing duplicate vertices, PLY loading can be speed up a
      * little bit at the expense of getting larger sets of data which will
      * contain redundant vertices. If your environment is memory constrained,
-     * this should be disabled. By default it is disabled.
+     * this should be disabled. By default, it is disabled.
      */
     public static final boolean DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK =
             false;
@@ -84,7 +84,7 @@ public class LoaderPLY extends Loader {
      * This loader keeps track of a set of stream positions that have been
      * parsed on ASCII mode. By keeping a cache of positions loading times can
      * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
+     * By default, this is set to 1000000 positions.
      * This only has effect on ASCII PLY files. For binary PLY files this
      * constant is ignored.
      */
@@ -124,7 +124,7 @@ public class LoaderPLY extends Loader {
 
     /**
      * Indicates maximum number of vertices to keep in a chunk of data.
-     * By default this is the maximum values stored in a short 65535. This is
+     * By default, this is the maximum values stored in a short 65535. This is
      * so that data chunks can be compatible with technologies such as openGL
      * where vertex indices are short values, and hence only 65535 vertices can
      * be indexed at a time.
@@ -136,7 +136,7 @@ public class LoaderPLY extends Loader {
      * duplicate vertices, PLY loading can be speed up a little bit at the
      * expense of getting larger sets of data which will contain redundant
      * vertices. If your environment is memory constrained, this should be
-     * disabled. By default it is disabled.
+     * disabled. By default, it is disabled.
      */
     private boolean allowDuplicateVerticesInChunk;
 
@@ -145,7 +145,7 @@ public class LoaderPLY extends Loader {
      * This loader keeps track of a set of stream positions that have been
      * parsed on ASCII mode. By keeping a cache of positions loading times can
      * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
+     * By default, this is set to 1000000 positions.
      * This only has effect on ASCII PLY files. For binary PLY files this
      * setting is ignored.
      */
@@ -520,7 +520,7 @@ public class LoaderPLY extends Loader {
 
     /**
      * Returns maximum number of vertices to keep in a chunk of data.
-     * By default this is the maximum values stored in a short is 65535. This is
+     * By default, this is the maximum values stored in a short is 65535. This is
      * so that data chunks can be compatible with technologies such as openGL
      * where vertex indices are short values, and hence only 65535 vertices can
      * be indexed at a time.
@@ -554,7 +554,7 @@ public class LoaderPLY extends Loader {
      * duplicate vertices, PLY loading can be speed up a little bit at the
      * expense of getting larger sets of data which will contain redundant
      * vertices. If your environment is memory constrained, this should be
-     * disabled. By default it is disabled.
+     * disabled. By default, it is disabled.
      *
      * @return Determines whether duplicate vertices in a chunk are allowed.
      */
@@ -567,7 +567,7 @@ public class LoaderPLY extends Loader {
      * duplicate vertices, PLY loading can be speed up a little bit at the
      * expense of getting larger sets of data which will contain redundant
      * vertices. If your environment is memory constrained, this should be
-     * disabled. By default it is disabled.
+     * disabled. By default, it is disabled.
      *
      * @param allow Indicates whether duplicates will be allowed or not.
      * @throws LockedException Raised if this instance is locked because loading
@@ -586,7 +586,7 @@ public class LoaderPLY extends Loader {
      * This loader keeps track of a set of stream positions that have been
      * parsed on ASCII mode. By keeping a cache of positions loading times can
      * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
+     * By default, this is set to 1000000 positions.
      * This only has effect on ASCII PLY files. For binary PLY files this
      * setting is ignored.
      *
@@ -601,7 +601,7 @@ public class LoaderPLY extends Loader {
      * This loader keeps track of a set of stream positions that have been
      * parsed on ASCII mode. By keeping a cache of positions loading times can
      * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
+     * By default, this is set to 1000000 positions.
      * This only has effect on ASCII PLY files. For binary PLY files this
      * setting is ignored.
      *
@@ -714,7 +714,7 @@ public class LoaderPLY extends Loader {
      * By allowing duplicate vertices, PLY loading can be speed up a little bit
      * at the expense of getting larger sets of data which will contain
      * redundant vertices. If your environment is memory constrained, this
-     * should be disabled. By default it is disabled.
+     * should be disabled. By default, it is disabled.
      *
      * @param allow Indicates whether duplicates will be allowed or not.
      */
@@ -727,7 +727,7 @@ public class LoaderPLY extends Loader {
      * This loader keeps track of a set of stream positions that have been
      * parsed on ASCII mode. By keeping a cache of positions loading times can
      * be largely reduced at the expense of using more memory during loading.
-     * By default this is set to 1000000 positions.
+     * By default, this is set to 1000000 positions.
      * This only has effect on ASCII PLY files. For binary PLY files this
      * setting is ignored.
      *
@@ -808,7 +808,7 @@ public class LoaderPLY extends Loader {
             // loop is to avoid empty strings
             // (because of duplicate spaces or carriage returns)
             str = reader.readWord();
-        } while ((str.length() == 0) && !reader.isEndOfStream());
+        } while ((str.isEmpty()) && !reader.isEndOfStream());
 
         if (!str.equals("format") || reader.isEndOfStream()) {
             validStream = false;
@@ -819,7 +819,7 @@ public class LoaderPLY extends Loader {
         do {
             // loop to avoid empty strings
             str = reader.readWord();
-        } while ((str.length() == 0) && !reader.isEndOfStream());
+        } while ((str.isEmpty()) && !reader.isEndOfStream());
 
         if (reader.isEndOfStream()) {
             validStream = false;
@@ -850,7 +850,7 @@ public class LoaderPLY extends Loader {
         do {
             // loop to avoid empty strings
             str = reader.readWord();
-        } while ((str.length() == 0) && !reader.isEndOfStream());
+        } while ((str.isEmpty()) && !reader.isEndOfStream());
 
         if (!str.equals("1.0") || reader.isEndOfStream()) {
             validStream = false;
@@ -870,7 +870,7 @@ public class LoaderPLY extends Loader {
             do {
                 // loop to avoid empty strings
                 str = reader.readWord();
-            } while ((str.length() == 0) && !reader.isEndOfStream());
+            } while ((str.isEmpty()) && !reader.isEndOfStream());
 
             if (str.equals("comment")) {
                 // if word is "comment", read until end of line
@@ -878,7 +878,7 @@ public class LoaderPLY extends Loader {
                 // add comment to list of comments in header
                 header.getComments().add(str);
             } else if (str.equals("obj_info")) {
-                // if word if "obj_info", read until end of line
+                // if word is "obj_info", read until end of line
                 str = reader.readLine();
                 // add obj_info to list of obj_infos in header
                 header.getObjInfos().add(str);
@@ -890,7 +890,7 @@ public class LoaderPLY extends Loader {
                 do {
                     // loop to avoid empty strings
                     str = reader.readWord();
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 if (reader.isEndOfStream()) {
                     validStream = false;
@@ -902,7 +902,7 @@ public class LoaderPLY extends Loader {
                 // next word contains number of instances of this element
                 do {
                     str = reader.readWord();
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 if (reader.isEndOfStream()) {
                     validStream = false;
@@ -935,7 +935,7 @@ public class LoaderPLY extends Loader {
                 do {
                     // loop to avoid empty strings
                     str = reader.readWord();
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 if (reader.isEndOfStream()) {
                     validStream = false;
@@ -951,7 +951,7 @@ public class LoaderPLY extends Loader {
                         do {
                             // loop to avoid empty strings
                             str = reader.readWord();
-                        } while ((str.length() == 0) && !reader.isEndOfStream());
+                        } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                         if (reader.isEndOfStream()) {
                             validStream = false;
@@ -963,7 +963,7 @@ public class LoaderPLY extends Loader {
                         // read value data type
                         do {
                             str = reader.readWord();
-                        } while ((str.length() == 0) && !reader.isEndOfStream());
+                        } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                         if (reader.isEndOfStream()) {
                             validStream = false;
@@ -980,7 +980,7 @@ public class LoaderPLY extends Loader {
                     // read property name
                     do {
                         str = reader.readWord();
-                    } while ((str.length() == 0) && !reader.isEndOfStream());
+                    } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                     if (reader.isEndOfStream()) {
                         validStream = false;
@@ -1007,7 +1007,7 @@ public class LoaderPLY extends Loader {
                     // read property name
                     do {
                         str = reader.readWord();
-                    } while ((str.length() == 0) && !reader.isEndOfStream());
+                    } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                     if (reader.isEndOfStream()) {
                         validStream = false;
@@ -1764,7 +1764,7 @@ public class LoaderPLY extends Loader {
          * @return array of indices corresponding to the triangles forming the
          * polygon.
          * @throws TriangulatorException if triangulation fails because polygon
-         *                               is generate or vertices contains invalid values such as NaN or
+         *                               is degenerate or vertices contains invalid values such as NaN or
          *                               infinity.
          */
         private long[] buildTriangulatedIndices(
@@ -1910,7 +1910,7 @@ public class LoaderPLY extends Loader {
             }
             indicesInChunkArray[indicesInChunk] = verticesInChunk;
             originalIndicesInChunkArray[indicesInChunk] = index;
-            // store original index in map so we can search chunk index by
+            // store original index in map, so we can search chunk index by
             // original index
             indicesMap.put(index, indicesInChunk);
 
@@ -2011,7 +2011,7 @@ public class LoaderPLY extends Loader {
         }
 
         /**
-         * Reads header data to setup listeners capable of reading stream data
+         * Reads header data to set up listeners capable of reading stream data
          * according to data types contained in header.
          *
          * @throws LoaderException Raised if file is corrupted (header is
@@ -2023,7 +2023,7 @@ public class LoaderPLY extends Loader {
             endHeaderStreamPosition = reader.getPosition();
             long streamPositionOffset = endHeaderStreamPosition;
 
-            // read header to setup listeners
+            // read header to set up listeners
             try {
                 totalInstances = 0;
                 colorComponents = 0;
@@ -3113,8 +3113,8 @@ public class LoaderPLY extends Loader {
                 long startStreamPos = firstVertexStreamPosition;
                 long startIndex = 0;
 
-                if (verticesStreamPositionsMap.size() > 0) {
-                    // with floorEntry, we will pic element immediately
+                if (!verticesStreamPositionsMap.isEmpty()) {
+                    // with floorEntry, we will pick element immediately
                     // before or equal to index if any exists
                     final Map.Entry<Long, Long> entry =
                             verticesStreamPositionsMap.floorEntry(index);
@@ -6733,7 +6733,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -6770,7 +6770,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
@@ -6808,7 +6808,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -6845,7 +6845,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
@@ -6883,7 +6883,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -6920,7 +6920,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
@@ -6944,7 +6944,7 @@ public class LoaderPLY extends Loader {
 
             /**
              * Reads next word of text within file at current position and
-             * attempts to parse it into an float32 value.
+             * attempts to parse it into a float32 value.
              *
              * @param buffer Buffer where data will be stored.
              * @throws IOException if an I/O error occurs or data cannot be
@@ -6958,7 +6958,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -6981,7 +6981,7 @@ public class LoaderPLY extends Loader {
 
             /**
              * Reads next word of text within file at current position and
-             * attempts to parse it into an float64 value.
+             * attempts to parse it into a float64 value.
              *
              * @param buffer Buffer where data will be stored.
              * @throws IOException if an I/O error occurs or data cannot be
@@ -6995,7 +6995,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -7032,7 +7032,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -7069,7 +7069,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
@@ -7107,7 +7107,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -7144,7 +7144,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
@@ -7182,7 +7182,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -7219,7 +7219,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
@@ -7257,7 +7257,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -7294,7 +7294,7 @@ public class LoaderPLY extends Loader {
                 do {
                     str = reader.readWord();
                     // loop to avoid empty strings
-                } while ((str.length() == 0) && !reader.isEndOfStream());
+                } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 // retrieve word value
                 try {
@@ -8382,7 +8382,7 @@ public class LoaderPLY extends Loader {
 
         /**
          * Returns a listener to read data from the file stream using provided
-         * data type (int8, uint8, int16, uint16, etc) and storage mode (ascii,
+         * data type (int8, uint8, int16, uint16, etc.) and storage mode (ascii,
          * little endian or big endian).
          *
          * @param dataType    Data type to read.

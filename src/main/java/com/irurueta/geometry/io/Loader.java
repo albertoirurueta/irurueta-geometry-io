@@ -286,7 +286,7 @@ public abstract class Loader implements Closeable {
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
      *
-     * @return a loader iterator to read the file in a step by step process.
+     * @return a loader iterator to read the file in a step-by-step process.
      * @throws LockedException   raised if this instance is already locked.
      * @throws NotReadyException raised if this instance is not yet ready.
      * @throws IOException       if an I/O error occurs.

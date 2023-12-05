@@ -33,7 +33,7 @@ public enum PLYStorageMode {
 
     /**
      * ASCII text. Data is stored in readable text format. This format might
-     * loose precision for floating point data.
+     * lose precision for floating point data.
      */
     PLY_ASCII
 }

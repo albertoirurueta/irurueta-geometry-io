@@ -16,11 +16,11 @@
 package com.irurueta.geometry.io;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.file.Files;
 
 /**
  * Loads a custom binary file implemented for this library.
@@ -42,7 +42,7 @@ public class LoaderBinary extends Loader {
     /**
      * Number of bytes required to determine the bounding box of a chunk or
      * the whole 3D object (which are 2 3D points = 2x3 coordinates =
-     * 6 floats * 4 bytes per float.
+     * 6 floats * 4 bytes per float).
      */
     private static final int BOUNDING_BYTES_SIZE = 6 * Float.SIZE / 8;
 
@@ -165,7 +165,7 @@ public class LoaderBinary extends Loader {
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
      *
-     * @return a loader iterator to read the file in a step by step process.
+     * @return a loader iterator to read the file in a step-by-step process.
      * @throws LockedException   raised if this instance is already locked.
      * @throws NotReadyException raised if this instance is not yet ready.
      * @throws IOException       if an I/O error occurs.
@@ -221,7 +221,7 @@ public class LoaderBinary extends Loader {
                     final byte[] buffer = new byte[BUFFER_SIZE];
 
                     int counter = 0;
-                    try (OutputStream outStream = new FileOutputStream(texFile)) {
+                    try (OutputStream outStream = Files.newOutputStream(texFile.toPath())) {
                         int n;
                         int len = BUFFER_SIZE;
                         while (counter < texLength) {

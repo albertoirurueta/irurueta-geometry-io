@@ -37,15 +37,15 @@ public class TextureTest {
 
         // check correctness
         assertNotNull(tex);
-        assertEquals(tex.getFileName(), fileName);
-        assertEquals(tex.getId(), id);
+        assertEquals(fileName, tex.getFileName());
+        assertEquals(id, tex.getId());
         assertTrue(tex.isFileNameAvailable());
         assertNotNull(tex.getFile());
-        assertEquals(tex.getFile().getName(), fileName);
+        assertEquals(fileName, tex.getFile().getName());
         assertTrue(tex.isFileAvailable());
-        assertEquals(tex.getWidth(), -1);
+        assertEquals(-1, tex.getWidth());
         assertFalse(tex.isWidthAvailable());
-        assertEquals(tex.getHeight(), -1);
+        assertEquals(-1, tex.getHeight());
         assertFalse(tex.isHeightAvailable());
         assertFalse(tex.isValid());
 
@@ -53,13 +53,13 @@ public class TextureTest {
 
         // check correctness
         assertTrue(tex.getFileName().isEmpty());
-        assertEquals(tex.getId(), id);
+        assertEquals(id, tex.getId());
         assertFalse(tex.isFileNameAvailable());
         assertNull(tex.getFile());
         assertFalse(tex.isFileAvailable());
-        assertEquals(tex.getWidth(), -1);
+        assertEquals(-1, tex.getWidth());
         assertFalse(tex.isWidthAvailable());
-        assertEquals(tex.getHeight(), -1);
+        assertEquals(-1, tex.getHeight());
         assertFalse(tex.isHeightAvailable());
         assertFalse(tex.isValid());
     }
@@ -72,10 +72,10 @@ public class TextureTest {
 
         // check correctness
         assertNotNull(tex);
-        assertEquals(tex.getFileName(), fileName);
-        assertEquals(tex.getId(), id);
+        assertEquals(fileName, tex.getFileName());
+        assertEquals(id, tex.getId());
         assertNotNull(tex.getFile());
-        assertEquals(tex.getFile().getName(), fileName);
+        assertEquals(fileName, tex.getFile().getName());
         assertTrue(tex.isFileAvailable());
 
         final File f1 = tex.getFile();
@@ -84,9 +84,9 @@ public class TextureTest {
         final File f2 = new File(fileName2);
 
         tex.setFile(f2);
-        assertNotSame(tex.getFile(), f1);
-        assertSame(tex.getFile(), f2);
-        assertEquals(tex.getFile().getName(), fileName2);
+        assertNotSame(f1, tex.getFile());
+        assertSame(f2, tex.getFile());
+        assertEquals(fileName2, tex.getFile().getName());
         assertTrue(tex.isFileAvailable());
 
         tex.setFile(null);
@@ -100,7 +100,7 @@ public class TextureTest {
         final Texture tex = new Texture("fake.png", id);
 
         // check default value
-        assertEquals(tex.getWidth(), -1);
+        assertEquals(-1, tex.getWidth());
         assertFalse(tex.isWidthAvailable());
 
         // set new value
@@ -109,9 +109,9 @@ public class TextureTest {
 
         tex.setWidth(width);
         // check correctness
-        assertEquals(tex.getWidth(), width);
+        assertEquals(width, tex.getWidth());
         assertTrue(tex.isWidthAvailable());
-        assertEquals(tex.getId(), id);
+        assertEquals(id, tex.getId());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class TextureTest {
         final Texture tex = new Texture("fake.png", id);
 
         // check default value
-        assertEquals(tex.getHeight(), -1);
+        assertEquals(-1, tex.getHeight());
         assertFalse(tex.isHeightAvailable());
 
         // set new value
@@ -129,9 +129,9 @@ public class TextureTest {
 
         tex.setHeight(height);
         // check correctness
-        assertEquals(tex.getHeight(), height);
+        assertEquals(height, tex.getHeight());
         assertTrue(tex.isHeightAvailable());
-        assertEquals(tex.getId(), id);
+        assertEquals(id, tex.getId());
     }
 
     @Test
@@ -151,6 +151,6 @@ public class TextureTest {
         tex.setValid(false);
         // check correctness
         assertFalse(tex.isValid());
-        assertEquals(tex.getId(), id);
+        assertEquals(id, tex.getId());
     }
 }

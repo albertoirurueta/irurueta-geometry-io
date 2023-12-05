@@ -117,31 +117,10 @@ public enum Illumination {
      * @return an illumination instance.
      */
     public static Illumination forValue(final int value) {
-        switch (value) {
-            case 0:
-                return COLOR_AND_AMBIENT_OFF;
-            case 1:
-                return COLOR_AND_AMBIENT_ON;
-            case 2:
-                return HIGHLIGHT_ON;
-            case 3:
-                return REFLECTION_ON_AND_RAY_TRACE_ON;
-            case 4:
-                return TRANSPARENCY_GLASS_ON_REFLECTION_RAYTRACE_ON;
-            case 5:
-                return REFLECTION_FRESNEL_ON_AND_RAY_TRACE_ON;
-            case 6:
-                return TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_AND_RAY_TRACE_ON;
-            case 7:
-                return TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_ON_AND_RAY_TRACE_ON;
-            case 8:
-                return REFLECTION_ON_AND_RAY_TRACE_OFF;
-            case 9:
-                return TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_OFF;
-            case 10:
-                return CAST_SHADOWS_ONTO_INVISIBLE_SURFACES;
-            default:
-                return null;
+        if (value >= 0 && value <= 10) {
+            return Illumination.values()[value];
+        } else {
+            return null;
         }
     }
 }
