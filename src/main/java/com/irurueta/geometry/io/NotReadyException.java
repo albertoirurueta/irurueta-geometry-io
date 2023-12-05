@@ -16,7 +16,7 @@
 package com.irurueta.geometry.io;
 
 /**
- * Raised when not enough parameters have been provided an an instance is not
+ * Raised when not enough parameters have been provided and an instance is not
  * ready to start a given process.
  */
 public class NotReadyException extends Exception {

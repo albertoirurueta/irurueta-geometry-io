@@ -28,23 +28,21 @@ public class PropertyPLYTest {
         final String name = "property name";
 
         // set property without name
-        PropertyPLY property = new PropertyPLY(null,
-                DataTypePLY.PLY_CHAR);
+        PropertyPLY property = new PropertyPLY(null, DataTypePLY.PLY_CHAR);
         try {
             property.getName();
             fail("NotAvailableException not thrown");
         } catch (final NotAvailableException ignore) {
         }
         assertFalse(property.isNameAvailable());
-        assertEquals(property.getPropertyType(),
-                PropertyTypePLY.PROPERTY_PLY_SCALAR);
+        assertEquals(PropertyTypePLY.PROPERTY_PLY_SCALAR, property.getPropertyType());
         try {
             property.getLengthType();
             fail("NotAvailableException not thrown");
         } catch (final NotAvailableException ignore) {
         }
         assertFalse(property.isLengthTypeAvailable());
-        assertEquals(property.getValueType(), DataTypePLY.PLY_CHAR);
+        assertEquals(DataTypePLY.PLY_CHAR, property.getValueType());
         assertTrue(property.isValueTypeAvailable());
         assertFalse(property.isValidProperty());
 
@@ -75,17 +73,16 @@ public class PropertyPLYTest {
 
         // set property with name and value type
         property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
-        assertEquals(property.getName(), name);
+        assertEquals(name, property.getName());
         assertTrue(property.isNameAvailable());
-        assertEquals(property.getPropertyType(),
-                PropertyTypePLY.PROPERTY_PLY_SCALAR);
+        assertEquals(PropertyTypePLY.PROPERTY_PLY_SCALAR, property.getPropertyType());
         try {
             property.getLengthType();
             fail("NotAvailableException not thrown");
         } catch (final NotAvailableException ignore) {
         }
         assertFalse(property.isLengthTypeAvailable());
-        assertEquals(property.getValueType(), DataTypePLY.PLY_FLOAT32);
+        assertEquals(DataTypePLY.PLY_FLOAT32, property.getValueType());
         assertTrue(property.isValueTypeAvailable());
         assertTrue(property.isValidProperty());
 
@@ -115,15 +112,13 @@ public class PropertyPLYTest {
         assertFalse(property.isReadLengthValueFromStreamListenerAvailable());
 
         // property with name, length type and value type
-        property = new PropertyPLY(name, DataTypePLY.PLY_UCHAR,
-                DataTypePLY.PLY_UINT);
-        assertEquals(property.getName(), name);
+        property = new PropertyPLY(name, DataTypePLY.PLY_UCHAR, DataTypePLY.PLY_UINT);
+        assertEquals(name, property.getName());
         assertTrue(property.isNameAvailable());
-        assertEquals(property.getPropertyType(),
-                PropertyTypePLY.PROPERTY_PLY_LIST);
-        assertEquals(property.getLengthType(), DataTypePLY.PLY_UCHAR);
+        assertEquals(PropertyTypePLY.PROPERTY_PLY_LIST, property.getPropertyType());
+        assertEquals(DataTypePLY.PLY_UCHAR, property.getLengthType());
         assertTrue(property.isLengthTypeAvailable());
-        assertEquals(property.getValueType(), DataTypePLY.PLY_UINT);
+        assertEquals(DataTypePLY.PLY_UINT, property.getValueType());
         assertTrue(property.isValueTypeAvailable());
         assertTrue(property.isValidProperty());
 
@@ -158,11 +153,11 @@ public class PropertyPLYTest {
         String name = "something";
         PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_UCHAR,
                 DataTypePLY.PLY_UINT);
-        assertEquals(property.toString(), "property list uchar uint something\n");
+        assertEquals("property list uchar uint something\n", property.toString());
 
         name = "x";
         property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
-        assertEquals(property.toString(), "property float32 x\n");
+        assertEquals("property float32 x\n", property.toString());
 
     }
 
@@ -188,7 +183,7 @@ public class PropertyPLYTest {
                 };
 
         property.setReadValueFromBufferListener(listener);
-        assertEquals(property.getReadValueFromBufferListener(), listener);
+        assertEquals(listener, property.getReadValueFromBufferListener());
         assertTrue(property.isReadValueFromBufferListenerAvailable());
     }
 
@@ -214,7 +209,7 @@ public class PropertyPLYTest {
                 };
 
         property.setReadValueFromStreamListener(listener);
-        assertEquals(property.getReadValueFromStreamListener(), listener);
+        assertEquals(listener, property.getReadValueFromStreamListener());
         assertTrue(property.isReadValueFromStreamListenerAvailable());
     }
 
@@ -240,7 +235,7 @@ public class PropertyPLYTest {
                 };
 
         property.setReadLengthValueFromBufferListener(listener);
-        assertEquals(property.getReadLengthValueFromBufferListener(), listener);
+        assertEquals(listener, property.getReadLengthValueFromBufferListener());
         assertTrue(property.isReadLengthValueFromBufferListenerAvailable());
     }
 
@@ -266,15 +261,14 @@ public class PropertyPLYTest {
                 };
 
         property.setReadLengthValueFromStreamListener(listener);
-        assertEquals(property.getReadLengthValueFromStreamListener(), listener);
+        assertEquals(listener, property.getReadLengthValueFromStreamListener());
         assertTrue(property.isReadLengthValueFromStreamListenerAvailable());
     }
 
     @Test
     public void testGetValueType() throws NotAvailableException {
         // test when value type available
-        PropertyPLY property = new PropertyPLY("name",
-                DataTypePLY.PLY_FLOAT);
+        PropertyPLY property = new PropertyPLY("name", DataTypePLY.PLY_FLOAT);
 
         assertTrue(property.isValueTypeAvailable());
         assertEquals(DataTypePLY.PLY_FLOAT, property.getValueType());

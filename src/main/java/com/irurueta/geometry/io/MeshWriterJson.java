@@ -19,12 +19,12 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 
 public class MeshWriterJson extends MeshWriter {
 
@@ -47,7 +47,7 @@ public class MeshWriterJson extends MeshWriter {
     public static final boolean DEFAULT_USE_REMOTE_TEXTURE_ID = false;
 
     /**
-     * Indicates charset to use in resulting JSON file. By default this will be
+     * Indicates charset to use in resulting JSON file. By default, this will be
      * UTF-8.
      */
     private Charset charset;
@@ -113,17 +113,17 @@ public class MeshWriterJson extends MeshWriter {
     }
 
     /**
-     * Returns charset to use in resulting JSON file. By default this will be
+     * Returns charset to use in resulting JSON file. By default, this will be
      * UTF-8.
      *
-     * @return charset to use in resulting JSON file..
+     * @return charset to use in resulting JSON file.
      */
     public Charset getCharset() {
         return charset;
     }
 
     /**
-     * Sets charset to use in resulting JSON file. By default this will be UTF-8.
+     * Sets charset to use in resulting JSON file. By default, this will be UTF-8.
      *
      * @param charset charset to use in resulting JSON file.
      * @throws LockedException if this mesh writer is locked processing a file.
@@ -429,7 +429,6 @@ public class MeshWriterJson extends MeshWriter {
                     // write max corner
                     writer.write("\"maxCorner\":[" + chunk.getMaxX() + "," +
                             chunk.getMaxY() + "," + chunk.getMaxZ() + "]");
-                    hasPreviousContent = true;
                 }
                 if (colorsAvailable) {
                     // write separator for next piece of data
@@ -537,7 +536,7 @@ public class MeshWriterJson extends MeshWriter {
             writer.flush();
 
 
-            try (final InputStream textureStream = new FileInputStream(textureFile)) {
+            try (final InputStream textureStream = Files.newInputStream(textureFile.toPath())) {
                 final byte[] imageData = new byte[(int) textureFile.length()];
 
                 if (textureStream.read(imageData) > 0) {

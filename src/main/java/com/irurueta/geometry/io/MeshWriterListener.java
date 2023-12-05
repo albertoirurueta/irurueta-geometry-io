@@ -58,7 +58,7 @@ public interface MeshWriterListener {
      * Called when a material file is needed. A path used as a hint to locate
      * such file will be provided, and using that path the File must be
      * retrieved (by any means, such as downloading from a remote location or
-     * uncompressing from a file, etc).
+     * uncompressing from a file, etc.).
      * Returned file will be handled by the callee of this method. If a
      * temporary file is created copying the contents of the file from a remote
      * location, then it will be the responsibility of the callee to delete the

@@ -38,7 +38,7 @@ public class MaterialOBJTest {
         final String materialName = "materialName";
         final MaterialOBJ material = new MaterialOBJ(materialName);
         assertNotNull(material);
-        assertEquals(material.getMaterialName(), materialName);
+        assertEquals(materialName, material.getMaterialName());
     }
 
     @Test
@@ -50,12 +50,12 @@ public class MaterialOBJTest {
         final int id = randomizer.nextInt();
 
         // check default value
-        assertEquals(material.getId(), 0);
+        assertEquals(0, material.getId());
 
         // set new value
         material.setId(id);
         // check correctness
-        assertEquals(material.getId(), id);
+        assertEquals(id, material.getId());
     }
 
     @Test
@@ -64,17 +64,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getAmbientRedColor(), -1);
+        assertEquals(-1, material.getAmbientRedColor());
         assertFalse(material.isAmbientRedColorAvailable());
 
         // set new value
         material.setAmbientRedColor(color);
         // check correctness
-        assertEquals(material.getAmbientRedColor(), color);
+        assertEquals(color, material.getAmbientRedColor());
         assertTrue(material.isAmbientRedColorAvailable());
     }
 
@@ -84,17 +83,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getAmbientGreenColor(), -1);
+        assertEquals(-1, material.getAmbientGreenColor());
         assertFalse(material.isAmbientGreenColorAvailable());
 
         // set new value
         material.setAmbientGreenColor(color);
         // check correctness
-        assertEquals(material.getAmbientGreenColor(), color);
+        assertEquals(color, material.getAmbientGreenColor());
         assertTrue(material.isAmbientGreenColorAvailable());
     }
 
@@ -104,17 +102,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getAmbientBlueColor(), -1);
+        assertEquals(-1, material.getAmbientBlueColor());
         assertFalse(material.isAmbientBlueColorAvailable());
 
         // set new value
         material.setAmbientBlueColor(color);
         // check correctness
-        assertEquals(material.getAmbientBlueColor(), color);
+        assertEquals(color, material.getAmbientBlueColor());
         assertTrue(material.isAmbientBlueColorAvailable());
     }
 
@@ -124,19 +121,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
-        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
-        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getAmbientRedColor(), -1);
+        assertEquals(-1, material.getAmbientRedColor());
         assertFalse(material.isAmbientRedColorAvailable());
-        assertEquals(material.getAmbientGreenColor(), -1);
+        assertEquals(-1, material.getAmbientGreenColor());
         assertFalse(material.isAmbientGreenColorAvailable());
-        assertEquals(material.getAmbientBlueColor(), -1);
+        assertEquals(-1, material.getAmbientBlueColor());
         assertFalse(material.isAmbientBlueColorAvailable());
 
         assertFalse(material.isAmbientColorAvailable());
@@ -145,11 +139,11 @@ public class MaterialOBJTest {
         material.setAmbientColor(red, green, blue);
 
         // check correctness
-        assertEquals(material.getAmbientRedColor(), red);
+        assertEquals(red, material.getAmbientRedColor());
         assertTrue(material.isAmbientRedColorAvailable());
-        assertEquals(material.getAmbientGreenColor(), green);
+        assertEquals(green, material.getAmbientGreenColor());
         assertTrue(material.isAmbientGreenColorAvailable());
-        assertEquals(material.getAmbientBlueColor(), blue);
+        assertEquals(blue, material.getAmbientBlueColor());
         assertTrue(material.isAmbientBlueColorAvailable());
 
         assertTrue(material.isAmbientColorAvailable());
@@ -161,17 +155,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getDiffuseRedColor(), -1);
+        assertEquals(-1, material.getDiffuseRedColor());
         assertFalse(material.isDiffuseRedColorAvailable());
 
         // set new value
         material.setDiffuseRedColor(color);
         // check correctness
-        assertEquals(material.getDiffuseRedColor(), color);
+        assertEquals(color, material.getDiffuseRedColor());
         assertTrue(material.isDiffuseRedColorAvailable());
     }
 
@@ -181,17 +174,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getDiffuseGreenColor(), -1);
+        assertEquals(-1, material.getDiffuseGreenColor());
         assertFalse(material.isDiffuseGreenColorAvailable());
 
         // set new value
         material.setDiffuseGreenColor(color);
         // check correctness
-        assertEquals(material.getDiffuseGreenColor(), color);
+        assertEquals(color, material.getDiffuseGreenColor());
         assertTrue(material.isDiffuseGreenColorAvailable());
     }
 
@@ -201,17 +193,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getDiffuseBlueColor(), -1);
+        assertEquals(-1, material.getDiffuseBlueColor());
         assertFalse(material.isDiffuseBlueColorAvailable());
 
         // set new value
         material.setDiffuseBlueColor(color);
         // check correctness
-        assertEquals(material.getDiffuseBlueColor(), color);
+        assertEquals(color, material.getDiffuseBlueColor());
         assertTrue(material.isDiffuseBlueColorAvailable());
     }
 
@@ -221,19 +212,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
-        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
-        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getDiffuseRedColor(), -1);
+        assertEquals(-1, material.getDiffuseRedColor());
         assertFalse(material.isDiffuseRedColorAvailable());
-        assertEquals(material.getDiffuseGreenColor(), -1);
+        assertEquals(-1, material.getDiffuseGreenColor());
         assertFalse(material.isDiffuseGreenColorAvailable());
-        assertEquals(material.getDiffuseBlueColor(), -1);
+        assertEquals(-1, material.getDiffuseBlueColor());
         assertFalse(material.isDiffuseBlueColorAvailable());
 
         assertFalse(material.isDiffuseColorAvailable());
@@ -242,11 +230,11 @@ public class MaterialOBJTest {
         material.setDiffuseColor(red, green, blue);
 
         // check correctness
-        assertEquals(material.getDiffuseRedColor(), red);
+        assertEquals(red, material.getDiffuseRedColor());
         assertTrue(material.isDiffuseRedColorAvailable());
-        assertEquals(material.getDiffuseGreenColor(), green);
+        assertEquals(green, material.getDiffuseGreenColor());
         assertTrue(material.isDiffuseGreenColorAvailable());
-        assertEquals(material.getDiffuseBlueColor(), blue);
+        assertEquals(blue, material.getDiffuseBlueColor());
         assertTrue(material.isDiffuseBlueColorAvailable());
 
         assertTrue(material.isDiffuseColorAvailable());
@@ -258,17 +246,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getSpecularRedColor(), -1);
+        assertEquals(-1, material.getSpecularRedColor());
         assertFalse(material.isSpecularRedColorAvailable());
 
         // set new value
         material.setSpecularRedColor(color);
         // check correctness
-        assertEquals(material.getSpecularRedColor(), color);
+        assertEquals(color, material.getSpecularRedColor());
         assertTrue(material.isSpecularRedColorAvailable());
     }
 
@@ -278,17 +265,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getSpecularGreenColor(), -1);
+        assertEquals(-1, material.getSpecularGreenColor());
         assertFalse(material.isSpecularGreenColorAvailable());
 
         // set new value
         material.setSpecularGreenColor(color);
         // check correctness
-        assertEquals(material.getSpecularGreenColor(), color);
+        assertEquals(color, material.getSpecularGreenColor());
         assertTrue(material.isSpecularGreenColorAvailable());
     }
 
@@ -298,17 +284,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getSpecularBlueColor(), -1);
+        assertEquals(-1, material.getSpecularBlueColor());
         assertFalse(material.isSpecularBlueColorAvailable());
 
         // set new value
         material.setSpecularBlueColor(color);
         // check correctness
-        assertEquals(material.getSpecularBlueColor(), color);
+        assertEquals(color, material.getSpecularBlueColor());
         assertTrue(material.isSpecularBlueColorAvailable());
     }
 
@@ -318,19 +303,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
-        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
-        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getSpecularRedColor(), -1);
+        assertEquals(-1, material.getSpecularRedColor());
         assertFalse(material.isSpecularRedColorAvailable());
-        assertEquals(material.getSpecularGreenColor(), -1);
+        assertEquals(-1, material.getSpecularGreenColor());
         assertFalse(material.isSpecularGreenColorAvailable());
-        assertEquals(material.getSpecularBlueColor(), -1);
+        assertEquals(-1, material.getSpecularBlueColor());
         assertFalse(material.isSpecularBlueColorAvailable());
 
         assertFalse(material.isSpecularColorAvailable());
@@ -339,11 +321,11 @@ public class MaterialOBJTest {
         material.setSpecularColor(red, green, blue);
 
         // check correctness
-        assertEquals(material.getSpecularRedColor(), red);
+        assertEquals(red, material.getSpecularRedColor());
         assertTrue(material.isSpecularRedColorAvailable());
-        assertEquals(material.getSpecularGreenColor(), green);
+        assertEquals(green, material.getSpecularGreenColor());
         assertTrue(material.isSpecularGreenColorAvailable());
-        assertEquals(material.getSpecularBlueColor(), blue);
+        assertEquals(blue, material.getSpecularBlueColor());
         assertTrue(material.isSpecularBlueColorAvailable());
 
         assertTrue(material.isSpecularColorAvailable());
@@ -355,17 +337,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final float coef = randomizer.nextFloat(MIN_SPECULAR_COEFFICIENT,
-                MAX_SPECULAR_COEFFICIENT);
+        final float coef = randomizer.nextFloat(MIN_SPECULAR_COEFFICIENT, MAX_SPECULAR_COEFFICIENT);
 
         // check default value
-        assertEquals(material.getSpecularCoefficient(), 0.0f, 0.0);
+        assertEquals(0.0f, material.getSpecularCoefficient(), 0.0);
         assertFalse(material.isSpecularCoefficientAvailable());
 
         // set new value
         material.setSpecularCoefficient(coef);
         // check correctness
-        assertEquals(material.getSpecularCoefficient(), coef, 0.0);
+        assertEquals(coef, material.getSpecularCoefficient(), 0.0);
         assertTrue(material.isSpecularCoefficientAvailable());
     }
 
@@ -382,7 +363,7 @@ public class MaterialOBJTest {
         // set new value
         material.setAmbientTextureMap(texture);
         // check correctness
-        assertSame(material.getAmbientTextureMap(), texture);
+        assertSame(texture, material.getAmbientTextureMap());
         assertTrue(material.isAmbientTextureMapAvailable());
     }
 
@@ -399,7 +380,7 @@ public class MaterialOBJTest {
         // set new value
         material.setDiffuseTextureMap(texture);
         // check correctness
-        assertSame(material.getDiffuseTextureMap(), texture);
+        assertSame(texture, material.getDiffuseTextureMap());
         assertTrue(material.isDiffuseTextureMapAvailable());
     }
 
@@ -416,7 +397,7 @@ public class MaterialOBJTest {
         // set new value
         material.setSpecularTextureMap(texture);
         // check correctness
-        assertSame(material.getSpecularTextureMap(), texture);
+        assertSame(texture, material.getSpecularTextureMap());
         assertTrue(material.isSpecularTextureMapAvailable());
     }
 
@@ -433,7 +414,7 @@ public class MaterialOBJTest {
         // set new value
         material.setAlphaTextureMap(texture);
         // check correctness
-        assertSame(material.getAlphaTextureMap(), texture);
+        assertSame(texture, material.getAlphaTextureMap());
         assertTrue(material.isAlphaTextureMapAvailable());
     }
 
@@ -450,7 +431,7 @@ public class MaterialOBJTest {
         // set new value
         material.setBumpTextureMap(texture);
         // check correctness
-        assertSame(material.getBumpTextureMap(), texture);
+        assertSame(texture, material.getBumpTextureMap());
         assertTrue(material.isBumpTextureMapAvailable());
     }
 
@@ -460,17 +441,16 @@ public class MaterialOBJTest {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
-        final short trans = (short) randomizer.nextInt(MIN_COLOR_VALUE,
-                MAX_COLOR_VALUE);
+        final short trans = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
-        assertEquals(material.getTransparency(), -1);
+        assertEquals(-1, material.getTransparency());
         assertFalse(material.isTransparencyAvailable());
 
         // set new value
         material.setTransparency(trans);
         // check correctness
-        assertEquals(material.getTransparency(), trans);
+        assertEquals(trans, material.getTransparency());
         assertTrue(material.isTransparencyAvailable());
     }
 
@@ -482,14 +462,13 @@ public class MaterialOBJTest {
         assertFalse(material.isIlluminationAvailable());
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int illumValue = randomizer.nextInt(MIN_ILLUMINATION_VALUE,
-                MAX_ILLUMINATION_VALUE);
+        final int illumValue = randomizer.nextInt(MIN_ILLUMINATION_VALUE, MAX_ILLUMINATION_VALUE);
         final Illumination illumination = Illumination.forValue(illumValue);
 
         // set new value
         material.setIllumination(illumination);
         // check correctness
-        assertEquals(material.getIllumination(), illumination);
+        assertEquals(illumination, material.getIllumination());
         assertTrue(material.isIlluminationAvailable());
     }
 
@@ -498,7 +477,7 @@ public class MaterialOBJTest {
         final String materialName = "materialName";
         final MaterialOBJ material = new MaterialOBJ(materialName);
 
-        assertEquals(material.getMaterialName(), materialName);
+        assertEquals(materialName, material.getMaterialName());
         assertTrue(material.isMaterialNameAvailable());
 
         material.setMaterialName(null);

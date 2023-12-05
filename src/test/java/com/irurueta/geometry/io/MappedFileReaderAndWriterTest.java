@@ -54,13 +54,12 @@ public class MappedFileReaderAndWriterTest {
 
         //close file
         readerWriter.close();
-        assertEquals(f.length(), 1);
+        assertEquals(1, f.length());
 
         //reopen and read byte
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.read(), b);
+        assertEquals(b, readerWriter.read());
 
         //close and delete file
         readerWriter.close();
@@ -88,11 +87,10 @@ public class MappedFileReaderAndWriterTest {
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 100);
+        assertEquals(100, f.length());
 
         // reopen and read array of bytes
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         final byte[] bytes2 = new byte[100];
         readerWriter.read(bytes2);
@@ -131,11 +129,10 @@ public class MappedFileReaderAndWriterTest {
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 3);
+        assertEquals(3, f.length());
 
         // reopen and read array of bytes
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         final byte[] bytes2 = new byte[3];
         readerWriter.read(bytes2, 0, 2);
@@ -162,7 +159,7 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // initialize array of bytes
         final byte[] bytes = new byte[100];
@@ -175,16 +172,15 @@ public class MappedFileReaderAndWriterTest {
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 100);
+        assertEquals(100, f.length());
 
         // reopen and read array of bytes
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         byte[] bytes2 = new byte[20];
         readerWriter.read(bytes2);
 
-        assertEquals(readerWriter.getPosition(), 20);
+        assertEquals(20, readerWriter.getPosition());
 
         // check correctness
         for (byte b = 0; b < 20; b++) {
@@ -193,7 +189,7 @@ public class MappedFileReaderAndWriterTest {
 
         // skip 20 bytes
         readerWriter.skip(20);
-        assertEquals(readerWriter.getPosition(), 40);
+        assertEquals(40, readerWriter.getPosition());
 
         // read remaining bytes
         bytes2 = new byte[60];
@@ -206,7 +202,7 @@ public class MappedFileReaderAndWriterTest {
             counter++;
         }
 
-        assertEquals(readerWriter.getPosition(), 100);
+        assertEquals(100, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -223,7 +219,7 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // initialize array of bytes
         final byte[] bytes = new byte[100];
@@ -236,7 +232,7 @@ public class MappedFileReaderAndWriterTest {
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 100);
+        assertEquals(100, f.length());
 
         // reopen and read array of bytes
         readerWriter = new MappedFileReaderAndWriter(f,
@@ -245,7 +241,7 @@ public class MappedFileReaderAndWriterTest {
         byte[] bytes2 = new byte[20];
         readerWriter.read(bytes2);
 
-        assertEquals(readerWriter.getPosition(), 20);
+        assertEquals(20, readerWriter.getPosition());
 
         // check correctness
         for (byte b = 0; b < 20; b++) {
@@ -254,7 +250,7 @@ public class MappedFileReaderAndWriterTest {
 
         // seek to position 10
         readerWriter.seek(10);
-        assertEquals(readerWriter.getPosition(), 10);
+        assertEquals(10, readerWriter.getPosition());
 
         // read remaining bytes
         bytes2 = new byte[90];
@@ -267,7 +263,7 @@ public class MappedFileReaderAndWriterTest {
             counter++;
         }
 
-        assertEquals(readerWriter.getPosition(), 100);
+        assertEquals(100, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -284,7 +280,7 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write two booleans
         readerWriter.writeBoolean(true);
@@ -292,18 +288,17 @@ public class MappedFileReaderAndWriterTest {
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 2);
+        assertEquals(2, f.length());
 
         // reopen and read booleans
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         assertTrue(readerWriter.readBoolean());
         assertFalse(readerWriter.readBoolean());
 
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -320,27 +315,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write byte
         final byte b = 100;
         readerWriter.writeByte(b);
 
-        assertEquals(readerWriter.getPosition(), 1);
+        assertEquals(1, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 1);
+        assertEquals(1, f.length());
 
         // reopen and read byte
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readByte(), b);
+        assertEquals(b, readerWriter.readByte());
 
-        assertEquals(readerWriter.getPosition(), 1);
+        assertEquals(1, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -357,27 +351,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write unsigned byte
         final short b = 200;
         readerWriter.writeUnsignedByte(b);
 
-        assertEquals(readerWriter.getPosition(), 1);
+        assertEquals(1, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 1);
+        assertEquals(1, f.length());
 
         // reopen and read unsigned byte
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedByte(), b);
+        assertEquals(b, readerWriter.readUnsignedByte());
 
-        assertEquals(readerWriter.getPosition(), 1);
+        assertEquals(1, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -394,27 +387,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write short
         final short value = -3252;
         readerWriter.writeShort(value);
 
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 2);
+        assertEquals(2, f.length());
 
         // reopen and read short
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readShort(), value);
+        assertEquals(value, readerWriter.readShort());
 
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -432,32 +424,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write short twice with big an little endian
+        // write short twice with big and little endian
         final short value = -3252;
         readerWriter.writeShort(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         readerWriter.writeShort(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 4);
+        assertEquals(4, f.length());
 
         // reopen and read shorts
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readShort(EndianType.BIG_ENDIAN_TYPE), value);
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(value, readerWriter.readShort(EndianType.BIG_ENDIAN_TYPE));
+        assertEquals(2, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readShort(EndianType.LITTLE_ENDIAN_TYPE),
-                value);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(readerWriter.readShort(EndianType.LITTLE_ENDIAN_TYPE), value);
+        assertEquals(4, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -474,27 +464,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write short
         final int value = 45645;
         readerWriter.writeUnsignedShort(value);
 
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 2);
+        assertEquals(2, f.length());
 
         // reopen and read short
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedShort(), value);
+        assertEquals(value, readerWriter.readUnsignedShort());
 
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -512,33 +501,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write unsigned short twice with big an little endian
+        // write unsigned short twice with big and little endian
         final int value = 45645;
         readerWriter.writeUnsignedShort(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(2, readerWriter.getPosition());
 
         readerWriter.writeUnsignedShort(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 4);
+        assertEquals(4, f.length());
 
         // reopen and read unsigned short
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedShort(EndianType.BIG_ENDIAN_TYPE),
-                value);
-        assertEquals(readerWriter.getPosition(), 2);
+        assertEquals(readerWriter.readUnsignedShort(EndianType.BIG_ENDIAN_TYPE), value);
+        assertEquals(2, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedShort(
-                EndianType.LITTLE_ENDIAN_TYPE), value);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(readerWriter.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE), value);
+        assertEquals(4, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -555,27 +541,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write int
         final int value = -5636634;
         readerWriter.writeInt(value);
 
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 4);
+        assertEquals(4, f.length());
 
         // reopen and read int
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readInt(), value);
+        assertEquals(value, readerWriter.readInt());
 
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -592,33 +577,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write int twice with big an little endian
+        // write int twice with big and little endian
         final int value = -5636634;
         readerWriter.writeInt(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         readerWriter.writeInt(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 8);
+        assertEquals(8, f.length());
 
         // reopen and read ints
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readInt(EndianType.BIG_ENDIAN_TYPE),
-                value);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(readerWriter.readInt(EndianType.BIG_ENDIAN_TYPE), value);
+        assertEquals(4, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readInt(
-                EndianType.LITTLE_ENDIAN_TYPE), value);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(value, readerWriter.readInt(EndianType.LITTLE_ENDIAN_TYPE));
+        assertEquals(8, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -635,27 +617,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write unsigned int
         final long value = 436680954;
         readerWriter.writeUnsignedInt(value);
 
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 4);
+        assertEquals(4, f.length());
 
         // reopen and read unsigned int
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedInt(), value);
+        assertEquals(value, readerWriter.readUnsignedInt());
 
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -672,33 +653,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write unsigned ints twice with big an little endian
+        // write unsigned ints twice with big and little endian
         final long value = 436680954;
         readerWriter.writeUnsignedInt(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         readerWriter.writeUnsignedInt(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 8);
+        assertEquals(8, f.length());
 
         // reopen and read unsigned ints
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE),
-                value);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(value, readerWriter.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE));
+        assertEquals(4, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedInt(
-                EndianType.LITTLE_ENDIAN_TYPE), value);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(value, readerWriter.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE));
+        assertEquals(8, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -715,27 +693,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write long
         final long value = -436680954;
         readerWriter.writeLong(value);
 
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 8);
+        assertEquals(8, f.length());
 
         // reopen and read long
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readLong(), value);
+        assertEquals(value, readerWriter.readLong());
 
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -752,33 +729,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write long twice with big an little endian
+        // write long twice with big and little endian
         final long value = -436680954;
         readerWriter.writeLong(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         readerWriter.writeLong(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 16);
+        assertEquals(16, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 16);
+        assertEquals(16, f.length());
 
         // reopen and read longs
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readLong(EndianType.BIG_ENDIAN_TYPE),
-                value);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(value, readerWriter.readLong(EndianType.BIG_ENDIAN_TYPE));
+        assertEquals(8, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readLong(
-                EndianType.LITTLE_ENDIAN_TYPE), value);
-        assertEquals(readerWriter.getPosition(), 16);
+        assertEquals(value, readerWriter.readLong(EndianType.LITTLE_ENDIAN_TYPE));
+        assertEquals(16, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -795,27 +769,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write float
         final float value = 234523.34f;
         readerWriter.writeFloat(value);
 
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 4);
+        assertEquals(4, f.length());
 
         // reopen and read float
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readFloat(), value, 0.0);
+        assertEquals(value, readerWriter.readFloat(), 0.0);
 
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -832,33 +805,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write float twice with big an little endian
+        // write float twice with big and little endian
         final float value = 234523.34f;
         readerWriter.writeFloat(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(4, readerWriter.getPosition());
 
         readerWriter.writeFloat(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 8);
+        assertEquals(8, f.length());
 
         // reopen and read floats
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readFloat(EndianType.BIG_ENDIAN_TYPE),
-                value, 0.0);
-        assertEquals(readerWriter.getPosition(), 4);
+        assertEquals(value, readerWriter.readFloat(EndianType.BIG_ENDIAN_TYPE), 0.0);
+        assertEquals(4, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readFloat(
-                EndianType.LITTLE_ENDIAN_TYPE), value, 0.0);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(value, readerWriter.readFloat(EndianType.LITTLE_ENDIAN_TYPE), 0.0);
+        assertEquals(8, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -875,27 +845,26 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write double
         final double value = 234523.344545;
         readerWriter.writeDouble(value);
 
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 8);
+        assertEquals(8, f.length());
 
         // reopen and read double
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readDouble(), value, 0.0);
+        assertEquals(value, readerWriter.readDouble(), 0.0);
 
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -912,33 +881,30 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        // write double twice with big an little endian
+        // write double twice with big and little endian
         final double value = 234523.344545;
         readerWriter.writeDouble(value, EndianType.BIG_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(8, readerWriter.getPosition());
 
         readerWriter.writeDouble(value, EndianType.LITTLE_ENDIAN_TYPE);
-        assertEquals(readerWriter.getPosition(), 16);
+        assertEquals(16, readerWriter.getPosition());
 
         // close file
         readerWriter.close();
-        assertEquals(f.length(), 16);
+        assertEquals(16, f.length());
 
         // reopen and read doubles
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readDouble(EndianType.BIG_ENDIAN_TYPE),
-                value, 0.0);
-        assertEquals(readerWriter.getPosition(), 8);
+        assertEquals(value, readerWriter.readDouble(EndianType.BIG_ENDIAN_TYPE), 0.0);
+        assertEquals(8, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readDouble(
-                EndianType.LITTLE_ENDIAN_TYPE), value, 0.0);
-        assertEquals(readerWriter.getPosition(), 16);
+        assertEquals(value, readerWriter.readDouble(EndianType.LITTLE_ENDIAN_TYPE), 0.0);
+        assertEquals(16, readerWriter.getPosition());
 
         // close and delete file
         readerWriter.close();
@@ -955,7 +921,7 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write text into file
         final String text = "first line\nsecond line";
@@ -964,14 +930,13 @@ public class MappedFileReaderAndWriterTest {
         // close file
         readerWriter.close();
 
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         final String firstLine = readerWriter.readLine();
         final String secondLine = readerWriter.readLine();
 
-        assertEquals(firstLine, "first line");
-        assertEquals(secondLine, "second line");
+        assertEquals("first line", firstLine);
+        assertEquals("second line", secondLine);
 
         // close and delete file
         readerWriter.close();
@@ -988,7 +953,7 @@ public class MappedFileReaderAndWriterTest {
                 f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
-        assertEquals(readerWriter.getPosition(), 0);
+        assertEquals(0, readerWriter.getPosition());
 
         // write text into file
         final String text = "first line\nsecond line";
@@ -997,8 +962,7 @@ public class MappedFileReaderAndWriterTest {
         // close file
         readerWriter.close();
 
-        readerWriter = new MappedFileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         final String firstWord = readerWriter.readWord();
         final String secondWord = readerWriter.readWord();
@@ -1007,10 +971,10 @@ public class MappedFileReaderAndWriterTest {
         // this is null because end is reached
         final String fifthWord = readerWriter.readWord();
 
-        assertEquals(firstWord, "first");
-        assertEquals(secondWord, "line");
-        assertEquals(thirdWord, "second");
-        assertEquals(fourthWord, "line");
+        assertEquals("first", firstWord);
+        assertEquals("line", secondWord);
+        assertEquals("second", thirdWord);
+        assertEquals("line", fourthWord);
         assertNull(fifthWord);
 
         // close and delete file

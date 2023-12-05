@@ -18,7 +18,7 @@ package com.irurueta.geometry.io;
 /**
  * Class containing a piece of 3D data loaded from a file.
  * This class is used along with a LoaderIterator so that very large 3D files
- * can be read in a step by step process returning consecutive DataChunk's of
+ * can be read in a step-by-step process returning consecutive DataChunk's of
  * the file.
  */
 public class DataChunk {
@@ -123,7 +123,7 @@ public class DataChunk {
 
     /**
      * Material of this chunk. This will be used to define ambient colors,
-     * textures etc for this chunk.
+     * textures etc. for this chunk.
      */
     private Material material;
 
@@ -472,7 +472,7 @@ public class DataChunk {
 
     /**
      * Returns material of this chunk. This will be used to define ambient
-     * colors, textures, etc for this chunk.
+     * colors, textures, etc. for this chunk.
      *
      * @return Materials of this chunk.
      */
@@ -482,7 +482,7 @@ public class DataChunk {
 
     /**
      * Sets material of this chunk. This will be used to define ambient colors,
-     * textures, etc for this chunk.
+     * textures, etc. for this chunk.
      *
      * @param material Material of this chunk.
      */

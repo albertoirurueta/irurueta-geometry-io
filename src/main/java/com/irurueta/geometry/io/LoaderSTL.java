@@ -228,7 +228,7 @@ public class LoaderSTL extends Loader {
      * This method returns a LoaderIterator to start the iterative process to
      * load a file in small chunks of data.
      *
-     * @return a loader iterator to read the file in a step by step process.
+     * @return a loader iterator to read the file in a step-by-step process.
      * @throws LockedException   raised if this instance is already locked.
      * @throws NotReadyException raised if this instance is not yet ready.
      * @throws IOException       if an I/O error occurs.
@@ -254,6 +254,25 @@ public class LoaderSTL extends Loader {
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
+
+    /**
+     * Returns name for the 3D object.
+     *
+     * @return name for the 3D object.
+     */
+    protected String getSolidName() {
+        return loaderIterator != null ? loaderIterator.getSolidName() : null;
+    }
+
+    /**
+     * Gets number of vertices contained in the file.
+     *
+     * @return number of vertices contained in the file.
+     */
+    protected Long getNumberOfVertices() {
+        return loaderIterator != null ? loaderIterator.getNumberOfVertices() : null;
+    }
+
 
     /**
      * Internal method to set maximum number of vertices allowed in a chunk.
@@ -298,7 +317,7 @@ public class LoaderSTL extends Loader {
                 // attempt restart stream to initial position
                 reader.seek(0);
             } catch (final Exception ignore) {
-                // this is a best effort operation, if it fails it is ignored
+                // this is the best effort operation, if it fails it is ignored
             }
 
 
@@ -413,7 +432,7 @@ public class LoaderSTL extends Loader {
 
         /**
          * Array containing indices to be added to current chunk of data. Notice
-         * that this indices are not the original indices appearing in the file.
+         * that these indices are not the original indices appearing in the file.
          * Instead, they are indices referring to data in current chunk,
          * accounting for duplicate points, etc. This way, indices in a chunk
          * can be directly used to draw the chunk of data by the graphical layer.
@@ -647,7 +666,7 @@ public class LoaderSTL extends Loader {
                             }
 
                         } else if (word.equalsIgnoreCase(ASCII_OUTER)) {
-                            // next word has to be loop
+                            // next word has to be "loop"
                             word = readNonEmptyWord();
                             if (word == null) {
                                 // undefined word
@@ -759,8 +778,8 @@ public class LoaderSTL extends Loader {
                         // add coordinates into chunk arrays
                         addNewVertexDataToChunk();
 
-                        int attributeByteCount = reader.readUnsignedShort(
-                                EndianType.LITTLE_ENDIAN_TYPE);
+                        // read two bytes attribute byte count
+                        reader.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE);
 
                         currentTriangle++;
 
@@ -827,6 +846,24 @@ public class LoaderSTL extends Loader {
         }
 
         /**
+         * Returns name for the 3D object.
+         *
+         * @return name for the 3D object.
+         */
+        public String getSolidName() {
+            return solidName;
+        }
+
+        /**
+         * Gets number of vertices contained in the file.
+         *
+         * @return number of vertices contained in the file.
+         */
+        public long getNumberOfVertices() {
+            return numberOfVertices;
+        }
+
+        /**
          * Internal method to read a word from ASCII file.
          *
          * @return next word that has been read.
@@ -837,7 +874,7 @@ public class LoaderSTL extends Loader {
             String word;
             do {
                 // ignore empty words
-                // (line feeds, etc)
+                // (line feeds, etc.)
                 word = reader.readWord();
             } while (word != null && word.isEmpty());
             return word;
@@ -965,7 +1002,7 @@ public class LoaderSTL extends Loader {
         }
 
         /**
-         * Set ups loader iterator. This method is called when constructing
+         * Setups loader iterator. This method is called when constructing
          * this iterator.
          *
          * @throws IOException     if an I/O error occurs.

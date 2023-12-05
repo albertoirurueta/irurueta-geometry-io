@@ -18,10 +18,10 @@ package com.irurueta.geometry.io;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 /**
  * Reads a 3D object and converts it into custom binary format.
@@ -561,7 +561,7 @@ public class MeshWriterBinary extends MeshWriter {
         dataStream.writeLong(length);
 
         // write file data
-        try (final InputStream textureStream = new FileInputStream(textureFile)) {
+        try (final InputStream textureStream = Files.newInputStream(textureFile.toPath())) {
             final byte[] buffer = new byte[BUFFER_SIZE];
             int n;
             while ((n = textureStream.read(buffer)) > 0) {

@@ -81,7 +81,7 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
         assertTrue(writer.isReady());
         assertFalse(writer.isLocked());
-        assertEquals(writer.getStream(), outStream);
+        assertEquals(outStream, writer.getStream());
         assertNull(writer.getListener());
 
         final MeshWriterListener listener = new MeshWriterListener() {
@@ -142,8 +142,8 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         writer = new MeshWriterBinary(loader, outStream, listener);
         assertTrue(writer.isReady());
         assertFalse(writer.isLocked());
-        assertEquals(writer.getStream(), outStream);
-        assertEquals(writer.getListener(), listener);
+        assertEquals(outStream, writer.getStream());
+        assertEquals(listener, writer.getListener());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
@@ -216,7 +216,7 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         };
 
         writer.setListener(listener);
-        assertEquals(writer.getListener(), listener);
+        assertEquals(listener, writer.getListener());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());

@@ -108,7 +108,7 @@ public class ElementPLY {
      * Returns number of instances of this element (i.e. number of vertices or
      * number of faces).
      *
-     * @return Number of instances of this element in the file..
+     * @return Number of instances of this element in the file.
      */
     public long getNumberOfInstances() {
         return nInstances;

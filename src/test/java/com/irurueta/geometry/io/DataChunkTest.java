@@ -36,16 +36,16 @@ public class DataChunkTest {
         assertNull(chunk.getNormalsData());
         assertFalse(chunk.isNormalsDataAvailable());
 
-        assertEquals(chunk.getColorComponents(),
-                DataChunk.DEFAULT_COLOR_COMPONENTS);
+        assertEquals(DataChunk.DEFAULT_COLOR_COMPONENTS,
+                chunk.getColorComponents());
 
-        assertEquals(chunk.getMinX(), Float.MAX_VALUE, 0.0);
-        assertEquals(chunk.getMinY(), Float.MAX_VALUE, 0.0);
-        assertEquals(chunk.getMinZ(), Float.MAX_VALUE, 0.0);
+        assertEquals(Float.MAX_VALUE, chunk.getMinX(), 0.0);
+        assertEquals(Float.MAX_VALUE, chunk.getMinY(), 0.0);
+        assertEquals(Float.MAX_VALUE, chunk.getMinZ(), 0.0);
 
-        assertEquals(chunk.getMaxX(), -Float.MAX_VALUE, 0.0);
-        assertEquals(chunk.getMaxY(), -Float.MAX_VALUE, 0.0);
-        assertEquals(chunk.getMaxZ(), -Float.MAX_VALUE, 0.0);
+        assertEquals(-Float.MAX_VALUE, chunk.getMaxX(), 0.0);
+        assertEquals(-Float.MAX_VALUE, chunk.getMaxY(), 0.0);
+        assertEquals(-Float.MAX_VALUE, chunk.getMaxZ(), 0.0);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class DataChunkTest {
         chunk.setVerticesCoordinatesData(data);
 
         // check correctness
-        assertEquals(chunk.getVerticesCoordinatesData(), data);
+        assertEquals(data, chunk.getVerticesCoordinatesData());
         assertTrue(chunk.isVerticesCoordinatesDataAvailable());
     }
 
@@ -76,7 +76,7 @@ public class DataChunkTest {
         chunk.setColorData(data);
 
         // check correctness
-        assertEquals(chunk.getColorData(), data);
+        assertEquals(data, chunk.getColorData());
         assertTrue(chunk.isColorDataAvailable());
     }
 
@@ -92,7 +92,7 @@ public class DataChunkTest {
         chunk.setIndicesData(data);
 
         // check correctness
-        assertEquals(chunk.getIndicesData(), data);
+        assertEquals(data, chunk.getIndicesData());
         assertTrue(chunk.isIndicesDataAvailable());
     }
 
@@ -108,7 +108,7 @@ public class DataChunkTest {
         chunk.setTextureCoordinatesData(data);
 
         // check correctness
-        assertEquals(chunk.getTextureCoordinatesData(), data);
+        assertEquals(data, chunk.getTextureCoordinatesData());
         assertTrue(chunk.isTextureCoordinatesDataAvailable());
     }
 
@@ -124,7 +124,7 @@ public class DataChunkTest {
         chunk.setNormalsData(data);
 
         // check correctness
-        assertEquals(chunk.getNormalsData(), data);
+        assertEquals(data, chunk.getNormalsData());
         assertTrue(chunk.isNormalsDataAvailable());
     }
 
@@ -132,15 +132,14 @@ public class DataChunkTest {
     public void testGetSetColorComponents() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getColorComponents(),
-                DataChunk.DEFAULT_COLOR_COMPONENTS);
+        assertEquals(DataChunk.DEFAULT_COLOR_COMPONENTS, chunk.getColorComponents());
 
         final int components = 4;
 
         // set new value
         chunk.setColorComponents(components);
         // check correctness
-        assertEquals(chunk.getColorComponents(), components);
+        assertEquals(components, chunk.getColorComponents());
 
         // Force IllegalArgumentException
         try {
@@ -154,84 +153,84 @@ public class DataChunkTest {
     public void testGetSetMinX() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getMinX(), Float.MAX_VALUE, 0.0);
+        assertEquals(Float.MAX_VALUE, chunk.getMinX(), 0.0);
 
         // set value
         final float value = 54213.23f;
         chunk.setMinX(value);
 
         // check correctness
-        assertEquals(chunk.getMinX(), value, 0.0);
+        assertEquals(value, chunk.getMinX(), 0.0);
     }
 
     @Test
     public void testGetSetMinY() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getMinY(), Float.MAX_VALUE, 0.0);
+        assertEquals(Float.MAX_VALUE, chunk.getMinY(), 0.0);
 
         // set value
         final float value = 533.423f;
         chunk.setMinY(value);
 
         // check correctness
-        assertEquals(chunk.getMinY(), value, 0.0);
+        assertEquals(value, chunk.getMinY(), 0.0);
     }
 
     @Test
     public void testGetSetMinZ() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getMinZ(), Float.MAX_VALUE, 0.0);
+        assertEquals(Float.MAX_VALUE, chunk.getMinZ(), 0.0);
 
         // set value
         final float value = 21542314.2523f;
         chunk.setMinZ(value);
 
         // check correctness
-        assertEquals(chunk.getMinZ(), value, 0.0);
+        assertEquals(value, chunk.getMinZ(), 0.0);
     }
 
     @Test
     public void testGetSetMaxX() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getMaxX(), -Float.MAX_VALUE, 0.0);
+        assertEquals(-Float.MAX_VALUE, chunk.getMaxX(), 0.0);
 
         // set value
         final float value = 3255.52f;
         chunk.setMaxX(value);
 
         // check correctness
-        assertEquals(chunk.getMaxX(), value, 0.0);
+        assertEquals(value, chunk.getMaxX(), 0.0);
     }
 
     @Test
     public void testGetSetMaxY() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getMaxX(), -Float.MAX_VALUE, 0.0);
+        assertEquals(-Float.MAX_VALUE, chunk.getMaxX(), 0.0);
 
         // set value
         final float value = 43215324.32231f;
         chunk.setMaxY(value);
 
         // check correctness
-        assertEquals(chunk.getMaxY(), value, 0.0);
+        assertEquals(value, chunk.getMaxY(), 0.0);
     }
 
     @Test
     public void testGetSetMaxZ() {
         final DataChunk chunk = new DataChunk();
 
-        assertEquals(chunk.getMaxZ(), -Float.MAX_VALUE, 0.0);
+        assertEquals(-Float.MAX_VALUE, chunk.getMaxZ(), 0.0);
 
         // set value
         final float value = 4514235.3245f;
         chunk.setMaxZ(value);
 
         // check correctness
-        assertEquals(chunk.getMaxZ(), value, 0.0);
+        assertEquals(value, chunk.getMaxZ(), 0.0);
     }
 
     @Test
@@ -247,7 +246,7 @@ public class DataChunkTest {
         // set new material
         chunk.setMaterial(material);
         // check correctness
-        assertSame(chunk.getMaterial(), material);
+        assertSame(material, chunk.getMaterial());
         assertTrue(chunk.isMaterialAvailable());
     }
 }

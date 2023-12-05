@@ -304,7 +304,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * Reads a signed 16-bit number from this file. The method reads two byte
      * from this file, starting at the current file pointer. If the two bytes
      * read, in order, are b1 and b2, where each of the two values is between 0
-     * and 255, inclusive, then the result is equal to: (short)((b1 &lt;&lt; 8 |
+     * and 255, inclusive, then the result is equal to: (short)(b1 &lt;&lt; 8 |
      * b2).
      * This method blocks until the two bytes are read, the end of the stream is
      * detected, or an exception is thrown.
@@ -632,7 +632,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public String readUntilAnyOfTheseCharactersIsFound(final String pattern) {
 
-        if (pattern.length() == 0) {
+        if (pattern.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
@@ -945,7 +945,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**
      * Converts the double argument to a long using the doubleToLongBits method
-     * in class Double, and then writes that long value to the file as an eight-
+     * in class Double, and then writes that long value to the file as an eight
      * byte quantity, high byte first. The write starts at the current position
      * of the file pointer.
      *
@@ -960,7 +960,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
 
     /**
      * Converts the double argument to a long using the doubleToLongBits method
-     * in class Double, and then writes that long value to the file as an eight-
+     * in class Double, and then writes that long value to the file as an eight
      * byte quantity, using provided endian type.
      * If endian type is big endian, then natural byte order is preserved (and
      * high byte is written first), if little endian order is chosen, then byte

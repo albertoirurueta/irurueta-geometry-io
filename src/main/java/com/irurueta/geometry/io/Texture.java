@@ -50,7 +50,7 @@ public class Texture {
     private boolean valid;
 
     /**
-     * Id assigned to this texture. Id must be unique so that texture can be
+     * ID assigned to this texture. ID must be unique so that texture can be
      * uniquely identified.
      */
     private final int id;
@@ -104,7 +104,7 @@ public class Texture {
     }
 
     /**
-     * Returns id assigned to this texture. Id must be unique so that texture
+     * Returns id assigned to this texture. ID must be unique so that texture
      * can be uniquely identified.
      *
      * @return id assigned to this texture.

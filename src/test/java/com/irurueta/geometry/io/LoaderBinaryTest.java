@@ -20,10 +20,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,7 +96,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
         // test empty constructor
         LoaderBinary loader = new LoaderBinary();
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_BINARY2);
+        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
         try {
@@ -121,7 +121,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
         loader = new LoaderBinary(outputFile);
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_BINARY2);
+        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
 
@@ -154,9 +154,9 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
         loader = new LoaderBinary(listener);
         assertFalse(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_BINARY2);
+        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
+        assertEquals(listener, loader.getListener());
         try {
             loader.isValidFile();
             fail("IOException expected but not thrown");
@@ -171,9 +171,9 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
         // test constructor with file and listener
         loader = new LoaderBinary(outputFile, listener);
         assertTrue(loader.isReady());
-        assertEquals(loader.getMeshFormat(), MeshFormat.MESH_FORMAT_BINARY2);
+        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
         assertFalse(loader.isLocked());
-        assertEquals(loader.getListener(), listener);
+        assertEquals(listener, loader.getListener());
 
         // Force IOException
         loader = null;
@@ -201,42 +201,44 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
         assertTrue(outputFile.exists()); //check that file exists
         assertTrue(outputFile.isFile());
 
-        final LoaderBinary loader = new LoaderBinary();
-        assertFalse(loader.hasFile());
-        assertFalse(loader.isReady());
+        try (final LoaderBinary loader = new LoaderBinary()) {
+            assertFalse(loader.hasFile());
+            assertFalse(loader.isReady());
 
-        // set file
-        loader.setFile(outputFile);
-        assertTrue(loader.hasFile());
-        assertTrue(loader.isReady());
+            // set file
+            loader.setFile(outputFile);
+            assertTrue(loader.hasFile());
+            assertTrue(loader.isReady());
 
-        // delete generated file
+            // delete generated file
 
-        //noinspection all
-        outputFile.delete();
+            //noinspection all
+            outputFile.delete();
+        }
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final LoaderBinary loader = new LoaderBinary();
-        assertNull(loader.getListener());
+    public void testGetSetListener() throws LockedException, IOException {
+        try (final LoaderBinary loader = new LoaderBinary()) {
+            assertNull(loader.getListener());
 
-        final LoaderListener listener = new LoaderListener() {
-            @Override
-            public void onLoadStart(final Loader loader) {
-            }
+            final LoaderListener listener = new LoaderListener() {
+                @Override
+                public void onLoadStart(final Loader loader) {
+                }
 
-            @Override
-            public void onLoadEnd(final Loader loader) {
-            }
+                @Override
+                public void onLoadEnd(final Loader loader) {
+                }
 
-            @Override
-            public void onLoadProgressChange(final Loader loader, final float progress) {
-            }
-        };
+                @Override
+                public void onLoadProgressChange(final Loader loader, final float progress) {
+                }
+            };
 
-        loader.setListener(listener);
-        assertEquals(loader.getListener(), listener);
+            loader.setListener(listener);
+            assertEquals(listener, loader.getListener());
+        }
     }
 
     @Test
@@ -488,7 +490,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             LockedException, NotReadyException, LoaderException,
             NotAvailableException {
 
-        // convert first potro.obj into potroObj.bin
+        // convert first "potro.obj" into "potroObj.bin"
         saveChunks = true;
         // obj loader might return different results after consecutive executions
         // in this file, mostly because of the triangulation algorithm, for that
@@ -854,8 +856,8 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             return false;
         }
 
-        final InputStream stream1 = new FileInputStream(f1);
-        final InputStream stream2 = new FileInputStream(f2);
+        final InputStream stream1 = Files.newInputStream(f1.toPath());
+        final InputStream stream2 = Files.newInputStream(f2.toPath());
 
         final byte[] buffer1 = new byte[BUFFER_SIZE];
         final byte[] buffer2 = new byte[BUFFER_SIZE];
