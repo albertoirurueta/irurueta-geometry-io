@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Illumination.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">Illumination.java</span></div><h1>Illumination.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+/**
+ * Enumerator containing the available illumination options and their
+ * corresponding integer values, as shown below:
+ * 0. Color on and Ambient off.
+ * 1. Color on and Ambient on.
+ * 2. Highlight on.
+ * 3. Reflection on and Ray trace on.
+ * 4. Transparency: Glass on, Reflection: Ray trace on.
+ * 5. Reflection: Fresnel on and Ray trace on.
+ * 6. Transparency: Refraction on, Reflection: Fresnel off and Ray trace on.
+ * 7. Transparency: Refraction on, Reflection: Fresnel on and Ray trace on.
+ * 8. Reflection on and Ray trace off.
+ * 9. Transparency: Glass on, Reflection: Ray trace off.
+ * 10. Casts shadows onto invisible surfaces.
+ */
+<span class="fc" id="L33">public enum Illumination {</span>
+    /**
+     * Color on and ambient off.
+     */
+<span class="fc" id="L37">    COLOR_AND_AMBIENT_OFF(0),</span>
+
+    /**
+     * Color on and ambient on.
+     */
+<span class="fc" id="L42">    COLOR_AND_AMBIENT_ON(1),</span>
+
+    /**
+     * Highlight on.
+     */
+<span class="fc" id="L47">    HIGHLIGHT_ON(2),</span>
+
+    /**
+     * Reflection on and ray trace on.
+     */
+<span class="fc" id="L52">    REFLECTION_ON_AND_RAY_TRACE_ON(3),</span>
+
+    /**
+     * Transparency: glass on, reflection: ray trace on.
+     */
+<span class="fc" id="L57">    TRANSPARENCY_GLASS_ON_REFLECTION_RAYTRACE_ON(4),</span>
+
+    /**
+     * Reflection: Fresnel on and ray trace on.
+     */
+<span class="fc" id="L62">    REFLECTION_FRESNEL_ON_AND_RAY_TRACE_ON(5),</span>
+
+    /**
+     * Transparency: refraction on, Reflection: Fresnel off and ray trace on.
+     */
+<span class="fc" id="L67">    TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_AND_RAY_TRACE_ON(6),</span>
+
+    /**
+     * Transparency: refraction on, Reflection: Fresnel on and ray trace on.
+     */
+<span class="fc" id="L72">    TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_ON_AND_RAY_TRACE_ON(7),</span>
+
+    /**
+     * Reflection on and ray trace off.
+     */
+<span class="fc" id="L77">    REFLECTION_ON_AND_RAY_TRACE_OFF(8),</span>
+
+    /**
+     * Transparency: glass on, Reflection: ray trace off.
+     */
+<span class="fc" id="L82">    TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_OFF(9),</span>
+
+    /**
+     * Cast shadows onto invisible surfaces.
+     */
+<span class="fc" id="L87">    CAST_SHADOWS_ONTO_INVISIBLE_SURFACES(10);</span>
+
+    /**
+     * Internal value to be stored as part of this enum.
+     */
+    private final int value;
+
+    /**
+     * Constructor.
+     *
+     * @param value value associated to this enum.
+     */
+<span class="fc" id="L99">    Illumination(final int value) {</span>
+<span class="fc" id="L100">        this.value = value;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Returns value associated to this enum.
+     *
+     * @return value associated to this enum.
+     */
+    public int value() {
+<span class="fc" id="L109">        return value;</span>
+    }
+
+    /**
+     * Factory method to create and instance of this enum from its associated
+     * value.
+     *
+     * @param value value associated to enum to be created.
+     * @return an illumination instance.
+     */
+    public static Illumination forValue(final int value) {
+<span class="pc bpc" id="L120" title="2 of 4 branches missed.">        if (value &gt;= 0 &amp;&amp; value &lt;= 10) {</span>
+<span class="fc" id="L121">            return Illumination.values()[value];</span>
+        } else {
+<span class="nc" id="L123">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

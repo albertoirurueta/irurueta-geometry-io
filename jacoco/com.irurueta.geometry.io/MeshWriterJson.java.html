@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MeshWriterJson.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">MeshWriterJson.java</span></div><h1>MeshWriterJson.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+
+public class MeshWriterJson extends MeshWriter {
+
+    /**
+     * Indicates if textures must be embedded into resulting file.
+     */
+    public static final boolean DEFAULT_EMBED_TEXTURES = true;
+
+    /**
+     * Indicates if by default a URL indicating where the texture can be located
+     * should be included into resulting file.
+     */
+    public static final boolean DEFAULT_USE_REMOTE_TEXTURE_URL = false;
+
+    /**
+     * Indicates if by default an identifier for the texture should be included
+     * into resulting file so that texture image can be fetched by some other
+     * mean.
+     */
+    public static final boolean DEFAULT_USE_REMOTE_TEXTURE_ID = false;
+
+    /**
+     * Indicates charset to use in resulting JSON file. By default, this will be
+     * UTF-8.
+     */
+    private Charset charset;
+
+    /**
+     * Writer to write resulting JSON into output stream.
+     */
+    private BufferedWriter writer;
+
+    /**
+     * Counter for the number of textures that have been read.
+     */
+    private int textureCounter;
+
+    /**
+     * Indicates if textures will be embedded into resulting JSON stream of
+     * data. When embedding textures their stream of bytes is written using
+     * BASE64 to the output stream.
+     */
+    private boolean embedTexturesEnabled;
+
+    /**
+     * Indicates if a URL indicating where the texture can be located should
+     * be included into resulting file.
+     */
+    private boolean remoteTextureUrlEnabled;
+
+    /**
+     * Indicates if an identifier for the texture should be included into
+     * resulting file so that texture image can be fetched by some other mean.
+     */
+    private boolean remoteTextureIdEnabled;
+
+    /**
+     * Constructor.
+     *
+     * @param loader loader to load a 3D file.
+     * @param stream stream where trans-coded data will be written to.
+     */
+    public MeshWriterJson(final Loader loader, final OutputStream stream) {
+<span class="fc" id="L91">        super(loader, stream);</span>
+<span class="fc" id="L92">        this.charset = null;</span>
+<span class="fc" id="L93">        embedTexturesEnabled = DEFAULT_EMBED_TEXTURES;</span>
+<span class="fc" id="L94">        remoteTextureUrlEnabled = DEFAULT_USE_REMOTE_TEXTURE_URL;</span>
+<span class="fc" id="L95">        remoteTextureIdEnabled = DEFAULT_USE_REMOTE_TEXTURE_ID;</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param loader   loader to load a 3D file.
+     * @param stream   stream where trans-coded data will be written to.
+     * @param listener listener to be notified of progress changes or when
+     *                 transcoding process starts or finishes.
+     */
+    public MeshWriterJson(final Loader loader, final OutputStream stream,
+                          final MeshWriterListener listener) {
+<span class="fc" id="L108">        super(loader, stream, listener);</span>
+<span class="fc" id="L109">        this.charset = null;</span>
+<span class="fc" id="L110">        embedTexturesEnabled = DEFAULT_EMBED_TEXTURES;</span>
+<span class="fc" id="L111">        remoteTextureUrlEnabled = DEFAULT_USE_REMOTE_TEXTURE_URL;</span>
+<span class="fc" id="L112">        remoteTextureIdEnabled = DEFAULT_USE_REMOTE_TEXTURE_ID;</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Returns charset to use in resulting JSON file. By default, this will be
+     * UTF-8.
+     *
+     * @return charset to use in resulting JSON file.
+     */
+    public Charset getCharset() {
+<span class="fc" id="L122">        return charset;</span>
+    }
+
+    /**
+     * Sets charset to use in resulting JSON file. By default, this will be UTF-8.
+     *
+     * @param charset charset to use in resulting JSON file.
+     * @throws LockedException if this mesh writer is locked processing a file.
+     */
+    public void setCharset(final Charset charset) throws LockedException {
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L133">            throw new LockedException();</span>
+        }
+<span class="fc" id="L135">        this.charset = charset;</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Indicates if default charset will be used or not.
+     *
+     * @return true if default charset (UTF-8) will be used, false otherwise.
+     */
+    public boolean isDefaultCharsetBeingUsed() {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        return (charset == null);</span>
+    }
+
+    /**
+     * Indicates if textures are embedded into resulting JSON or not.
+     * When embedding textures their stream of bytes is written using BASE64 to
+     * the output stream.
+     *
+     * @return true if textures are embedded into resulting JSON, false
+     * otherwise.
+     */
+    public boolean isEmbedTexturesEnabled() {
+<span class="fc" id="L156">        return embedTexturesEnabled;</span>
+    }
+
+    /**
+     * Specified whether textures are embedded into resulting JSON or not.
+     * When embedding textures their stream of bytes is written using BASE64 to
+     * the output stream.
+     *
+     * @param embedTexturesEnabled true if textures will be embedded into
+     *                             resulting JSON, false.
+     * @throws LockedException if this mesh writer is locked processing a file.
+     */
+    public void setEmbedTexturedEnabled(final boolean embedTexturesEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L171">            throw new LockedException();</span>
+        }
+<span class="fc" id="L173">        this.embedTexturesEnabled = embedTexturesEnabled;</span>
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Indicates if a URL indicating where the texture can be located should
+     * be included into resulting file.
+     *
+     * @return true if a URL indicating where the texture can be located will
+     * be included into resulting file, false otherwise.
+     */
+    public boolean isRemoteTextureUrlEnabled() {
+<span class="fc" id="L184">        return remoteTextureUrlEnabled;</span>
+    }
+
+    /**
+     * Specifies whether a URL indicating where the texture can be located
+     * should be included into resulting file.
+     *
+     * @param remoteTextureUrlEnabled true if a URL indicating where the texture
+     *                                can be located will be included into resulting file, false otherwise.
+     * @throws LockedException if this mesh writer is locked processing a file.
+     */
+    public void setRemoteTextureUrlEnabled(final boolean remoteTextureUrlEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L198">            throw new LockedException();</span>
+        }
+<span class="fc" id="L200">        this.remoteTextureUrlEnabled = remoteTextureUrlEnabled;</span>
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * Indicates if an identifier for the texture should be included into
+     * resulting file so that texture image can be fetched by some other mean.
+     *
+     * @return true if an identifier for the texture should be included into.
+     * resulting file so that texture image can be fetched by some other mean.
+     */
+    public boolean isRemoteTextureIdEnabled() {
+<span class="fc" id="L211">        return remoteTextureIdEnabled;</span>
+    }
+
+    /**
+     * Specifies whether an identifier for the texture should be included into
+     * resulting file so that texture image can be fetched by some other mean.
+     *
+     * @param remoteTextureIdEnabled true if identifier for the texture should
+     *                               be included into resulting file.
+     * @throws LockedException if this mesh writer is locked processing  file.
+     */
+    public void setRemoteTextureIdEnabled(final boolean remoteTextureIdEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L225">            throw new LockedException();</span>
+        }
+<span class="fc" id="L227">        this.remoteTextureIdEnabled = remoteTextureIdEnabled;</span>
+<span class="fc" id="L228">    }</span>
+
+    /**
+     * Processes input file provided to loader and writes it trans-coded into
+     * output stream.
+     *
+     * @throws LoaderException   if 3D file loading fails.
+     * @throws IOException       if an I/O error occurs.
+     * @throws NotReadyException if mesh writer is not ready because either a
+     *                           loader has not been provided or an output stream has not been provided.
+     * @throws LockedException   if this mesh writer is locked processing a file.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public void write() throws LoaderException, IOException, NotReadyException,
+            LockedException {
+
+<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L246">            throw new NotReadyException();</span>
+        }
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L249">            throw new LockedException();</span>
+        }
+
+        try {
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">            if (charset == null) {</span>
+                // use default charset
+<span class="fc" id="L255">                writer = new BufferedWriter(new OutputStreamWriter(stream));</span>
+            } else {
+                // use provided charset
+<span class="nc" id="L258">                writer = new BufferedWriter(new OutputStreamWriter(stream,</span>
+                        charset));
+            }
+
+<span class="fc" id="L262">            locked = true;</span>
+<span class="fc" id="L263">            textureCounter = 0;</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L265">                listener.onWriteStart(this);</span>
+            }
+
+<span class="fc" id="L268">            loader.setListener(this.internalListeners);</span>
+
+<span class="fc" id="L270">            writer.write(&quot;{\&quot;textures\&quot;:[&quot;);</span>
+<span class="fc" id="L271">            final LoaderIterator iter = loader.load();</span>
+
+<span class="fc" id="L273">            float minX = Float.MAX_VALUE;</span>
+<span class="fc" id="L274">            float minY = Float.MAX_VALUE;</span>
+<span class="fc" id="L275">            float minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L276">            float maxX = -Float.MAX_VALUE;</span>
+<span class="fc" id="L277">            float maxY = -Float.MAX_VALUE;</span>
+<span class="fc" id="L278">            float maxZ = -Float.MAX_VALUE;</span>
+
+            // write array opening
+<span class="fc" id="L281">            writer.write(&quot;],\&quot;chunks\&quot;:[&quot;);</span>
+            // indicate that no more textures can follow
+<span class="fc" id="L283">            ignoreTextureValidation = true;</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">            while (iter.hasNext()) {</span>
+<span class="fc" id="L285">                final DataChunk chunk = iter.next();</span>
+<span class="fc" id="L286">                final float[] coords = chunk.getVerticesCoordinatesData();</span>
+<span class="fc" id="L287">                final short[] colors = chunk.getColorData();</span>
+<span class="fc" id="L288">                final int[] indices = chunk.getIndicesData();</span>
+<span class="fc" id="L289">                final float[] textureCoords = chunk.getTextureCoordinatesData();</span>
+<span class="fc" id="L290">                final float[] normals = chunk.getNormalsData();</span>
+
+<span class="fc" id="L292">                final Material material = chunk.getMaterial();</span>
+
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">                final boolean coordsAvailable = (coords != null);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">                final boolean colorsAvailable = (colors != null);</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">                final boolean indicesAvailable = (indices != null);</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">                final boolean textureCoordsAvailable = (textureCoords != null);</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">                final boolean normalsAvailable = (normals != null);</span>
+<span class="fc" id="L299">                boolean hasPreviousContent = false;</span>
+
+<span class="fc bfc" id="L301" title="All 2 branches covered.">                if (chunk.getMinX() &lt; minX) {</span>
+<span class="fc" id="L302">                    minX = chunk.getMinX();</span>
+                }
+<span class="fc bfc" id="L304" title="All 2 branches covered.">                if (chunk.getMinY() &lt; minY) {</span>
+<span class="fc" id="L305">                    minY = chunk.getMinY();</span>
+                }
+<span class="fc bfc" id="L307" title="All 2 branches covered.">                if (chunk.getMinZ() &lt; minZ) {</span>
+<span class="fc" id="L308">                    minZ = chunk.getMinZ();</span>
+                }
+
+<span class="fc bfc" id="L311" title="All 2 branches covered.">                if (chunk.getMaxX() &gt; maxX) {</span>
+<span class="fc" id="L312">                    maxX = chunk.getMaxX();</span>
+                }
+<span class="fc bfc" id="L314" title="All 2 branches covered.">                if (chunk.getMaxY() &gt; maxY) {</span>
+<span class="fc" id="L315">                    maxY = chunk.getMaxY();</span>
+                }
+<span class="fc bfc" id="L317" title="All 2 branches covered.">                if (chunk.getMaxZ() &gt; maxZ) {</span>
+<span class="fc" id="L318">                    maxZ = chunk.getMaxZ();</span>
+                }
+
+                //write chunk opening
+<span class="fc" id="L322">                writer.write(&quot;{&quot;);</span>
+
+                // CHUNK CONTENTS
+<span class="fc bfc" id="L325" title="All 2 branches covered.">                if (material != null) {</span>
+                    // write material
+<span class="fc" id="L327">                    writeMaterial(material);</span>
+<span class="fc" id="L328">                    hasPreviousContent = true;</span>
+                }
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">                if (indicesAvailable) {</span>
+                    // write separator for next piece of data
+<span class="fc bfc" id="L332" title="All 2 branches covered.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L333">                        writer.write(&quot;,&quot;);</span>
+                    }
+
+                    // write indices opening
+<span class="fc" id="L337">                    writer.write(&quot;\&quot;indices\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                    for (int i = 0; i &lt; indices.length; i++) {</span>
+<span class="fc" id="L339">                        writer.write(Integer.toString(indices[i]));</span>
+                        // write separator if more elements in array
+<span class="fc bfc" id="L341" title="All 2 branches covered.">                        if (i &lt; (indices.length - 1)) {</span>
+<span class="fc" id="L342">                            writer.write(&quot;,&quot;);</span>
+                        }
+                    }
+                    // write indices closing
+<span class="fc" id="L346">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L347">                    hasPreviousContent = true;</span>
+                }
+<span class="fc bfc" id="L349" title="All 2 branches covered.">                if (normalsAvailable) {</span>
+                    // write separator for next piece of data
+<span class="pc bpc" id="L351" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L352">                        writer.write(&quot;,&quot;);</span>
+                    }
+
+                    // write normals opening
+<span class="fc" id="L356">                    writer.write(&quot;\&quot;vertexNormals\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">                    for (int i = 0; i &lt; normals.length; i++) {</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                        if (Float.isInfinite(normals[i]) ||</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">                                Float.isNaN(normals[i])) {</span>
+<span class="nc" id="L360">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
+                        } else {
+<span class="fc" id="L362">                            writer.write(Float.toString(normals[i]));</span>
+                        }
+                        // write separator if more elements in array
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                        if (i &lt; (normals.length - 1)) {</span>
+<span class="fc" id="L366">                            writer.write(&quot;,&quot;);</span>
+                        }
+                    }
+                    // write normals closing
+<span class="fc" id="L370">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L371">                    hasPreviousContent = true;</span>
+                }
+<span class="pc bpc" id="L373" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
+                    // write separator for next piece of data
+<span class="pc bpc" id="L375" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L376">                        writer.write(&quot;,&quot;);</span>
+                    }
+
+                    // write coords opening
+<span class="fc" id="L380">                    writer.write(&quot;\&quot;vertexPositions\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">                    for (int i = 0; i &lt; coords.length; i++) {</span>
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">                        if (Float.isInfinite(coords[i]) ||</span>
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">                                Float.isNaN(coords[i])) {</span>
+<span class="nc" id="L384">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
+                        } else {
+<span class="fc" id="L386">                            writer.write(Float.toString(coords[i]));</span>
+                        }
+                        // write separator if more elements in array
+<span class="fc bfc" id="L389" title="All 2 branches covered.">                        if (i &lt; (coords.length - 1)) {</span>
+<span class="fc" id="L390">                            writer.write(&quot;,&quot;);</span>
+                        }
+                    }
+                    // write coords closing
+<span class="fc" id="L394">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L395">                    hasPreviousContent = true;</span>
+                }
+<span class="fc bfc" id="L397" title="All 2 branches covered.">                if (textureCoordsAvailable) {</span>
+                    // write separator for next piece of data
+<span class="pc bpc" id="L399" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L400">                        writer.write(&quot;,&quot;);</span>
+                    }
+
+                    // write texture coords opening
+<span class="fc" id="L404">                    writer.write(&quot;\&quot;vertexTextureCoords\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">                    for (int i = 0; i &lt; textureCoords.length; i++) {</span>
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">                        if (Float.isInfinite(textureCoords[i]) ||</span>
+<span class="pc bpc" id="L407" title="1 of 2 branches missed.">                                Float.isNaN(textureCoords[i])) {</span>
+<span class="nc" id="L408">                            writer.write(Float.toString(Float.MAX_VALUE));</span>
+                        } else {
+<span class="fc" id="L410">                            writer.write(Float.toString(textureCoords[i]));</span>
+                        }
+                        // write separator if more elements in array
+<span class="fc bfc" id="L413" title="All 2 branches covered.">                        if (i &lt; (textureCoords.length - 1)) {</span>
+<span class="fc" id="L414">                            writer.write(&quot;,&quot;);</span>
+                        }
+                    }
+                    // write texture coords closing
+<span class="fc" id="L418">                    writer.write(&quot;]&quot;);</span>
+<span class="fc" id="L419">                    hasPreviousContent = true;</span>
+                }
+<span class="pc bpc" id="L421" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
+                    // write separator for next piece of data
+<span class="fc" id="L423">                    writer.write(&quot;,&quot;);</span>
+
+                    // write min corner
+<span class="fc" id="L426">                    writer.write(&quot;\&quot;minCorner\&quot;:[&quot; + chunk.getMinX() + &quot;,&quot; +</span>
+<span class="fc" id="L427">                            chunk.getMinY() + &quot;,&quot; + chunk.getMinZ() + &quot;],&quot;);</span>
+
+                    // write max corner
+<span class="fc" id="L430">                    writer.write(&quot;\&quot;maxCorner\&quot;:[&quot; + chunk.getMaxX() + &quot;,&quot; +</span>
+<span class="fc" id="L431">                            chunk.getMaxY() + &quot;,&quot; + chunk.getMaxZ() + &quot;]&quot;);</span>
+                }
+<span class="fc bfc" id="L433" title="All 2 branches covered.">                if (colorsAvailable) {</span>
+                    // write separator for next piece of data
+<span class="pc bpc" id="L435" title="1 of 2 branches missed.">                    if (hasPreviousContent) {</span>
+<span class="fc" id="L436">                        writer.write(&quot;,&quot;);</span>
+                    }
+
+                    // write colors opening
+<span class="fc" id="L440">                    writer.write(&quot;\&quot;vertexColors\&quot;:[&quot;);</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">                    for (int i = 0; i &lt; colors.length; i++) {</span>
+<span class="fc" id="L442">                        writer.write(Short.toString(colors[i]));</span>
+
+<span class="fc bfc" id="L444" title="All 2 branches covered.">                        if (i &lt; (colors.length - 1)) {</span>
+<span class="fc" id="L445">                            writer.write(&quot;,&quot;);</span>
+                        }
+                    }
+
+                    // write colors closing and color components
+<span class="fc" id="L450">                    writer.write(&quot;],\&quot;colorComponents\&quot;: &quot; +</span>
+<span class="fc" id="L451">                            chunk.getColorComponents());</span>
+                }
+
+                // write chunk closing
+<span class="fc" id="L455">                writer.write(&quot;}&quot;);</span>
+
+                // write chunk separator if more chunks are available
+<span class="fc bfc" id="L458" title="All 2 branches covered.">                if (iter.hasNext()) {</span>
+<span class="fc" id="L459">                    writer.write(&quot;,&quot;);</span>
+                }
+
+<span class="fc" id="L462">                writer.flush();</span>
+<span class="fc" id="L463">            }</span>
+            // write array closing
+<span class="fc" id="L465">            writer.write(&quot;],&quot;);</span>
+            // write bounding box for all chunks
+            // write min corner
+<span class="fc" id="L468">            writer.write(&quot;\&quot;minCorner\&quot;:[&quot; + minX + &quot;,&quot; + minY + &quot;,&quot; + minZ +</span>
+                    &quot;],&quot;);
+
+            // write max corner
+<span class="fc" id="L472">            writer.write(&quot;\&quot;maxCorner\&quot;:[&quot; + maxX + &quot;,&quot; + maxY + &quot;,&quot; + maxZ +</span>
+                    &quot;]&quot;);
+
+            // write object closing
+<span class="fc" id="L476">            writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L477">            writer.flush();</span>
+
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L480">                listener.onWriteEnd(this);</span>
+            }
+<span class="fc" id="L482">            locked = false;</span>
+
+<span class="nc" id="L484">        } catch (final LoaderException | IOException e) {</span>
+<span class="nc" id="L485">            throw e;</span>
+<span class="nc" id="L486">        } catch (final Exception e) {</span>
+<span class="nc" id="L487">            throw new LoaderException(e);</span>
+<span class="fc" id="L488">        }</span>
+
+<span class="fc" id="L490">    }</span>
+
+    /**
+     * Processes texture file. By reading provided texture file that has been
+     * created in a temporal location and embedding it into resulting output
+     * stream.
+     *
+     * @param texture     reference to texture that uses texture image
+     * @param textureFile file containing texture image. File will usually be
+     *                    created in a temporal location.
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void processTextureFile(final Texture texture, final File textureFile)
+            throws IOException {
+<span class="fc bfc" id="L505" title="All 2 branches covered.">        if (textureCounter &gt; 0) {</span>
+<span class="fc" id="L506">            writer.write(&quot;,&quot;);</span>
+        }
+<span class="fc" id="L508">        writer.write(&quot;{\&quot;id\&quot;:&quot; + texture.getId());</span>
+<span class="fc" id="L509">        writer.write(&quot;,\&quot;width\&quot;:&quot; + texture.getWidth());</span>
+<span class="fc" id="L510">        writer.write(&quot;,\&quot;height\&quot;:&quot; + texture.getHeight());</span>
+<span class="pc bpc" id="L511" title="1 of 2 branches missed.">        if (listener instanceof MeshWriterJsonListener) {</span>
+<span class="fc" id="L512">            final MeshWriterJsonListener listener2 = (MeshWriterJsonListener) listener;</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">            if (remoteTextureUrlEnabled) {</span>
+<span class="fc" id="L514">                final String remoteUrl = listener2.onRemoteTextureUrlRequested(this,</span>
+                        texture, textureFile);
+<span class="pc bpc" id="L516" title="1 of 2 branches missed.">                if (remoteUrl != null) {</span>
+                    // add url to json
+<span class="fc" id="L518">                    writer.write(&quot;,\&quot;remoteUrl\&quot;:\&quot;&quot; + remoteUrl + &quot;\&quot;&quot;);</span>
+                }
+            }
+<span class="pc bpc" id="L521" title="1 of 2 branches missed.">            if (remoteTextureIdEnabled) {</span>
+<span class="fc" id="L522">                final String remoteId = listener2.onRemoteTextureIdRequested(this,</span>
+                        texture, textureFile);
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">                if (remoteId != null) {</span>
+                    // add id to json
+<span class="fc" id="L526">                    writer.write(&quot;,\&quot;remoteId\&quot;: \&quot;&quot; + remoteId + &quot;\&quot;&quot;);</span>
+                }
+            }
+
+        }
+<span class="pc bpc" id="L531" title="1 of 2 branches missed.">        if (embedTexturesEnabled) {</span>
+<span class="fc" id="L532">            writer.write(&quot;,\&quot;data\&quot;:\&quot;&quot;);</span>
+            // write texture file data as base64
+
+            // flush to sync writer and stream
+<span class="fc" id="L536">            writer.flush();</span>
+
+
+<span class="fc" id="L539">            try (final InputStream textureStream = Files.newInputStream(textureFile.toPath())) {</span>
+<span class="fc" id="L540">                final byte[] imageData = new byte[(int) textureFile.length()];</span>
+
+<span class="pc bpc" id="L542" title="1 of 2 branches missed.">                if (textureStream.read(imageData) &gt; 0) {</span>
+                    // convert image byte array into Base64 string
+                    //TODO: could we use a Base64OutputStream to reduce memory usage,
+                    // but doing the same replacement for safe json generation?
+<span class="fc" id="L546">                    String base64 = Base64.encodeBase64String(imageData);</span>
+<span class="fc" id="L547">                    base64 = base64.replace(&quot;/&quot;, &quot;\\/&quot;);</span>
+<span class="fc" id="L548">                    writer.write(base64);</span>
+<span class="fc" id="L549">                    writer.flush();</span>
+                }
+            }
+<span class="fc" id="L552">            writer.write(&quot;\&quot;&quot;);</span>
+        }
+<span class="fc" id="L554">        writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L555">        textureCounter++;</span>
+<span class="fc" id="L556">    }</span>
+
+    /**
+     * Writes material into output JSON file.
+     *
+     * @param material material to be written.
+     * @throws IOException if an I/O error occurs.
+     */
+    private void writeMaterial(final Material material) throws IOException {
+<span class="fc" id="L565">        writer.write(&quot;\&quot;material\&quot;:{&quot;);</span>
+<span class="fc" id="L566">        writer.write(&quot;\&quot;id\&quot;:&quot; + material.getId());</span>
+<span class="pc bpc" id="L567" title="1 of 2 branches missed.">        if (material.isAmbientColorAvailable()) {</span>
+<span class="fc" id="L568">            writer.write(&quot;,\&quot;ambientColor\&quot;:[&quot; + material.getAmbientRedColor() +</span>
+<span class="fc" id="L569">                    &quot;,&quot; + material.getAmbientGreenColor() + &quot;,&quot; +</span>
+<span class="fc" id="L570">                    material.getAmbientBlueColor() + &quot;]&quot;);</span>
+        }
+<span class="pc bpc" id="L572" title="1 of 2 branches missed.">        if (material.isDiffuseColorAvailable()) {</span>
+<span class="fc" id="L573">            writer.write(&quot;,\&quot;diffuseColor\&quot;:[&quot; + material.getDiffuseRedColor() +</span>
+<span class="fc" id="L574">                    &quot;,&quot; + material.getDiffuseGreenColor() + &quot;,&quot; +</span>
+<span class="fc" id="L575">                    material.getDiffuseBlueColor() + &quot;]&quot;);</span>
+        }
+<span class="fc bfc" id="L577" title="All 2 branches covered.">        if (material.isSpecularColorAvailable()) {</span>
+<span class="fc" id="L578">            writer.write(&quot;,\&quot;specularColor\&quot;:[&quot; + material.getSpecularRedColor()</span>
+<span class="fc" id="L579">                    + &quot;,&quot; + material.getSpecularGreenColor() + &quot;,&quot; +</span>
+<span class="fc" id="L580">                    material.getSpecularBlueColor() + &quot;]&quot;);</span>
+        }
+<span class="pc bpc" id="L582" title="1 of 2 branches missed.">        if (material.isSpecularCoefficientAvailable()) {</span>
+<span class="fc" id="L583">            writer.write(&quot;,\&quot;specularCoefficient\&quot;:&quot; +</span>
+<span class="fc" id="L584">                    material.getSpecularCoefficient());</span>
+        }
+<span class="fc bfc" id="L586" title="All 2 branches covered.">        if (material.isAmbientTextureMapAvailable()) {</span>
+<span class="fc" id="L587">            final Texture tex = material.getAmbientTextureMap();</span>
+<span class="fc" id="L588">            writer.write(&quot;,\&quot;ambientTextureId\&quot;:&quot; + tex.getId());</span>
+        }
+<span class="fc bfc" id="L590" title="All 2 branches covered.">        if (material.isDiffuseTextureMapAvailable()) {</span>
+<span class="fc" id="L591">            final Texture tex = material.getDiffuseTextureMap();</span>
+<span class="fc" id="L592">            writer.write(&quot;,\&quot;diffuseTextureId\&quot;:&quot; + tex.getId());</span>
+        }
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">        if (material.isSpecularTextureMapAvailable()) {</span>
+<span class="nc" id="L595">            final Texture tex = material.getSpecularTextureMap();</span>
+<span class="nc" id="L596">            writer.write(&quot;,\&quot;specularTextureId\&quot;:&quot; + tex.getId());</span>
+        }
+<span class="pc bpc" id="L598" title="1 of 2 branches missed.">        if (material.isAlphaTextureMapAvailable()) {</span>
+<span class="nc" id="L599">            final Texture tex = material.getAlphaTextureMap();</span>
+<span class="nc" id="L600">            writer.write(&quot;,\&quot;alphaTextureId\&quot;:&quot; + tex.getId());</span>
+        }
+<span class="pc bpc" id="L602" title="1 of 2 branches missed.">        if (material.isBumpTextureMapAvailable()) {</span>
+<span class="nc" id="L603">            final Texture tex = material.getBumpTextureMap();</span>
+<span class="nc" id="L604">            writer.write(&quot;,\&quot;bumpTextureId\&quot;:&quot; + tex.getId());</span>
+        }
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        if (material.isTransparencyAvailable()) {</span>
+<span class="fc" id="L607">            writer.write(&quot;,\&quot;transparency\&quot;:&quot; + material.getTransparency());</span>
+        }
+<span class="pc bpc" id="L609" title="1 of 2 branches missed.">        if (material.isIlluminationAvailable()) {</span>
+<span class="fc" id="L610">            writer.write(&quot;,\&quot;illumination\&quot;:\&quot;&quot; + material.getIllumination().</span>
+<span class="fc" id="L611">                    name() + &quot;\&quot;&quot;);</span>
+        }
+<span class="fc" id="L613">        writer.write(&quot;}&quot;);</span>
+<span class="fc" id="L614">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

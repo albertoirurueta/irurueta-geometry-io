@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoaderBinary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">LoaderBinary.java</span></div><h1>LoaderBinary.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.nio.file.Files;
+
+/**
+ * Loads a custom binary file implemented for this library.
+ * The binary format has been created to keep 3D data in a more compact way than
+ * other formats.
+ */
+public class LoaderBinary extends Loader {
+
+    /**
+     * Buffer size to load input file.
+     */
+    public static final int BUFFER_SIZE = 1024;
+
+    /**
+     * Version number of the binary format supported by this class.
+     */
+    private static final byte SUPPORTED_VERSION = 2;
+
+    /**
+     * Number of bytes required to determine the bounding box of a chunk or
+     * the whole 3D object (which are 2 3D points = 2x3 coordinates =
+     * 6 floats * 4 bytes per float).
+     */
+    private static final int BOUNDING_BYTES_SIZE = 6 * Float.SIZE / 8;
+
+    /**
+     * Iterator to load binary data in small chunks.
+     * Usually data is divided in chunks that can be directly loaded by
+     * graphic layers such as OpenGL.
+     */
+    private LoaderIteratorBinary loaderIterator;
+
+    /**
+     * Indicates if file has been checked to have a valid header. Notice that
+     * file might still be corrupt or incomplete at some point.
+     */
+    private final boolean validityChecked;
+
+    /**
+     * Indicates if after checking validity, the file header has been found to
+     * be valid or not.
+     */
+    private boolean validFile;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L71">    public LoaderBinary() {</span>
+<span class="fc" id="L72">        loaderIterator = null;</span>
+<span class="fc" id="L73">        validityChecked = false;</span>
+<span class="fc" id="L74">        validFile = false;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param f file to be loaded.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderBinary(final File f) throws IOException {
+<span class="fc" id="L84">        super(f);</span>
+<span class="fc" id="L85">        loaderIterator = null;</span>
+<span class="fc" id="L86">        validityChecked = false;</span>
+<span class="fc" id="L87">        validFile = false;</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of loading progress.
+     */
+    public LoaderBinary(final LoaderListener listener) {
+<span class="fc" id="L96">        super(listener);</span>
+<span class="fc" id="L97">        loaderIterator = null;</span>
+<span class="fc" id="L98">        validityChecked = false;</span>
+<span class="fc" id="L99">        validFile = false;</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param f        file to be loaded.
+     * @param listener listener to be notified of loading progress.
+     * @throws IOException if an I/O error occurs.
+     */
+    public LoaderBinary(final File f, final LoaderListener listener) throws IOException {
+<span class="fc" id="L110">        super(f, listener);</span>
+<span class="fc" id="L111">        loaderIterator = null;</span>
+<span class="fc" id="L112">        validityChecked = false;</span>
+<span class="fc" id="L113">        validFile = false;</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * If loader is ready to start loading a file.
+     * This is true once a file has been provided.
+     *
+     * @return true if ready to start loading a file, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc" id="L124">        return hasFile();</span>
+    }
+
+    /**
+     * Returns mesh format supported by this class, which is MESH_FORMAT_BINARY2.
+     *
+     * @return mesh format supported by this class.
+     */
+    @Override
+    public MeshFormat getMeshFormat() {
+<span class="fc" id="L134">        return MeshFormat.MESH_FORMAT_BINARY2;</span>
+    }
+
+    /**
+     * Determines if provided file is a valid file that can be read by this
+     * loader.
+     *
+     * @return true if file is valid, false otherwise.
+     * @throws LockedException raised if this instance is already locked.
+     * @throws IOException     if an I/O error occurs.
+     */
+    @Override
+    public boolean isValidFile() throws LockedException, IOException {
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (!hasFile()) {</span>
+<span class="fc" id="L148">            throw new IOException();</span>
+        }
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L151">            throw new LockedException();</span>
+        }
+
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (!validityChecked) {</span>
+            // check that file version is supported
+<span class="fc" id="L156">            final byte version = reader.readByte();</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            validFile = (version == SUPPORTED_VERSION);</span>
+        }
+
+<span class="fc" id="L160">        return validFile;</span>
+    }
+
+    /**
+     * Starts the loading process of provided file.
+     * This method returns a LoaderIterator to start the iterative process to
+     * load a file in small chunks of data.
+     *
+     * @return a loader iterator to read the file in a step-by-step process.
+     * @throws LockedException   raised if this instance is already locked.
+     * @throws NotReadyException raised if this instance is not yet ready.
+     * @throws IOException       if an I/O error occurs.
+     * @throws LoaderException   if file is corrupted or cannot be interpreted.
+     */
+    @Override
+    public LoaderIterator load() throws LockedException, NotReadyException,
+            IOException, LoaderException {
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L178">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L181">            throw new NotReadyException();</span>
+        }
+
+        // check file validity by reading its version
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (!isValidFile()) {</span>
+<span class="nc" id="L186">            throw new LoaderException();</span>
+        }
+
+<span class="fc" id="L189">        setLocked(true);</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (listener != null) {</span>
+<span class="fc" id="L191">            listener.onLoadStart(this);</span>
+        }
+
+        // read textures until no more textures are available
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        while (reader.readBoolean()) {</span>
+            // texture data follows
+<span class="fc" id="L197">            final int texId = reader.readInt();</span>
+<span class="fc" id="L198">            final int texWidth = reader.readInt();</span>
+<span class="fc" id="L199">            final int texHeight = reader.readInt();</span>
+<span class="fc" id="L200">            final long texLength = reader.readLong();</span>
+<span class="fc" id="L201">            final long textureFileStartPos = reader.getPosition();</span>
+<span class="fc" id="L202">            final long textureFileEndPos = textureFileStartPos + texLength;</span>
+
+            // check that at least texLength bytes remain otherwise file is
+            // incomplete or corrupted
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">            if (textureFileEndPos &gt; file.length()) {</span>
+<span class="nc" id="L207">                throw new LoaderException();</span>
+            }
+
+            // notify that texture data is available
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">            if (listener instanceof LoaderListenerBinary) {</span>
+<span class="fc" id="L212">                final LoaderListenerBinary loaderListener =</span>
+                        (LoaderListenerBinary) listener;
+
+                // request file where texture will be stored
+<span class="fc" id="L216">                final File texFile = loaderListener.onTextureReceived(this, texId,</span>
+                        texWidth, texHeight);
+
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">                if (texFile != null) {</span>
+                    // write texture data at provided file
+<span class="fc" id="L221">                    final byte[] buffer = new byte[BUFFER_SIZE];</span>
+
+<span class="fc" id="L223">                    int counter = 0;</span>
+<span class="fc" id="L224">                    try (OutputStream outStream = Files.newOutputStream(texFile.toPath())) {</span>
+                        int n;
+<span class="fc" id="L226">                        int len = BUFFER_SIZE;</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                        while (counter &lt; texLength) {</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">                            if (counter + len &gt; texLength) {</span>
+<span class="fc" id="L229">                                len = (int) texLength - counter;</span>
+                            }
+<span class="fc" id="L231">                            n = reader.read(buffer, 0, len);</span>
+<span class="fc" id="L232">                            outStream.write(buffer, 0, n);</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">                            if (n &gt; 0) {</span>
+<span class="fc" id="L234">                                counter += n;</span>
+                            } else {
+                                break;
+                            }
+                        }
+
+<span class="fc" id="L240">                        outStream.flush();</span>
+                    }
+
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">                    if (counter != texLength) {</span>
+<span class="nc" id="L244">                        throw new LoaderException();</span>
+                    }
+
+                    // notify that texture data has been written to provided file
+<span class="fc" id="L248">                    boolean valid = loaderListener.onTextureDataAvailable(this,</span>
+                            texFile, texId, texWidth, texHeight);
+                    // texture processing couldn't be correctly done
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                    if (!valid) {</span>
+<span class="nc" id="L252">                        throw new LoaderException();</span>
+                    }
+<span class="fc" id="L254">                } else {</span>
+                    // skip to end of texture file in case that listener
+                    // didn't provide a file to write texture data
+<span class="nc" id="L257">                    reader.skip(texLength);</span>
+                }
+<span class="fc" id="L259">            } else {</span>
+                // skip to end of texture file in case that there is no listener
+<span class="nc" id="L261">                reader.skip(texLength);</span>
+            }
+<span class="fc" id="L263">        }</span>
+
+<span class="fc" id="L265">        loaderIterator = new LoaderIteratorBinary(this);</span>
+<span class="fc" id="L266">        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));</span>
+<span class="fc" id="L267">        return loaderIterator;</span>
+    }
+
+    /**
+     * Internal listener to be notified when loading process finishes.
+     * This listener is used to free resources when loading process finishes.
+     */
+    private class LoaderIteratorListenerImpl implements LoaderIteratorListener {
+
+        /**
+         * Reference to Loader loading binary file.
+         */
+        private final LoaderBinary loader;
+
+        /**
+         * Constructor.
+         *
+         * @param loader reference to Loader.
+         */
+<span class="fc" id="L286">        public LoaderIteratorListenerImpl(final LoaderBinary loader) {</span>
+<span class="fc" id="L287">            this.loader = loader;</span>
+<span class="fc" id="L288">        }</span>
+
+        /**
+         * Method to be notified when the loading process finishes.
+         *
+         * @param iterator iterator loading the file in chunks.
+         */
+        @Override
+        public void onIteratorFinished(final LoaderIterator iterator) {
+            // because iterator is finished, we should allow subsequent calls to
+            // load method
+
+            // on subsequent calls
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L302">                listener.onLoadEnd(loader);</span>
+            }
+<span class="fc" id="L304">            setLocked(false);</span>
+<span class="fc" id="L305">        }</span>
+    }
+
+    /**
+     * Loader iterator in charge of loading file data in small chunks.
+     * Usually data is divided in chunks small enough that can be directly
+     * loaded by graphical layers such as OpenGL (which has a limit of 65535
+     * indices when using Vertex Buffer Objects, which increase graphical
+     * performance).
+     */
+    private class LoaderIteratorBinary implements LoaderIterator {
+
+        /**
+         * Reference to loader loading binary file.
+         */
+        private final LoaderBinary loader;
+
+        /**
+         * Reference to the listener of this loader iterator. This listener will
+         * be notified when the loading process finishes so that resources can
+         * be freed.
+         */
+        private LoaderIteratorListener listener;
+
+        /**
+         * Constructor.
+         *
+         * @param loader reference to loader loading binary file.
+         */
+<span class="fc" id="L334">        public LoaderIteratorBinary(final LoaderBinary loader) {</span>
+<span class="fc" id="L335">            this.loader = loader;</span>
+<span class="fc" id="L336">            listener = null;</span>
+<span class="fc" id="L337">        }</span>
+
+        /**
+         * Method to set listener of this loader iterator.
+         * This listener will be notified when the loading process finishes.
+         *
+         * @param listener listener of this loader iterator.
+         */
+        public void setListener(final LoaderIteratorListener listener) {
+<span class="fc" id="L346">            this.listener = listener;</span>
+<span class="fc" id="L347">        }</span>
+
+        /**
+         * Indicates if there is another chunk of data to be loaded.
+         *
+         * @return true if there is another chunk of data, false otherwise.
+         */
+        @Override
+        public boolean hasNext() {
+            try {
+<span class="fc bfc" id="L357" title="All 2 branches covered.">                return !reader.isEndOfStream();</span>
+<span class="nc" id="L358">            } catch (final IOException e) {</span>
+<span class="nc" id="L359">                return false;</span>
+            }
+        }
+
+        /**
+         * Loads and returns next chunk of data, if available.
+         *
+         * @return next chunk of data.
+         * @throws NotAvailableException thrown if no more data is available.
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
+        @Override
+        public DataChunk next() throws NotAvailableException, LoaderException,
+                IOException {
+<span class="pc bpc" id="L375" title="1 of 2 branches missed.">            if (!hasNext()) {</span>
+<span class="nc" id="L376">                throw new NotAvailableException();</span>
+            }
+
+            // read chunk size
+<span class="fc" id="L380">            final int chunkSize = reader.readInt();</span>
+
+            // ensure that chunk size is positive, otherwise file is corrupted
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">            if (chunkSize &lt; 0) {</span>
+<span class="nc" id="L384">                throw new LoaderException();</span>
+            }
+
+            // get position of start of chunk
+<span class="fc" id="L388">            final long chunkStartPos = reader.getPosition();</span>
+
+            // position of end of chunk
+<span class="fc" id="L391">            final long chunkEndPos = chunkStartPos + chunkSize;</span>
+
+            // check that at least chunkSize bytes remain otherwise file is
+            // incomplete or corrupted
+<span class="fc" id="L395">            final long fileLength = file.length();</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">            if (chunkEndPos &gt; fileLength) {</span>
+<span class="nc" id="L397">                throw new LoaderException();</span>
+            }
+
+<span class="fc" id="L400">            final DataChunk chunk = new DataChunk();</span>
+
+            // ----- MATERIAL ------
+<span class="fc bfc" id="L403" title="All 2 branches covered.">            if (reader.readBoolean()) {</span>
+                // material is available
+<span class="fc" id="L405">                final int materialId = reader.readInt();</span>
+
+<span class="fc" id="L407">                final Material material = new Material();</span>
+<span class="fc" id="L408">                chunk.setMaterial(material);</span>
+<span class="fc" id="L409">                material.setId(materialId);</span>
+
+<span class="pc bpc" id="L411" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // ambient color is available
+                    byte b;
+                    // red
+<span class="fc" id="L415">                    b = reader.readByte();</span>
+<span class="fc" id="L416">                    material.setAmbientRedColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                    // green
+<span class="fc" id="L419">                    b = reader.readByte();</span>
+<span class="fc" id="L420">                    material.setAmbientGreenColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                    // blue
+<span class="fc" id="L423">                    b = reader.readByte();</span>
+<span class="fc" id="L424">                    material.setAmbientBlueColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                }
+
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // diffuse color is available
+                    byte b;
+                    // red
+<span class="fc" id="L432">                    b = reader.readByte();</span>
+<span class="fc" id="L433">                    material.setDiffuseRedColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                    // green
+<span class="fc" id="L436">                    b = reader.readByte();</span>
+<span class="fc" id="L437">                    material.setDiffuseGreenColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                    // blue
+<span class="fc" id="L440">                    b = reader.readByte();</span>
+<span class="fc" id="L441">                    material.setDiffuseBlueColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                }
+
+<span class="fc bfc" id="L445" title="All 2 branches covered.">                if (reader.readBoolean()) {</span>
+                    // specular color is available
+                    byte b;
+                    // red
+<span class="fc" id="L449">                    b = reader.readByte();</span>
+<span class="fc" id="L450">                    material.setSpecularRedColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                    // green
+<span class="fc" id="L453">                    b = reader.readByte();</span>
+<span class="fc" id="L454">                    material.setSpecularGreenColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                    // blue
+<span class="fc" id="L457">                    b = reader.readByte();</span>
+<span class="fc" id="L458">                    material.setSpecularBlueColor(</span>
+                            (short) (b &amp; 0x000000ff));
+                }
+
+<span class="pc bpc" id="L462" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // specular coefficient is available
+<span class="fc" id="L464">                    material.setSpecularCoefficient(reader.readFloat());</span>
+                }
+
+<span class="pc bpc" id="L467" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // ambient texture map is available
+<span class="nc" id="L469">                    final int textureId = reader.readInt();</span>
+<span class="nc" id="L470">                    final Texture tex = new Texture(textureId);</span>
+<span class="nc" id="L471">                    material.setAmbientTextureMap(tex);</span>
+
+<span class="nc" id="L473">                    tex.setWidth(reader.readInt());</span>
+<span class="nc" id="L474">                    tex.setHeight(reader.readInt());</span>
+                }
+
+<span class="pc bpc" id="L477" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // diffuse texture map is available
+<span class="fc" id="L479">                    final int textureId = reader.readInt();</span>
+<span class="fc" id="L480">                    final Texture tex = new Texture(textureId);</span>
+<span class="fc" id="L481">                    material.setDiffuseTextureMap(tex);</span>
+
+<span class="fc" id="L483">                    tex.setWidth(reader.readInt());</span>
+<span class="fc" id="L484">                    tex.setHeight(reader.readInt());</span>
+                }
+
+<span class="pc bpc" id="L487" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // specular texture map is available
+<span class="nc" id="L489">                    final int textureId = reader.readInt();</span>
+<span class="nc" id="L490">                    final Texture tex = new Texture(textureId);</span>
+<span class="nc" id="L491">                    material.setSpecularTextureMap(tex);</span>
+
+<span class="nc" id="L493">                    tex.setWidth(reader.readInt());</span>
+<span class="nc" id="L494">                    tex.setHeight(reader.readInt());</span>
+                }
+
+<span class="pc bpc" id="L497" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // alpha texture map is available
+<span class="nc" id="L499">                    final int textureId = reader.readInt();</span>
+<span class="nc" id="L500">                    final Texture tex = new Texture(textureId);</span>
+<span class="nc" id="L501">                    material.setAlphaTextureMap(tex);</span>
+
+<span class="nc" id="L503">                    tex.setWidth(reader.readInt());</span>
+<span class="nc" id="L504">                    tex.setHeight(reader.readInt());</span>
+                }
+
+<span class="pc bpc" id="L507" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // bump texture map is available
+<span class="nc" id="L509">                    final int textureId = reader.readInt();</span>
+<span class="nc" id="L510">                    final Texture tex = new Texture(textureId);</span>
+<span class="nc" id="L511">                    material.setBumpTextureMap(tex);</span>
+
+<span class="nc" id="L513">                    tex.setWidth(reader.readInt());</span>
+<span class="nc" id="L514">                    tex.setHeight(reader.readInt());</span>
+                }
+
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // transparency is available
+<span class="nc" id="L519">                    final byte b = reader.readByte();</span>
+<span class="nc" id="L520">                    material.setTransparency((short) (b &amp; 0x000000ff));</span>
+                }
+
+<span class="pc bpc" id="L523" title="1 of 2 branches missed.">                if (reader.readBoolean()) {</span>
+                    // illumination is available
+<span class="fc" id="L525">                    final int value = reader.readInt();</span>
+<span class="fc" id="L526">                    material.setIllumination(Illumination.forValue(value));</span>
+                }
+            }
+
+            // ---- COORDS -------
+
+            // read coords size
+<span class="fc" id="L533">            final int coordsSizeInBytes = reader.readInt();</span>
+
+            // ensure that coords size is positive, otherwise file is corrupted
+<span class="pc bpc" id="L536" title="1 of 2 branches missed.">            if (coordsSizeInBytes &lt; 0) {</span>
+<span class="nc" id="L537">                throw new LoaderException();</span>
+            }
+            // if size in bytes is not multiple of float size (4 bytes), then
+            // file is corrupted
+<span class="pc bpc" id="L541" title="1 of 2 branches missed.">            if (coordsSizeInBytes % (Float.SIZE / 8) != 0) {</span>
+<span class="nc" id="L542">                throw new LoaderException();</span>
+            }
+
+            // if coords are available
+<span class="pc bpc" id="L546" title="1 of 2 branches missed.">            if (coordsSizeInBytes &gt; 0) {</span>
+                // ensure that coords fit within chunk, otherwise file is
+                // corrupted
+<span class="pc bpc" id="L549" title="1 of 2 branches missed.">                if (reader.getPosition() + coordsSizeInBytes &gt; chunkEndPos) {</span>
+<span class="nc" id="L550">                    throw new LoaderException();</span>
+                }
+
+                // get number of floats in coords
+<span class="fc" id="L554">                final int coordsLength = coordsSizeInBytes / (Float.SIZE / 8);</span>
+
+                // read coordsSize bytes into array of floats
+<span class="fc" id="L557">                final float[] coords = new float[coordsLength];</span>
+<span class="fc" id="L558">                final byte[] bytes = new byte[coordsSizeInBytes];</span>
+<span class="fc" id="L559">                reader.read(bytes);</span>
+<span class="fc" id="L560">                final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);</span>
+<span class="fc" id="L561">                final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();</span>
+<span class="fc" id="L562">                floatBuffer.get(coords);</span>
+
+<span class="fc" id="L564">                chunk.setVerticesCoordinatesData(coords);</span>
+
+                // compute progress
+<span class="pc bpc" id="L567" title="1 of 2 branches missed.">                if (loader.listener != null) {</span>
+<span class="fc" id="L568">                    loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L569">                            (float) (reader.getPosition()) /</span>
+<span class="fc" id="L570">                                    (float) (file.length()));</span>
+                }
+            }
+
+
+            // ----- COLORS ------
+
+            // read colors size
+<span class="fc" id="L578">            final int colorsSizeInBytes = reader.readInt();</span>
+
+            // ensure that colors size is positive, otherwise file is corrupted
+<span class="pc bpc" id="L581" title="1 of 2 branches missed.">            if (colorsSizeInBytes &lt; 0) {</span>
+<span class="nc" id="L582">                throw new LoaderException();</span>
+            }
+
+            // each color data is stored in a byte, so there is no need to
+            // check size multiplicity
+
+            // if colors are available
+<span class="fc bfc" id="L589" title="All 2 branches covered.">            if (colorsSizeInBytes &gt; 0) {</span>
+                // ensure that colors fit within chunk, otherwise file is
+                // corrupted
+<span class="pc bpc" id="L592" title="1 of 2 branches missed.">                if (reader.getPosition() + colorsSizeInBytes &gt; chunkEndPos) {</span>
+<span class="nc" id="L593">                    throw new LoaderException();</span>
+                }
+
+                // read colorSizeInBytes into array of shorts (conversion
+                // must be done from unsigned bytes to shorts, as java does not
+                // support unsigned bytes values
+<span class="fc" id="L599">                final short[] colors = new short[colorsSizeInBytes];</span>
+<span class="fc" id="L600">                final byte[] bytes = new byte[colorsSizeInBytes];</span>
+<span class="fc" id="L601">                reader.read(bytes);</span>
+<span class="fc bfc" id="L602" title="All 2 branches covered.">                for (int i = 0; i &lt; colorsSizeInBytes; i++) {</span>
+                    // convert signed bytes into unsigned bytes stored in shorts
+<span class="fc" id="L604">                    colors[i] = (short) (bytes[i] &amp; 0x000000ff);</span>
+                }
+<span class="fc" id="L606">                chunk.setColorData(colors);</span>
+
+                // read color components
+<span class="fc" id="L609">                chunk.setColorComponents(reader.readInt());</span>
+
+                // compute progress
+<span class="pc bpc" id="L612" title="1 of 2 branches missed.">                if (loader.listener != null) {</span>
+<span class="fc" id="L613">                    loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L614">                            (float) (reader.getPosition()) /</span>
+<span class="fc" id="L615">                                    (float) (file.length()));</span>
+                }
+            }
+
+            // ------ INDICES ------
+
+            // read indices size
+<span class="fc" id="L622">            final int indicesSizeInBytes = reader.readInt();</span>
+
+            // ensure that indices size is positive, otherwise file is corrupted
+<span class="pc bpc" id="L625" title="1 of 2 branches missed.">            if (indicesSizeInBytes &lt; 0) {</span>
+<span class="nc" id="L626">                throw new LoaderException();</span>
+            }
+            // if size in bytes is not multiple of float size (4 bytes), then
+            // file is corrupted
+<span class="pc bpc" id="L630" title="1 of 2 branches missed.">            if (indicesSizeInBytes % (Short.SIZE / 8) != 0) {</span>
+<span class="nc" id="L631">                throw new LoaderException();</span>
+            }
+
+            // if indices are available
+<span class="pc bpc" id="L635" title="1 of 2 branches missed.">            if (indicesSizeInBytes &gt; 0) {</span>
+                // ensure that indices fit within chunk, otherwise file is
+                // corrupted
+<span class="pc bpc" id="L638" title="1 of 2 branches missed.">                if (reader.getPosition() + indicesSizeInBytes &gt; chunkEndPos) {</span>
+<span class="nc" id="L639">                    throw new LoaderException();</span>
+                }
+
+                // get number of shorts in indices
+<span class="fc" id="L643">                final int indicesLength = indicesSizeInBytes / (Short.SIZE / 8);</span>
+
+                // read coordsSize bytes into array of floats
+<span class="fc" id="L646">                final int[] indices = new int[indicesLength];</span>
+<span class="fc" id="L647">                final byte[] bytes = new byte[indicesSizeInBytes];</span>
+<span class="fc" id="L648">                reader.read(bytes);</span>
+                int firstByte;
+                int secondByte;
+<span class="fc" id="L651">                int counter = 0;</span>
+<span class="fc bfc" id="L652" title="All 2 branches covered.">                for (int i = 0; i &lt; indicesLength; i++) {</span>
+<span class="fc" id="L653">                    firstByte = bytes[counter] &amp; 0x000000ff;</span>
+<span class="fc" id="L654">                    counter++;</span>
+<span class="fc" id="L655">                    secondByte = bytes[counter] &amp; 0x000000ff;</span>
+<span class="fc" id="L656">                    counter++;</span>
+<span class="fc" id="L657">                    indices[i] = firstByte &lt;&lt; 8 | secondByte;</span>
+                }
+<span class="fc" id="L659">                chunk.setIndicesData(indices);</span>
+
+                // compute progress
+<span class="pc bpc" id="L662" title="1 of 2 branches missed.">                if (loader.listener != null) {</span>
+<span class="fc" id="L663">                    loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L664">                            (float) (reader.getPosition()) /</span>
+<span class="fc" id="L665">                                    (float) (file.length()));</span>
+                }
+            }
+
+            // -------- TEXTURE COORDS --------
+
+            // read texture coords size
+<span class="fc" id="L672">            final int texCoordsSizeInBytes = reader.readInt();</span>
+
+            // ensure that texture coords size is positive, otherwise file is
+            // corrupted
+<span class="pc bpc" id="L676" title="1 of 2 branches missed.">            if (texCoordsSizeInBytes &lt; 0) {</span>
+<span class="nc" id="L677">                throw new LoaderException();</span>
+            }
+            // if size in bytes is not multiple of float size (4 bytes), then
+            // file is corrupted
+<span class="pc bpc" id="L681" title="1 of 2 branches missed.">            if (texCoordsSizeInBytes % (Float.SIZE / 8) != 0) {</span>
+<span class="nc" id="L682">                throw new LoaderException();</span>
+            }
+
+            // if texture coords are available
+<span class="fc bfc" id="L686" title="All 2 branches covered.">            if (texCoordsSizeInBytes &gt; 0) {</span>
+                // ensure that texture coords fit within chunk, otherwise file is
+                // corrupted
+<span class="pc bpc" id="L689" title="1 of 2 branches missed.">                if (reader.getPosition() + texCoordsSizeInBytes &gt; chunkEndPos) {</span>
+<span class="nc" id="L690">                    throw new LoaderException();</span>
+                }
+
+                // get number of floats in coords
+<span class="fc" id="L694">                final int texCoordsLength = texCoordsSizeInBytes / (Float.SIZE / 8);</span>
+
+                // read coordsSize bytes into array of floats
+<span class="fc" id="L697">                final float[] texCoords = new float[texCoordsLength];</span>
+<span class="fc" id="L698">                final byte[] bytes = new byte[texCoordsSizeInBytes];</span>
+<span class="fc" id="L699">                reader.read(bytes);</span>
+<span class="fc" id="L700">                final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);</span>
+<span class="fc" id="L701">                final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();</span>
+<span class="fc" id="L702">                floatBuffer.get(texCoords);</span>
+<span class="fc" id="L703">                chunk.setTextureCoordinatesData(texCoords);</span>
+
+                // compute progress
+<span class="pc bpc" id="L706" title="1 of 2 branches missed.">                if (loader.listener != null) {</span>
+<span class="fc" id="L707">                    loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L708">                            (float) (reader.getPosition()) /</span>
+<span class="fc" id="L709">                                    (float) (file.length()));</span>
+                }
+            }
+
+
+            // -------- NORMALS --------
+
+            // read normals size
+<span class="fc" id="L717">            final int normalsSizeInBytes = reader.readInt();</span>
+
+            // ensure that normals size is positive, otherwise file is
+            // corrupted
+<span class="pc bpc" id="L721" title="1 of 2 branches missed.">            if (normalsSizeInBytes &lt; 0) {</span>
+<span class="nc" id="L722">                throw new LoaderException();</span>
+            }
+            // if size in bytes is not multiple of float size (4 bytes), then
+            // file is corrupted
+<span class="pc bpc" id="L726" title="1 of 2 branches missed.">            if (normalsSizeInBytes % (Float.SIZE / 8) != 0) {</span>
+<span class="nc" id="L727">                throw new LoaderException();</span>
+            }
+
+            // if texture coords are available
+<span class="fc bfc" id="L731" title="All 2 branches covered.">            if (normalsSizeInBytes &gt; 0) {</span>
+                // ensure that normals fit within chunk, otherwise file is
+                // corrupted
+<span class="pc bpc" id="L734" title="1 of 2 branches missed.">                if (reader.getPosition() + normalsSizeInBytes &gt; chunkEndPos) {</span>
+<span class="nc" id="L735">                    throw new LoaderException();</span>
+                }
+
+                // get number of floats in coords
+<span class="fc" id="L739">                final int normalsLength = normalsSizeInBytes / (Float.SIZE / 8);</span>
+
+                // read coordsSize bytes into array of floats
+<span class="fc" id="L742">                final float[] normals = new float[normalsLength];</span>
+<span class="fc" id="L743">                final byte[] bytes = new byte[normalsSizeInBytes];</span>
+<span class="fc" id="L744">                reader.read(bytes);</span>
+<span class="fc" id="L745">                final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);</span>
+<span class="fc" id="L746">                final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();</span>
+<span class="fc" id="L747">                floatBuffer.get(normals);</span>
+<span class="fc" id="L748">                chunk.setNormalsData(normals);</span>
+
+                // compute progress
+<span class="pc bpc" id="L751" title="1 of 2 branches missed.">                if (loader.listener != null) {</span>
+<span class="fc" id="L752">                    loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L753">                            (float) (reader.getPosition()) /</span>
+<span class="fc" id="L754">                                    (float) (file.length()));</span>
+                }
+            }
+
+            // read bounding box for chunk (min/max x, y, z)
+
+            // we need to load 6 floats, so position + 6 * Float.SIZE / 8 bytes
+            // must fit within chunk
+<span class="pc bpc" id="L762" title="1 of 2 branches missed.">            if (reader.getPosition() + (BOUNDING_BYTES_SIZE) &gt; chunkEndPos) {</span>
+<span class="nc" id="L763">                throw new LoaderException();</span>
+            }
+
+
+<span class="fc" id="L767">            final byte[] bytes = new byte[BOUNDING_BYTES_SIZE];</span>
+<span class="fc" id="L768">            reader.read(bytes);</span>
+<span class="fc" id="L769">            final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);</span>
+<span class="fc" id="L770">            final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();</span>
+<span class="fc" id="L771">            chunk.setMinX(floatBuffer.get());</span>
+<span class="fc" id="L772">            chunk.setMinY(floatBuffer.get());</span>
+<span class="fc" id="L773">            chunk.setMinZ(floatBuffer.get());</span>
+
+<span class="fc" id="L775">            chunk.setMaxX(floatBuffer.get());</span>
+<span class="fc" id="L776">            chunk.setMaxY(floatBuffer.get());</span>
+<span class="fc" id="L777">            chunk.setMaxZ(floatBuffer.get());</span>
+
+            // compute progress
+<span class="pc bpc" id="L780" title="1 of 2 branches missed.">            if (loader.listener != null) {</span>
+<span class="fc" id="L781">                loader.listener.onLoadProgressChange(loader,</span>
+<span class="fc" id="L782">                        (float) (reader.getPosition()) / (float) (file.length()));</span>
+            }
+
+<span class="pc bpc" id="L785" title="1 of 4 branches missed.">            if (!hasNext() &amp;&amp; listener != null) {</span>
+                // notify iterator finished
+<span class="fc" id="L787">                listener.onIteratorFinished(this);</span>
+            }
+
+<span class="fc" id="L790">            return chunk;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
