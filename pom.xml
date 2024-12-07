@@ -60,12 +60,6 @@ mvn -s s3-settings.xml clean test site deploy site-deploy
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.11.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.irurueta</groupId>
             <artifactId>irurueta-statistics</artifactId>
             <version>1.3.2</version>
