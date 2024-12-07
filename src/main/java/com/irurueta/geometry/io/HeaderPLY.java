@@ -108,7 +108,7 @@ public class HeaderPLY {
      */
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder("ply\n");
+        final var builder = new StringBuilder("ply\n");
 
         if (storageMode != null) {
             builder.append("format ");
@@ -131,17 +131,17 @@ public class HeaderPLY {
         builder.append("1.0\n");
 
         // add comments
-        for (final String comment : comments) {
+        for (final var comment : comments) {
             builder.append("comment ").append(comment).append("\n");
         }
 
         // add obj_infos
-        for (final String objInfo : objInfos) {
+        for (final var objInfo : objInfos) {
             builder.append("obj_info ").append(objInfo).append("\n");
         }
 
         // dd elements
-        for (final ElementPLY element : elements) {
+        for (final var element : elements) {
             // NOTE: elements already contain carrier return on their textual
             // representation
             builder.append(element.toString());

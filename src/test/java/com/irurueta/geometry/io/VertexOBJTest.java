@@ -17,20 +17,18 @@ package com.irurueta.geometry.io;
 
 import com.irurueta.geometry.Point3D;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class VertexOBJTest {
+class VertexOBJTest {
 
     private static final int MIN_INDEX = 0;
     private static final int MAX_INDEX = 1000;
 
     @Test
-    public void testConstructor() {
-        final VertexOBJ vertex = new VertexOBJ();
+    void testConstructor() {
+        final var vertex = new VertexOBJ();
 
         // test default values
         assertNull(vertex.getVertex());
@@ -44,10 +42,10 @@ public class VertexOBJTest {
     }
 
     @Test
-    public void testGetSetVertex() {
-        final VertexOBJ vertex = new VertexOBJ();
+    void testGetSetVertex() {
+        final var vertex = new VertexOBJ();
 
-        final Point3D point = Point3D.create();
+        final var point = Point3D.create();
 
         // check default value
         assertNull(vertex.getVertex());
@@ -61,16 +59,16 @@ public class VertexOBJTest {
     }
 
     @Test
-    public void testGetSetVertexIndex() {
-        final VertexOBJ vertex = new VertexOBJ();
+    void testGetSetVertexIndex() {
+        final var vertex = new VertexOBJ();
 
         // check default value
         assertEquals(-1, vertex.getVertexIndex());
         assertFalse(vertex.isVertexIndexAvailable());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int vertexIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
+        final var randomizer = new UniformRandomizer();
+        final var vertexIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
 
         // set value
         vertex.setVertexIndex(vertexIndex);
@@ -80,16 +78,16 @@ public class VertexOBJTest {
     }
 
     @Test
-    public void testGetSetNormalIndex() {
-        final VertexOBJ vertex = new VertexOBJ();
+    void testGetSetNormalIndex() {
+        final var vertex = new VertexOBJ();
 
         // check default value
         assertEquals(-1, vertex.getNormalIndex());
         assertFalse(vertex.isNormalIndexAvailable());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int normalIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
+        final var randomizer = new UniformRandomizer();
+        final var normalIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
 
         // set value
         vertex.setNormalIndex(normalIndex);
@@ -99,16 +97,16 @@ public class VertexOBJTest {
     }
 
     @Test
-    public void testGetSetTextureIndex() {
-        final VertexOBJ vertex = new VertexOBJ();
+    void testGetSetTextureIndex() {
+        final var vertex = new VertexOBJ();
 
         // check default value
         assertEquals(-1, vertex.getNormalIndex());
         assertFalse(vertex.isTextureIndexAvailable());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int textureIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
+        final var randomizer = new UniformRandomizer();
+        final var textureIndex = randomizer.nextInt(MIN_INDEX, MAX_INDEX);
 
         // set value
         vertex.setTextureIndex(textureIndex);

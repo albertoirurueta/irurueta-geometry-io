@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class LoaderExceptionTest {
+class LoaderExceptionTest {
 
     @Test
-    public void testConstructor() {
-        LoaderException ex = new LoaderException();
+    void testConstructor() {
+        var ex = new LoaderException();
         assertNotNull(ex);
 
         ex = new LoaderException("message");

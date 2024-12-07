@@ -50,15 +50,13 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @param mode file opening mode (read only or read write).
      * @throws IOException if an I/O error occurs .
      */
-    public MappedFileReaderAndWriter(final File f, final FileChannel.MapMode mode)
-            throws IOException {
+    public MappedFileReaderAndWriter(final File f, final FileChannel.MapMode mode) throws IOException {
         if (mode == FileChannel.MapMode.READ_ONLY) {
             this.randomAccessFile = new RandomAccessFile(f, "r");
         } else {
             this.randomAccessFile = new RandomAccessFile(f, "rw");
         }
-        this.buffer = randomAccessFile.getChannel().map(mode, 0,
-                randomAccessFile.length());
+        this.buffer = randomAccessFile.getChannel().map(mode, 0, randomAccessFile.length());
         this.buffer.load();
     }
 
@@ -96,7 +94,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         if (isEndOfStream()) {
             return -1;
         }
-        final int length = Math.min(buffer.remaining(), b.length);
+        final var length = Math.min(buffer.remaining(), b.length);
         if (length > 0) {
             buffer.get(b, 0, length);
         }
@@ -124,7 +122,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         if (isEndOfStream()) {
             return -1;
         }
-        final int length = Math.min(buffer.remaining(), len);
+        final var length = Math.min(buffer.remaining(), len);
         if (length > 0) {
             buffer.get(b, off, length);
         }
@@ -149,8 +147,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
             return 0;
         }
 
-        final int skipped = Math.min(buffer.remaining(), (int) n);
-        final int newPos = buffer.position() + skipped;
+        final var skipped = Math.min(buffer.remaining(), (int) n);
+        final var newPos = buffer.position() + skipped;
         buffer.position(newPos);
         read = true;
         return skipped;
@@ -192,8 +190,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final byte[] b, final int off, final int len)
-            throws IOException {
+    public void write(final byte[] b, final int off, final int len) throws IOException {
         randomAccessFile.write(b, off, len);
         read = false;
     }
@@ -350,15 +347,14 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public int readUnsignedShort() {
         read = true;
-        final short value = buffer.getShort();
+        final var value = buffer.getShort();
 
         // convert value to byte array
-        final int firstShortByte = 0xff & (value >> 8);
-        final int secondShortByte = 0xff & ((value << 8) >> 8);
+        final var firstShortByte = 0xff & (value >> 8);
+        final var secondShortByte = 0xff & ((value << 8) >> 8);
 
         // return it as integer
-        return 0xffff & ((firstShortByte << 8) |
-                secondShortByte);
+        return 0xffff & ((firstShortByte << 8) | secondShortByte);
     }
 
     /**
@@ -377,16 +373,15 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public int readUnsignedShort(final EndianType endianType) {
         read = true;
-        final short streamValue = buffer.getShort();
-        final short value = Util.fromEndianType(endianType, streamValue);
+        final var streamValue = buffer.getShort();
+        final var value = Util.fromEndianType(endianType, streamValue);
 
         // convert value to byte array
-        final int firstShortByte = 0xff & (value >> 8);
-        final int secondShortByte = 0xff & ((value << 8) >> 8);
+        final var secondShortByte = 0xff & ((value << 8) >> 8);
+        final var firstShortByte = 0xff & (value >> 8);
 
         // return it as integer
-        return 0xffff & ((firstShortByte << 8) |
-                secondShortByte);
+        return 0xffff & ((firstShortByte << 8) | secondShortByte);
     }
 
     /**
@@ -438,19 +433,16 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public long readUnsignedInt() {
         read = true;
-        final int value = buffer.getInt();
+        final var value = buffer.getInt();
 
         // convert value to byte array
-        final int firstIntByte = 0xff & (value >> 24);
-        final int secondIntByte = 0xff & ((value << 8) >> 24);
-        final int thirdIntByte = 0xff & ((value << 16) >> 24);
-        final int fourthIntByte = 0xff & ((value << 24) >> 24);
+        final var firstIntByte = 0xff & (value >> 24);
+        final var secondIntByte = 0xff & ((value << 8) >> 24);
+        final var thirdIntByte = 0xff & ((value << 16) >> 24);
+        final var fourthIntByte = 0xff & ((value << 24) >> 24);
 
         // return it as integer
-        return ((long) firstIntByte << 24) |
-                (secondIntByte << 16) |
-                (thirdIntByte << 8) |
-                fourthIntByte;
+        return ((long) firstIntByte << 24) | (secondIntByte << 16) | (thirdIntByte << 8) | fourthIntByte;
     }
 
     /**
@@ -468,20 +460,17 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
     @Override
     public long readUnsignedInt(final EndianType endianType) {
         read = true;
-        final int streamValue = buffer.getInt();
-        final int value = Util.fromEndianType(endianType, streamValue);
+        final var streamValue = buffer.getInt();
+        final var value = Util.fromEndianType(endianType, streamValue);
 
         // convert value to byte array
-        final int firstIntByte = 0xff & (value >> 24);
-        final int secondIntByte = 0xff & ((value << 8) >> 24);
-        final int thirdIntByte = 0xff & ((value << 16) >> 24);
-        final int fourthIntByte = 0xff & ((value << 24) >> 24);
+        final var firstIntByte = 0xff & (value >> 24);
+        final var secondIntByte = 0xff & ((value << 8) >> 24);
+        final var thirdIntByte = 0xff & ((value << 16) >> 24);
+        final var fourthIntByte = 0xff & ((value << 24) >> 24);
 
         // return it as integer
-        return ((long) firstIntByte << 24) |
-                (secondIntByte << 16) |
-                (thirdIntByte << 8) |
-                fourthIntByte;
+        return ((long) firstIntByte << 24) | (secondIntByte << 16) | (thirdIntByte << 8) | fourthIntByte;
     }
 
     /**
@@ -631,15 +620,14 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public String readUntilAnyOfTheseCharactersIsFound(final String pattern) {
-
         if (pattern.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
         read = true;
 
-        final StringBuilder stringBuffer = new StringBuilder();
-        final byte[] charBuffer = new byte[1];
+        final var stringBuffer = new StringBuilder();
+        final var charBuffer = new byte[1];
         String character;
         while (buffer.hasRemaining()) {
             charBuffer[0] = buffer.get();
@@ -692,7 +680,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedByte(final short v) throws IOException {
-        final byte data = (byte) (0xff & v);
+        final var data = (byte) (0xff & v);
         randomAccessFile.writeByte(data);
         read = false;
     }
@@ -722,9 +710,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeShort(final short v, final EndianType endianType)
-            throws IOException {
-        final short value = Util.toEndianType(endianType, v);
+    public void writeShort(final short v, final EndianType endianType) throws IOException {
+        final var value = Util.toEndianType(endianType, v);
         randomAccessFile.writeShort(value);
         read = false;
     }
@@ -741,11 +728,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedShort(final int v) throws IOException {
-        final int firstShortByte = 0xff & (v >> 8);
-        final int secondShortByte = 0xff & ((v << 8) >> 8);
+        final var firstShortByte = 0xff & (v >> 8);
+        final var secondShortByte = 0xff & ((v << 8) >> 8);
 
-        final short value = (short) ((firstShortByte << 8) |
-                secondShortByte);
+        final var value = (short) ((firstShortByte << 8) | secondShortByte);
 
         randomAccessFile.writeShort(value);
         read = false;
@@ -768,14 +754,12 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeUnsignedShort(final int v, final EndianType endianType)
-            throws IOException {
-        final int firstShortByte = 0xff & (v >> 8);
-        final int secondShortByte = 0xff & ((v << 8) >> 8);
+    public void writeUnsignedShort(final int v, final EndianType endianType) throws IOException {
+        final var firstShortByte = 0xff & (v >> 8);
+        final var secondShortByte = 0xff & ((v << 8) >> 8);
 
-        final short machineValue = (short) ((firstShortByte << 8) |
-                secondShortByte);
-        final short value = Util.toEndianType(endianType, machineValue);
+        final var machineValue = (short) ((firstShortByte << 8) | secondShortByte);
+        final var value = Util.toEndianType(endianType, machineValue);
 
         randomAccessFile.writeShort(value);
         read = false;
@@ -808,7 +792,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeInt(final int v, final EndianType endianType) throws IOException {
-        final int value = Util.toEndianType(endianType, v);
+        final var value = Util.toEndianType(endianType, v);
         randomAccessFile.writeInt(value);
         read = false;
     }
@@ -825,15 +809,12 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public void writeUnsignedInt(final long v) throws IOException {
-        final int firstIntByte = (int) (0xff & (v >> 24));
-        final int secondIntByte = (int) (0xff & ((v << 8) >> 24));
-        final int thirdIntByte = (int) (0xff & ((v << 16) >> 24));
-        final int fourthIntByte = (int) (0xff & ((v << 24) >> 24));
+        final var firstIntByte = (int) (0xff & (v >> 24));
+        final var secondIntByte = (int) (0xff & ((v << 8) >> 24));
+        final var thirdIntByte = (int) (0xff & ((v << 16) >> 24));
+        final var fourthIntByte = (int) (0xff & ((v << 24) >> 24));
 
-        final int value = (firstIntByte << 24) |
-                (secondIntByte << 16) |
-                (thirdIntByte << 8) |
-                fourthIntByte;
+        final var value = (firstIntByte << 24) | (secondIntByte << 16) | (thirdIntByte << 8) | fourthIntByte;
 
         randomAccessFile.writeInt(value);
         read = false;
@@ -856,18 +837,14 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeUnsignedInt(final long v, final EndianType endianType)
-            throws IOException {
-        final int firstIntByte = (int) (0xff & (v >> 24));
-        final int secondIntByte = (int) (0xff & ((v << 8) >> 24));
-        final int thirdIntByte = (int) (0xff & ((v << 16) >> 24));
-        final int fourthIntByte = (int) (0xff & ((v << 24) >> 24));
+    public void writeUnsignedInt(final long v, final EndianType endianType) throws IOException {
+        final var firstIntByte = (int) (0xff & (v >> 24));
+        final var secondIntByte = (int) (0xff & ((v << 8) >> 24));
+        final var thirdIntByte = (int) (0xff & ((v << 16) >> 24));
+        final var fourthIntByte = (int) (0xff & ((v << 24) >> 24));
 
-        final int machineValue = (firstIntByte << 24) |
-                (secondIntByte << 16) |
-                (thirdIntByte << 8) |
-                fourthIntByte;
-        final int value = Util.toEndianType(endianType, machineValue);
+        final var machineValue = (firstIntByte << 24) | (secondIntByte << 16) | (thirdIntByte << 8) | fourthIntByte;
+        final var value = Util.toEndianType(endianType, machineValue);
 
         randomAccessFile.writeInt(value);
         read = false;
@@ -899,9 +876,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeLong(final long v, final EndianType endianType)
-            throws IOException {
-        final long value = Util.toEndianType(endianType, v);
+    public void writeLong(final long v, final EndianType endianType) throws IOException {
+        final var value = Util.toEndianType(endianType, v);
         randomAccessFile.writeLong(value);
         read = false;
     }
@@ -936,9 +912,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeFloat(final float v, final EndianType endianType)
-            throws IOException {
-        final float value = Util.toEndianType(endianType, v);
+    public void writeFloat(final float v, final EndianType endianType) throws IOException {
+        final var value = Util.toEndianType(endianType, v);
         randomAccessFile.writeFloat(value);
         read = false;
     }
@@ -973,9 +948,8 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void writeDouble(final double v, final EndianType endianType)
-            throws IOException {
-        final double value = Util.toEndianType(endianType, v);
+    public void writeDouble(final double v, final EndianType endianType) throws IOException {
+        final var value = Util.toEndianType(endianType, v);
         randomAccessFile.writeDouble(value);
         read = false;
     }

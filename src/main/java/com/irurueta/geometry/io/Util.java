@@ -63,13 +63,7 @@ public class Util {
      * @return Converted value.
      */
     static short toEndianType(final EndianType endianType, final short value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return toLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;
     }
 
     /**
@@ -111,13 +105,7 @@ public class Util {
      * @return Converted value.
      */
     static short fromEndianType(final EndianType endianType, final short value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return fromLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;
     }
 
     /**
@@ -155,13 +143,7 @@ public class Util {
      * @return Converted value.
      */
     static int toEndianType(final EndianType endianType, final int value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return toLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;
     }
 
     /**
@@ -203,13 +185,7 @@ public class Util {
      * @return Converted value.
      */
     static int fromEndianType(final EndianType endianType, final int value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return fromLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;
     }
 
     /**
@@ -247,13 +223,7 @@ public class Util {
      * @return Converted value.
      */
     static long toEndianType(final EndianType endianType, final long value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return toLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;
     }
 
     /**
@@ -295,13 +265,7 @@ public class Util {
      * @return Converted value.
      */
     static long fromEndianType(final EndianType endianType, final long value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return fromLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;
     }
 
     /**
@@ -326,8 +290,7 @@ public class Util {
      * @return Converted value.
      */
     static float toLittleEndian(final float value) {
-        return Float.intBitsToFloat(Integer.reverseBytes(
-                Float.floatToRawIntBits(value)));
+        return Float.intBitsToFloat(Integer.reverseBytes(Float.floatToRawIntBits(value)));
     }
 
     /**
@@ -340,13 +303,7 @@ public class Util {
      * @return Converted value.
      */
     static float toEndianType(final EndianType endianType, final float value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return toLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;
     }
 
     /**
@@ -373,8 +330,7 @@ public class Util {
      * @return Converted value.
      */
     static float fromLittleEndian(final float value) {
-        return Float.intBitsToFloat(Integer.reverseBytes(
-                Float.floatToRawIntBits(value)));
+        return Float.intBitsToFloat(Integer.reverseBytes(Float.floatToRawIntBits(value)));
     }
 
     /**
@@ -389,13 +345,7 @@ public class Util {
      * @return Converted value.
      */
     static float fromEndianType(final EndianType endianType, final float value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return fromLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;
     }
 
     /**
@@ -420,8 +370,7 @@ public class Util {
      * @return Converted value.
      */
     static double toLittleEndian(final double value) {
-        return Double.longBitsToDouble(Long.reverseBytes(
-                Double.doubleToRawLongBits(value)));
+        return Double.longBitsToDouble(Long.reverseBytes(Double.doubleToRawLongBits(value)));
     }
 
     /**
@@ -434,13 +383,7 @@ public class Util {
      * @return Converted value.
      */
     static double toEndianType(final EndianType endianType, final double value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return toLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;
     }
 
     /**
@@ -467,8 +410,7 @@ public class Util {
      * @return Converted value.
      */
     static double fromLittleEndian(final double value) {
-        return Double.longBitsToDouble(Long.reverseBytes(
-                Double.doubleToRawLongBits(value)));
+        return Double.longBitsToDouble(Long.reverseBytes(Double.doubleToRawLongBits(value)));
     }
 
     /**
@@ -483,13 +425,6 @@ public class Util {
      * @return Converted value.
      */
     static double fromEndianType(final EndianType endianType, final double value) {
-        switch (endianType) {
-            case LITTLE_ENDIAN_TYPE:
-                return fromLittleEndian(value);
-            case BIG_ENDIAN_TYPE:
-            default:
-                return value;
-        }
+        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;
     }
-
 }

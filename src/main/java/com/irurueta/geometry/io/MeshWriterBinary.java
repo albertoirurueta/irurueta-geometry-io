@@ -19,7 +19,6 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 
@@ -61,8 +60,7 @@ public class MeshWriterBinary extends MeshWriter {
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
-    public MeshWriterBinary(final Loader loader, final OutputStream stream,
-                            final MeshWriterListener listener) {
+    public MeshWriterBinary(final Loader loader, final OutputStream stream, final MeshWriterListener listener) {
         super(loader, stream, listener);
     }
 
@@ -78,8 +76,7 @@ public class MeshWriterBinary extends MeshWriter {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public void write() throws LoaderException, IOException, NotReadyException,
-            LockedException {
+    public void write() throws LoaderException, IOException, NotReadyException, LockedException {
 
         if (!isReady()) {
             throw new NotReadyException();
@@ -101,33 +98,33 @@ public class MeshWriterBinary extends MeshWriter {
             // write version
             dataStream.writeByte(VERSION);
 
-            final LoaderIterator iter = loader.load();
+            final var iter = loader.load();
 
-            float minX = Float.MAX_VALUE;
-            float minY = Float.MAX_VALUE;
-            float minZ = Float.MAX_VALUE;
-            float maxX = -Float.MAX_VALUE;
-            float maxY = -Float.MAX_VALUE;
-            float maxZ = -Float.MAX_VALUE;
+            var minX = Float.MAX_VALUE;
+            var minY = Float.MAX_VALUE;
+            var minZ = Float.MAX_VALUE;
+            var maxX = -Float.MAX_VALUE;
+            var maxY = -Float.MAX_VALUE;
+            var maxZ = -Float.MAX_VALUE;
 
             while (iter.hasNext()) {
-                final DataChunk chunk = iter.next();
+                final var chunk = iter.next();
                 if (listener != null) {
                     listener.onChunkAvailable(this, chunk);
                 }
 
-                final float[] coords = chunk.getVerticesCoordinatesData();
-                final short[] colors = chunk.getColorData();
-                final int[] indices = chunk.getIndicesData();
-                final float[] textureCoords = chunk.getTextureCoordinatesData();
-                final float[] normals = chunk.getNormalsData();
-                final int colorComponents = chunk.getColorComponents();
+                final var coords = chunk.getVerticesCoordinatesData();
+                final var colors = chunk.getColorData();
+                final var indices = chunk.getIndicesData();
+                final var textureCoords = chunk.getTextureCoordinatesData();
+                final var normals = chunk.getNormalsData();
+                final var colorComponents = chunk.getColorComponents();
 
-                final boolean coordsAvailable = (coords != null);
-                final boolean colorsAvailable = (colors != null);
-                final boolean indicesAvailable = (indices != null);
-                final boolean textureCoordsAvailable = (textureCoords != null);
-                final boolean normalsAvailable = (normals != null);
+                final var coordsAvailable = (coords != null);
+                final var colorsAvailable = (colors != null);
+                final var indicesAvailable = (indices != null);
+                final var textureCoordsAvailable = (textureCoords != null);
+                final var normalsAvailable = (normals != null);
 
                 if (chunk.getMinX() < minX) {
                     minX = chunk.getMinX();
@@ -150,10 +147,10 @@ public class MeshWriterBinary extends MeshWriter {
                 }
 
                 // compute size of material in bytes
-                final Material material = chunk.getMaterial();
+                final var material = chunk.getMaterial();
                 // boolean indicating availability
                 // of material
-                int materialSizeInBytes = 1;
+                var materialSizeInBytes = 1;
 
                 if (material != null) {
                     // material id (int)
@@ -277,11 +274,11 @@ public class MeshWriterBinary extends MeshWriter {
                 }
 
                 // compute size of chunk data in bytes
-                int coordsSizeInBytes = 0;
-                int colorsSizeInBytes = 0;
-                int indicesSizeInBytes = 0;
-                int textureCoordsSizeInBytes = 0;
-                int normalsSizeInBytes = 0;
+                var coordsSizeInBytes = 0;
+                var colorsSizeInBytes = 0;
+                var indicesSizeInBytes = 0;
+                var textureCoordsSizeInBytes = 0;
+                var normalsSizeInBytes = 0;
 
                 if (coordsAvailable) {
                     coordsSizeInBytes = coords.length * Float.SIZE / 8;
@@ -293,17 +290,15 @@ public class MeshWriterBinary extends MeshWriter {
                     indicesSizeInBytes = indices.length * Short.SIZE / 8;
                 }
                 if (textureCoordsAvailable) {
-                    textureCoordsSizeInBytes = textureCoords.length *
-                            Float.SIZE / 8;
+                    textureCoordsSizeInBytes = textureCoords.length * Float.SIZE / 8;
                 }
                 if (normalsAvailable) {
                     normalsSizeInBytes = normals.length * Float.SIZE / 8;
                 }
 
-                int chunkSize = materialSizeInBytes + coordsSizeInBytes +
-                        colorsSizeInBytes + indicesSizeInBytes +
-                        textureCoordsSizeInBytes + normalsSizeInBytes +
-                        (5 * Integer.SIZE / 8) + // sizes
+                int chunkSize = materialSizeInBytes + coordsSizeInBytes + colorsSizeInBytes + indicesSizeInBytes
+                        + textureCoordsSizeInBytes + normalsSizeInBytes
+                        + (5 * Integer.SIZE / 8) + // sizes
                         (6 * Float.SIZE / 8); // min/max values
                 if (colorsAvailable) {
                     // bytes for number of color components
@@ -333,7 +328,7 @@ public class MeshWriterBinary extends MeshWriter {
                     // ambient color
                     dataStream.writeBoolean(material.isAmbientColorAvailable());
                     if (material.isAmbientColorAvailable()) {
-                        byte b = (byte) (material.getAmbientRedColor() & 0x00ff);
+                        var b = (byte) (material.getAmbientRedColor() & 0x00ff);
                         dataStream.writeByte(b);
                         b = (byte) (material.getAmbientGreenColor() & 0x00ff);
                         dataStream.writeByte(b);
@@ -344,7 +339,7 @@ public class MeshWriterBinary extends MeshWriter {
                     // diffuse color
                     dataStream.writeBoolean(material.isDiffuseColorAvailable());
                     if (material.isDiffuseColorAvailable()) {
-                        byte b = (byte) (material.getDiffuseRedColor() & 0x00ff);
+                        var b = (byte) (material.getDiffuseRedColor() & 0x00ff);
                         dataStream.writeByte(b);
                         b = (byte) (material.getDiffuseGreenColor() & 0x00ff);
                         dataStream.writeByte(b);
@@ -353,11 +348,9 @@ public class MeshWriterBinary extends MeshWriter {
                     }
 
                     // specular color
-                    dataStream.writeBoolean(material.
-                            isSpecularColorAvailable());
+                    dataStream.writeBoolean(material.isSpecularColorAvailable());
                     if (material.isSpecularColorAvailable()) {
-                        byte b = (byte) (material.getSpecularRedColor() &
-                                0x00ff);
+                        var b = (byte) (material.getSpecularRedColor() & 0x00ff);
                         dataStream.writeByte(b);
                         b = (byte) (material.getSpecularGreenColor() & 0x00ff);
                         dataStream.writeByte(b);
@@ -366,18 +359,15 @@ public class MeshWriterBinary extends MeshWriter {
                     }
 
                     // specular coefficient (float)
-                    dataStream.writeBoolean(
-                            material.isSpecularCoefficientAvailable());
+                    dataStream.writeBoolean(material.isSpecularCoefficientAvailable());
                     if (material.isSpecularCoefficientAvailable()) {
-                        dataStream.writeFloat(
-                                material.getSpecularCoefficient());
+                        dataStream.writeFloat(material.getSpecularCoefficient());
                     }
 
                     // ambient texture map
-                    dataStream.writeBoolean(
-                            material.isAmbientTextureMapAvailable());
+                    dataStream.writeBoolean(material.isAmbientTextureMapAvailable());
                     if (material.isAmbientTextureMapAvailable()) {
-                        final Texture tex = material.getAmbientTextureMap();
+                        final var tex = material.getAmbientTextureMap();
                         // texture id
                         dataStream.writeInt(tex.getId());
                         // texture width
@@ -387,10 +377,9 @@ public class MeshWriterBinary extends MeshWriter {
                     }
 
                     // diffuse texture map
-                    dataStream.writeBoolean(
-                            material.isDiffuseTextureMapAvailable());
+                    dataStream.writeBoolean(material.isDiffuseTextureMapAvailable());
                     if (material.isDiffuseTextureMapAvailable()) {
-                        final Texture tex = material.getDiffuseTextureMap();
+                        final var tex = material.getDiffuseTextureMap();
                         // texture id
                         dataStream.writeInt(tex.getId());
                         // texture width
@@ -400,10 +389,9 @@ public class MeshWriterBinary extends MeshWriter {
                     }
 
                     // specular texture map
-                    dataStream.writeBoolean(
-                            material.isSpecularTextureMapAvailable());
+                    dataStream.writeBoolean(material.isSpecularTextureMapAvailable());
                     if (material.isSpecularTextureMapAvailable()) {
-                        final Texture tex = material.getSpecularTextureMap();
+                        final var tex = material.getSpecularTextureMap();
                         // texture id
                         dataStream.writeInt(tex.getId());
                         // texture width
@@ -413,10 +401,9 @@ public class MeshWriterBinary extends MeshWriter {
                     }
 
                     // alpha texture map
-                    dataStream.writeBoolean(
-                            material.isAlphaTextureMapAvailable());
+                    dataStream.writeBoolean(material.isAlphaTextureMapAvailable());
                     if (material.isAlphaTextureMapAvailable()) {
-                        final Texture tex = material.getAlphaTextureMap();
+                        final var tex = material.getAlphaTextureMap();
                         // texture id
                         dataStream.writeInt(tex.getId());
                         // texture width
@@ -426,10 +413,9 @@ public class MeshWriterBinary extends MeshWriter {
                     }
 
                     // bump texture map
-                    dataStream.writeBoolean(
-                            material.isBumpTextureMapAvailable());
+                    dataStream.writeBoolean(material.isBumpTextureMapAvailable());
                     if (material.isBumpTextureMapAvailable()) {
-                        final Texture tex = material.getBumpTextureMap();
+                        final var tex = material.getBumpTextureMap();
                         // texture id
                         dataStream.writeInt(tex.getId());
                         // texture width
@@ -440,7 +426,7 @@ public class MeshWriterBinary extends MeshWriter {
 
                     dataStream.writeBoolean(material.isTransparencyAvailable());
                     if (material.isTransparencyAvailable()) {
-                        final byte b = (byte) (material.getTransparency() & 0x00ff);
+                        final var b = (byte) (material.getTransparency() & 0x00ff);
                         dataStream.writeByte(b);
                     }
 
@@ -454,7 +440,7 @@ public class MeshWriterBinary extends MeshWriter {
                 dataStream.writeInt(coordsSizeInBytes);
                 // write coords
                 if (coordsAvailable) {
-                    for (final float coord : coords) {
+                    for (final var coord : coords) {
                         dataStream.writeFloat(coord);
                     }
                 }
@@ -463,9 +449,9 @@ public class MeshWriterBinary extends MeshWriter {
                 dataStream.writeInt(colorsSizeInBytes);
                 // write colors
                 if (colorsAvailable) {
-                    int i = 0;
+                    var i = 0;
                     while (i < colors.length) {
-                        final byte b = (byte) (colors[i] & 0x00ff);
+                        final var b = (byte) (colors[i] & 0x00ff);
                         dataStream.writeByte(b);
                         i++;
                     }
@@ -476,8 +462,8 @@ public class MeshWriterBinary extends MeshWriter {
                 dataStream.writeInt(indicesSizeInBytes);
                 // write indices
                 if (indicesAvailable) {
-                    for (final int index : indices) {
-                        final short s = (short) (index & 0x0000ffff);
+                    for (final var index : indices) {
+                        final var s = (short) (index & 0x0000ffff);
                         dataStream.writeShort(s);
                     }
                 }
@@ -486,7 +472,7 @@ public class MeshWriterBinary extends MeshWriter {
                 dataStream.writeInt(textureCoordsSizeInBytes);
                 // write texture coords
                 if (textureCoordsAvailable) {
-                    for (final float textureCoord : textureCoords) {
+                    for (final var textureCoord : textureCoords) {
                         dataStream.writeFloat(textureCoord);
                     }
                 }
@@ -495,7 +481,7 @@ public class MeshWriterBinary extends MeshWriter {
                 dataStream.writeInt(normalsSizeInBytes);
                 // write normals
                 if (normalsAvailable) {
-                    for (final float normal : normals) {
+                    for (final var normal : normals) {
                         dataStream.writeFloat(normal);
                     }
                 }
@@ -535,8 +521,7 @@ public class MeshWriterBinary extends MeshWriter {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    protected void processTextureFile(final Texture texture, final File textureFile)
-            throws IOException {
+    protected void processTextureFile(final Texture texture, final File textureFile) throws IOException {
         if (!textureFile.exists()) {
             return;
         }
@@ -545,24 +530,24 @@ public class MeshWriterBinary extends MeshWriter {
         dataStream.writeBoolean(true);
 
         // write int containing texture id
-        final int textureId = texture.getId();
+        final var textureId = texture.getId();
         dataStream.writeInt(textureId);
 
         // write int containing image width
-        final int width = texture.getWidth();
+        final var width = texture.getWidth();
         dataStream.writeInt(width);
 
         // write int containing image height
-        final int height = texture.getHeight();
+        final var height = texture.getHeight();
         dataStream.writeInt(height);
 
         // write length of texture file in bytes
-        final long length = textureFile.length();
+        final var length = textureFile.length();
         dataStream.writeLong(length);
 
         // write file data
-        try (final InputStream textureStream = Files.newInputStream(textureFile.toPath())) {
-            final byte[] buffer = new byte[BUFFER_SIZE];
+        try (final var textureStream = Files.newInputStream(textureFile.toPath())) {
+            final var buffer = new byte[BUFFER_SIZE];
             int n;
             while ((n = textureStream.read(buffer)) > 0) {
                 dataStream.write(buffer, 0, n);

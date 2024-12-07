@@ -16,22 +16,22 @@
 
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IlluminationTest {
+class IlluminationTest {
 
     @Test
-    public void testValue() {
+    void testValue() {
         assertEquals(0, Illumination.COLOR_AND_AMBIENT_OFF.value());
         assertEquals(1, Illumination.COLOR_AND_AMBIENT_ON.value());
         assertEquals(2, Illumination.HIGHLIGHT_ON.value());
         assertEquals(3, Illumination.REFLECTION_ON_AND_RAY_TRACE_ON.value());
         assertEquals(4, Illumination.TRANSPARENCY_GLASS_ON_REFLECTION_RAYTRACE_ON.value());
         assertEquals(5, Illumination.REFLECTION_FRESNEL_ON_AND_RAY_TRACE_ON.value());
-        assertEquals(6, Illumination.
-                TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_AND_RAY_TRACE_ON.value());
+        assertEquals(6,
+                Illumination.TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_AND_RAY_TRACE_ON.value());
         assertEquals(7,
                 Illumination.TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_ON_AND_RAY_TRACE_ON.value());
         assertEquals(8, Illumination.REFLECTION_ON_AND_RAY_TRACE_OFF.value());
@@ -40,7 +40,7 @@ public class IlluminationTest {
     }
 
     @Test
-    public void testForValue() {
+    void testForValue() {
         assertEquals(Illumination.COLOR_AND_AMBIENT_OFF, Illumination.forValue(0));
         assertEquals(Illumination.COLOR_AND_AMBIENT_ON, Illumination.forValue(1));
         assertEquals(Illumination.HIGHLIGHT_ON, Illumination.forValue(2));

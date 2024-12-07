@@ -34,6 +34,5 @@ public interface VertexFetcherListener {
      * @throws IOException           if an I/O exception occurs.
      * @throws NotAvailableException raised if requested vertex can't be found.
      */
-    void fetch(final long index)
-            throws LoaderException, IOException, NotAvailableException;
+    void fetch(final long index) throws LoaderException, IOException, NotAvailableException;
 }

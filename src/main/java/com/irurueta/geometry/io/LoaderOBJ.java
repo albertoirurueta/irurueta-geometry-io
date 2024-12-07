@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -55,8 +54,7 @@ public class LoaderOBJ extends Loader {
      * Constant indicating that duplicated vertices are allowed by default,
      * which allows faster loading.
      */
-    public static final boolean DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK =
-            true;
+    public static final boolean DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK = true;
 
     /**
      * Maximum number of stream positions to be cached by default.
@@ -142,8 +140,7 @@ public class LoaderOBJ extends Loader {
     public LoaderOBJ() {
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -161,8 +158,7 @@ public class LoaderOBJ extends Loader {
     public LoaderOBJ(final int maxVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -181,8 +177,7 @@ public class LoaderOBJ extends Loader {
      * @throws IllegalArgumentException if maximum number of vertices allowed in
      *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk) {
+    public LoaderOBJ(final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
         this.allowDuplicateVerticesInChunk = allowDuplicateVerticesInChunk;
@@ -206,8 +201,7 @@ public class LoaderOBJ extends Loader {
      * @throws IllegalArgumentException if maximum number of vertices allowed in
      *                                  a chunk is lower than 1.
      */
-    public LoaderOBJ(final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
+    public LoaderOBJ(final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk,
                      final long maxStreamPositions) {
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -227,8 +221,7 @@ public class LoaderOBJ extends Loader {
         super(f);
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -245,13 +238,11 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final int maxVerticesInChunk)
-            throws IOException {
+    public LoaderOBJ(final File f, final int maxVerticesInChunk) throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -272,8 +263,7 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk)
+    public LoaderOBJ(final File f, final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk)
             throws IOException {
         super(f);
         loaderIterator = null;
@@ -301,10 +291,8 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
-                     final long maxStreamPositions)
-            throws IOException {
+    public LoaderOBJ(final File f, final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk,
+                     final long maxStreamPositions) throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -323,8 +311,7 @@ public class LoaderOBJ extends Loader {
     public LoaderOBJ(final LoaderListener listener) {
         super(listener);
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -345,8 +332,7 @@ public class LoaderOBJ extends Loader {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -396,8 +382,7 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      */
     public LoaderOBJ(final LoaderListener listener, final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
-                     final long maxStreamPositions) {
+                     final boolean allowDuplicateVerticesInChunk, final long maxStreamPositions) {
         super(listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -415,13 +400,11 @@ public class LoaderOBJ extends Loader {
      *                 loading process starts or finishes.
      * @throws IOException if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final LoaderListener listener)
-            throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener) throws IOException {
         super(f, listener);
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -440,13 +423,11 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final LoaderListener listener,
-                     final int maxVerticesInChunk) throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener, final int maxVerticesInChunk) throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
         comments = new LinkedList<>();
         continueIfTriangulationError = DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR;
@@ -469,8 +450,7 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final LoaderListener listener,
-                     final int maxVerticesInChunk,
+    public LoaderOBJ(final File f, final LoaderListener listener, final int maxVerticesInChunk,
                      final boolean allowDuplicateVerticesInChunk) throws IOException {
         super(f, listener);
         loaderIterator = null;
@@ -500,10 +480,8 @@ public class LoaderOBJ extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderOBJ(final File f, final LoaderListener listener,
-                     final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
-                     final long maxStreamPositions) throws IOException {
+    public LoaderOBJ(final File f, final LoaderListener listener, final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk, final long maxStreamPositions) throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -533,8 +511,7 @@ public class LoaderOBJ extends Loader {
      * @throws IllegalArgumentException if provided value is lower than 1.
      * @throws LockedException          if this loader is currently loading a file.
      */
-    public void setMaxVerticesInChunk(final int maxVerticesInChunk)
-            throws LockedException {
+    public void setMaxVerticesInChunk(final int maxVerticesInChunk) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -560,8 +537,7 @@ public class LoaderOBJ extends Loader {
      * @param allow true if duplicate vertices are allowed, false otherwise.
      * @throws LockedException if this loader is currently loading a file.
      */
-    public void setAllowDuplicateVerticesInChunk(final boolean allow)
-            throws LockedException {
+    public void setAllowDuplicateVerticesInChunk(final boolean allow) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -597,8 +573,7 @@ public class LoaderOBJ extends Loader {
      * @throws IllegalArgumentException if provided value is lower than 1.
      * @throws LockedException          if this loader is currently loading a file.
      */
-    public void setMaxStreamPositions(final long maxStreamPositions)
-            throws LockedException {
+    public void setMaxStreamPositions(final long maxStreamPositions) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -627,8 +602,7 @@ public class LoaderOBJ extends Loader {
      * @param continueIfTriangulationError if ture, loading will continue but
      *                                     the result will lack the polygons that failed.
      */
-    public void setContinueIfTriangulationError(
-            final boolean continueIfTriangulationError) {
+    public void setContinueIfTriangulationError(final boolean continueIfTriangulationError) {
         this.continueIfTriangulationError = continueIfTriangulationError;
     }
 
@@ -703,9 +677,7 @@ public class LoaderOBJ extends Loader {
      * @throws LoaderException   if file is corrupted or cannot be interpreted.
      */
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException,
-            IOException, LoaderException {
-
+    public LoaderIterator load() throws LockedException, NotReadyException, IOException, LoaderException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -1173,15 +1145,12 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if file data is corrupt or cannot be
          *                         understood.
          */
-        public LoaderIteratorOBJ(final LoaderOBJ loader) throws IOException,
-                LoaderException {
+        public LoaderIteratorOBJ(final LoaderOBJ loader) throws IOException, LoaderException {
             this.loader = loader;
             nX = nY = nZ = 1.0f;
             vertexIndex = textureIndex = normalIndex = 0;
-            verticesAvailable = textureAvailable = normalsAvailable =
-                    indicesAvailable = materialsAvailable = false;
-            numberOfVertices = numberOfTextureCoords = numberOfNormals =
-                    numberOfFaces = 0;
+            verticesAvailable = textureAvailable = normalsAvailable = indicesAvailable = materialsAvailable = false;
+            numberOfVertices = numberOfTextureCoords = numberOfNormals = numberOfFaces = 0;
             currentFace = 0;
             firstVertexStreamPosition = 0;
             firstVertexStreamPositionAvailable = false;
@@ -1259,9 +1228,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException           if an I/O error occurs.
          */
         @Override
-        public DataChunk next() throws NotAvailableException, LoaderException,
-                IOException {
-
+        public DataChunk next() throws NotAvailableException, LoaderException, IOException {
             if (reader == null) {
                 throw new IOException();
             }
@@ -1276,17 +1243,15 @@ public class LoaderOBJ extends Loader {
             minX = minY = minZ = Float.MAX_VALUE;
             maxX = maxY = maxZ = -Float.MAX_VALUE;
 
-
-            final long progressStep = Math.max(
-                    (long) (LoaderOBJ.PROGRESS_DELTA * numberOfFaces), 1);
+            final var progressStep = Math.max((long) (LoaderOBJ.PROGRESS_DELTA * numberOfFaces), 1);
 
             boolean materialChange = false;
 
             try {
                 while (currentFace < numberOfFaces) { // && !materialChange
 
-                    final long faceStreamPos = reader.getPosition();
-                    String str = reader.readLine();
+                    final var faceStreamPos = reader.getPosition();
+                    var str = reader.readLine();
                     if ((str == null) && (currentFace < (numberOfFaces - 1))) {
                         // unexpected end of file
                         throw new LoaderException();
@@ -1299,13 +1264,11 @@ public class LoaderOBJ extends Loader {
                     if (str.startsWith(USEMTL)) {
 
                         if (currentChunkMaterialName.isEmpty()) {
-                            currentChunkMaterialName = str.substring(
-                                    USEMTL.length()).trim();
+                            currentChunkMaterialName = str.substring(USEMTL.length()).trim();
                             // search current material on material library
                             currentMaterial = null;
                             if (materialLoader != null) {
-                                currentMaterial = materialLoader.getMaterialByName(
-                                        currentChunkMaterialName);
+                                currentMaterial = materialLoader.getMaterialByName(currentChunkMaterialName);
                             }
                         } else {
                             // stop reading this chunk and reset position to
@@ -1320,8 +1283,8 @@ public class LoaderOBJ extends Loader {
                         // line is a face, so we keep data after "f"
                         str = str.substring("f ".length()).trim();
                         // retrieve words in data
-                        final String[] valuesTemp = str.split(" ");
-                        final Set<String[]> valuesSet = new HashSet<>();
+                        final var valuesTemp = str.split(" ");
+                        final var valuesSet = new HashSet<String[]>();
 
                         // check that each face contains three elements to define a
                         // triangle only
@@ -1332,11 +1295,9 @@ public class LoaderOBJ extends Loader {
                             // if instead of a triangle we have a polygon then we
                             // to divide valuesTemp into a set of values forming
                             // triangles
-                            final List<VertexOBJ> verticesList =
-                                    getFaceValues(valuesTemp);
+                            final var verticesList = getFaceValues(valuesTemp);
                             try {
-                                valuesSet.addAll(buildTriangulatedIndices(
-                                        verticesList));
+                                valuesSet.addAll(buildTriangulatedIndices(verticesList));
                             } catch (final TriangulatorException e) {
                                 // triangulation failed for some reason, but
                                 // file reading continues if configured like that
@@ -1353,8 +1314,7 @@ public class LoaderOBJ extends Loader {
                         // each word corresponds to a vertex/texture/normal index,
                         // so we check if such number of indices can be added into
                         // this chunk
-                        if ((verticesInChunk + valuesSet.size() * 3) >
-                                loader.maxVerticesInChunk) { // values.length
+                        if ((verticesInChunk + valuesSet.size() * 3) > loader.maxVerticesInChunk) { // values.length
                             // no more vertices can be added to chunk, so we reset
                             // stream to start on current face
                             reader.seek(faceStreamPos);
@@ -1364,24 +1324,24 @@ public class LoaderOBJ extends Loader {
                         // keep current stream position for next face
                         currentStreamPosition = reader.getPosition();
 
-                        for (final String[] values : valuesSet) {
+                        for (final var values : valuesSet) {
 
                             // otherwise values can be added into chunk, so we read
                             // vertex index, texture index and normal index
-                            for (final String value : values) {
+                            for (final var value : values) {
                                 // value can be of the form v/vt/vn, where v stands
                                 // for vertex index, vt for texture index and vn for
                                 // normal index, and where vt and vn are optional
-                                final String[] indices = value.split("/");
-                                boolean addExistingVertexCoords = false;
-                                boolean addExistingTextureCoords = false;
-                                boolean addExistingNormal = false;
-                                int vertexCoordsChunkIndex = -1;
-                                int textureCoordsChunkIndex = -1;
-                                int normalChunkIndex = -1;
+                                final var indices = value.split("/");
+                                var addExistingVertexCoords = false;
+                                var addExistingTextureCoords = false;
+                                var addExistingNormal = false;
+                                var vertexCoordsChunkIndex = -1;
+                                var textureCoordsChunkIndex = -1;
+                                var normalChunkIndex = -1;
 
                                 boolean addExisting;
-                                int chunkIndex = 0;
+                                var chunkIndex = 0;
 
                                 // first check if vertex has to be added as new or
                                 // not
@@ -1393,8 +1353,8 @@ public class LoaderOBJ extends Loader {
                                     // determine if vertex coordinates have to be
                                     // added as new, or they can be reused from an
                                     // existing vertex
-                                    addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk &&
-                                            (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) >= 0;
+                                    addExistingVertexCoords = !loader.allowDuplicateVerticesInChunk
+                                            && (vertexCoordsChunkIndex = searchVertexIndexInChunk(vertexIndex)) >= 0;
                                 }
                                 if (indices.length >= 2 && (!indices[1].isEmpty())) {
                                     textureAvailable = true;
@@ -1404,8 +1364,8 @@ public class LoaderOBJ extends Loader {
                                     // determine if texture coordinates have to be
                                     // added as new, or they can be reused from an
                                     // existing vertex
-                                    addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk &&
-                                            (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) >= 0;
+                                    addExistingTextureCoords = !loader.allowDuplicateVerticesInChunk
+                                            && (textureCoordsChunkIndex = searchTextureCoordIndexInChunk(textureIndex)) >= 0;
                                 }
                                 if (indices.length >= 3 && (!indices[2].isEmpty())) {
                                     normalsAvailable = true;
@@ -1415,8 +1375,8 @@ public class LoaderOBJ extends Loader {
                                     // determine if normal coordinates have to be
                                     // added as new, or they can be reused from an
                                     // existing vertex
-                                    addExistingNormal = !loader.allowDuplicateVerticesInChunk &&
-                                            (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) >= 0;
+                                    addExistingNormal = !loader.allowDuplicateVerticesInChunk
+                                            && (normalChunkIndex = searchNormalIndexInChunk(normalIndex)) >= 0;
                                 }
 
                                 // if either vertex coordinates, texture coordinates
@@ -1430,9 +1390,8 @@ public class LoaderOBJ extends Loader {
 
                                 // if some chunk index is found, set add existing to
                                 // true
-                                addExisting = (vertexCoordsChunkIndex >= 0) ||
-                                        (textureCoordsChunkIndex >= 0) ||
-                                        (normalChunkIndex >= 0);
+                                addExisting = (vertexCoordsChunkIndex >= 0) || (textureCoordsChunkIndex >= 0)
+                                        || (normalChunkIndex >= 0);
                                 // ensure that if index is present an existing vertex
                                 // in chunk exists
                                 if (indices.length >= 1 && (!indices[0].isEmpty())) {
@@ -1459,7 +1418,6 @@ public class LoaderOBJ extends Loader {
                                     }
                                 }
 
-
                                 if (indices.length >= 1 && (!indices[0].isEmpty()) && !addExistingVertexCoords) {
                                     // new vertex needs to be added into chunk,
                                     // so we need to read vertex data
@@ -1473,13 +1431,11 @@ public class LoaderOBJ extends Loader {
                                     if (!vertexLine.startsWith("v ")) {
                                         throw new LoaderException();
                                     }
-                                    vertexLine = vertexLine.substring(
-                                            "v ".length()).trim();
+                                    vertexLine = vertexLine.substring("v ".length()).trim();
                                     // retrieve words in vertexLine, which contain
                                     // vertex coordinates either as x, y, z or x,
                                     // y, z, w
-                                    final String[] vertexCoordinates =
-                                            vertexLine.split(" ");
+                                    final var vertexCoordinates = vertexLine.split(" ");
                                     if (vertexCoordinates.length == 4) {
                                         // homogeneous coordinates x, y, z, w
 
@@ -1497,14 +1453,10 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        final float w = Float.parseFloat(
-                                                vertexCoordinates[3]);
-                                        coordX = Float.parseFloat(
-                                                vertexCoordinates[0]) / w;
-                                        coordY = Float.parseFloat(
-                                                vertexCoordinates[1]) / w;
-                                        coordZ = Float.parseFloat(
-                                                vertexCoordinates[2]) / w;
+                                        final var w = Float.parseFloat(vertexCoordinates[3]);
+                                        coordX = Float.parseFloat(vertexCoordinates[0]) / w;
+                                        coordY = Float.parseFloat(vertexCoordinates[1]) / w;
+                                        coordZ = Float.parseFloat(vertexCoordinates[2]) / w;
 
                                     } else if (vertexCoordinates.length >= 3) {
                                         // inhomogeneous coordinates x, y, z
@@ -1520,12 +1472,9 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        coordX = Float.parseFloat(
-                                                vertexCoordinates[0]);
-                                        coordY = Float.parseFloat(
-                                                vertexCoordinates[1]);
-                                        coordZ = Float.parseFloat(
-                                                vertexCoordinates[2]);
+                                        coordX = Float.parseFloat(vertexCoordinates[0]);
+                                        coordY = Float.parseFloat(vertexCoordinates[1]);
+                                        coordZ = Float.parseFloat(vertexCoordinates[2]);
 
                                     } else {
                                         // unsupported length
@@ -1539,20 +1488,17 @@ public class LoaderOBJ extends Loader {
 
                                     // fetch texture data position
                                     fetchTexture(textureIndex);
-                                    textureCoordStreamPosition =
-                                            reader.getPosition();
+                                    textureCoordStreamPosition = reader.getPosition();
 
                                     // read all texture data
-                                    String textureLine = reader.readLine();
+                                    var textureLine = reader.readLine();
                                     if (!textureLine.startsWith("vt ")) {
                                         throw new LoaderException();
                                     }
-                                    textureLine = textureLine.substring(
-                                            "vt ".length()).trim();
+                                    textureLine = textureLine.substring("vt ".length()).trim();
                                     // retrieve words in textureLine, which contain
                                     // texture coordinates either as u, w or u, v, w
-                                    final String[] textureCoordinates =
-                                            textureLine.split(" ");
+                                    final var textureCoordinates = textureLine.split(" ");
                                     if (textureCoordinates.length == 3) {
                                         // homogeneous coordinates u, v, w
 
@@ -1567,22 +1513,15 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        final float w = Float.parseFloat(
-                                                textureCoordinates[2]);
+                                        final var w = Float.parseFloat(textureCoordinates[2]);
 
-                                        textureU = Float.parseFloat(
-                                                textureCoordinates[0]) / w;
-                                        textureV = Float.parseFloat(
-                                                textureCoordinates[1]) / w;
-                                        if (Math.abs(w) < Float.MIN_VALUE ||
-                                                Float.isInfinite(textureU) ||
-                                                Float.isNaN(textureU) ||
-                                                Float.isInfinite(textureV) ||
-                                                Float.isNaN(textureV)) {
-                                            textureU = Float.parseFloat(
-                                                    textureCoordinates[0]);
-                                            textureV = Float.parseFloat(
-                                                    textureCoordinates[1]);
+                                        textureU = Float.parseFloat(textureCoordinates[0]) / w;
+                                        textureV = Float.parseFloat(textureCoordinates[1]) / w;
+                                        if (Math.abs(w) < Float.MIN_VALUE || Float.isInfinite(textureU)
+                                                || Float.isNaN(textureU) || Float.isInfinite(textureV)
+                                                || Float.isNaN(textureV)) {
+                                            textureU = Float.parseFloat(textureCoordinates[0]);
+                                            textureV = Float.parseFloat(textureCoordinates[1]);
                                         }
 
                                     } else if (textureCoordinates.length >= 2) {
@@ -1596,10 +1535,8 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        textureU = Float.parseFloat(
-                                                textureCoordinates[0]);
-                                        textureV = Float.parseFloat(
-                                                textureCoordinates[1]);
+                                        textureU = Float.parseFloat(textureCoordinates[0]);
+                                        textureV = Float.parseFloat(textureCoordinates[1]);
                                     } else {
                                         // unsupported length
                                         throw new LoaderException();
@@ -1614,16 +1551,14 @@ public class LoaderOBJ extends Loader {
                                     normalStreamPosition = reader.getPosition();
 
                                     // read all normal data
-                                    String normalLine = reader.readLine();
+                                    var normalLine = reader.readLine();
                                     if (!normalLine.startsWith("vn ")) {
                                         throw new LoaderException();
                                     }
-                                    normalLine = normalLine.substring(
-                                            "vn ".length()).trim();
+                                    normalLine = normalLine.substring("vn ".length()).trim();
                                     // retrieve words in normalLine, which must
                                     // contain normal coordinates as x, y, z
-                                    final String[] normalCoordinates =
-                                            normalLine.split(" ");
+                                    final var normalCoordinates = normalLine.split(" ");
                                     if (normalCoordinates.length == 3) {
                                         // normal coordinates x, y, z
 
@@ -1638,12 +1573,9 @@ public class LoaderOBJ extends Loader {
                                             throw new LoaderException();
                                         }
 
-                                        nX = Float.parseFloat(
-                                                normalCoordinates[0]);
-                                        nY = Float.parseFloat(
-                                                normalCoordinates[1]);
-                                        nZ = Float.parseFloat(
-                                                normalCoordinates[2]);
+                                        nX = Float.parseFloat(normalCoordinates[0]);
+                                        nY = Float.parseFloat(normalCoordinates[1]);
+                                        nZ = Float.parseFloat(normalCoordinates[2]);
                                     } else {
                                         // unsupported length
                                         throw new LoaderException();
@@ -1663,8 +1595,7 @@ public class LoaderOBJ extends Loader {
                     }
 
                     // compute progress
-                    if (loader.listener != null &&
-                            (currentFace % progressStep) == 0) {
+                    if (loader.listener != null && (currentFace % progressStep) == 0) {
                         loader.listener.onLoadProgressChange(loader,
                                 (float) (currentFace) / (float) (numberOfFaces));
                     }
@@ -1677,7 +1608,7 @@ public class LoaderOBJ extends Loader {
             trimArrays();
 
             // Instantiate DataChunk with chunk arrays
-            final DataChunk dataChunk = new DataChunk();
+            final var dataChunk = new DataChunk();
 
             if (verticesAvailable) {
                 dataChunk.setVerticesCoordinatesData(coordsInChunkArray);
@@ -1748,17 +1679,16 @@ public class LoaderOBJ extends Loader {
                 throw new LoaderException();
             }
 
-            long startStreamPos = firstVertexStreamPosition;
-            long startIndex = 0;
+            var startStreamPos = firstVertexStreamPosition;
+            var startIndex = 0L;
 
             if (!verticesStreamPositionMap.isEmpty()) {
                 // with floorEntry, we will pick element immediately
                 // before or equal to index if any exists
-                final Map.Entry<Long, Long> entry =
-                        verticesStreamPositionMap.floorEntry(index);
+                final var entry = verticesStreamPositionMap.floorEntry(index);
                 if (entry != null) {
-                    final long origIndex = entry.getKey();
-                    final long pos = entry.getValue();
+                    final var origIndex = entry.getKey();
+                    final var pos = entry.getValue();
                     if ((origIndex <= index) && (pos >= 0)) {
                         startIndex = origIndex;
                         startStreamPos = pos;
@@ -1775,14 +1705,14 @@ public class LoaderOBJ extends Loader {
             }
 
             // read from stream until start of data of desired vertex
-            long streamPosition = 0;
-            for (long i = startIndex; i <= index; i++) {
+            var streamPosition = 0L;
+            for (var i = startIndex; i <= index; i++) {
 
                 // when traversing stream of data until reaching desired
                 // index, we add all vertex, texture and normal positions
                 // into maps
                 String str;
-                boolean end = false;
+                var end = false;
                 do {
                     streamPosition = reader.getPosition();
                     str = reader.readLine();
@@ -1818,23 +1748,21 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if data is corrupted or cannot be understood.
          * @throws IOException     if an I/O error occurs.
          */
-        public void fetchTexture(final long index) throws LoaderException,
-                IOException {
+        public void fetchTexture(final long index) throws LoaderException, IOException {
             if (index > numberOfTextureCoords) {
                 throw new LoaderException();
             }
 
-            long startStreamPos = firstTextureCoordStreamPosition;
-            long startIndex = 0;
+            var startStreamPos = firstTextureCoordStreamPosition;
+            var startIndex = 0L;
 
             if (!textureCoordsStreamPositionMap.isEmpty()) {
                 // with floorEntry, we will pick element immediately
                 // before or equal to index if any exists
-                final Map.Entry<Long, Long> entry =
-                        textureCoordsStreamPositionMap.floorEntry(index);
+                final var entry = textureCoordsStreamPositionMap.floorEntry(index);
                 if (entry != null) {
-                    final long origIndex = entry.getKey();
-                    final long pos = entry.getValue();
+                    final var origIndex = entry.getKey();
+                    final var pos = entry.getValue();
                     if ((origIndex <= index) && (pos >= 0)) {
                         startIndex = origIndex;
                         startStreamPos = pos;
@@ -1851,14 +1779,14 @@ public class LoaderOBJ extends Loader {
             }
 
             // read from stream until start of data of desired texture vertex
-            long streamPosition = 0;
-            for (long i = startIndex; i <= index; i++) {
+            var streamPosition = 0L;
+            for (var i = startIndex; i <= index; i++) {
 
                 // when traversing stream of data until reaching desired
                 // index, we add all vertex, texture and normal positions
                 // into maps
                 String str;
-                boolean end = false;
+                var end = false;
                 do {
                     streamPosition = reader.getPosition();
                     str = reader.readLine();
@@ -1899,17 +1827,16 @@ public class LoaderOBJ extends Loader {
                 throw new LoaderException();
             }
 
-            long startStreamPos = firstNormalStreamPosition;
-            long startIndex = 0;
+            var startStreamPos = firstNormalStreamPosition;
+            var startIndex = 0L;
 
             if (!normalsStreamPositionMap.isEmpty()) {
                 // with floorEntry, we will pick element immediately before or
                 // equal to index if any exists
-                final Map.Entry<Long, Long> entry =
-                        normalsStreamPositionMap.floorEntry(index);
+                final var entry = normalsStreamPositionMap.floorEntry(index);
                 if (entry != null) {
-                    final long origIndex = entry.getKey();
-                    final long pos = entry.getValue();
+                    final var origIndex = entry.getKey();
+                    final var pos = entry.getValue();
                     if ((origIndex <= index) && (pos >= 0)) {
                         startIndex = origIndex;
                         startStreamPos = pos;
@@ -1925,14 +1852,14 @@ public class LoaderOBJ extends Loader {
             }
 
             // read from stream until start of data of desired normal
-            long streamPosition = 0;
-            for (long i = startIndex; i <= index; i++) {
+            var streamPosition = 0L;
+            for (var i = startIndex; i <= index; i++) {
 
                 // when traversing stream of data until reaching desired
                 // index, we add all vertex, texture and normal positions
                 // into maps
                 String str;
-                boolean end = false;
+                var end = false;
                 do {
                     streamPosition = reader.getPosition();
                     str = reader.readLine();
@@ -1972,40 +1899,36 @@ public class LoaderOBJ extends Loader {
          * @throws TriangulatorException if triangulation fails (because polygon
          *                               is degenerate or contains invalid values such as NaN or infinity).
          */
-        private Set<String[]> buildTriangulatedIndices(
-                final List<VertexOBJ> vertices) throws TriangulatorException {
-            final List<Point3D> polygonVertices = new ArrayList<>(
-                    vertices.size());
-            for (final VertexOBJ v : vertices) {
+        private Set<String[]> buildTriangulatedIndices(final List<VertexOBJ> vertices) throws TriangulatorException {
+            final var polygonVertices = new ArrayList<Point3D>(vertices.size());
+            for (final var v : vertices) {
                 if (v.getVertex() == null) {
                     throw new TriangulatorException();
                 }
                 polygonVertices.add(v.getVertex());
             }
-            final List<int[]> indices = new ArrayList<>();
-            final Triangulator3D triangulator = Triangulator3D.create();
-            final List<Triangle3D> triangles = triangulator.triangulate(
-                    polygonVertices, indices);
+            final var indices = new ArrayList<int[]>();
+            final var triangulator = Triangulator3D.create();
+            final var triangles = triangulator.triangulate(polygonVertices, indices);
 
-            final Set<String[]> result = new HashSet<>();
+            final var result = new HashSet<String[]>();
             String[] face;
-            int counter = 0;
+            var counter = 0;
             int[] triangleIndices;
             int index;
             VertexOBJ vertex;
             StringBuilder builder;
-            for (final Triangle3D ignored : triangles) {
+            for (final var ignored : triangles) {
                 triangleIndices = indices.get(counter);
                 face = new String[Triangle3D.NUM_VERTICES];
-                for (int i = 0; i < Triangle3D.NUM_VERTICES; i++) {
+                for (var i = 0; i < Triangle3D.NUM_VERTICES; i++) {
                     index = triangleIndices[i];
                     vertex = vertices.get(index);
                     builder = new StringBuilder();
                     if (vertex.isVertexIndexAvailable()) {
                         builder.append(vertex.getVertexIndex());
                     }
-                    if (vertex.isTextureIndexAvailable() ||
-                            vertex.isNormalIndexAvailable()) {
+                    if (vertex.isTextureIndexAvailable() || vertex.isNormalIndexAvailable()) {
                         builder.append("/");
                         if (vertex.isTextureIndexAvailable()) {
                             builder.append(vertex.getTextureIndex());
@@ -2038,23 +1961,21 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if loading fails because data is corrupted or
          *                         cannot be interpreted.
          */
-        private List<VertexOBJ> getFaceValues(final String[] values)
-                throws IOException, LoaderException {
+        private List<VertexOBJ> getFaceValues(final String[] values) throws IOException, LoaderException {
 
             VertexOBJ tmpVertex;
             Point3D point;
-            final List<VertexOBJ> vertices = new ArrayList<>(values.length);
+            final var vertices = new ArrayList<VertexOBJ>(values.length);
 
             // keep current stream position for next face
-            final long tempPosition = reader.getPosition();
+            final var tempPosition = reader.getPosition();
 
-            for (final String value : values) {
-
+            for (final var value : values) {
                 tmpVertex = new VertexOBJ();
                 point = Point3D.create();
                 tmpVertex.setVertex(point);
 
-                final String[] indices = value.split("/");
+                final var indices = value.split("/");
 
                 if (indices.length >= 1 && (!indices[0].isEmpty())) {
                     vertexIndex = Integer.parseInt(indices[0]) - 1;
@@ -2062,12 +1983,12 @@ public class LoaderOBJ extends Loader {
                     fetchVertex(vertexIndex);
                     vertexStreamPosition = reader.getPosition();
 
-                    String vertexLine = reader.readLine();
+                    var vertexLine = reader.readLine();
                     if (!vertexLine.startsWith("v ")) {
                         throw new LoaderException();
                     }
                     vertexLine = vertexLine.substring("v ".length()).trim();
-                    final String[] vertexCoordinates = vertexLine.split(" ");
+                    final var vertexCoordinates = vertexLine.split(" ");
 
                     if (vertexCoordinates.length == 4) {
                         // homogeneous coordinates x, y, z, w
@@ -2123,12 +2044,10 @@ public class LoaderOBJ extends Loader {
                     }
                 }
                 if (indices.length >= 2 && (!indices[1].isEmpty())) {
-                    tmpVertex.setTextureIndex(
-                            Integer.parseInt(indices[1]));
+                    tmpVertex.setTextureIndex(Integer.parseInt(indices[1]));
                 }
                 if (indices.length >= 3 && (!indices[2].isEmpty())) {
-                    tmpVertex.setNormalIndex(
-                            Integer.parseInt(indices[2]));
+                    tmpVertex.setNormalIndex(Integer.parseInt(indices[2]));
                 }
 
                 vertices.add(tmpVertex);
@@ -2143,17 +2062,13 @@ public class LoaderOBJ extends Loader {
          */
         private void initChunkArrays() {
             coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];
-            textureCoordsInChunkArray =
-                    new float[loader.maxVerticesInChunk * 2];
+            textureCoordsInChunkArray = new float[loader.maxVerticesInChunk * 2];
             normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];
             indicesInChunkArray = new int[loader.maxVerticesInChunk];
 
-            originalVertexIndicesInChunkArray =
-                    new long[loader.maxVerticesInChunk];
-            originalTextureIndicesInChunkArray =
-                    new long[loader.maxVerticesInChunk];
-            originalNormalIndicesInChunkArray =
-                    new long[loader.maxVerticesInChunk];
+            originalVertexIndicesInChunkArray = new long[loader.maxVerticesInChunk];
+            originalTextureIndicesInChunkArray = new long[loader.maxVerticesInChunk];
+            originalNormalIndicesInChunkArray = new long[loader.maxVerticesInChunk];
             verticesInChunk = 0;
             indicesInChunk = 0;
             indicesInChunkSize = loader.maxVerticesInChunk;
@@ -2174,7 +2089,7 @@ public class LoaderOBJ extends Loader {
          */
         private int searchVertexIndexInChunk(final long originalIndex) {
             // returns chunk index array position where index is found
-            final Integer chunkIndex = vertexIndicesMap.get(originalIndex);
+            final var chunkIndex = vertexIndicesMap.get(originalIndex);
 
             if (chunkIndex == null) {
                 return -1;
@@ -2217,16 +2132,14 @@ public class LoaderOBJ extends Loader {
          * @param originalIndex  vertex index used in OBJ file.
          * @param streamPosition stream position where vertex is located.
          */
-        private void addVertexPositionToMap(final long originalIndex,
-                                            final long streamPosition) {
+        private void addVertexPositionToMap(final long originalIndex, final long streamPosition) {
             if (verticesStreamPositionMap.size() > loader.maxStreamPositions) {
                 // Map is full. Remove 1st item before adding a new one
-                final Long origIndex = verticesStreamPositionMap.firstKey();
+                final var origIndex = verticesStreamPositionMap.firstKey();
                 verticesStreamPositionMap.remove(origIndex);
             }
             // add new item
-            verticesStreamPositionMap.put(originalIndex,
-                    streamPosition);
+            verticesStreamPositionMap.put(originalIndex, streamPosition);
         }
 
         /**
@@ -2236,17 +2149,14 @@ public class LoaderOBJ extends Loader {
          * @param streamPosition stream position where texture coordinate is
          *                       located.
          */
-        private void addTextureCoordPositionToMap(final long originalIndex,
-                                                  final long streamPosition) {
-            if (textureCoordsStreamPositionMap.size() >
-                    loader.maxStreamPositions) {
+        private void addTextureCoordPositionToMap(final long originalIndex, final long streamPosition) {
+            if (textureCoordsStreamPositionMap.size() > loader.maxStreamPositions) {
                 // Map is full. Remove 1st item before adding a new one
-                final Long origIndex = textureCoordsStreamPositionMap.firstKey();
+                final var origIndex = textureCoordsStreamPositionMap.firstKey();
                 textureCoordsStreamPositionMap.remove(origIndex);
             }
             // add new item
-            textureCoordsStreamPositionMap.put(originalIndex,
-                    streamPosition);
+            textureCoordsStreamPositionMap.put(originalIndex, streamPosition);
         }
 
         /**
@@ -2256,16 +2166,14 @@ public class LoaderOBJ extends Loader {
          * @param streamPosition stream position where normal coordinate is
          *                       located.
          */
-        private void addNormalPositionToMap(final long originalIndex,
-                                            final long streamPosition) {
+        private void addNormalPositionToMap(final long originalIndex, final long streamPosition) {
             if (normalsStreamPositionMap.size() > loader.maxStreamPositions) {
                 // Map is full. Remove 1st item before adding a new one
-                final Long origIndex = normalsStreamPositionMap.firstKey();
+                final var origIndex = normalsStreamPositionMap.firstKey();
                 normalsStreamPositionMap.remove(origIndex);
             }
             // add new item
-            normalsStreamPositionMap.put(originalIndex,
-                    streamPosition);
+            normalsStreamPositionMap.put(originalIndex, streamPosition);
         }
 
         /**
@@ -2273,8 +2181,8 @@ public class LoaderOBJ extends Loader {
          * new vertex.
          */
         private void addNewVertexDataToChunk() {
-            int pos = 3 * verticesInChunk;
-            int textPos = 2 * verticesInChunk;
+            var pos = 3 * verticesInChunk;
+            var textPos = 2 * verticesInChunk;
 
             coordsInChunkArray[pos] = coordX;
             normalsInChunkArray[pos] = nX;
@@ -2323,17 +2231,13 @@ public class LoaderOBJ extends Loader {
             originalNormalIndicesInChunkArray[indicesInChunk] = normalIndex;
             // store original indices in maps, so we can search chunk index by
             // original indices of vertices, texture or normal
-            vertexIndicesMap.put((long) vertexIndex,
-                    indicesInChunk);
-            textureCoordsIndicesMap.put((long) textureIndex,
-                    indicesInChunk);
-            normalsIndicesMap.put((long) normalIndex,
-                    indicesInChunk);
+            vertexIndicesMap.put((long) vertexIndex, indicesInChunk);
+            textureCoordsIndicesMap.put((long) textureIndex, indicesInChunk);
+            normalsIndicesMap.put((long) normalIndex, indicesInChunk);
 
             // store vertex, texture and normal stream positions
             addVertexPositionToMap(vertexIndex, vertexStreamPosition);
-            addTextureCoordPositionToMap(textureIndex,
-                    textureCoordStreamPosition);
+            addTextureCoordPositionToMap(textureIndex, textureCoordStreamPosition);
             addNormalPositionToMap(normalIndex, normalStreamPosition);
 
             verticesInChunk++;
@@ -2363,37 +2267,26 @@ public class LoaderOBJ extends Loader {
          * Increases size of arrays of data. This method is called when needed.
          */
         private void increaseIndicesArraySize() {
-            final int newIndicesInChunkSize = indicesInChunkSize +
-                    loader.maxVerticesInChunk;
-            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
-            final long[] newOriginalVertexIndicesInChunkArray =
-                    new long[newIndicesInChunkSize];
-            final long[] newOriginalTextureIndicesInChunkArray =
-                    new long[newIndicesInChunkSize];
-            final long[] newOriginalNormalIndicesInChunkArray =
-                    new long[newIndicesInChunkSize];
+            final var newIndicesInChunkSize = indicesInChunkSize + loader.maxVerticesInChunk;
+            final var newIndicesInChunkArray = new int[newIndicesInChunkSize];
+            final var newOriginalVertexIndicesInChunkArray = new long[newIndicesInChunkSize];
+            final var newOriginalTextureIndicesInChunkArray = new long[newIndicesInChunkSize];
+            final var newOriginalNormalIndicesInChunkArray = new long[newIndicesInChunkSize];
 
             // copy contents of old array
-            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,
-                    indicesInChunkSize);
-            System.arraycopy(originalVertexIndicesInChunkArray, 0,
-                    newOriginalVertexIndicesInChunkArray, 0,
-                    indicesInChunkSize);
-            System.arraycopy(originalTextureIndicesInChunkArray, 0,
-                    newOriginalTextureIndicesInChunkArray, 0,
-                    indicesInChunkSize);
-            System.arraycopy(originalNormalIndicesInChunkArray, 0,
-                    newOriginalNormalIndicesInChunkArray, 0,
-                    indicesInChunkSize);
+            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, indicesInChunkSize);
+            System.arraycopy(originalVertexIndicesInChunkArray, 0, newOriginalVertexIndicesInChunkArray,
+                    0, indicesInChunkSize);
+            System.arraycopy(originalTextureIndicesInChunkArray, 0, newOriginalTextureIndicesInChunkArray,
+                    0, indicesInChunkSize);
+            System.arraycopy(originalNormalIndicesInChunkArray, 0, newOriginalNormalIndicesInChunkArray,
+                    0, indicesInChunkSize);
 
             // set new arrays and new size
             indicesInChunkArray = newIndicesInChunkArray;
-            originalVertexIndicesInChunkArray =
-                    newOriginalVertexIndicesInChunkArray;
-            originalTextureIndicesInChunkArray =
-                    newOriginalTextureIndicesInChunkArray;
-            originalNormalIndicesInChunkArray =
-                    newOriginalNormalIndicesInChunkArray;
+            originalVertexIndicesInChunkArray = newOriginalVertexIndicesInChunkArray;
+            originalTextureIndicesInChunkArray = newOriginalTextureIndicesInChunkArray;
+            originalNormalIndicesInChunkArray = newOriginalNormalIndicesInChunkArray;
             indicesInChunkSize = newIndicesInChunkSize;
         }
 
@@ -2403,20 +2296,18 @@ public class LoaderOBJ extends Loader {
          */
         private void trimArrays() {
             if (verticesInChunk > 0) {
-                final int elems = verticesInChunk * 3;
-                final int textElems = verticesInChunk * 2;
+                final var elems = verticesInChunk * 3;
+                final var textElems = verticesInChunk * 2;
 
-                final float[] newCoordsInChunkArray = new float[elems];
-                final float[] newTextureCoordsInChunkArray = new float[elems];
-                final float[] newNormalsInChunkArray = new float[elems];
+                final var newCoordsInChunkArray = new float[elems];
+                final var newTextureCoordsInChunkArray = new float[elems];
+                final var newNormalsInChunkArray = new float[elems];
 
                 // copy contents of old arrays
-                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,
-                        0, elems);
-                System.arraycopy(textureCoordsInChunkArray, 0,
-                        newTextureCoordsInChunkArray, 0, textElems);
-                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,
-                        0, elems);
+                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray, 0, elems);
+                System.arraycopy(textureCoordsInChunkArray, 0, newTextureCoordsInChunkArray, 0,
+                        textElems);
+                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray, 0, elems);
 
                 // set new arrays
                 coordsInChunkArray = newCoordsInChunkArray;
@@ -2430,9 +2321,8 @@ public class LoaderOBJ extends Loader {
             }
 
             if (indicesInChunk > 0) {
-                final int[] newIndicesInChunkArray = new int[indicesInChunk];
-                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,
-                        0, indicesInChunk);
+                final var newIndicesInChunkArray = new int[indicesInChunk];
+                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, indicesInChunk);
 
                 // set new array
                 indicesInChunkArray = newIndicesInChunkArray;
@@ -2453,14 +2343,11 @@ public class LoaderOBJ extends Loader {
          * @throws LoaderException if data is corrupted or cannot be understood.
          */
         private void setUp() throws IOException, LoaderException {
-            String str;
-            long streamPosition;
-            numberOfVertices = numberOfTextureCoords = numberOfNormals =
-                    numberOfFaces = 0;
+            numberOfVertices = numberOfTextureCoords = numberOfNormals = numberOfFaces = 0;
 
             do {
-                streamPosition = reader.getPosition();
-                str = reader.readLine();
+                final var streamPosition = reader.getPosition();
+                final var str = reader.readLine();
                 if (str == null) {
                     break;
                 }
@@ -2511,13 +2398,9 @@ public class LoaderOBJ extends Loader {
 
                 } else if (str.startsWith("mtllib ")) {
                     // a material library is found
-                    final String path = str.substring("mtllib ".length()).trim();
-                    if (loader.listener instanceof LoaderListenerOBJ) {
-                        final LoaderListenerOBJ loaderListener =
-                                (LoaderListenerOBJ) loader.listener;
-                        materialLoader =
-                                loaderListener.onMaterialLoaderRequested(loader,
-                                        path);
+                    final var path = str.substring("mtllib ".length()).trim();
+                    if (loader.listener instanceof LoaderListenerOBJ loaderListener) {
+                        materialLoader = loaderListener.onMaterialLoaderRequested(loader, path);
                     } else {
                         materialLoader = new MaterialLoaderOBJ(new File(path));
                     }
@@ -2549,8 +2432,7 @@ public class LoaderOBJ extends Loader {
                 throw new LoaderException();
             }
 
-            if (materialsAvailable &&
-                    firstMaterialStreamPosition < firstFaceStreamPosition) {
+            if (materialsAvailable && firstMaterialStreamPosition < firstFaceStreamPosition) {
                 reader.seek(firstMaterialStreamPosition);
             } else {
                 reader.seek(firstFaceStreamPosition);

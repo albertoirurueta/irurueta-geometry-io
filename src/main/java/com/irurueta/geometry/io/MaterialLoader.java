@@ -31,8 +31,7 @@ public abstract class MaterialLoader implements Closeable {
      * Maximum allowed file size to keep cached in memory. Files exceeding this
      * size will just be streamed.
      */
-    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY =
-            50000000;
+    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY = 50000000;
 
     /**
      * Constant defining whether textures must be validated by default.
@@ -95,8 +94,7 @@ public abstract class MaterialLoader implements Closeable {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         file = f;
         if (f.length() < fileSizeLimitToKeepInMemory) {
-            reader = new MappedFileReaderAndWriter(f,
-                    FileChannel.MapMode.READ_ONLY);
+            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
@@ -128,13 +126,11 @@ public abstract class MaterialLoader implements Closeable {
      * @throws IOException raised if provided file does not exist or an I/O
      *                     exception occurs.
      */
-    protected MaterialLoader(final File f, final MaterialLoaderListener listener)
-            throws IOException {
+    protected MaterialLoader(final File f, final MaterialLoaderListener listener) throws IOException {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         file = f;
         if (f.length() < fileSizeLimitToKeepInMemory) {
-            reader = new MappedFileReaderAndWriter(f,
-                    FileChannel.MapMode.READ_ONLY);
+            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
@@ -161,8 +157,7 @@ public abstract class MaterialLoader implements Closeable {
      *                                    cached in memory.
      * @throws LockedException if this instance is already loading another file.
      */
-    public void setFileSizeLimitToKeepInMemory(
-            final long fileSizeLimitToKeepInMemory) throws LockedException {
+    public void setFileSizeLimitToKeepInMemory(final long fileSizeLimitToKeepInMemory) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -189,8 +184,7 @@ public abstract class MaterialLoader implements Closeable {
      *                         exception occurs.
      */
     @SuppressWarnings("DuplicatedCode")
-    public void setFile(final File f)
-            throws LockedException, IOException {
+    public void setFile(final File f) throws LockedException, IOException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -202,8 +196,7 @@ public abstract class MaterialLoader implements Closeable {
         }
 
         if (f.length() < fileSizeLimitToKeepInMemory) {
-            reader = new MappedFileReaderAndWriter(f,
-                    FileChannel.MapMode.READ_ONLY);
+            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
@@ -285,8 +278,7 @@ public abstract class MaterialLoader implements Closeable {
      * @param listener material listener of this instance.
      * @throws LockedException Raised if this instance is already locked.
      */
-    public void setListener(final MaterialLoaderListener listener)
-            throws LockedException {
+    public void setListener(final MaterialLoaderListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -313,6 +305,5 @@ public abstract class MaterialLoader implements Closeable {
      * @throws IOException       if an I/O error occurs.
      * @throws LoaderException   if file is corrupted or cannot be interpreted.
      */
-    public abstract Set<Material> load() throws LockedException,
-            NotReadyException, IOException, LoaderException;
+    public abstract Set<Material> load() throws LockedException, NotReadyException, IOException, LoaderException;
 }

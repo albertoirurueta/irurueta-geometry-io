@@ -15,23 +15,23 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MeshWriterBinaryTest implements MeshWriterListener {
+class MeshWriterBinaryTest implements MeshWriterListener {
 
-    private static final String INPUT_FOLDER =
-            "./src/test/java/com/irurueta/geometry/io/";
+    private static final String INPUT_FOLDER = "./src/test/java/com/irurueta/geometry/io/";
 
-    private static final String TMP_FOLDER =
-            "./src/test/java/com/irurueta/geometry/io/tmp/";
+    private static final String TMP_FOLDER = "./src/test/java/com/irurueta/geometry/io/tmp/";
 
     private boolean startValid = true;
     private boolean endValid = true;
@@ -42,24 +42,24 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
     private int endCounter = 0;
     private float previousProgress = 0.0f;
 
-    @BeforeClass
-    public static void setUpClass() {
+    @BeforeAll
+    static void setUpClass() {
         // create folder for generated files
-        final File folder = new File(TMP_FOLDER);
+        final var folder = new File(TMP_FOLDER);
         //noinspection ResultOfMethodCallIgnored
         folder.mkdirs();
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    @AfterAll
+    static void tearDownClass() {
         // remove any remaining files in thumbnails folder
-        final File folder = new File(TMP_FOLDER);
-        final File[] files = folder.listFiles();
+        final var folder = new File(TMP_FOLDER);
+        final var files = folder.listFiles();
         if (files == null) {
             return;
         }
 
-        for (final File f : files) {
+        for (final var f : files) {
             //noinspection ResultOfMethodCallIgnored
             f.delete();
         }
@@ -70,110 +70,35 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
     }
 
     @Test
-    public void testConstructors() throws IOException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.bin");
-        final File inF = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+    void testConstructors() throws IOException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.bin");
+        final var inF = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
         // test constructor with output stream and loader
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
+        var writer = new MeshWriterBinary(loader, outStream);
         assertTrue(writer.isReady());
         assertFalse(writer.isLocked());
         assertEquals(outStream, writer.getStream());
         assertNull(writer.getListener());
 
-        final MeshWriterListener listener = new MeshWriterListener() {
+        final var listener = new MeshWriterListener() {
 
             @Override
             public void onWriteStart(final MeshWriter writer) {
+                // no action needed
             }
 
             @Override
             public void onWriteEnd(final MeshWriter writer) {
+                // no action needed
             }
 
             @Override
-            public void onWriteProgressChange(final MeshWriter writer,
-                                              final float progress) {
-            }
-
-            @Override
-            public File onMaterialFileRequested(final MeshWriter writer,
-                                                final String path) {
-                return null;
-            }
-
-            @Override
-            public File onValidateTexture(final MeshWriter writer, final Texture texture) {
-                return null;
-            }
-
-            @Override
-            public void onDidValidateTexture(final MeshWriter writer, final File f) {
-            }
-
-            @Override
-            public File onTextureReceived(
-                    final MeshWriter writer, final int textureWidth,
-                    final int textureHeight) {
-                return null;
-            }
-
-            @Override
-            public File onTextureDataAvailable(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
-                return null;
-            }
-
-            @Override
-            public void onTextureDataProcessed(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
-            }
-
-            @Override
-            public void onChunkAvailable(final MeshWriter writer, final DataChunk chunk) {
-            }
-        };
-
-        writer = new MeshWriterBinary(loader, outStream, listener);
-        assertTrue(writer.isReady());
-        assertFalse(writer.isLocked());
-        assertEquals(outStream, writer.getStream());
-        assertEquals(listener, writer.getListener());
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-    }
-
-    @Test
-    public void testGetSetListener() throws IOException, LockedException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.bin");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        final MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        assertNull(writer.getListener());
-
-        // set new listener
-        final MeshWriterListener listener = new MeshWriterListener() {
-
-            @Override
-            public void onWriteStart(final MeshWriter writer) {
-            }
-
-            @Override
-            public void onWriteEnd(final MeshWriter writer) {
-            }
-
-            @Override
-            public void onWriteProgressChange(final MeshWriter writer,
-                                              final float progress) {
+            public void onWriteProgressChange(final MeshWriter writer, final float progress) {
+                // no action needed
             }
 
             @Override
@@ -188,30 +113,108 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
 
             @Override
             public void onDidValidateTexture(final MeshWriter writer, final File f) {
+                // no action needed
             }
 
             @Override
             public File onTextureReceived(
-                    final MeshWriter writer, final int textureWidth,
-                    final int textureHeight) {
+                    final MeshWriter writer, final int textureWidth, final int textureHeight) {
                 return null;
             }
 
             @Override
             public File onTextureDataAvailable(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
                 return null;
             }
 
             @Override
             public void onTextureDataProcessed(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
+                // no action needed
             }
 
             @Override
             public void onChunkAvailable(final MeshWriter writer, final DataChunk chunk) {
+                // no action needed
+            }
+        };
+
+        writer = new MeshWriterBinary(loader, outStream, listener);
+        assertTrue(writer.isReady());
+        assertFalse(writer.isLocked());
+        assertEquals(outStream, writer.getStream());
+        assertEquals(listener, writer.getListener());
+
+        assertTrue(outF.exists());
+        assertTrue(outF.delete());
+    }
+
+    @Test
+    void testGetSetListener() throws IOException, LockedException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.bin");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.ply");
+
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
+
+        final var writer = new MeshWriterBinary(loader, outStream);
+        assertNull(writer.getListener());
+
+        // set new listener
+        final var listener = new MeshWriterListener() {
+
+            @Override
+            public void onWriteStart(final MeshWriter writer) {
+                // no action needed
+            }
+
+            @Override
+            public void onWriteEnd(final MeshWriter writer) {
+                // no action needed
+            }
+
+            @Override
+            public void onWriteProgressChange(final MeshWriter writer, final float progress) {
+                // no action needed
+            }
+
+            @Override
+            public File onMaterialFileRequested(final MeshWriter writer, final String path) {
+                return null;
+            }
+
+            @Override
+            public File onValidateTexture(final MeshWriter writer, final Texture texture) {
+                return null;
+            }
+
+            @Override
+            public void onDidValidateTexture(final MeshWriter writer, final File f) {
+                // no action needed
+            }
+
+            @Override
+            public File onTextureReceived(
+                    final MeshWriter writer, final int textureWidth, final int textureHeight) {
+                return null;
+            }
+
+            @Override
+            public File onTextureDataAvailable(
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
+                return null;
+            }
+
+            @Override
+            public void onTextureDataProcessed(
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
+                // no action needed
+            }
+
+            @Override
+            public void onChunkAvailable(final MeshWriter writer, final DataChunk chunk) {
+                // no action needed
             }
         };
 
@@ -222,16 +225,23 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         assertTrue(outF.delete());
     }
 
-    @Test
-    public void testWriteAndIsReadyRandomAsciiFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "randomAscii.bin");
-        final File inF = new File(INPUT_FOLDER, "randomAscii.ply");
+    @ParameterizedTest(name = "{index} - inputFile = {0}, outputFile = {1}")
+    @CsvSource({"randomAscii.ply,randomAscii.bin",
+            "randomLittle.ply,randomLittle.bin",
+            "randomBig.ply,randomBig.bin",
+            "booksBinary.ply,booksBinary.bin",
+            "booksAscii.ply,booksAscii.bin",
+            "pilarAscii.ply,pilarAscii.bin",
+            "pilarLittleEndian.ply,pilarLittleEndian.bin",
+            "pilarBigEndian.ply,pilarBigEndian.bin"})
+    void testWriteAndIsReadyPly(final String inputFile, final String outputFile) throws IOException, LockedException, LoaderException, NotReadyException {
+        final var outF = new File(TMP_FOLDER, outputFile);
+        final var inF = new File(INPUT_FOLDER, inputFile);
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
+        var writer = new MeshWriterBinary(loader, outStream);
         writer.setListener(this);
         assertTrue(writer.isReady());
 
@@ -251,30 +261,59 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         // Force NotReadyException
         writer = new MeshWriterBinary(loader, null);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
         writer = new MeshWriterBinary(null, outStream);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
+    }
+
+    @ParameterizedTest(name = "{index} - inputFile = {0}, outputFile = {1}")
+    @CsvSource({"books.obj,booksObj.bin",
+            "pitcher.obj,pitcherObj.bin",
+            "potro.obj,potroObj.bin"})
+    void testWriteAndIsReadyObj(final String inputFile, final String outputFile) throws IOException, LockedException, LoaderException, NotReadyException {
+        final var outF = new File(TMP_FOLDER, outputFile);
+        final var inF = new File(INPUT_FOLDER, inputFile);
+
+        final var loader = new LoaderOBJ(inF);
+        final var outStream = new FileOutputStream(outF);
+
+        var writer = new MeshWriterBinary(loader, outStream);
+        writer.setListener(this);
+        assertTrue(writer.isReady());
+
+        // write into json
+        writer.write();
+        outStream.close();
+
+        assertTrue(isEndValid());
+        assertTrue(isLockedValid());
+        assertTrue(isProgressValid());
+        assertTrue(isStartValid());
+        resetListener();
+
+        assertTrue(outF.exists());
+        assertTrue(outF.delete());
+
+        // Force NotReadyException
+        writer = new MeshWriterBinary(loader, null);
+        assertFalse(writer.isReady());
+        assertThrows(NotReadyException.class, writer::write);
+        writer = new MeshWriterBinary(null, outStream);
+        assertFalse(writer.isReady());
+        assertThrows(NotReadyException.class, writer::write);
     }
 
     @Test
-    public void testWriteAndIsReadyRandomLittleFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "randomLittle.bin");
-        final File inF = new File(INPUT_FOLDER, "randomLittle.ply");
+    void testWriteAndIsReadyBooksBinaryStlFile() throws IOException, LockedException, LoaderException,
+            NotReadyException {
+        final var outF = new File(TMP_FOLDER, "booksBinaryStl.bin");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.stl");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderSTL(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
+        var writer = new MeshWriterBinary(loader, outStream);
         writer.setListener(this);
         assertTrue(writer.isReady());
 
@@ -294,35 +333,27 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         // Force NotReadyException
         writer = new MeshWriterBinary(loader, null);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
         writer = new MeshWriterBinary(null, outStream);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
     }
 
     @Test
-    public void testWriteAndIsReadyRandomBigFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "randomBig.bin");
-        final File inF = new File(INPUT_FOLDER, "randomBig.ply");
+    void testWriteAndIsReadyBooksAsciiStlFile() throws IOException, LockedException, LoaderException,
+            NotReadyException {
+        final var outF = new File(TMP_FOLDER, "booksAsciiStl.bin");
+        final var inF = new File(INPUT_FOLDER, "booksAscii.stl");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderSTL(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
+        final var writer1 = new MeshWriterBinary(loader, outStream);
+        writer1.setListener(this);
+        assertTrue(writer1.isReady());
 
         // write into json
-        writer.write();
+        writer1.write();
         outStream.close();
 
         assertTrue(isEndValid());
@@ -335,452 +366,12 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
         assertTrue(outF.delete());
 
         // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksBinaryFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.bin");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksAsciiFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksAscii.bin");
-        final File inF = new File(INPUT_FOLDER, "booksAscii.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksObjFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksObj.bin");
-        final File inF = new File(INPUT_FOLDER, "books.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksBinaryStlFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksBinaryStl.bin");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.stl");
-
-        final Loader loader = new LoaderSTL(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksAsciiStlFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksAsciiStl.bin");
-        final File inF = new File(INPUT_FOLDER, "booksAscii.stl");
-
-        final Loader loader = new LoaderSTL(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPitcherObjFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pitcherObj.bin");
-        final File inF = new File(INPUT_FOLDER, "pitcher.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPotroFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "potroObj.bin");
-        // This file references textures which are already in jpeg format, those
-        // textures will be embedded in resulting binary file
-        final File inF = new File(INPUT_FOLDER, "potro.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPilarAsciiFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pilarAscii.bin");
-        final File inF = new File(INPUT_FOLDER, "pilarAscii.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPilarLittleEndianFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pilarLittleEndian.bin");
-        final File inF = new File(INPUT_FOLDER, "pilarLittleEndian.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPilarBigEndianFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pilarBigEndian.bin");
-        final File inF = new File(INPUT_FOLDER, "pilarBigEndian.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
-        writer.setListener(this);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterBinary(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterBinary(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        final var writer2 = new MeshWriterBinary(loader, null);
+        assertFalse(writer2.isReady());
+        assertThrows(NotReadyException.class, writer2::write);
+        final var writer3 = new MeshWriterBinary(null, outStream);
+        assertFalse(writer3.isReady());
+        assertThrows(NotReadyException.class, writer3::write);
     }
 
     @Override
@@ -824,14 +415,14 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
     // FOR OBJ LOADER
     @Override
     public File onMaterialFileRequested(final MeshWriter writer, final String path) {
-        File origF = new File(path);
+        final var origF = new File(path);
         return new File(INPUT_FOLDER, origF.getName());
     }
 
     @Override
     public File onValidateTexture(final MeshWriter writer, final Texture texture) {
-        final File origF = new File(texture.getFileName());
-        final File inputTextureFile = new File(INPUT_FOLDER, origF.getName());
+        final var origF = new File(texture.getFileName());
+        final var inputTextureFile = new File(INPUT_FOLDER, origF.getName());
         // image needs to be in jpg format, if it isn't here we have a chance
         // to convert it
         texture.setValid(true);
@@ -846,22 +437,20 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
     }
 
     @Override
-    public File onTextureReceived(final MeshWriter writer, final int textureWidth,
-                                  final int textureHeight) {
+    public File onTextureReceived(final MeshWriter writer, final int textureWidth, final int textureHeight) {
         // generate a temporal file in TMP_FOLDER where texture data will be
         // stored
         try {
             // FOR BINARY LOADER
-            return File.createTempFile("tex", ".jpg", new File(
-                    TMP_FOLDER));
+            return File.createTempFile("tex", ".jpg", new File(TMP_FOLDER));
         } catch (final IOException e) {
             return null;
         }
     }
 
     @Override
-    public File onTextureDataAvailable(final MeshWriter writer, final File textureFile,
-                                       final int textureWidth, final int textureHeight) {
+    public File onTextureDataAvailable(final MeshWriter writer, final File textureFile, final int textureWidth,
+                                       final int textureHeight) {
         // texture file needs to be rewritten into JPG format, since the data
         // contained in that file will be used by the MeshWriter.
         // Because textures are already in JPG format in this test, there is no
@@ -870,8 +459,8 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
     }
 
     @Override
-    public void onTextureDataProcessed(final MeshWriter writer, final File textureFile,
-                                       final int textureWidth, final int textureHeight) {
+    public void onTextureDataProcessed(final MeshWriter writer, final File textureFile, final int textureWidth,
+                                       final int textureHeight) {
         // this method is called to give an opportunity to delete any generated
         // texture files
 
@@ -889,6 +478,7 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
             writer.setListener(null);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -897,6 +487,7 @@ public class MeshWriterBinaryTest implements MeshWriterListener {
             writer.write();
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }

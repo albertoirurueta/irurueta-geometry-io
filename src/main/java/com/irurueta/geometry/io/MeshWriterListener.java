@@ -109,8 +109,7 @@ public interface MeshWriterListener {
      * @param textureHeight texture image height in pixels.
      * @return File where texture data will be copied to.
      */
-    File onTextureReceived(final MeshWriter writer, final int textureWidth,
-                           final int textureHeight);
+    File onTextureReceived(final MeshWriter writer, final int textureWidth, final int textureHeight);
 
     /**
      * Called when texture data of a binary file has been copied to temporal
@@ -125,8 +124,8 @@ public interface MeshWriterListener {
      * @return converted image trans-coded into JPG format or resized if
      * needed, otherwise textureFile can be returned if no changes are needed.
      */
-    File onTextureDataAvailable(final MeshWriter writer, final File textureFile,
-                                final int textureWidth, final int textureHeight);
+    File onTextureDataAvailable(final MeshWriter writer, final File textureFile, final int textureWidth,
+                                final int textureHeight);
 
     /**
      * Called when texture data has already been processed for a binary file.
@@ -139,6 +138,6 @@ public interface MeshWriterListener {
      * @param textureWidth  texture image width in pixels.
      * @param textureHeight texture image height in pixels.
      */
-    void onTextureDataProcessed(final MeshWriter writer, final File textureFile,
-                                final int textureWidth, final int textureHeight);
+    void onTextureDataProcessed(final MeshWriter writer, final File textureFile, final int textureWidth,
+                                final int textureHeight);
 }

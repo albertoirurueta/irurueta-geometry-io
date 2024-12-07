@@ -307,9 +307,8 @@ public class Chunk3DS {
         return endStreamPosition >= 0;
     }
 
-    public static Chunk3DS load(final AbstractFileReaderAndWriter reader)
-            throws IOException {
-        final Chunk3DS chunk = new Chunk3DS();
+    public static Chunk3DS load(final AbstractFileReaderAndWriter reader) throws IOException {
+        final var chunk = new Chunk3DS();
         chunk.startStreamPosition = reader.getPosition();
         chunk.chunkId = reader.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE);
         chunk.size = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);

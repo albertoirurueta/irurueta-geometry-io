@@ -30,8 +30,8 @@ public interface LoaderListenerBinary extends LoaderListener {
      * @param textureImageHeight Texture image height in pixels.
      * @return A file where texture data will be stored.
      */
-    File onTextureReceived(final LoaderBinary loader, final int textureId,
-                           final int textureImageWidth, final int textureImageHeight);
+    File onTextureReceived(final LoaderBinary loader, final int textureId, final int textureImageWidth,
+                           final int textureImageHeight);
 
     /**
      * Indicates that texture data has been stored in provided texture file,
@@ -48,8 +48,6 @@ public interface LoaderListenerBinary extends LoaderListener {
      * binary loader by raising a LoaderException.
      * @see #onTextureReceived(LoaderBinary, int, int, int)
      */
-    boolean onTextureDataAvailable(final LoaderBinary loader,
-                                   final File textureFile, final int textureId,
-                                   final int textureImageWidth,
-                                   final int textureImageHeight);
+    boolean onTextureDataAvailable(final LoaderBinary loader, final File textureFile, final int textureId,
+                                   final int textureImageWidth, final int textureImageHeight);
 }

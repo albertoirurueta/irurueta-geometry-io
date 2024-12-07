@@ -17,18 +17,18 @@
 package com.irurueta.geometry.io;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UtilTest {
+class UtilTest {
 
     @Test
-    public void testToBigEndian() {
-        final ByteBuffer buffer = ByteBuffer.allocate(8);
+    void testToBigEndian() {
+        final var buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         final short shortValue = 5436;
@@ -38,28 +38,28 @@ public class UtilTest {
         assertEquals(buffer.getShort(0), Util.toBigEndian(shortValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final int intValue = 231452564;
+        final var intValue = 231452564;
         buffer.putInt(0, intValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getInt(0), Util.toBigEndian(intValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final long longValue = 542364326;
+        final var longValue = 542364326L;
         buffer.putLong(0, longValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getLong(0), Util.toBigEndian(longValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final float floatValue = 413632.3245f;
+        final var floatValue = 413632.3245f;
         buffer.putFloat(0, floatValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getFloat(0), Util.toBigEndian(floatValue), 0.0);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final double doubleValue = 5324623.23636645;
+        final var doubleValue = 5324623.23636645;
         buffer.putDouble(0, doubleValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
@@ -67,8 +67,8 @@ public class UtilTest {
     }
 
     @Test
-    public void testToLittleEndian() {
-        final ByteBuffer buffer = ByteBuffer.allocate(8);
+    void testToLittleEndian() {
+        final var buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         final short shortValue = 5436;
@@ -78,28 +78,28 @@ public class UtilTest {
         assertEquals(buffer.getShort(0), Util.toLittleEndian(shortValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final int intValue = 231452564;
+        final var intValue = 231452564;
         buffer.putInt(0, intValue);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         assertEquals(buffer.getInt(0), Util.toLittleEndian(intValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final long longValue = 542364326;
+        final var longValue = 542364326L;
         buffer.putLong(0, longValue);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         assertEquals(buffer.getLong(0), Util.toLittleEndian(longValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final float floatValue = 413632.3245f;
+        final var floatValue = 413632.3245f;
         buffer.putFloat(0, floatValue);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         assertEquals(buffer.getFloat(0), Util.toLittleEndian(floatValue), 0.0);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final double doubleValue = 5324623.23636645;
+        final var doubleValue = 5324623.23636645;
         buffer.putDouble(0, doubleValue);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -107,8 +107,8 @@ public class UtilTest {
     }
 
     @Test
-    public void testFromBigEndian() {
-        final ByteBuffer buffer = ByteBuffer.allocate(8);
+    void testFromBigEndian() {
+        final var buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         final short shortValue = 5436;
@@ -118,28 +118,28 @@ public class UtilTest {
         assertEquals(buffer.getShort(0), Util.fromBigEndian(shortValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final int intValue = 231452564;
+        final var intValue = 231452564;
         buffer.putInt(0, intValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getInt(0), Util.fromBigEndian(intValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final long longValue = 542364326;
+        final var longValue = 542364326L;
         buffer.putLong(0, longValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getLong(0), Util.fromBigEndian(longValue));
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final float floatValue = 413632.3245f;
+        final var floatValue = 413632.3245f;
         buffer.putFloat(0, floatValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getFloat(0), Util.fromBigEndian(floatValue), 0.0);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        final double doubleValue = 5324623.23636645;
+        final var doubleValue = 5324623.23636645;
         buffer.putDouble(0, doubleValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
@@ -147,8 +147,8 @@ public class UtilTest {
     }
 
     @Test
-    public void testFromLittleEndian() {
-        final ByteBuffer buffer = ByteBuffer.allocate(8);
+    void testFromLittleEndian() {
+        final var buffer = ByteBuffer.allocate(8);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         final short shortValue = 5436;
@@ -158,28 +158,28 @@ public class UtilTest {
         assertEquals(buffer.getShort(0), Util.fromLittleEndian(shortValue));
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        final int intValue = 231452564;
+        final var intValue = 231452564;
         buffer.putInt(0, intValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getInt(0), Util.fromLittleEndian(intValue));
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        final long longValue = 542364326;
+        final var longValue = 542364326L;
         buffer.putLong(0, longValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getLong(0), Util.fromLittleEndian(longValue));
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        final float floatValue = 413632.3245f;
+        final var floatValue = 413632.3245f;
         buffer.putFloat(0, floatValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
         assertEquals(buffer.getFloat(0), Util.fromLittleEndian(floatValue), 0.0);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        final double doubleValue = 5324623.23636645;
+        final var doubleValue = 5324623.23636645;
         buffer.putDouble(0, doubleValue);
         buffer.order(ByteOrder.BIG_ENDIAN);
 
@@ -187,67 +187,55 @@ public class UtilTest {
     }
 
     @Test
-    public void testToEndianType() {
+    void testToEndianType() {
         final short shortValue = 5436;
-        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, shortValue),
-                Util.toBigEndian(shortValue));
-        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, shortValue),
-                Util.toLittleEndian(shortValue));
+        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, shortValue), Util.toBigEndian(shortValue));
+        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, shortValue), Util.toLittleEndian(shortValue));
 
-        final int intValue = 231452564;
-        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, intValue),
-                Util.toBigEndian(intValue));
-        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, intValue),
-                Util.toLittleEndian(intValue));
+        final var intValue = 231452564;
+        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, intValue), Util.toBigEndian(intValue));
+        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, intValue), Util.toLittleEndian(intValue));
 
-        final long longValue = 542364326;
-        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, longValue),
-                Util.toBigEndian(longValue));
-        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, longValue),
-                Util.toLittleEndian(longValue));
+        final var longValue = 542364326L;
+        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, longValue), Util.toBigEndian(longValue));
+        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, longValue), Util.toLittleEndian(longValue));
 
-        final float floatValue = 413632.3245f;
-        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, floatValue),
-                Util.toBigEndian(floatValue), 0.0);
-        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, floatValue),
-                Util.toLittleEndian(floatValue), 0.0);
+        final var floatValue = 413632.3245f;
+        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, floatValue), Util.toBigEndian(floatValue),
+                0.0);
+        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, floatValue), Util.toLittleEndian(floatValue),
+                0.0);
 
-        final double doubleValue = 5324623.23636645;
-        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, doubleValue),
-                Util.toBigEndian(doubleValue), 0.0);
-        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, doubleValue),
-                Util.toLittleEndian(doubleValue), 0.0);
+        final var doubleValue = 5324623.23636645;
+        assertEquals(Util.toEndianType(EndianType.BIG_ENDIAN_TYPE, doubleValue), Util.toBigEndian(doubleValue),
+                0.0);
+        assertEquals(Util.toEndianType(EndianType.LITTLE_ENDIAN_TYPE, doubleValue), Util.toLittleEndian(doubleValue),
+                0.0);
     }
 
     @Test
-    public void testFromEndianType() {
+    void testFromEndianType() {
         final short shortValue = 5436;
-        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, shortValue),
-                Util.fromBigEndian(shortValue));
-        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, shortValue),
-                Util.fromLittleEndian(shortValue));
+        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, shortValue), Util.fromBigEndian(shortValue));
+        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, shortValue), Util.fromLittleEndian(shortValue));
 
-        final int intValue = 231452564;
-        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, intValue),
-                Util.fromBigEndian(intValue));
-        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, intValue),
-                Util.fromLittleEndian(intValue));
+        final var intValue = 231452564;
+        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, intValue), Util.fromBigEndian(intValue));
+        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, intValue), Util.fromLittleEndian(intValue));
 
-        final long longValue = 542364326;
-        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, longValue),
-                Util.fromBigEndian(longValue));
-        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, longValue),
-                Util.fromLittleEndian(longValue));
+        final var longValue = 542364326L;
+        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, longValue), Util.fromBigEndian(longValue));
+        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, longValue), Util.fromLittleEndian(longValue));
 
-        final float floatValue = 413632.3245f;
-        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, floatValue),
-                Util.fromBigEndian(floatValue), 0.0);
-        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, floatValue),
-                Util.fromLittleEndian(floatValue), 0.0);
+        final var floatValue = 413632.3245f;
+        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, floatValue), Util.fromBigEndian(floatValue),
+                0.0);
+        assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, floatValue), Util.fromLittleEndian(floatValue),
+                0.0);
 
-        final double doubleValue = 5324623.23636645;
-        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, doubleValue),
-                Util.fromBigEndian(doubleValue), 0.0);
+        final var doubleValue = 5324623.23636645;
+        assertEquals(Util.fromEndianType(EndianType.BIG_ENDIAN_TYPE, doubleValue), Util.fromBigEndian(doubleValue),
+                0.0);
         assertEquals(Util.fromEndianType(EndianType.LITTLE_ENDIAN_TYPE, doubleValue),
                 Util.fromLittleEndian(doubleValue), 0.0);
     }

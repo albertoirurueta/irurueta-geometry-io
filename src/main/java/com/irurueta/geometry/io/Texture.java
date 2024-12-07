@@ -61,7 +61,7 @@ public class Texture {
      * @param id id to be set for this texture.
      */
     public Texture(final int id) {
-        this.fileName = "";
+        fileName = "";
         this.id = id;
         file = null;
         width = height = -1;

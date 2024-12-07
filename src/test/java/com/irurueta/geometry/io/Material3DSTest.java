@@ -15,17 +15,17 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Material3DSTest {
+class Material3DSTest {
 
     private static final String MATERIAL_NAME = "name";
 
     @Test
-    public void testConstructor() {
-        Material3DS material = new Material3DS();
+    void testConstructor() {
+        var material = new Material3DS();
         assertNull(material.getMaterialName());
         assertFalse(material.isMaterialNameAvailable());
 
@@ -35,8 +35,8 @@ public class Material3DSTest {
     }
 
     @Test
-    public void testGetSetMaterialName() {
-        final Material3DS material = new Material3DS();
+    void testGetSetMaterialName() {
+        final var material = new Material3DS();
 
         // check default value
         assertNull(material.getMaterialName());

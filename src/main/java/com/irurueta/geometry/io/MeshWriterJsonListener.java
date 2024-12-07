@@ -31,8 +31,7 @@ public interface MeshWriterJsonListener extends MeshWriterListener {
      * @param textureFile reference to file containing texture.
      * @return URL where texture can be located.
      */
-    String onRemoteTextureUrlRequested(final MeshWriterJson writer,
-                                       final Texture texture, final File textureFile);
+    String onRemoteTextureUrlRequested(final MeshWriterJson writer, final Texture texture, final File textureFile);
 
     /**
      * Handles texture to write ID to fetch it.
@@ -42,6 +41,5 @@ public interface MeshWriterJsonListener extends MeshWriterListener {
      * @param textureFile reference to file containing texture
      * @return ID to locate texture.
      */
-    String onRemoteTextureIdRequested(final MeshWriterJson writer,
-                                      final Texture texture, final File textureFile);
+    String onRemoteTextureIdRequested(final MeshWriterJson writer, final Texture texture, final File textureFile);
 }

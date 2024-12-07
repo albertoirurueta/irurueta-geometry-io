@@ -81,8 +81,7 @@ public abstract class MeshWriter {
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
-    protected MeshWriter(final Loader loader, final OutputStream stream,
-                         final MeshWriterListener listener) {
+    protected MeshWriter(final Loader loader, final OutputStream stream, final MeshWriterListener listener) {
         this.loader = loader;
         this.stream = stream;
         this.listener = listener;
@@ -148,8 +147,7 @@ public abstract class MeshWriter {
     /**
      * Internal class implementing listeners for different specific loaders.
      */
-    private class Listeners implements LoaderListener,
-            LoaderListenerOBJ, LoaderListenerBinary, MaterialLoaderListener {
+    private class Listeners implements LoaderListener, LoaderListenerOBJ, LoaderListenerBinary, MaterialLoaderListener {
 
         /**
          * Reference to mesh writer.
@@ -213,11 +211,9 @@ public abstract class MeshWriter {
          * @return an instance of a material loader.
          */
         @Override
-        public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader,
-                                                           final String path) {
+        public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader, final String path) {
             if (listener != null) {
-                final File materialFile = listener.onMaterialFileRequested(writer,
-                        path);
+                final var materialFile = listener.onMaterialFileRequested(writer, path);
 
                 if (materialFile == null) {
                     return null;
@@ -245,11 +241,10 @@ public abstract class MeshWriter {
          * @return File where texture data will be copied to.
          */
         @Override
-        public File onTextureReceived(final LoaderBinary loader, final int textureId,
-                                      final int textureImageWidth, final int textureImageHeight) {
+        public File onTextureReceived(final LoaderBinary loader, final int textureId, final int textureImageWidth,
+                                      final int textureImageHeight) {
             if (listener != null) {
-                return listener.onTextureReceived(writer, textureImageWidth,
-                        textureImageHeight);
+                return listener.onTextureReceived(writer, textureImageWidth, textureImageHeight);
             }
 
             return null;
@@ -268,22 +263,21 @@ public abstract class MeshWriter {
          * needed, or input textureFile if no changes are needed.
          */
         @Override
-        public boolean onTextureDataAvailable(final LoaderBinary loader,
-                                              final File textureFile, final int textureId, final int textureImageWidth,
-                                              final int textureImageHeight) {
-            boolean valid = true;
-            File convertedFile = textureFile;
+        public boolean onTextureDataAvailable(final LoaderBinary loader, final File textureFile, final int textureId,
+                                              final int textureImageWidth, final int textureImageHeight) {
+            var valid = true;
+            var convertedFile = textureFile;
             if (textureFile != null) {
                 if (listener != null) {
                     // notify that texture data has been copied into texture file
                     // in case it needs to be handled elsewhere (to transform it
                     // into another format)
-                    convertedFile = listener.onTextureDataAvailable(writer,
-                            textureFile, textureImageWidth, textureImageHeight);
+                    convertedFile = listener.onTextureDataAvailable(writer, textureFile, textureImageWidth,
+                            textureImageHeight);
                 }
 
                 if (convertedFile != null) {
-                    final Texture tex = new Texture(textureId);
+                    final var tex = new Texture(textureId);
                     tex.setWidth(textureImageWidth);
                     tex.setHeight(textureImageHeight);
                     tex.setValid(true);
@@ -295,8 +289,7 @@ public abstract class MeshWriter {
                     }
 
                     if (listener != null) {
-                        listener.onTextureDataProcessed(writer, textureFile,
-                                textureId, textureImageHeight);
+                        listener.onTextureDataProcessed(writer, textureFile, textureId, textureImageHeight);
                     }
                 }
             }
@@ -334,11 +327,10 @@ public abstract class MeshWriter {
          * @return true if texture is valid, false otherwise.
          */
         @Override
-        public boolean onValidateTexture(final MaterialLoader loader,
-                                         final Texture texture) {
-            boolean valid = true;
+        public boolean onValidateTexture(final MaterialLoader loader, final Texture texture) {
+            var valid = true;
             if (listener != null && !ignoreTextureValidation) {
-                final File textureFile = listener.onValidateTexture(writer, texture);
+                final var textureFile = listener.onValidateTexture(writer, texture);
                 valid = texture.isValid();
 
                 if (valid && textureFile != null) {
@@ -366,8 +358,7 @@ public abstract class MeshWriter {
      *                           loader has not been provided or an output stream has not been provided.
      * @throws LockedException   if this mesh writer is locked processing a file.
      */
-    public abstract void write() throws LoaderException, IOException,
-            NotReadyException, LockedException;
+    public abstract void write() throws LoaderException, IOException, NotReadyException, LockedException;
 
     /**
      * Abstract method to processes texture file. Usually this will imply
@@ -378,6 +369,5 @@ public abstract class MeshWriter {
      * @param textureFile file where texture is temporarily copied.
      * @throws IOException if an I/O error occurs.
      */
-    protected abstract void processTextureFile(
-            final Texture texture, final File textureFile) throws IOException;
+    protected abstract void processTextureFile(final Texture texture, final File textureFile) throws IOException;
 }

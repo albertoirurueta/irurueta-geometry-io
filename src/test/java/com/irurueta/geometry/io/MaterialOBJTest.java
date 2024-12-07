@@ -16,13 +16,11 @@
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class MaterialOBJTest {
+class MaterialOBJTest {
 
     private static final int MIN_COLOR_VALUE = 0;
     private static final int MAX_COLOR_VALUE = 255;
@@ -34,20 +32,20 @@ public class MaterialOBJTest {
     private static final int MAX_ILLUMINATION_VALUE = 10;
 
     @Test
-    public void testConstructor() {
-        final String materialName = "materialName";
-        final MaterialOBJ material = new MaterialOBJ(materialName);
+    void testConstructor() {
+        final var materialName = "materialName";
+        final var material = new MaterialOBJ(materialName);
         assertNotNull(material);
         assertEquals(materialName, material.getMaterialName());
     }
 
     @Test
-    public void testGetSetId() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetId() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final int id = randomizer.nextInt();
+        final var id = randomizer.nextInt();
 
         // check default value
         assertEquals(0, material.getId());
@@ -59,12 +57,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetAmbientRedColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetAmbientRedColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getAmbientRedColor());
@@ -78,12 +76,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetAmbientGreenColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetAmbientGreenColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getAmbientGreenColor());
@@ -97,12 +95,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetAmbientBlueColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetAmbientBlueColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getAmbientBlueColor());
@@ -116,14 +114,14 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testSetAmbientColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testSetAmbientColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
-        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
-        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getAmbientRedColor());
@@ -150,12 +148,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetDiffuseRedColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetDiffuseRedColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getDiffuseRedColor());
@@ -169,12 +167,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetDiffuseGreenColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetDiffuseGreenColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getDiffuseGreenColor());
@@ -188,12 +186,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetDiffuseBlueColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetDiffuseBlueColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getDiffuseBlueColor());
@@ -207,14 +205,14 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testSetDiffuseColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testSetDiffuseColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
-        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
-        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getDiffuseRedColor());
@@ -241,12 +239,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetSpecularRedColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetSpecularRedColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getSpecularRedColor());
@@ -260,12 +258,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetSpecularGreenColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetSpecularGreenColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getSpecularGreenColor());
@@ -279,12 +277,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetSpecularBlueColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetSpecularBlueColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var color = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getSpecularBlueColor());
@@ -298,14 +296,14 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testSetSpecularColor() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testSetSpecularColor() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
-        final short green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
-        final short blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var red = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var green = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var blue = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getSpecularRedColor());
@@ -332,12 +330,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetSpecularCoefficient() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetSpecularCoefficient() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final float coef = randomizer.nextFloat(MIN_SPECULAR_COEFFICIENT, MAX_SPECULAR_COEFFICIENT);
+        final var coef = randomizer.nextFloat(MIN_SPECULAR_COEFFICIENT, MAX_SPECULAR_COEFFICIENT);
 
         // check default value
         assertEquals(0.0f, material.getSpecularCoefficient(), 0.0);
@@ -351,10 +349,10 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetAmbientTextureMap() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetAmbientTextureMap() {
+        final var material = new MaterialOBJ("materialName");
 
-        final Texture texture = new Texture("ambient.png", 0);
+        final var texture = new Texture("ambient.png", 0);
 
         // check default value
         assertNull(material.getAmbientTextureMap());
@@ -368,10 +366,10 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetDiffuseTextureMap() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetDiffuseTextureMap() {
+        final var material = new MaterialOBJ("materialName");
 
-        final Texture texture = new Texture("diffuse.png", 0);
+        final var texture = new Texture("diffuse.png", 0);
 
         // check default value
         assertNull(material.getDiffuseTextureMap());
@@ -385,10 +383,10 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetSpecularTextureMap() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetSpecularTextureMap() {
+        final var material = new MaterialOBJ("materialName");
 
-        final Texture texture = new Texture("specular.png", 0);
+        final var texture = new Texture("specular.png", 0);
 
         // check default value
         assertNull(material.getSpecularTextureMap());
@@ -402,10 +400,10 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetAlphaTextureMap() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetAlphaTextureMap() {
+        final var material = new MaterialOBJ("materialName");
 
-        final Texture texture = new Texture("alpha.png", 0);
+        final var texture = new Texture("alpha.png", 0);
 
         // check default value
         assertNull(material.getAlphaTextureMap());
@@ -419,10 +417,10 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetBumpTextureMap() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetBumpTextureMap() {
+        final var material = new MaterialOBJ("materialName");
 
-        final Texture texture = new Texture("bump.png", 0);
+        final var texture = new Texture("bump.png", 0);
 
         // check default value
         assertNull(material.getBumpTextureMap());
@@ -436,12 +434,12 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetTransparency() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetTransparency() {
+        final var material = new MaterialOBJ("materialName");
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final short trans = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
+        final var trans = (short) randomizer.nextInt(MIN_COLOR_VALUE, MAX_COLOR_VALUE);
 
         // check default value
         assertEquals(-1, material.getTransparency());
@@ -455,15 +453,15 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetIllumination() {
-        final MaterialOBJ material = new MaterialOBJ("materialName");
+    void testGetSetIllumination() {
+        final var material = new MaterialOBJ("materialName");
 
         assertNull(material.getIllumination());
         assertFalse(material.isIlluminationAvailable());
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int illumValue = randomizer.nextInt(MIN_ILLUMINATION_VALUE, MAX_ILLUMINATION_VALUE);
-        final Illumination illumination = Illumination.forValue(illumValue);
+        final var randomizer = new UniformRandomizer();
+        final var illumValue = randomizer.nextInt(MIN_ILLUMINATION_VALUE, MAX_ILLUMINATION_VALUE);
+        final var illumination = Illumination.forValue(illumValue);
 
         // set new value
         material.setIllumination(illumination);
@@ -473,9 +471,9 @@ public class MaterialOBJTest {
     }
 
     @Test
-    public void testGetSetMaterialName() {
-        final String materialName = "materialName";
-        final MaterialOBJ material = new MaterialOBJ(materialName);
+    void testGetSetMaterialName() {
+        final var materialName = "materialName";
+        final var material = new MaterialOBJ(materialName);
 
         assertEquals(materialName, material.getMaterialName());
         assertTrue(material.isMaterialNameAvailable());

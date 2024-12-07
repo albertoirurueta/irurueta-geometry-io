@@ -29,8 +29,7 @@ public abstract class Loader implements Closeable {
     /**
      * Default limit of bytes to keep mapped in memory.
      */
-    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY =
-            50000000;
+    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY = 50000000;
 
     /**
      * Instance in charge of reading data from file.
@@ -81,14 +80,12 @@ public abstract class Loader implements Closeable {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         file = f;
         if (f.length() < fileSizeLimitToKeepInMemory) {
-            reader = new MappedFileReaderAndWriter(f,
-                    FileChannel.MapMode.READ_ONLY);
+            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
         locked = false;
         listener = null;
-
     }
 
     /**
@@ -115,8 +112,7 @@ public abstract class Loader implements Closeable {
         fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;
         file = f;
         if (f.length() < fileSizeLimitToKeepInMemory) {
-            reader = new MappedFileReaderAndWriter(f,
-                    FileChannel.MapMode.READ_ONLY);
+            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
@@ -145,8 +141,7 @@ public abstract class Loader implements Closeable {
      * @throws LockedException if loader is locked because it is currently
      *                         processing a file.
      */
-    public void setFileSizeLimitToKeepInMemory(
-            final long fileSizeLimitToKeepInMemory) throws LockedException {
+    public void setFileSizeLimitToKeepInMemory(final long fileSizeLimitToKeepInMemory) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -173,8 +168,7 @@ public abstract class Loader implements Closeable {
      *                         exception occurs.
      */
     @SuppressWarnings("DuplicatedCode")
-    public void setFile(final File f)
-            throws LockedException, IOException {
+    public void setFile(final File f) throws LockedException, IOException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -186,8 +180,7 @@ public abstract class Loader implements Closeable {
         }
 
         if (f.length() < fileSizeLimitToKeepInMemory) {
-            reader = new MappedFileReaderAndWriter(f,
-                    FileChannel.MapMode.READ_ONLY);
+            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         } else {
             reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
         }
@@ -292,6 +285,5 @@ public abstract class Loader implements Closeable {
      * @throws IOException       if an I/O error occurs.
      * @throws LoaderException   if file is corrupted or cannot be interpreted.
      */
-    public abstract LoaderIterator load() throws LockedException,
-            NotReadyException, IOException, LoaderException;
+    public abstract LoaderIterator load() throws LockedException, NotReadyException, IOException, LoaderException;
 }

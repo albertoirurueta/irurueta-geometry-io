@@ -15,14 +15,14 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LoaderPLYTest implements LoaderListener {
+class LoaderPLYTest implements LoaderListener {
 
     private boolean startValid = true;
     private boolean endValid = true;
@@ -34,7 +34,7 @@ public class LoaderPLYTest implements LoaderListener {
     private float previousProgress = 0.0f;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(50000000, Loader.DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY);
         assertEquals(8, LoaderPLY.BUFFER_SIZE);
         assertEquals(0xffff, LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK);
@@ -46,59 +46,34 @@ public class LoaderPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testConstructors() throws LockedException, LoaderException,
-            IOException {
-        LoaderPLY loader = new LoaderPLY();
+    void testConstructors() throws IOException {
+        var loader = new LoaderPLY();
         assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // test constructor with maxVerticesInChunk
-        final int maxVerticesInChunk = 21423;
+        final var maxVerticesInChunk = 21423;
         loader = new LoaderPLY(maxVerticesInChunk);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(0));
 
         // test constructor with maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
@@ -110,29 +85,17 @@ public class LoaderPLYTest implements LoaderListener {
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(0, true));
 
         // test constructor with maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        final long maxStreamPositions = 500;
+        final var maxStreamPositions = 500L;
         loader = new LoaderPLY(maxVerticesInChunk, true, maxStreamPositions);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
@@ -141,68 +104,26 @@ public class LoaderPLYTest implements LoaderListener {
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(0, true, maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderPLY(maxVerticesInChunk, true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(maxVerticesInChunk, true, 0));
 
         // constructor with file
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
         loader = new LoaderPLY(f);
         assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS,
-                loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        // to free file resources
-        loader.close();
-
-        // Force IOException
-        final File badF = new File("./non-existing");
-        assertFalse(badF.exists());
-
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
-
-        // test constructor with file and maxVerticesInChunk
-        loader = new LoaderPLY(f, maxVerticesInChunk);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
@@ -212,21 +133,31 @@ public class LoaderPLYTest implements LoaderListener {
         loader.close();
 
         // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, maxVerticesInChunk);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        final var badF = new File("./non-existing");
+        assertFalse(badF.exists());
+
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderPLY(badF));
+
+        // test constructor with file and maxVerticesInChunk
+        loader = new LoaderPLY(f, maxVerticesInChunk);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+        assertTrue(loader.isReady());
+        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+        assertFalse(loader.isLocked());
+        assertNull(loader.getListener());
+        // to free file resources
+        loader.close();
+
+        // Force IOException
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderPLY(badF, maxVerticesInChunk));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, 0));
 
         // test constructor with file, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
@@ -242,21 +173,13 @@ public class LoaderPLYTest implements LoaderListener {
         loader.close();
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, maxVerticesInChunk, true);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderPLY(badF, maxVerticesInChunk, true));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, 0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, 0, true));
 
         // test constructor with file, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
@@ -272,82 +195,46 @@ public class LoaderPLYTest implements LoaderListener {
         loader.close();
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, maxVerticesInChunk,
-                    true, maxStreamPositions);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class,
+                () -> new LoaderPLY(badF, maxVerticesInChunk, true, maxStreamPositions));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, 0, true,
-                    maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderPLY(f, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, 0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, maxVerticesInChunk, true, 0));
 
         // Test constructor with loader listener
         loader = new LoaderPLY(this);
         assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(this, loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // test constructor with loader listener and maxVerticesInChunk
         loader = new LoaderPLY(this, maxVerticesInChunk);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(this, loader.getListener());
 
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(this, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(this, 0));
 
         // test constructor with loader listener, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
@@ -359,30 +246,17 @@ public class LoaderPLYTest implements LoaderListener {
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
         assertFalse(loader.isLocked());
 
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(this, 0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(this, 0, true));
 
         // test constructor with loader listener, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderPLY(this, maxVerticesInChunk,
-                true, maxStreamPositions);
+        loader = new LoaderPLY(this, maxVerticesInChunk, true, maxStreamPositions);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
@@ -391,39 +265,21 @@ public class LoaderPLYTest implements LoaderListener {
         assertFalse(loader.isLocked());
         assertEquals(this, loader.getListener());
 
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(this, 0, true,
-                    maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderPLY(this, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(this, 0,
+                true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(this, maxVerticesInChunk,
+                true, 0));
 
         // test constructor with file and listener
         loader = new LoaderPLY(f, this);
         assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
@@ -433,19 +289,13 @@ public class LoaderPLYTest implements LoaderListener {
         loader.close();
 
         // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, this);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderPLY(badF, this));
 
         // test constructor with file, listener and maxVerticesInChunk
         loader = new LoaderPLY(f, this, maxVerticesInChunk);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
@@ -455,21 +305,12 @@ public class LoaderPLYTest implements LoaderListener {
         loader.close();
 
         // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, this, maxVerticesInChunk);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderPLY(badF, this, maxVerticesInChunk));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, this, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, this, 0));
 
         // test constructor with file, listener, maxVerticesInChunk
         // and allowDuplicateVerticesInChunk
@@ -484,27 +325,19 @@ public class LoaderPLYTest implements LoaderListener {
         // to free file resources
         loader.close();
 
-        // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, this, maxVerticesInChunk, true);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        // Force IOException
+        //noinspection resource
+        assertThrows(IOException.class,
+                () -> new LoaderPLY(badF, this, maxVerticesInChunk, true));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, this, 0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, this, 0, true));
 
         // test constructor with file, listener, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderPLY(f, this, maxVerticesInChunk,
-                true, maxStreamPositions);
+        loader = new LoaderPLY(f, this, maxVerticesInChunk, true, maxStreamPositions);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
@@ -515,41 +348,28 @@ public class LoaderPLYTest implements LoaderListener {
         // to free file resources
         loader.close();
 
-        // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, this, maxVerticesInChunk,
-                    true, maxStreamPositions);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        // Force IOException
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderPLY(badF, this, maxVerticesInChunk,
+                true, maxStreamPositions));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, this, 0,
-                    true, maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderPLY(f, this, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, this, 0,
+                true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, this, maxVerticesInChunk,
+                true, 0));
     }
 
     @Test
-    public void testHasSetFileAndIsReady() throws LockedException, IOException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+    void testHasSetFileAndIsReady() throws LockedException, IOException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        try (LoaderPLY loader = new LoaderPLY()) {
+        try (var loader = new LoaderPLY()) {
             assertFalse(loader.hasFile());
             assertFalse(loader.isReady());
 
@@ -561,8 +381,8 @@ public class LoaderPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetListener() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
+    void testGetSetListener() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
             assertNull(loader.getListener());
 
             loader.setListener(this);
@@ -571,9 +391,9 @@ public class LoaderPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
-            final int maxVerticesInChunk = 521351;
+    void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
+            final var maxVerticesInChunk = 521351;
 
             assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
 
@@ -583,15 +403,13 @@ public class LoaderPLYTest implements LoaderListener {
             assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
 
             // Force IllegalArgumentException
-            loader.setMaxVerticesInChunk(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            assertThrows(IllegalArgumentException.class, () -> loader.setMaxVerticesInChunk(0));
         }
     }
 
     @Test
-    public void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
+    void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
 
             assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
                     loader.areDuplicateVerticesInChunkAllowed());
@@ -604,9 +422,9 @@ public class LoaderPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetMaxStreamPositions() throws LockedException, IOException {
-        final long maxStreamPositions = 400;
-        try (final LoaderPLY loader = new LoaderPLY()) {
+    void testGetSetMaxStreamPositions() throws LockedException, IOException {
+        final var maxStreamPositions = 400L;
+        try (final var loader = new LoaderPLY()) {
 
             assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
 
@@ -616,36 +434,33 @@ public class LoaderPLYTest implements LoaderListener {
             assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
 
             // Force IllegalArgumentException
-            loader.setMaxStreamPositions(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            assertThrows(IllegalArgumentException.class, () -> loader.setMaxStreamPositions(0));
         }
     }
 
     @Test
-    public void testIsValidFile() throws LockedException, IOException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+    void testIsValidFile() throws LockedException, IOException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        final LoaderPLY loader = new LoaderPLY(f);
+        final var loader = new LoaderPLY(f);
         assertTrue(loader.isValidFile());
         // to free file resources
         loader.close();
     }
 
     @Test
-    public void testLoadAndIterate() throws IOException, LockedException,
-            LoaderException, NotReadyException, NotAvailableException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+    void testLoadAndIterate() throws IOException, LockedException, LoaderException, NotReadyException,
+            NotAvailableException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
 
-        final int maxNumberOfVerticesInChunk = 500;
-        try (final LoaderPLY loader = new LoaderPLY(f,
-                maxNumberOfVerticesInChunk, false)) {
+        final var maxNumberOfVerticesInChunk = 500;
+        try (final var loader = new LoaderPLY(f, maxNumberOfVerticesInChunk, false)) {
             loader.setListener(this);
 
-            final LoaderIterator it = loader.load();
+            final var it = loader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -661,21 +476,21 @@ public class LoaderPLYTest implements LoaderListener {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final DataChunk chunk = it.next();
+                final var chunk = it.next();
 
-                final float[] vertices = chunk.getVerticesCoordinatesData();
-                final float[] texture = chunk.getTextureCoordinatesData();
-                final short[] colors = chunk.getColorData();
-                final float[] normals = chunk.getNormalsData();
-                final int[] indices = chunk.getIndicesData();
+                final var vertices = chunk.getVerticesCoordinatesData();
+                final var texture = chunk.getTextureCoordinatesData();
+                final var colors = chunk.getColorData();
+                final var normals = chunk.getNormalsData();
+                final var indices = chunk.getIndicesData();
 
                 assertEquals(vertices.length, normals.length);
                 assertNull(texture);
                 assertNotNull(colors);
 
-                final int nVerticesInChunk = vertices.length / 3;
+                final var nVerticesInChunk = vertices.length / 3;
 
-                for (int index : indices) {
+                for (var index : indices) {
                     assertTrue(index < nVerticesInChunk);
                 }
 
@@ -724,37 +539,13 @@ public class LoaderPLYTest implements LoaderListener {
         checkLocked((LoaderPLY) loader);
     }
 
-    private void checkLocked(final LoaderPLY loader) {
+    private static void checkLocked(final LoaderPLY loader) {
         assertTrue(loader.isLocked());
-        try {
-            loader.setMaxVerticesInChunk(0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            loader.setAllowDuplicateVerticesInChunk(false);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            loader.setMaxStreamPositions(1);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            loader.isValidFile();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final IOException e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            loader.load();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+        assertThrows(LockedException.class, () -> loader.setMaxVerticesInChunk(0));
+        assertThrows(LockedException.class, () -> loader.setAllowDuplicateVerticesInChunk(false));
+        assertThrows(LockedException.class, () -> loader.setMaxStreamPositions(1));
+        assertThrows(LockedException.class, loader::isValidFile);
+        assertThrows(LockedException.class, loader::load);
     }
 
     private void resetListener() {
