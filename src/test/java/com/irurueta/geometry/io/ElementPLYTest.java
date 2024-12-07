@@ -15,27 +15,23 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ElementPLYTest {
+class ElementPLYTest {
 
     @Test
-    public void testConstructors() throws NotAvailableException {
-        final String name = "name";
-        final long number = 2143245;
+    void testConstructors() throws NotAvailableException {
+        final var name = "name";
+        final var number = 2143245L;
         
         // constructor without name
-        ElementPLY element = new ElementPLY(null, number);
-        
-        try {
-            element.getName();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) { }
+        var element = new ElementPLY(null, number);
+
+        assertThrows(NotAvailableException.class, element::getName);
         assertFalse(element.isNameAvailable());
         assertEquals(number, element.getNumberOfInstances());
         assertTrue(element.getProperties().isEmpty());
@@ -52,7 +48,7 @@ public class ElementPLYTest {
         assertTrue(element.isValidElement());
         
         // constructor with name, number of instances and property
-        final PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
+        final var property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
         element = new ElementPLY(name, number, property);
         assertEquals(name, element.getName());
         assertTrue(element.isNameAvailable());
@@ -63,7 +59,7 @@ public class ElementPLYTest {
         assertTrue(element.isValidElement());        
         
         // constructor with name, number of instances and property list
-        final List<PropertyPLY> properties = new LinkedList<>();
+        final var properties = new LinkedList<PropertyPLY>();
         element = new ElementPLY(name, number, properties);
         assertEquals(name, element.getName());
         assertTrue(element.isNameAvailable());
@@ -74,14 +70,13 @@ public class ElementPLYTest {
     }
     
     @Test
-    public void testToString() {
-        final String name = "name";
-        final long number = 2143245;
+    void testToString() {
+        final var name = "name";
+        final var number = 2143245L;
         
-        final PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
-        final ElementPLY element = new ElementPLY(name, number, property);
+        final var property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
+        final var element = new ElementPLY(name, number, property);
         
-        assertEquals(element.toString(), "element name " + number + "\n" +
-                property);
+        assertEquals(element.toString(), "element name " + number + "\n" + property);
     }
 }

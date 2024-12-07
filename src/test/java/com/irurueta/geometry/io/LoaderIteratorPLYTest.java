@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LoaderIteratorPLYTest implements LoaderListener {
+class LoaderIteratorPLYTest implements LoaderListener {
 
     private static final double ERROR = 1e-4;
 
@@ -37,501 +37,351 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     private float previousProgress = 0.0f;
 
     @Test
-    public void testConstructors() throws LockedException, IOException,
-            LoaderException {
+    void testConstructors() throws IOException {
 
         // test empty constructor
-        LoaderPLY loader = new LoaderPLY();
-        assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK,
-                loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS,
-                loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderPLY()) {
+            assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // test constructor with maxVerticesInChunk
-        final int maxVerticesInChunk = 21423;
-        loader = new LoaderPLY(maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        final var maxVerticesInChunk = 21423;
+        try (final var loader = new LoaderPLY(maxVerticesInChunk)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(0));
 
         // test constructor with maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
-        loader = new LoaderPLY(maxVerticesInChunk, true);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderPLY(maxVerticesInChunk, true)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(0, true);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(0, true));
 
         // test constructor with maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        final long maxStreamPositions = 500;
-        loader = new LoaderPLY(maxVerticesInChunk, true, maxStreamPositions);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        final var maxStreamPositions = 500L;
+        try (final var loader = new LoaderPLY(maxVerticesInChunk, true, maxStreamPositions)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(0, true, maxStreamPositions);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            loader = new LoaderPLY(maxVerticesInChunk, true, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(maxVerticesInChunk, true, 0));
 
         // constructor with file
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
         assertTrue(f.exists()); //check that file exists
         assertTrue(f.isFile());
 
-        loader = new LoaderPLY(f);
-        assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
+        try (final var loader = new LoaderPLY(f)) {
+            assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+        }
 
         // Force FileNotFoundException
-        final File badF = new File("./non-existing");
+        final var badF = new File("./non-existing");
         assertFalse(badF.exists());
 
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(FileNotFoundException.class, () -> new LoaderPLY(badF));
 
         // test constructor with file and maxVerticesInChunk
-        loader = new LoaderPLY(f, maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
+        try (final var loader = new LoaderPLY(f, maxVerticesInChunk)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, maxVerticesInChunk);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
+        //noinspection resource
+        assertThrows(FileNotFoundException.class, () -> new LoaderPLY(badF, maxVerticesInChunk));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, 0));
 
         // test constructor with file, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
-        loader = new LoaderPLY(f, maxVerticesInChunk,
-                true);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
+        try (final var loader = new LoaderPLY(f, maxVerticesInChunk, true)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, maxVerticesInChunk,
-                    true);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
+        //noinspection resource
+        assertThrows(FileNotFoundException.class,
+                () -> new LoaderPLY(badF, maxVerticesInChunk, true));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, 0, true);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, 0, true));
 
         // test constructor with file, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderPLY(f, maxVerticesInChunk, true, maxStreamPositions);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
+        try (final var loader = new LoaderPLY(f, maxVerticesInChunk, true,
+                maxStreamPositions)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, maxVerticesInChunk,
-                    true, maxStreamPositions);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
+        //noinspection resource
+        assertThrows(FileNotFoundException.class,
+                () -> new LoaderPLY(badF, maxVerticesInChunk, true, maxStreamPositions));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, 0, true,
-                    maxStreamPositions);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            loader = new LoaderPLY(f, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, 0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, maxVerticesInChunk, true, 0));
 
         // Test constructor with loader listener
-        final LoaderListener listener = new LoaderListener() {
+        final var listener = new LoaderListener() {
             @Override
             public void onLoadStart(final Loader loader) {
+                // no action needed
             }
 
             @Override
             public void onLoadEnd(final Loader loader) {
+                // no action needed
             }
 
             @Override
             public void onLoadProgressChange(final Loader loader, final float progress) {
+                // no action needed
             }
         };
 
-        loader = new LoaderPLY(listener);
-        assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS,
-                loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderPLY(listener)) {
+            assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // test constructor with loader listener and maxVerticesInChunk
-        loader = new LoaderPLY(listener, maxVerticesInChunk);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS,
-                loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderPLY(listener, maxVerticesInChunk)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(listener, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(listener, 0));
 
         // test constructor with loader listener, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
-        loader = new LoaderPLY(listener, maxVerticesInChunk, true);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderPLY(listener, maxVerticesInChunk, true)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(listener, 0, true);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(listener, 0, true));
 
         // test constructor with loader listener, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderPLY(listener, maxVerticesInChunk,
-                true, maxStreamPositions);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderPLY(listener, maxVerticesInChunk, true,
+                maxStreamPositions)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderPLY(listener, 0, true,
-                    maxStreamPositions);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            loader = new LoaderPLY(listener, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(listener, 0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(listener, maxVerticesInChunk, true, 0));
 
         // test constructor with file and listener
-        loader = new LoaderPLY(f, listener);
-        assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
+        try (final var loader = new LoaderPLY(f, listener)) {
+            assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                    loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, listener);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(FileNotFoundException.class, () -> new LoaderPLY(badF, listener));
 
         // test constructor with file, listener and maxVerticesInChunk
-        loader = new LoaderPLY(f, listener, maxVerticesInChunk);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
+        try (final var loader = new LoaderPLY(f, listener, maxVerticesInChunk)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
+                    loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, listener, maxVerticesInChunk);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
+        //noinspection resource
+        assertThrows(FileNotFoundException.class, () -> new LoaderPLY(badF, listener, maxVerticesInChunk));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, listener, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, listener, 0));
 
         // test constructor with file, listener, maxVerticesInChunk
         // and allowDuplicateVerticesInChunk
-        loader = new LoaderPLY(f, listener, maxVerticesInChunk, true);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
+        try (final var loader = new LoaderPLY(f, listener, maxVerticesInChunk, true)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, listener, maxVerticesInChunk, true);
-            fail("FileNotFoundException not thrown");
-        } catch (FileNotFoundException ignore) {
-        }
+        //noinspection resource
+        assertThrows(FileNotFoundException.class,
+                () -> new LoaderPLY(badF, listener, maxVerticesInChunk, true));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, listener, 0, true);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderPLY(f, listener, 0, true));
 
         // test constructor with file, listener, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderPLY(f, listener, maxVerticesInChunk,
-                true, maxStreamPositions);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertTrue(loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
+        try (final var loader = new LoaderPLY(f, listener, maxVerticesInChunk, true,
+                maxStreamPositions)) {
+            assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+            assertTrue(loader.areDuplicateVerticesInChunkAllowed());
+            assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_PLY, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+        }
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderPLY(badF, listener, maxVerticesInChunk,
-                    true, maxStreamPositions);
-            fail("FileNotFoundException not thrown");
-        } catch (final FileNotFoundException ignore) {
-        }
+        //noinspection resource
+        assertThrows(FileNotFoundException.class, () -> new LoaderPLY(badF, listener, maxVerticesInChunk,
+                true, maxStreamPositions));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderPLY(f, listener, 0,
-                    true, maxStreamPositions);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            loader = new LoaderPLY(f, listener, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, listener, 0,
+                true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderPLY(f, listener, maxVerticesInChunk,
+                true, 0));
     }
 
     @Test
-    public void testHasSetFileAndIsReady()
-            throws LockedException, IOException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
+    void testHasSetFileAndIsReady() throws LockedException, IOException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
         assertTrue(f.exists()); //check that file exists
         assertTrue(f.isFile());
 
-        try (final LoaderPLY loader = new LoaderPLY()) {
+        try (final var loader = new LoaderPLY()) {
             assertFalse(loader.hasFile());
             assertFalse(loader.isReady());
 
@@ -543,13 +393,12 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetFileSizeLimitToKeepInMemory() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
-            assertEquals(LoaderPLY.DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY,
-                    loader.getFileSizeLimitToKeepInMemory());
+    void testGetSetFileSizeLimitToKeepInMemory() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
+            assertEquals(LoaderPLY.DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY, loader.getFileSizeLimitToKeepInMemory());
 
             // set new value
-            final long value = 1000000;
+            final var value = 1000000L;
             loader.setFileSizeLimitToKeepInMemory(value);
             // and check correctness
             assertEquals(value, loader.getFileSizeLimitToKeepInMemory());
@@ -557,21 +406,24 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetListener() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
+    void testGetSetListener() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
             assertNull(loader.getListener());
 
-            final LoaderListener listener = new LoaderListener() {
+            final var listener = new LoaderListener() {
                 @Override
                 public void onLoadStart(final Loader loader) {
+                    // no action needed
                 }
 
                 @Override
                 public void onLoadEnd(final Loader loader) {
+                    // no action needed
                 }
 
                 @Override
                 public void onLoadProgressChange(final Loader loader, float progress) {
+                    // no action needed
                 }
             };
 
@@ -581,9 +433,9 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
-            final int maxVerticesInChunk = 521351;
+    void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
+            final var maxVerticesInChunk = 521351;
 
             assertEquals(LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
 
@@ -593,15 +445,13 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
 
             // Force IllegalArgumentException
-            loader.setMaxVerticesInChunk(0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            assertThrows(IllegalArgumentException.class, () -> loader.setMaxVerticesInChunk(0));
         }
     }
 
     @Test
-    public void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
-        try (final LoaderPLY loader = new LoaderPLY()) {
+    void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
+        try (final var loader = new LoaderPLY()) {
 
             assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
                     loader.areDuplicateVerticesInChunkAllowed());
@@ -614,9 +464,9 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testGetSetMaxStreamPositions() throws LockedException, IOException {
-        final long maxStreamPositions = 400;
-        try (final LoaderPLY loader = new LoaderPLY()) {
+    void testGetSetMaxStreamPositions() throws LockedException, IOException {
+        final var maxStreamPositions = 400L;
+        try (final var loader = new LoaderPLY()) {
             assertEquals(LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
 
             // set new value
@@ -625,21 +475,19 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
 
             // Force IllegalArgumentException
-            loader.setMaxStreamPositions(0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            assertThrows(IllegalArgumentException.class, () -> loader.setMaxStreamPositions(0));
         }
     }
 
     @Test
-    public void testIsValidFile() throws LockedException, IOException {
+    void testIsValidFile() throws LockedException, IOException {
         // Test for BIG ENDIAN
-        File f = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
+        var f = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        try (final LoaderPLY loader = new LoaderPLY(f)) {
+        try (final var loader = new LoaderPLY(f)) {
             assertTrue(loader.isValidFile());
 
             // Test for LITTLE ENDIAN
@@ -649,7 +497,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(f.isFile());
         }
 
-        try (final LoaderPLY loader = new LoaderPLY(f)){
+        try (final var loader = new LoaderPLY(f)){
             assertTrue(loader.isValidFile());
 
             // Test for ASCII
@@ -659,21 +507,20 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(f.isFile());
         }
 
-        try (final LoaderPLY loader = new LoaderPLY(f)) {
+        try (final var loader = new LoaderPLY(f)) {
             assertTrue(loader.isValidFile());
         }
     }
 
     @Test
-    public void testLoad() throws LockedException, NotReadyException,
-            IOException, LoaderException {
+    void testLoad() throws LockedException, NotReadyException, IOException, LoaderException {
         // Test for BIG ENDIAN
-        File f = new File("./src/test/java/com/irurueta/geometry/io/randomBig.ply");
+        var f = new File("./src/test/java/com/irurueta/geometry/io/randomBig.ply");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        LoaderPLY loader = new LoaderPLY(f);
+        var loader = new LoaderPLY(f);
         loader.setListener(this);
         assertNotNull(loader.load());
         // releases file resources
@@ -708,29 +555,22 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testLoadAndIterate()
-            throws IllegalArgumentException, LockedException, NotReadyException,
-            IOException, LoaderException, NotAvailableException {
-        final int maxNumberOfVerticesInChunk = 9;
+    void testLoadAndIterate() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
+        final var maxNumberOfVerticesInChunk = 9;
 
-        final File fileAscii = new File(
-                "./src/test/java/com/irurueta/geometry/io/randomAscii.ply");
-        final File fileLittle = new File(
-                "./src/test/java/com/irurueta/geometry/io/randomLittle.ply");
-        final File fileBig = new File(
-                "./src/test/java/com/irurueta/geometry/io/randomBig.ply");
+        final var fileAscii = new File("./src/test/java/com/irurueta/geometry/io/randomAscii.ply");
+        final var fileLittle = new File("./src/test/java/com/irurueta/geometry/io/randomLittle.ply");
+        final var fileBig = new File("./src/test/java/com/irurueta/geometry/io/randomBig.ply");
 
-        final LoaderPLY asciiLoader = new LoaderPLY(fileAscii,
-                maxNumberOfVerticesInChunk);
+        final var asciiLoader = new LoaderPLY(fileAscii, maxNumberOfVerticesInChunk);
         asciiLoader.setListener(this);
-        final LoaderPLY littleLoader = new LoaderPLY(fileLittle,
-                maxNumberOfVerticesInChunk);
+        final var littleLoader = new LoaderPLY(fileLittle, maxNumberOfVerticesInChunk);
         littleLoader.setListener(this);
-        final LoaderPLY bigLoader = new LoaderPLY(fileBig,
-                maxNumberOfVerticesInChunk);
+        final var bigLoader = new LoaderPLY(fileBig, maxNumberOfVerticesInChunk);
         bigLoader.setListener(this);
 
-        final LoaderIterator asciiIt = asciiLoader.load();
+        final var asciiIt = asciiLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -738,7 +578,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         assertTrue(isStartValid());
         resetListener();
 
-        final LoaderIterator littleIt = littleLoader.load();
+        final var littleIt = littleLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -746,7 +586,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         assertTrue(isStartValid());
         resetListener();
 
-        final LoaderIterator bigIt = bigLoader.load();
+        final var bigIt = bigLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -756,7 +596,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
 
         // check correctness of chunks
         while (asciiIt.hasNext() && littleIt.hasNext() && bigIt.hasNext()) {
-            final DataChunk asciiChunk = asciiIt.next();
+            final var asciiChunk = asciiIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -764,7 +604,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk littleChunk = littleIt.next();
+            final var littleChunk = littleIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -772,7 +612,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk bigChunk = bigIt.next();
+            final var bigChunk = bigIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -780,38 +620,41 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final float[] asciiVertices = asciiChunk.getVerticesCoordinatesData();
-            final short[] asciiColors = asciiChunk.getColorData();
-            final int[] asciiIndices = asciiChunk.getIndicesData();
+            final var asciiVertices = asciiChunk.getVerticesCoordinatesData();
+            final var asciiColors = asciiChunk.getColorData();
+            final var asciiIndices = asciiChunk.getIndicesData();
 
-            final float[] littleVertices = littleChunk.getVerticesCoordinatesData();
-            final short[] littleColors = littleChunk.getColorData();
-            final int[] littleIndices = littleChunk.getIndicesData();
+            final var littleVertices = littleChunk.getVerticesCoordinatesData();
+            final var littleColors = littleChunk.getColorData();
+            final var littleIndices = littleChunk.getIndicesData();
 
-            final float[] bigVertices = bigChunk.getVerticesCoordinatesData();
-            final short[] bigColors = bigChunk.getColorData();
-            final int[] bigIndices = bigChunk.getIndicesData();
+            final var bigVertices = bigChunk.getVerticesCoordinatesData();
+            final var bigColors = bigChunk.getColorData();
+            final var bigIndices = bigChunk.getIndicesData();
 
             assertEquals(asciiVertices.length, asciiColors.length);
             assertEquals(littleVertices.length, littleColors.length);
             assertEquals(bigVertices.length, bigColors.length);
 
-            final int nVerticesInChunk = asciiVertices.length / 3;
+            final var nVerticesInChunk = asciiVertices.length / 3;
 
             if (asciiIt.hasNext()) {
-                assertEquals(nVerticesInChunk,
-                        (maxNumberOfVerticesInChunk / 3) * 3);
+                assertEquals((maxNumberOfVerticesInChunk / 3) * 3, nVerticesInChunk);
             }
 
             assertEquals(nVerticesInChunk, littleVertices.length / 3);
             assertEquals(nVerticesInChunk, bigVertices.length / 3);
 
-            float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE,
-                    minZ = Float.MAX_VALUE;
-            float maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE,
-                    maxZ = -Float.MAX_VALUE;
-            float x, y, z;
-            for (int i = 0; i < nVerticesInChunk; i++) {
+            var minX = Float.MAX_VALUE;
+            var minY = Float.MAX_VALUE;
+            var minZ = Float.MAX_VALUE;
+            var maxX = -Float.MAX_VALUE;
+            var maxY = -Float.MAX_VALUE;
+            var maxZ = -Float.MAX_VALUE;
+            float x;
+            float y;
+            float z;
+            for (var i = 0; i < nVerticesInChunk; i++) {
                 // check x coordinate
                 x = littleVertices[3 * i];
                 assertEquals(asciiVertices[3 * i], littleVertices[3 * i], ERROR);
@@ -879,11 +722,11 @@ public class LoaderIteratorPLYTest implements LoaderListener {
                 assertTrue(asciiColors[3 * i + 2] >= 0 && asciiColors[3 * i + 2] <= 255);
             }
 
-            final int nIndicesInChunk = asciiIndices.length;
+            final var nIndicesInChunk = asciiIndices.length;
             assertEquals(nIndicesInChunk, littleIndices.length);
             assertEquals(nIndicesInChunk, bigIndices.length);
 
-            for (int i = 0; i < nIndicesInChunk; i++) {
+            for (var i = 0; i < nIndicesInChunk; i++) {
                 assertTrue(asciiIndices[i] < nVerticesInChunk);
                 assertTrue(littleIndices[i] < nVerticesInChunk);
                 assertTrue(bigIndices[i] < nVerticesInChunk);
@@ -954,15 +797,12 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testLoadAndIterateRealFile() throws LockedException, NotReadyException,
-            IOException, LoaderException, NotAvailableException {
+    void testLoadAndIterateRealFile() throws LockedException, NotReadyException, IOException, LoaderException,
+            NotAvailableException {
 
-        final File fileAscii = new File(
-                "./src/test/java/com/irurueta/geometry/io/pilarAscii.ply");
-        final File fileLittle = new File(
-                "./src/test/java/com/irurueta/geometry/io/pilarLittleEndian.ply");
-        final File fileBig = new File(
-                "./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
+        final var fileAscii = new File("./src/test/java/com/irurueta/geometry/io/pilarAscii.ply");
+        final var fileLittle = new File("./src/test/java/com/irurueta/geometry/io/pilarLittleEndian.ply");
+        final var fileBig = new File("./src/test/java/com/irurueta/geometry/io/pilarBigEndian.ply");
 
         assertTrue(fileAscii.exists());
         assertTrue(fileAscii.isFile());
@@ -971,14 +811,14 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         assertTrue(fileBig.exists());
         assertTrue(fileBig.isFile());
 
-        final LoaderPLY asciiLoader = new LoaderPLY(fileAscii);
+        final var asciiLoader = new LoaderPLY(fileAscii);
         asciiLoader.setListener(this);
-        final LoaderPLY littleLoader = new LoaderPLY(fileLittle);
+        final var littleLoader = new LoaderPLY(fileLittle);
         littleLoader.setListener(this);
-        final LoaderPLY bigLoader = new LoaderPLY(fileBig);
+        final var bigLoader = new LoaderPLY(fileBig);
         bigLoader.setListener(this);
 
-        final LoaderIterator asciiIt = asciiLoader.load();
+        final var asciiIt = asciiLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -986,7 +826,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         assertTrue(isStartValid());
         resetListener();
 
-        final LoaderIterator littleIt = littleLoader.load();
+        final var littleIt = littleLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -994,7 +834,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         assertTrue(isStartValid());
         resetListener();
 
-        final LoaderIterator bigIt = bigLoader.load();
+        final var bigIt = bigLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -1004,7 +844,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
 
         // read and compare chunks of data
         while (asciiIt.hasNext() && littleIt.hasNext() && bigIt.hasNext()) {
-            final DataChunk asciiChunk = asciiIt.next();
+            final var asciiChunk = asciiIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1012,7 +852,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk littleChunk = littleIt.next();
+            final var littleChunk = littleIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1020,7 +860,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk bigChunk = bigIt.next();
+            final var bigChunk = bigIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1028,17 +868,17 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final float[] asciiVertices = asciiChunk.getVerticesCoordinatesData();
-            final short[] asciiColors = asciiChunk.getColorData();
-            final int[] asciiIndices = asciiChunk.getIndicesData();
+            final var asciiVertices = asciiChunk.getVerticesCoordinatesData();
+            final var asciiColors = asciiChunk.getColorData();
+            final var asciiIndices = asciiChunk.getIndicesData();
 
-            final float[] littleVertices = littleChunk.getVerticesCoordinatesData();
-            final short[] littleColors = littleChunk.getColorData();
-            final int[] littleIndices = littleChunk.getIndicesData();
+            final var littleVertices = littleChunk.getVerticesCoordinatesData();
+            final var littleColors = littleChunk.getColorData();
+            final var littleIndices = littleChunk.getIndicesData();
 
-            final float[] bigVertices = bigChunk.getVerticesCoordinatesData();
-            final short[] bigColors = bigChunk.getColorData();
-            final int[] bigIndices = bigChunk.getIndicesData();
+            final var bigVertices = bigChunk.getVerticesCoordinatesData();
+            final var bigColors = bigChunk.getColorData();
+            final var bigIndices = bigChunk.getIndicesData();
 
             assertEquals(asciiVertices.length, asciiColors.length);
             assertEquals(littleVertices.length, littleColors.length);
@@ -1048,8 +888,8 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertEquals(asciiVertices.length, littleVertices.length);
             assertEquals(asciiVertices.length, bigVertices.length);
 
-            final int arraySize = asciiVertices.length;
-            for (int i = 0; i < arraySize; i++) {
+            final var arraySize = asciiVertices.length;
+            for (var i = 0; i < arraySize; i++) {
                 assertEquals(littleVertices[i], bigVertices[i], 0.0);
                 assertEquals(asciiVertices[i], littleVertices[i], ERROR);
 
@@ -1061,12 +901,12 @@ public class LoaderIteratorPLYTest implements LoaderListener {
                 assertTrue(bigColors[i] >= 0 && bigColors[i] <= 255);
             }
 
-            final int nIndicesInChunk = asciiIndices.length;
-            final int nVerticesInChunk = arraySize / 3;
+            final var nIndicesInChunk = asciiIndices.length;
+            final var nVerticesInChunk = arraySize / 3;
             assertEquals(nIndicesInChunk, littleIndices.length);
             assertEquals(nIndicesInChunk, bigIndices.length);
 
-            for (int i = 0; i < nIndicesInChunk; i++) {
+            for (var i = 0; i < nIndicesInChunk; i++) {
                 assertTrue(asciiIndices[i] < nVerticesInChunk);
                 assertTrue(littleIndices[i] < nVerticesInChunk);
                 assertTrue(bigIndices[i] < nVerticesInChunk);
@@ -1076,16 +916,16 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             }
 
             // check bounding box values
-            float minX = Float.MAX_VALUE;
-            float minY = Float.MAX_VALUE;
-            float minZ = Float.MAX_VALUE;
-            float maxX = -Float.MAX_VALUE;
-            float maxY = -Float.MAX_VALUE;
-            float maxZ = -Float.MAX_VALUE;
+            var minX = Float.MAX_VALUE;
+            var minY = Float.MAX_VALUE;
+            var minZ = Float.MAX_VALUE;
+            var maxX = -Float.MAX_VALUE;
+            var maxY = -Float.MAX_VALUE;
+            var maxZ = -Float.MAX_VALUE;
             float x;
             float y;
             float z;
-            for (int i = 0; i < arraySize; i += 3) {
+            for (var i = 0; i < arraySize; i += 3) {
                 x = littleVertices[i];
                 y = littleVertices[i + 1];
                 z = littleVertices[i + 2];
@@ -1170,25 +1010,23 @@ public class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     @Test
-    public void testLoadAndIterateRealFileWithNormals() throws LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIterateRealFileWithNormals() throws LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final File fileAscii =
-                new File("./src/test/java/com/irurueta/geometry/io/booksAscii.ply");
-        final File fileBinary =
-                new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+        final var fileAscii = new File("./src/test/java/com/irurueta/geometry/io/booksAscii.ply");
+        final var fileBinary = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
 
         assertTrue(fileAscii.exists());
         assertTrue(fileAscii.isFile());
         assertTrue(fileBinary.exists());
         assertTrue(fileBinary.isFile());
 
-        final LoaderPLY asciiLoader = new LoaderPLY(fileAscii);
+        final var asciiLoader = new LoaderPLY(fileAscii);
         asciiLoader.setListener(this);
-        final LoaderPLY binaryLoader = new LoaderPLY(fileBinary);
+        final var binaryLoader = new LoaderPLY(fileBinary);
         binaryLoader.setListener(this);
 
-        final LoaderIterator asciiIt = asciiLoader.load();
+        final var asciiIt = asciiLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -1196,7 +1034,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
         assertTrue(isStartValid());
         resetListener();
 
-        final LoaderIterator binaryIt = binaryLoader.load();
+        final var binaryIt = binaryLoader.load();
 
         assertTrue(isEndValid());
         assertTrue(isLockedValid());
@@ -1206,7 +1044,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
 
         // read and compare chunks of data
         while (asciiIt.hasNext() && binaryIt.hasNext()) {
-            final DataChunk asciiChunk = asciiIt.next();
+            final var asciiChunk = asciiIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1214,7 +1052,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final DataChunk binaryChunk = binaryIt.next();
+            final var binaryChunk = binaryIt.next();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1222,20 +1060,20 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertTrue(isStartValid());
             resetListener();
 
-            final float[] asciiVertices = asciiChunk.getVerticesCoordinatesData();
-            final short[] asciiColors = asciiChunk.getColorData();
-            final int[] asciiIndices = asciiChunk.getIndicesData();
-            final float[] asciiTextureCoords = asciiChunk.getTextureCoordinatesData();
-            final float[] asciiNormals = asciiChunk.getNormalsData();
+            final var asciiVertices = asciiChunk.getVerticesCoordinatesData();
+            final var asciiColors = asciiChunk.getColorData();
+            final var asciiIndices = asciiChunk.getIndicesData();
+            final var asciiTextureCoords = asciiChunk.getTextureCoordinatesData();
+            final var asciiNormals = asciiChunk.getNormalsData();
 
-            final float[] binaryVertices = binaryChunk.getVerticesCoordinatesData();
-            final short[] binaryColors = binaryChunk.getColorData();
-            final int[] binaryIndices = binaryChunk.getIndicesData();
-            final float[] binaryTextureCoords = binaryChunk.getTextureCoordinatesData();
-            final float[] binaryNormals = binaryChunk.getNormalsData();
+            final var binaryVertices = binaryChunk.getVerticesCoordinatesData();
+            final var binaryColors = binaryChunk.getColorData();
+            final var binaryIndices = binaryChunk.getIndicesData();
+            final var binaryTextureCoords = binaryChunk.getTextureCoordinatesData();
+            final var binaryNormals = binaryChunk.getNormalsData();
 
-            final int arraySize = asciiVertices.length;
-            final int nVerticesInChunk = arraySize / 3;
+            final var arraySize = asciiVertices.length;
+            final var nVerticesInChunk = arraySize / 3;
 
             assertEquals(asciiVertices.length, binaryVertices.length);
             assertEquals(asciiColors.length, binaryColors.length);
@@ -1253,19 +1091,19 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             assertEquals(binaryNormals.length, nVerticesInChunk * 3);
 
             // compare ascii and binary chunks
-            for (int i = 0; i < asciiVertices.length; i++) {
+            for (var i = 0; i < asciiVertices.length; i++) {
                 assertEquals(asciiVertices[i], binaryVertices[i], ERROR);
                 assertEquals(asciiNormals[i], binaryNormals[i], ERROR);
             }
 
-            for (int i = 0; i < asciiColors.length; i++) {
+            for (var i = 0; i < asciiColors.length; i++) {
                 assertEquals(asciiColors[i], binaryColors[i]);
                 assertTrue(asciiColors[i] >= 0 && asciiColors[i] <= 255);
                 assertTrue(binaryColors[i] >= 0 && binaryColors[i] <= 255);
             }
 
-            final int nIndicesInChunk = asciiIndices.length;
-            for (int i = 0; i < nIndicesInChunk; i++) {
+            final var nIndicesInChunk = asciiIndices.length;
+            for (var i = 0; i < nIndicesInChunk; i++) {
                 assertTrue(asciiIndices[i] < nVerticesInChunk);
                 assertTrue(binaryIndices[i] < nVerticesInChunk);
 
@@ -1273,16 +1111,16 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             }
 
             // check bounding box values
-            float minX = Float.MAX_VALUE;
-            float minY = Float.MAX_VALUE;
-            float minZ = Float.MAX_VALUE;
-            float maxX = -Float.MAX_VALUE;
-            float maxY = -Float.MAX_VALUE;
-            float maxZ = -Float.MAX_VALUE;
+            var minX = Float.MAX_VALUE;
+            var minY = Float.MAX_VALUE;
+            var minZ = Float.MAX_VALUE;
+            var maxX = -Float.MAX_VALUE;
+            var maxY = -Float.MAX_VALUE;
+            var maxZ = -Float.MAX_VALUE;
             float x;
             float y;
             float z;
-            for (int i = 0; i < arraySize; i += 3) {
+            for (var i = 0; i < arraySize; i += 3) {
                 x = binaryVertices[i];
                 y = binaryVertices[i + 1];
                 z = binaryVertices[i + 2];
@@ -1395,6 +1233,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             loader.setListener(null);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1403,6 +1242,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             loader.load();
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1411,6 +1251,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             loader.setMaxVerticesInChunk(1);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1419,6 +1260,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             loader.setAllowDuplicateVerticesInChunk(true);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1427,6 +1269,7 @@ public class LoaderIteratorPLYTest implements LoaderListener {
             loader.setMaxStreamPositions(1);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }

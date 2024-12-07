@@ -15,60 +15,34 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.nio.ByteBuffer;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class PropertyPLYTest {
+class PropertyPLYTest {
 
     @Test
-    public void testConstructors() throws NotAvailableException {
-        final String name = "property name";
+    void testConstructors() throws NotAvailableException {
+        final var name = "property name";
 
         // set property without name
-        PropertyPLY property = new PropertyPLY(null, DataTypePLY.PLY_CHAR);
-        try {
-            property.getName();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        var property = new PropertyPLY(null, DataTypePLY.PLY_CHAR);
+        assertThrows(NotAvailableException.class, property::getName);
         assertFalse(property.isNameAvailable());
         assertEquals(PropertyTypePLY.PROPERTY_PLY_SCALAR, property.getPropertyType());
-        try {
-            property.getLengthType();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getLengthType);
         assertFalse(property.isLengthTypeAvailable());
         assertEquals(DataTypePLY.PLY_CHAR, property.getValueType());
         assertTrue(property.isValueTypeAvailable());
         assertFalse(property.isValidProperty());
 
-        try {
-            property.getReadValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromBufferListener);
         assertFalse(property.isReadValueFromBufferListenerAvailable());
-        try {
-            property.getReadValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromStreamListener);
         assertFalse(property.isReadValueFromStreamListenerAvailable());
-        try {
-            property.getReadLengthValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromBufferListener);
         assertFalse(property.isReadLengthValueFromBufferListenerAvailable());
-        try {
-            property.getReadLengthValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromStreamListener);
         assertFalse(property.isReadLengthValueFromStreamListenerAvailable());
 
         // set property with name and value type
@@ -76,39 +50,19 @@ public class PropertyPLYTest {
         assertEquals(name, property.getName());
         assertTrue(property.isNameAvailable());
         assertEquals(PropertyTypePLY.PROPERTY_PLY_SCALAR, property.getPropertyType());
-        try {
-            property.getLengthType();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getLengthType);
         assertFalse(property.isLengthTypeAvailable());
         assertEquals(DataTypePLY.PLY_FLOAT32, property.getValueType());
         assertTrue(property.isValueTypeAvailable());
         assertTrue(property.isValidProperty());
 
-        try {
-            property.getReadValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromBufferListener);
         assertFalse(property.isReadValueFromBufferListenerAvailable());
-        try {
-            property.getReadValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromStreamListener);
         assertFalse(property.isReadValueFromStreamListenerAvailable());
-        try {
-            property.getReadLengthValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromBufferListener);
         assertFalse(property.isReadLengthValueFromBufferListenerAvailable());
-        try {
-            property.getReadLengthValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromStreamListener);
         assertFalse(property.isReadLengthValueFromStreamListenerAvailable());
 
         // property with name, length type and value type
@@ -122,37 +76,20 @@ public class PropertyPLYTest {
         assertTrue(property.isValueTypeAvailable());
         assertTrue(property.isValidProperty());
 
-        try {
-            property.getReadValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromBufferListener);
         assertFalse(property.isReadValueFromBufferListenerAvailable());
-        try {
-            property.getReadValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromStreamListener);
         assertFalse(property.isReadValueFromStreamListenerAvailable());
-        try {
-            property.getReadLengthValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromBufferListener);
         assertFalse(property.isReadLengthValueFromBufferListenerAvailable());
-        try {
-            property.getReadLengthValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromStreamListener);
         assertFalse(property.isReadLengthValueFromStreamListenerAvailable());
     }
 
     @Test
-    public void testToString() {
-        String name = "something";
-        PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_UCHAR,
-                DataTypePLY.PLY_UINT);
+    void testToString() {
+        var name = "something";
+        var property = new PropertyPLY(name, DataTypePLY.PLY_UCHAR, DataTypePLY.PLY_UINT);
         assertEquals("property list uchar uint something\n", property.toString());
 
         name = "x";
@@ -162,25 +99,15 @@ public class PropertyPLYTest {
     }
 
     @Test
-    public void testGetSetReadValueFromBufferListener()
-            throws NotAvailableException {
+    void testGetSetReadValueFromBufferListener() throws NotAvailableException {
 
-        final PropertyPLY property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
+        final var property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
 
-        try {
-            property.getReadValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromBufferListener);
         assertFalse(property.isReadValueFromBufferListenerAvailable());
 
         // set listener
-        final PLYReadValueFromBufferListener listener =
-                new PLYReadValueFromBufferListener() {
-                    @Override
-                    public void readValueFromBuffer(final ByteBuffer buffer) {
-                    }
-                };
+        final PLYReadValueFromBufferListener listener = buffer -> {};
 
         property.setReadValueFromBufferListener(listener);
         assertEquals(listener, property.getReadValueFromBufferListener());
@@ -188,25 +115,15 @@ public class PropertyPLYTest {
     }
 
     @Test
-    public void testGetSetReadValueFromStreamListener()
-            throws NotAvailableException {
+    void testGetSetReadValueFromStreamListener() throws NotAvailableException {
 
-        final PropertyPLY property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
+        final var property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
 
-        try {
-            property.getReadValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadValueFromStreamListener);
         assertFalse(property.isReadValueFromStreamListenerAvailable());
 
         // set listener
-        final PLYReadValueFromStreamListener listener =
-                new PLYReadValueFromStreamListener() {
-                    @Override
-                    public void readFromStream(final ByteBuffer buffer) {
-                    }
-                };
+        final PLYReadValueFromStreamListener listener = buffer -> {};
 
         property.setReadValueFromStreamListener(listener);
         assertEquals(listener, property.getReadValueFromStreamListener());
@@ -214,25 +131,15 @@ public class PropertyPLYTest {
     }
 
     @Test
-    public void testGetSetReadLengthValueFromBufferListener()
-            throws NotAvailableException {
+    void testGetSetReadLengthValueFromBufferListener() throws NotAvailableException {
 
-        final PropertyPLY property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
+        final var property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
 
-        try {
-            property.getReadLengthValueFromBufferListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromBufferListener);
         assertFalse(property.isReadLengthValueFromBufferListenerAvailable());
 
         // set listener
-        final PLYReadValueFromBufferListener listener =
-                new PLYReadValueFromBufferListener() {
-                    @Override
-                    public void readValueFromBuffer(final ByteBuffer buffer) {
-                    }
-                };
+        final PLYReadValueFromBufferListener listener = buffer -> {};
 
         property.setReadLengthValueFromBufferListener(listener);
         assertEquals(listener, property.getReadLengthValueFromBufferListener());
@@ -240,25 +147,15 @@ public class PropertyPLYTest {
     }
 
     @Test
-    public void testGetSetReadLengthValueFromStreamListener()
-            throws NotAvailableException {
+    void testGetSetReadLengthValueFromStreamListener() throws NotAvailableException {
 
-        final PropertyPLY property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
+        final var property = new PropertyPLY("x", DataTypePLY.PLY_FLOAT32);
 
-        try {
-            property.getReadLengthValueFromStreamListener();
-            fail("NotAvailableException not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getReadLengthValueFromStreamListener);
         assertFalse(property.isReadLengthValueFromStreamListenerAvailable());
 
         // set listener
-        final PLYReadValueFromStreamListener listener =
-                new PLYReadValueFromStreamListener() {
-                    @Override
-                    public void readFromStream(final ByteBuffer buffer) {
-                    }
-                };
+        final PLYReadValueFromStreamListener listener = buffer -> {};
 
         property.setReadLengthValueFromStreamListener(listener);
         assertEquals(listener, property.getReadLengthValueFromStreamListener());
@@ -266,9 +163,9 @@ public class PropertyPLYTest {
     }
 
     @Test
-    public void testGetValueType() throws NotAvailableException {
+    void testGetValueType() throws NotAvailableException {
         // test when value type available
-        PropertyPLY property = new PropertyPLY("name", DataTypePLY.PLY_FLOAT);
+        var property = new PropertyPLY("name", DataTypePLY.PLY_FLOAT);
 
         assertTrue(property.isValueTypeAvailable());
         assertEquals(DataTypePLY.PLY_FLOAT, property.getValueType());
@@ -277,10 +174,6 @@ public class PropertyPLYTest {
         property = new PropertyPLY("name", null);
 
         assertFalse(property.isValueTypeAvailable());
-        try {
-            property.getValueType();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, property::getValueType);
     }
 }

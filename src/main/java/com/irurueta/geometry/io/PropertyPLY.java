@@ -89,8 +89,7 @@ public class PropertyPLY {
      * @param lengthType data type of the length value of this property.
      * @param valueType  data type of the value of this property.
      */
-    public PropertyPLY(final String name, final DataTypePLY lengthType,
-                       final DataTypePLY valueType) {
+    public PropertyPLY(final String name, final DataTypePLY lengthType, final DataTypePLY valueType) {
         this.name = name;
         type = PropertyTypePLY.PROPERTY_PLY_LIST;
         this.lengthType = lengthType;
@@ -206,7 +205,7 @@ public class PropertyPLY {
             return "";
         }
 
-        final StringBuilder builder = new StringBuilder("property ");
+        final var builder = new StringBuilder("property ");
 
         // depending whether property is scalar or list
         if (type == PropertyTypePLY.PROPERTY_PLY_SCALAR) {
@@ -216,8 +215,7 @@ public class PropertyPLY {
         } else if (type == PropertyTypePLY.PROPERTY_PLY_LIST && lengthType != null) {
             // indicate it is a list by adding length data type and values
             // data type
-            builder.append("list ").append(lengthType.getValue()).append(
-                    " ").append(valueType.getValue()).append(" ");
+            builder.append("list ").append(lengthType.getValue()).append(" ").append(valueType.getValue()).append(" ");
         }
         // add name
         builder.append(name).append("\n");
@@ -234,8 +232,7 @@ public class PropertyPLY {
      * @throws NotAvailableException Raised if listener has not yet been
      *                               provided and is not available for retrieval.
      */
-    public PLYReadValueFromBufferListener getReadValueFromBufferListener()
-            throws NotAvailableException {
+    public PLYReadValueFromBufferListener getReadValueFromBufferListener() throws NotAvailableException {
         if (!isReadValueFromBufferListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -250,8 +247,7 @@ public class PropertyPLY {
      *
      * @param listener listener to read the value of this property.
      */
-    public void setReadValueFromBufferListener(
-            final PLYReadValueFromBufferListener listener) {
+    public void setReadValueFromBufferListener(final PLYReadValueFromBufferListener listener) {
         readValueFromBufferListener = listener;
     }
 
@@ -274,8 +270,7 @@ public class PropertyPLY {
      * @throws NotAvailableException Raised if listener has not yet been
      *                               provided and is not available for retrieval.
      */
-    public PLYReadValueFromStreamListener getReadValueFromStreamListener()
-            throws NotAvailableException {
+    public PLYReadValueFromStreamListener getReadValueFromStreamListener() throws NotAvailableException {
         if (!isReadValueFromStreamListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -291,8 +286,7 @@ public class PropertyPLY {
      * @param listener listener to read the appropriate amount of bytes from a
      *                 PLY file.
      */
-    public void setReadValueFromStreamListener(
-            final PLYReadValueFromStreamListener listener) {
+    public void setReadValueFromStreamListener(final PLYReadValueFromStreamListener listener) {
         readValueFromStreamListener = listener;
     }
 
@@ -315,8 +309,7 @@ public class PropertyPLY {
      * @throws NotAvailableException Raised if listener has not yet been
      *                               provided and is not available for retrieval.
      */
-    public PLYReadValueFromBufferListener getReadLengthValueFromBufferListener()
-            throws NotAvailableException {
+    public PLYReadValueFromBufferListener getReadLengthValueFromBufferListener() throws NotAvailableException {
         if (!isReadLengthValueFromBufferListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -331,8 +324,7 @@ public class PropertyPLY {
      *
      * @param listener listener to read the length value of this property.
      */
-    public void setReadLengthValueFromBufferListener(
-            final PLYReadValueFromBufferListener listener) {
+    public void setReadLengthValueFromBufferListener(final PLYReadValueFromBufferListener listener) {
         readLengthValueFromBufferListener = listener;
     }
 
@@ -355,8 +347,7 @@ public class PropertyPLY {
      * @throws NotAvailableException Raised if listener has not yet been
      *                               provided and is not available for retrieval.
      */
-    public PLYReadValueFromStreamListener getReadLengthValueFromStreamListener()
-            throws NotAvailableException {
+    public PLYReadValueFromStreamListener getReadLengthValueFromStreamListener() throws NotAvailableException {
         if (!isReadLengthValueFromStreamListenerAvailable()) {
             throw new NotAvailableException();
         }
@@ -372,8 +363,7 @@ public class PropertyPLY {
      * @param listener listener to read the appropriate amount of bytes from a
      *                 PLY file.
      */
-    public void setReadLengthValueFromStreamListener(
-            final PLYReadValueFromStreamListener listener) {
+    public void setReadLengthValueFromStreamListener(final PLYReadValueFromStreamListener listener) {
         readLengthValueFromStreamListener = listener;
     }
 

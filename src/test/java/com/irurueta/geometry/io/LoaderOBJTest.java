@@ -15,14 +15,14 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LoaderOBJTest implements LoaderListenerOBJ {
+class LoaderOBJTest implements LoaderListenerOBJ {
 
     private static final double ERROR = 1e-4;
 
@@ -36,122 +36,76 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     private float previousProgress = 0.0f;
 
     @Test
-    public void testConstructors() throws LockedException, IOException,
-            LoaderException {
+    void testConstructors() throws IOException {
 
         // test constants are equal to LoaderPLY
-        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK,
-                LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, LoaderPLY.DEFAULT_MAX_VERTICES_IN_CHUNK);
         assertEquals(LoaderPLY.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
                 !LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK);
-        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS,
-                LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS);
-        assertEquals(LoaderOBJ.MIN_MAX_VERTICES_IN_CHUNK,
-                LoaderPLY.MIN_MAX_VERTICES_IN_CHUNK);
-        assertEquals(LoaderOBJ.MIN_STREAM_POSITIONS,
-                LoaderPLY.MIN_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, LoaderPLY.DEFAULT_MAX_STREAM_POSITIONS);
+        assertEquals(LoaderOBJ.MIN_MAX_VERTICES_IN_CHUNK, LoaderPLY.MIN_MAX_VERTICES_IN_CHUNK);
+        assertEquals(LoaderOBJ.MIN_STREAM_POSITIONS, LoaderPLY.MIN_STREAM_POSITIONS);
         assertEquals(LoaderOBJ.PROGRESS_DELTA, LoaderPLY.PROGRESS_DELTA, 0.0);
 
         // test empty constructor
-        LoaderOBJ loader = new LoaderOBJ();
-        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK,
-                loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
-        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS,
-                loader.getMaxStreamPositions());
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
-        assertTrue(loader.getComments().isEmpty());
-        assertNull(loader.getMaterials());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-
-        // test constructor with maxVerticesInChunk
-        final int maxVerticesInChunk = 21423;
-        loader = new LoaderOBJ(maxVerticesInChunk);
-        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        var loader = new LoaderOBJ();
+        assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
+
+        // test constructor with maxVerticesInChunk
+        final var maxVerticesInChunk = 21423;
+        loader = new LoaderOBJ(maxVerticesInChunk);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
+        assertFalse(loader.isReady());
+        assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
+        assertFalse(loader.isLocked());
+        assertNull(loader.getListener());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
+        assertTrue(loader.getComments().isEmpty());
+        assertNull(loader.getMaterials());
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderOBJ(0));
 
         // test constructor with maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
         loader = new LoaderOBJ(maxVerticesInChunk, true);
-        assertEquals(loader.getMaxVerticesInChunk(), maxVerticesInChunk);
+        assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(0, true));
 
         // test constructor with maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        final long maxStreamPositions = 500;
+        final var maxStreamPositions = 500L;
         loader = new LoaderOBJ(maxVerticesInChunk, true, maxStreamPositions);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
@@ -160,103 +114,69 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(0, true, maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderOBJ(maxVerticesInChunk, true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(maxVerticesInChunk, true, 0));
 
         // constructor with file
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
         loader = new LoaderOBJ(f);
         assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
         // Force IOException
-        final File badF = new File("./non-existing");
+        final var badF = new File("./non-existing");
         assertFalse(badF.exists());
 
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderOBJ(badF));
 
         // test constructor with file and maxVerticesInChunk
         loader = new LoaderOBJ(f, maxVerticesInChunk);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
         // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, maxVerticesInChunk);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderOBJ(badF, maxVerticesInChunk));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderOBJ(f, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderOBJ(f, 0));
 
         // test constructor with file, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
@@ -268,29 +188,20 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, maxVerticesInChunk, true);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderOBJ(badF, maxVerticesInChunk, true));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderOBJ(f, 0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(f, 0, true));
 
         // test constructor with file, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
@@ -302,112 +213,76 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertNull(loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
         // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, maxVerticesInChunk,
-                    true, maxStreamPositions);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class,
+                () -> new LoaderOBJ(badF, maxVerticesInChunk, true, maxStreamPositions));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderOBJ(f, 0, true,
-                    maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderOBJ(f, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(f, 0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(f, maxVerticesInChunk, true, 0));
 
         // Test constructor with loader listener
-        final LoaderListener listener = new LoaderListener() {
+        final var listener = new LoaderListener() {
             @Override
             public void onLoadStart(final Loader loader) {
+                // no action needed
             }
 
             @Override
             public void onLoadEnd(final Loader loader) {
+                // no action needed
             }
 
             @Override
             public void onLoadProgressChange(final Loader loader, final float progress) {
+                // no action needed
             }
         };
 
         loader = new LoaderOBJ(listener);
         assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // test constructor with loader listener and maxVerticesInChunk
         loader = new LoaderOBJ(listener, maxVerticesInChunk);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertFalse(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
 
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(listener, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderOBJ(listener, 0));
 
         // test constructor with loader listener, maxVerticesInChunk and
         // allowDuplicateVerticesInChunk
@@ -419,35 +294,21 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
 
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(listener, 0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(listener, 0, true));
 
         // test constructor with loader listener, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderOBJ(listener, maxVerticesInChunk,
-                true, maxStreamPositions);
+        loader = new LoaderOBJ(listener, maxVerticesInChunk, true, maxStreamPositions);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
@@ -455,98 +316,62 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
 
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(IOException.class, loader::isValidFile);
+        assertThrows(NotReadyException.class, loader::load);
 
         // Force IllegalArgumentException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(listener, 0, true,
-                    maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderOBJ(listener, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(listener, 0, true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(listener, maxVerticesInChunk, true, 0));
 
         // test constructor with file and listener
         loader = new LoaderOBJ(f, listener);
         assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
         // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, listener);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderOBJ(badF, listener));
 
         // test constructor with file, listener and maxVerticesInChunk
         loader = new LoaderOBJ(f, listener, maxVerticesInChunk);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
-        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
-                loader.areDuplicateVerticesInChunkAllowed());
+        assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK, loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
         assertTrue(loader.isReady());
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
         // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, listener, maxVerticesInChunk);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderOBJ(badF, listener, maxVerticesInChunk));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderOBJ(f, listener, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderOBJ(f, listener, 0));
 
         // test constructor with file, listener, maxVerticesInChunk
         // and allowDuplicateVerticesInChunk
@@ -558,34 +383,25 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
-        // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, listener, maxVerticesInChunk, true);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        // Force IOException
+        //noinspection resource
+        assertThrows(IOException.class,
+                () -> new LoaderOBJ(badF, listener, maxVerticesInChunk, true));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderOBJ(f, listener, 0, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoaderOBJ(f, listener, 0, true));
 
         // test constructor with file, listener, maxVerticesInChunk,
         // allowDuplicateVerticesInChunk and maxStreamPositions
-        loader = new LoaderOBJ(f, listener, maxVerticesInChunk,
-                true, maxStreamPositions);
+        loader = new LoaderOBJ(f, listener, maxVerticesInChunk, true, maxStreamPositions);
         assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
         assertTrue(loader.areDuplicateVerticesInChunkAllowed());
         assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
@@ -593,48 +409,34 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
         assertEquals(MeshFormat.MESH_FORMAT_OBJ, loader.getMeshFormat());
         assertFalse(loader.isLocked());
         assertEquals(listener, loader.getListener());
-        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR,
-                loader.isContinueIfTriangulationError());
+        assertEquals(LoaderOBJ.DEFAULT_CONTINUE_IF_TRIANGULATION_ERROR, loader.isContinueIfTriangulationError());
         assertTrue(loader.getComments().isEmpty());
         assertNull(loader.getMaterials());
         // to free file resources
         loader.close();
 
-        // Force FileNotFoundException
-        loader = null;
-        try {
-            loader = new LoaderOBJ(badF, listener, maxVerticesInChunk,
-                    true, maxStreamPositions);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
+        // Force IOException
+        //noinspection resource
+        assertThrows(IOException.class, () -> new LoaderOBJ(badF, listener, maxVerticesInChunk,
+                true, maxStreamPositions));
 
         // Force IllegalArgumentException
-        try {
-            loader = new LoaderOBJ(f, listener, 0,
-                    true, maxStreamPositions);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
-        try {
-            loader = new LoaderOBJ(f, listener, maxVerticesInChunk,
-                    true, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(loader);
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderOBJ(f, listener, 0,
+                true, maxStreamPositions));
+        //noinspection resource
+        assertThrows(IllegalArgumentException.class, () -> new LoaderOBJ(f, listener, maxVerticesInChunk,
+                true, 0));
     }
 
     @Test
-    public void testHasSetFileAndIsReady() throws LockedException, IOException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
+    void testHasSetFileAndIsReady() throws LockedException, IOException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        try (final LoaderOBJ loader = new LoaderOBJ()) {
+        try (final var loader = new LoaderOBJ()) {
             assertFalse(loader.hasFile());
             assertFalse(loader.isReady());
 
@@ -646,21 +448,24 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testGetSetListener() throws LockedException, IOException {
-        try (final LoaderOBJ loader = new LoaderOBJ()) {
+    void testGetSetListener() throws LockedException, IOException {
+        try (final var loader = new LoaderOBJ()) {
             assertNull(loader.getListener());
 
-            final LoaderListener listener = new LoaderListener() {
+            final var listener = new LoaderListener() {
                 @Override
                 public void onLoadStart(final Loader loader) {
+                    // no action needed
                 }
 
                 @Override
                 public void onLoadEnd(final Loader loader) {
+                    // no action needed
                 }
 
                 @Override
                 public void onLoadProgressChange(final Loader loader, final float progress) {
+                    // no action needed
                 }
             };
 
@@ -670,9 +475,9 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
-        try (final LoaderOBJ loader = new LoaderOBJ()) {
-            final int maxVerticesInChunk = 521351;
+    void testGetSetMaxVerticesInChunk() throws LockedException, IOException {
+        try (final var loader = new LoaderOBJ()) {
+            final var maxVerticesInChunk = 521351;
 
             assertEquals(LoaderOBJ.DEFAULT_MAX_VERTICES_IN_CHUNK, loader.getMaxVerticesInChunk());
 
@@ -682,15 +487,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertEquals(maxVerticesInChunk, loader.getMaxVerticesInChunk());
 
             // Force IllegalArgumentException
-            loader.setMaxVerticesInChunk(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            assertThrows(IllegalArgumentException.class, () -> loader.setMaxVerticesInChunk(0));
         }
     }
 
     @Test
-    public void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
-        try (final LoaderOBJ loader = new LoaderOBJ()) {
+    void testGetSetAllowDuplicateVerticesInChunk() throws LockedException, IOException {
+        try (final var loader = new LoaderOBJ()) {
 
             assertEquals(LoaderOBJ.DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK,
                     loader.areDuplicateVerticesInChunkAllowed());
@@ -703,12 +506,11 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testGetSetMaxStreamPositions() throws LockedException, IOException {
-        final long maxStreamPositions = 400;
-        try (final LoaderOBJ loader = new LoaderOBJ()) {
+    void testGetSetMaxStreamPositions() throws LockedException, IOException {
+        final var maxStreamPositions = 400;
+        try (final var loader = new LoaderOBJ()) {
 
-            assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS,
-                    loader.getMaxStreamPositions());
+            assertEquals(LoaderOBJ.DEFAULT_MAX_STREAM_POSITIONS, loader.getMaxStreamPositions());
 
             // set new value
             loader.setMaxStreamPositions(maxStreamPositions);
@@ -716,15 +518,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             assertEquals(maxStreamPositions, loader.getMaxStreamPositions());
 
             // Force IllegalArgumentException
-            loader.setMaxStreamPositions(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            assertThrows(IllegalArgumentException.class, () -> loader.setMaxStreamPositions(0));
         }
     }
 
     @Test
-    public void testIsSetContinueIfTriangulationError() throws IOException {
-        try (final LoaderOBJ loader = new LoaderOBJ()) {
+    void testIsSetContinueIfTriangulationError() throws IOException {
+        try (final var loader = new LoaderOBJ()) {
 
             assertTrue(loader.isContinueIfTriangulationError());
 
@@ -735,27 +535,26 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testIsValidFile() throws LockedException, IOException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
+    void testIsValidFile() throws LockedException, IOException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        final LoaderOBJ loader = new LoaderOBJ(f);
+        final var loader = new LoaderOBJ(f);
         assertTrue(loader.isValidFile());
         // to free file resources
         loader.close();
     }
 
     @Test
-    public void testLoad() throws LockedException, NotReadyException,
-            IOException, LoaderException {
-        final File f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
+    void testLoad() throws LockedException, NotReadyException, IOException, LoaderException {
+        final var f = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
         // check that file exists
         assertTrue(f.exists());
         assertTrue(f.isFile());
 
-        final LoaderOBJ loader = new LoaderOBJ(f);
+        final var loader = new LoaderOBJ(f);
         assertNotNull(loader.load());
 
         assertTrue(isEndValid());
@@ -769,24 +568,22 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testLoadAndIterate() throws IllegalArgumentException, LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIterate() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final int maxNumberOfVerticesInChunk = 500;
-        final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
-        final File filePly = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+        final var maxNumberOfVerticesInChunk = 500;
+        final var fileObj = new File("./src/test/java/com/irurueta/geometry/io/books.obj");
+        final var filePly = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
 
-        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
-                maxNumberOfVerticesInChunk, false);
+        try (final var plyLoader = new LoaderPLY(filePly, maxNumberOfVerticesInChunk, false);
              //disable vertex duplicates
-             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                     maxNumberOfVerticesInChunk, false)) {
+             final var objLoader = new LoaderOBJ(fileObj, maxNumberOfVerticesInChunk, false)) {
 
             objLoader.setListener(this);
 
 
-            final LoaderIterator plyIt = plyLoader.load();
-            final LoaderIterator objIt = objLoader.load();
+            final var plyIt = plyLoader.load();
+            final var objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -796,7 +593,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             // check correctness of chunks
             while (objIt.hasNext() && plyIt.hasNext()) {
-                final DataChunk objChunk = objIt.next();
+                final var objChunk = objIt.next();
 
                 assertTrue(isEndValid());
                 assertTrue(isLockedValid());
@@ -804,19 +601,19 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final DataChunk plyChunk = plyIt.next();
+                final var plyChunk = plyIt.next();
 
-                final float[] objVertices = objChunk.getVerticesCoordinatesData();
-                final float[] objTexture = objChunk.getTextureCoordinatesData();
-                final short[] objColors = objChunk.getColorData();
-                final float[] objNormals = objChunk.getNormalsData();
-                final int[] objIndices = objChunk.getIndicesData();
+                final var objVertices = objChunk.getVerticesCoordinatesData();
+                final var objTexture = objChunk.getTextureCoordinatesData();
+                final var objColors = objChunk.getColorData();
+                final var objNormals = objChunk.getNormalsData();
+                final var objIndices = objChunk.getIndicesData();
 
-                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-                final short[] plyColors = plyChunk.getColorData();
-                final float[] plyNormals = plyChunk.getNormalsData();
-                final int[] plyIndices = plyChunk.getIndicesData();
+                final var plyVertices = plyChunk.getVerticesCoordinatesData();
+                final var plyTexture = plyChunk.getTextureCoordinatesData();
+                final var plyColors = plyChunk.getColorData();
+                final var plyNormals = plyChunk.getNormalsData();
+                final var plyIndices = plyChunk.getIndicesData();
 
                 assertEquals(objVertices.length, objNormals.length);
                 assertNull(objTexture);
@@ -825,12 +622,12 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertNull(plyTexture);
                 assertNotNull(plyColors);
 
-                final int nVerticesInChunk = objVertices.length / 3;
+                final var nVerticesInChunk = objVertices.length / 3;
 
                 assertEquals(nVerticesInChunk, objVertices.length / 3);
                 assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                for (int i = 0; i < nVerticesInChunk; i++) {
+                for (var i = 0; i < nVerticesInChunk; i++) {
                     // check x coordinate
                     assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
 
@@ -850,10 +647,10 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                     assertEquals(objNormals[3 * i + 2], plyNormals[3 * i + 2], ERROR);
                 }
 
-                final int nIndicesInChunk = objIndices.length;
+                final var nIndicesInChunk = objIndices.length;
                 assertEquals(nIndicesInChunk, plyIndices.length);
 
-                for (int i = 0; i < nIndicesInChunk; i++) {
+                for (var i = 0; i < nIndicesInChunk; i++) {
                     assertTrue(objIndices[i] < nVerticesInChunk);
                     assertTrue(plyIndices[i] < nVerticesInChunk);
 
@@ -886,22 +683,21 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testLoadAndIterateMacbook() throws IllegalArgumentException, LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIterateMacbook() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final int maxNumberOfVerticesInChunk = 100000;
-        final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/macbook.obj");
-        final File filePly = new File("./src/test/java/com/irurueta/geometry/io/macbook.ply");
+        final var maxNumberOfVerticesInChunk = 100000;
+        final var fileObj = new File("./src/test/java/com/irurueta/geometry/io/macbook.obj");
+        final var filePly = new File("./src/test/java/com/irurueta/geometry/io/macbook.ply");
 
-        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
-                maxNumberOfVerticesInChunk, true); //enable vertex duplicates
+        try (final var plyLoader = new LoaderPLY(filePly, maxNumberOfVerticesInChunk, true); //enable vertex duplicates
              //enable vertex duplicates
-             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                     maxNumberOfVerticesInChunk, true)) {
+             final var objLoader = new LoaderOBJ(fileObj, maxNumberOfVerticesInChunk, true)) {
+
             objLoader.setListener(this);
 
-            final LoaderIterator plyIt = plyLoader.load();
-            final LoaderIterator objIt = objLoader.load();
+            final var plyIt = plyLoader.load();
+            final var objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -911,7 +707,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             // check correctness of chunks
             while (objIt.hasNext() && plyIt.hasNext()) {
-                final DataChunk objChunk = objIt.next();
+                final var objChunk = objIt.next();
 
                 assertTrue(isEndValid());
                 assertTrue(isLockedValid());
@@ -919,19 +715,19 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final DataChunk plyChunk = plyIt.next();
+                final var plyChunk = plyIt.next();
 
-                final float[] objVertices = objChunk.getVerticesCoordinatesData();
-                final float[] objTexture = objChunk.getTextureCoordinatesData();
-                final short[] objColors = objChunk.getColorData();
-                final float[] objNormals = objChunk.getNormalsData();
-                final int[] objIndices = objChunk.getIndicesData();
+                final var objVertices = objChunk.getVerticesCoordinatesData();
+                final var objTexture = objChunk.getTextureCoordinatesData();
+                final var objColors = objChunk.getColorData();
+                final var objNormals = objChunk.getNormalsData();
+                final var objIndices = objChunk.getIndicesData();
 
-                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-                final short[] plyColors = plyChunk.getColorData();
-                final float[] plyNormals = plyChunk.getNormalsData();
-                final int[] plyIndices = plyChunk.getIndicesData();
+                final var plyVertices = plyChunk.getVerticesCoordinatesData();
+                final var plyTexture = plyChunk.getTextureCoordinatesData();
+                final var plyColors = plyChunk.getColorData();
+                final var plyNormals = plyChunk.getNormalsData();
+                final var plyIndices = plyChunk.getIndicesData();
 
                 assertEquals(objVertices.length, objNormals.length);
                 assertNull(objTexture);
@@ -940,12 +736,12 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertNull(plyTexture);
                 assertNotNull(plyColors);
 
-                final int nVerticesInChunk = objVertices.length / 3;
+                final var nVerticesInChunk = objVertices.length / 3;
 
                 assertEquals(nVerticesInChunk, objVertices.length / 3);
                 assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                for (int i = 0; i < nVerticesInChunk; i++) {
+                for (var i = 0; i < nVerticesInChunk; i++) {
                     // check x coordinate
                     assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
 
@@ -956,10 +752,10 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                     assertEquals(objVertices[3 * i + 2], plyVertices[3 * i + 2], ERROR);
                 }
 
-                final int nIndicesInChunk = objIndices.length;
+                final var nIndicesInChunk = objIndices.length;
                 assertEquals(nIndicesInChunk, plyIndices.length);
 
-                for (int i = 0; i < nIndicesInChunk; i++) {
+                for (var i = 0; i < nIndicesInChunk; i++) {
                     assertTrue(objIndices[i] < nVerticesInChunk);
                     assertTrue(plyIndices[i] < nVerticesInChunk);
 
@@ -992,23 +788,21 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testLoadAndIterateMacbook2() throws IllegalArgumentException, LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIterateMacbook2() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final int maxNumberOfVerticesInChunk = 100000;
-        final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/macbook2.obj");
-        final File filePly = new File("./src/test/java/com/irurueta/geometry/io/macbook.ply");
+        final var maxNumberOfVerticesInChunk = 100000;
+        final var fileObj = new File("./src/test/java/com/irurueta/geometry/io/macbook2.obj");
+        final var filePly = new File("./src/test/java/com/irurueta/geometry/io/macbook.ply");
 
-        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
-                maxNumberOfVerticesInChunk, false); //disable vertex duplicates
+        try (final var plyLoader = new LoaderPLY(filePly, maxNumberOfVerticesInChunk, false);
              //disable vertex duplicates
-             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                     maxNumberOfVerticesInChunk, false)) {
+             final var objLoader = new LoaderOBJ(fileObj, maxNumberOfVerticesInChunk, false)) {
+
             objLoader.setListener(this);
 
-
-            final LoaderIterator plyIt = plyLoader.load();
-            final LoaderIterator objIt = objLoader.load();
+            final var plyIt = plyLoader.load();
+            final var objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1018,7 +812,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             // check correctness of chunks
             while (objIt.hasNext() && plyIt.hasNext()) {
-                final DataChunk objChunk = objIt.next();
+                final var objChunk = objIt.next();
 
                 assertTrue(isEndValid());
                 assertTrue(isLockedValid());
@@ -1026,19 +820,19 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final DataChunk plyChunk = plyIt.next();
+                final var plyChunk = plyIt.next();
 
-                final float[] objVertices = objChunk.getVerticesCoordinatesData();
-                final float[] objTexture = objChunk.getTextureCoordinatesData();
-                final short[] objColors = objChunk.getColorData();
-                final float[] objNormals = objChunk.getNormalsData();
-                final int[] objIndices = objChunk.getIndicesData();
+                final var objVertices = objChunk.getVerticesCoordinatesData();
+                final var objTexture = objChunk.getTextureCoordinatesData();
+                final var objColors = objChunk.getColorData();
+                final var objNormals = objChunk.getNormalsData();
+                final var objIndices = objChunk.getIndicesData();
 
-                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-                final short[] plyColors = plyChunk.getColorData();
-                final float[] plyNormals = plyChunk.getNormalsData();
-                final int[] plyIndices = plyChunk.getIndicesData();
+                final var plyVertices = plyChunk.getVerticesCoordinatesData();
+                final var plyTexture = plyChunk.getTextureCoordinatesData();
+                final var plyColors = plyChunk.getColorData();
+                final var plyNormals = plyChunk.getNormalsData();
+                final var plyIndices = plyChunk.getIndicesData();
 
                 assertEquals(objVertices.length, objNormals.length);
                 assertNull(objTexture);
@@ -1047,12 +841,12 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertNull(plyTexture);
                 assertNotNull(plyColors);
 
-                final int nVerticesInChunk = objVertices.length / 3;
+                final var nVerticesInChunk = objVertices.length / 3;
 
                 assertEquals(nVerticesInChunk, objVertices.length / 3);
                 assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                for (int i = 0; i < nVerticesInChunk; i++) {
+                for (var i = 0; i < nVerticesInChunk; i++) {
                     // check x coordinate
                     assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
 
@@ -1072,10 +866,10 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                     assertEquals(objNormals[3 * i + 2], plyNormals[3 * i + 2], ERROR);
                 }
 
-                final int nIndicesInChunk = objIndices.length;
+                final var nIndicesInChunk = objIndices.length;
                 assertEquals(nIndicesInChunk, plyIndices.length);
 
-                for (int i = 0; i < nIndicesInChunk; i++) {
+                for (var i = 0; i < nIndicesInChunk; i++) {
                     assertTrue(objIndices[i] < nVerticesInChunk);
                     assertTrue(plyIndices[i] < nVerticesInChunk);
 
@@ -1108,23 +902,21 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testLoadAndIteratePitcher() throws IllegalArgumentException, LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIteratePitcher() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final int maxNumberOfVerticesInChunk = 100000;
-        final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/pitcher.obj");
-        final File filePly = new File("./src/test/java/com/irurueta/geometry/io/pitcher.ply");
+        final var maxNumberOfVerticesInChunk = 100000;
+        final var fileObj = new File("./src/test/java/com/irurueta/geometry/io/pitcher.obj");
+        final var filePly = new File("./src/test/java/com/irurueta/geometry/io/pitcher.ply");
 
-        try (final LoaderPLY plyLoader = new LoaderPLY(filePly,
-                maxNumberOfVerticesInChunk, true); //enable vertex duplicates
+        try (final var plyLoader = new LoaderPLY(filePly, maxNumberOfVerticesInChunk, true);
              //enable vertex duplicates
-             final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                     maxNumberOfVerticesInChunk, true)
-        ) {
+             final var objLoader = new LoaderOBJ(fileObj, maxNumberOfVerticesInChunk, true)) {
+
             objLoader.setListener(this);
 
-            final LoaderIterator plyIt = plyLoader.load();
-            final LoaderIterator objIt = objLoader.load();
+            final var plyIt = plyLoader.load();
+            final var objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1134,7 +926,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             // check correctness of chunks
             while (objIt.hasNext() && plyIt.hasNext()) {
-                final DataChunk objChunk = objIt.next();
+                final var objChunk = objIt.next();
 
                 assertTrue(isEndValid());
                 assertTrue(isLockedValid());
@@ -1142,19 +934,19 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final DataChunk plyChunk = plyIt.next();
+                final var plyChunk = plyIt.next();
 
-                final float[] objVertices = objChunk.getVerticesCoordinatesData();
-                final float[] objTexture = objChunk.getTextureCoordinatesData();
-                final short[] objColors = objChunk.getColorData();
-                final float[] objNormals = objChunk.getNormalsData();
-                final int[] objIndices = objChunk.getIndicesData();
+                final var objVertices = objChunk.getVerticesCoordinatesData();
+                final var objTexture = objChunk.getTextureCoordinatesData();
+                final var objColors = objChunk.getColorData();
+                final var objNormals = objChunk.getNormalsData();
+                final var objIndices = objChunk.getIndicesData();
 
-                final float[] plyVertices = plyChunk.getVerticesCoordinatesData();
-                final float[] plyTexture = plyChunk.getTextureCoordinatesData();
-                final short[] plyColors = plyChunk.getColorData();
-                final float[] plyNormals = plyChunk.getNormalsData();
-                final int[] plyIndices = plyChunk.getIndicesData();
+                final var plyVertices = plyChunk.getVerticesCoordinatesData();
+                final var plyTexture = plyChunk.getTextureCoordinatesData();
+                final var plyColors = plyChunk.getColorData();
+                final var plyNormals = plyChunk.getNormalsData();
+                final var plyIndices = plyChunk.getIndicesData();
 
                 assertEquals(objVertices.length, objNormals.length);
                 assertNotNull(objTexture);
@@ -1163,12 +955,12 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertNull(plyTexture);
                 assertNotNull(plyColors);
 
-                final int nVerticesInChunk = objVertices.length / 3;
+                final var nVerticesInChunk = objVertices.length / 3;
 
                 assertEquals(nVerticesInChunk, objVertices.length / 3);
                 assertEquals(nVerticesInChunk, plyVertices.length / 3);
 
-                for (int i = 0; i < nVerticesInChunk; i++) {
+                for (var i = 0; i < nVerticesInChunk; i++) {
                     // check x coordinate
                     assertEquals(objVertices[3 * i], plyVertices[3 * i], ERROR);
 
@@ -1179,10 +971,10 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                     assertEquals(objVertices[3 * i + 2], plyVertices[3 * i + 2], ERROR);
                 }
 
-                final int nIndicesInChunk = objIndices.length;
+                final var nIndicesInChunk = objIndices.length;
                 assertEquals(nIndicesInChunk, plyIndices.length);
 
-                for (int i = 0; i < nIndicesInChunk; i++) {
+                for (var i = 0; i < nIndicesInChunk; i++) {
                     assertTrue(objIndices[i] < nVerticesInChunk);
                     assertTrue(plyIndices[i] < nVerticesInChunk);
 
@@ -1215,17 +1007,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testLoadAndIterateCamera() throws IllegalArgumentException, LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIterateCamera() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final int maxNumberOfVerticesInChunk = 100000;
-        final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/camera.obj");
+        final var maxNumberOfVerticesInChunk = 100000;
+        final var fileObj = new File("./src/test/java/com/irurueta/geometry/io/camera.obj");
         //enable vertex duplicates
-        try (final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, true)) {
+        try (final var objLoader = new LoaderOBJ(fileObj, maxNumberOfVerticesInChunk, true)) {
             objLoader.setListener(this);
 
-            final LoaderIterator objIt = objLoader.load();
+            final var objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1235,7 +1026,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             // check correctness of chunks
             while (objIt.hasNext()) {
-                final DataChunk objChunk = objIt.next();
+                final var objChunk = objIt.next();
 
                 assertTrue(isEndValid());
                 assertTrue(isLockedValid());
@@ -1243,19 +1034,19 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final float[] objVertices = objChunk.getVerticesCoordinatesData();
-                final float[] objTexture = objChunk.getTextureCoordinatesData();
-                final short[] objColors = objChunk.getColorData();
-                final float[] objNormals = objChunk.getNormalsData();
-                final int[] objIndices = objChunk.getIndicesData();
+                final var objVertices = objChunk.getVerticesCoordinatesData();
+                final var objTexture = objChunk.getTextureCoordinatesData();
+                final var objColors = objChunk.getColorData();
+                final var objNormals = objChunk.getNormalsData();
+                final var objIndices = objChunk.getIndicesData();
 
                 assertEquals(objVertices.length, objNormals.length);
                 assertNotNull(objTexture);
                 assertNull(objColors);
 
-                final int nVerticesInChunk = objVertices.length / 3;
+                final var nVerticesInChunk = objVertices.length / 3;
 
-                for (final int objIndex : objIndices) {
+                for (final var objIndex : objIndices) {
                     assertTrue(objIndex < nVerticesInChunk);
                 }
 
@@ -1272,17 +1063,16 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
     }
 
     @Test
-    public void testLoadAndIteratePotro() throws IllegalArgumentException, LockedException,
-            NotReadyException, IOException, LoaderException, NotAvailableException {
+    void testLoadAndIteratePotro() throws IllegalArgumentException, LockedException, NotReadyException, IOException,
+            LoaderException, NotAvailableException {
 
-        final int maxNumberOfVerticesInChunk = 100000;
-        final File fileObj = new File("./src/test/java/com/irurueta/geometry/io/potro.obj");
+        final var maxNumberOfVerticesInChunk = 100000;
+        final var fileObj = new File("./src/test/java/com/irurueta/geometry/io/potro.obj");
         //enable vertex duplicates
-        try (final LoaderOBJ objLoader = new LoaderOBJ(fileObj,
-                maxNumberOfVerticesInChunk, true)) {
+        try (final var objLoader = new LoaderOBJ(fileObj, maxNumberOfVerticesInChunk, true)) {
             objLoader.setListener(this);
 
-            final LoaderIterator objIt = objLoader.load();
+            final var objIt = objLoader.load();
 
             assertTrue(isEndValid());
             assertTrue(isLockedValid());
@@ -1292,7 +1082,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
             // check correctness of chunks
             while (objIt.hasNext()) {
-                final DataChunk objChunk = objIt.next();
+                final var objChunk = objIt.next();
 
                 assertTrue(isEndValid());
                 assertTrue(isLockedValid());
@@ -1300,19 +1090,19 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
                 assertTrue(isStartValid());
                 resetListener();
 
-                final float[] objVertices = objChunk.getVerticesCoordinatesData();
-                final float[] objTexture = objChunk.getTextureCoordinatesData();
-                final short[] objColors = objChunk.getColorData();
-                final float[] objNormals = objChunk.getNormalsData();
-                final int[] objIndices = objChunk.getIndicesData();
+                final var objVertices = objChunk.getVerticesCoordinatesData();
+                final var objTexture = objChunk.getTextureCoordinatesData();
+                final var objColors = objChunk.getColorData();
+                final var objNormals = objChunk.getNormalsData();
+                final var objIndices = objChunk.getIndicesData();
 
                 assertEquals(objVertices.length, objNormals.length);
                 assertNotNull(objTexture);
                 assertNull(objColors);
 
-                final int nVerticesInChunk = objVertices.length / 3;
+                final var nVerticesInChunk = objVertices.length / 3;
 
-                for (final int objIndex : objIndices) {
+                for (final var objIndex : objIndices) {
                     assertTrue(objIndex < nVerticesInChunk);
                 }
 
@@ -1363,13 +1153,13 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
 
     @Override
     public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader, final String path) {
-        final File origF = new File(path);
-        final String folder = "./src/test/java/com/irurueta/geometry/io/";
-        final File f = new File(folder, origF.getName());
-        boolean hasToFail = path.contains("pitcher") || path.contains("Camara fotos");
+        final var origF = new File(path);
+        final var folder = "./src/test/java/com/irurueta/geometry/io/";
+        final var f = new File(folder, origF.getName());
+        var hasToFail = path.contains("pitcher") || path.contains("Camara fotos");
         // we don't have mtl file for pitcher or camera
         try {
-            final MaterialLoaderOBJ materialLoader = new MaterialLoaderOBJ(f);
+            final var materialLoader = new MaterialLoaderOBJ(f);
             if (hasToFail) {
                 fail("IOException was expected but not thrown");
             }
@@ -1391,6 +1181,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             loader.setListener(null);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable ignore) {
             lockedValid = false;
         }
@@ -1399,6 +1190,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             loader.load();
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1407,6 +1199,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             loader.setMaxVerticesInChunk(1);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1415,6 +1208,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             loader.setAllowDuplicateVerticesInChunk(true);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1423,6 +1217,7 @@ public class LoaderOBJTest implements LoaderListenerOBJ {
             loader.setMaxStreamPositions(1);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }

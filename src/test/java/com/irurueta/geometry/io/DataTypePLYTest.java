@@ -1,13 +1,13 @@
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DataTypePLYTest {
+class DataTypePLYTest {
 
     @Test
-    public void testValues() {
+    void testValues() {
         assertEquals("int8", DataTypePLY.PLY_INT8.getValue());
         assertEquals("uint8", DataTypePLY.PLY_UINT8.getValue());
         assertEquals("int16", DataTypePLY.PLY_INT16.getValue());
@@ -27,7 +27,7 @@ public class DataTypePLYTest {
     }
 
     @Test
-    public void testForValue() {
+    void testForValue() {
         assertNull(DataTypePLY.forValue(null));
         assertNull(DataTypePLY.forValue("invalid"));
 

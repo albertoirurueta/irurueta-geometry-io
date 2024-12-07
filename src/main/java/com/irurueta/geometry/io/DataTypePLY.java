@@ -103,8 +103,9 @@ public enum DataTypePLY {
     PLY_DOUBLE("double");
 
     private static final Map<String, DataTypePLY> LOOKUP = new HashMap<>();
+
     static {
-        for (final DataTypePLY value : DataTypePLY.values()) {
+        for (final var value : DataTypePLY.values()) {
             LOOKUP.put(value.getValue(), value);
         }
     }

@@ -16,23 +16,22 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class FileReaderAndWriterTest {
+class FileReaderAndWriterTest {
 
     @Test
-    public void testConstructor() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testConstructor() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        final FileReaderAndWriter readerWriter = new FileReaderAndWriter(
-                f, FileChannel.MapMode.READ_WRITE);
+        final var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
 
         assertTrue(f.exists());
         assertTrue(f.delete());
@@ -40,12 +39,11 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteOneByte() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteOneByte() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(
-                f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         // write one byte
@@ -59,7 +57,7 @@ public class FileReaderAndWriterTest {
         // reopen and read byte
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        assertEquals(readerWriter.read(), b);
+        assertEquals(b, readerWriter.read());
 
         // close and delete file
         readerWriter.close();
@@ -68,16 +66,16 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteArrayOfBytes() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteArrayOfBytes() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         // initialize array of bytes
-        final byte[] bytes = new byte[100];
+        final var bytes = new byte[100];
         for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
@@ -92,11 +90,11 @@ public class FileReaderAndWriterTest {
         // reopen and read array of bytes
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final byte[] bytes2 = new byte[100];
+        final var bytes2 = new byte[100];
         readerWriter.read(bytes2);
 
         // check correctness
-        for (byte b = 0; b < 100; b++) {
+        for (var b = 0; b < 100; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
 
@@ -107,21 +105,20 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteArrayOfBytesWithOffsetAndLength() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteArrayOfBytesWithOffsetAndLength() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(
-                f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         // initialize array of bytes
-        final byte[] bytes = new byte[100];
+        final var bytes = new byte[100];
         for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
-        final int offset = 2;
-        final int length = 3;
+        final var offset = 2;
+        final var length = 3;
 
         // write array of bytes
         readerWriter.write(bytes, offset, length);
@@ -133,12 +130,12 @@ public class FileReaderAndWriterTest {
         // reopen and read array of bytes
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final byte[] bytes2 = new byte[3];
+        final var bytes2 = new byte[3];
         readerWriter.read(bytes2, 0, 2);
 
         // check correctness
-        int counter = 0;
-        for (int i = offset; i < offset + 2; i++) {
+        var counter = 0;
+        for (var i = offset; i < offset + 2; i++) {
             assertEquals(bytes[i], bytes2[counter]);
             counter++;
         }
@@ -150,15 +147,15 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadFullyWriteArrayOfBytes() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadFullyWriteArrayOfBytes() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         // initialize array of bytes
-        byte[] bytes = new byte[100];
+        var bytes = new byte[100];
         for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
@@ -171,14 +168,13 @@ public class FileReaderAndWriterTest {
         assertEquals(100, f.length());
 
         // reopen and read array of bytes
-        readerWriter = new FileReaderAndWriter(f,
-                FileChannel.MapMode.READ_ONLY);
+        readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final byte[] bytes2 = new byte[100];
+        final var bytes2 = new byte[100];
         readerWriter.readFully(bytes2);
 
         // check correctness
-        for (byte b = 0; b < 100; b++) {
+        for (var b = 0; b < 100; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
 
@@ -189,20 +185,20 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadFullyWriteArrayOfBytesWithOffsetAndLength() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadFullyWriteArrayOfBytesWithOffsetAndLength() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         // initialize array of bytes
-        final byte[] bytes = new byte[100];
+        final var bytes = new byte[100];
         for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
-        int offset = 2;
-        int length = 3;
+        var offset = 2;
+        var length = 3;
 
         // write array of bytes
         readerWriter.write(bytes, offset, length);
@@ -214,12 +210,12 @@ public class FileReaderAndWriterTest {
         // reopen and read array of bytes
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final byte[] bytes2 = new byte[3];
+        final var bytes2 = new byte[3];
         readerWriter.readFully(bytes2, 0, 2);
 
         // check correctness
-        int counter = 0;
-        for (int i = offset; i < offset + 2; i++) {
+        var counter = 0;
+        for (var i = offset; i < offset + 2; i++) {
             assertEquals(bytes[i], bytes2[counter]);
             counter++;
         }
@@ -231,18 +227,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testSkipAndGetPosition() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testSkipAndGetPosition() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // initialize array of bytes
-        final byte[] bytes = new byte[100];
+        final var bytes = new byte[100];
         for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
@@ -257,13 +252,13 @@ public class FileReaderAndWriterTest {
         // reopen and read array of bytes
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        byte[] bytes2 = new byte[20];
+        var bytes2 = new byte[20];
         readerWriter.read(bytes2);
 
         assertEquals(20, readerWriter.getPosition());
 
         // check correctness
-        for (byte b = 0; b < 20; b++) {
+        for (var b = 0; b < 20; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
 
@@ -276,8 +271,8 @@ public class FileReaderAndWriterTest {
         readerWriter.read(bytes2);
 
         // check correctness
-        int counter = 40;
-        for (int i = 0; i < 60; i++) {
+        var counter = 40;
+        for (var i = 0; i < 60; i++) {
             assertEquals(bytes[counter], bytes2[i]);
             counter++;
         }
@@ -291,17 +286,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testSeekAndClose() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testSeekAndClose() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // initialize array of bytes
-        final byte[] bytes = new byte[100];
+        final var bytes = new byte[100];
         for (byte b = 0; b < 100; b++) {
             bytes[b] = b;
         }
@@ -316,13 +311,13 @@ public class FileReaderAndWriterTest {
         // reopen and read array of bytes
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        byte[] bytes2 = new byte[20];
+        var bytes2 = new byte[20];
         readerWriter.read(bytes2);
 
         assertEquals(20, readerWriter.getPosition());
 
         // check correctness
-        for (byte b = 0; b < 20; b++) {
+        for (var b = 0; b < 20; b++) {
             assertEquals(bytes[b], bytes2[b]);
         }
 
@@ -335,8 +330,8 @@ public class FileReaderAndWriterTest {
         readerWriter.read(bytes2);
 
         // check correctness
-        int counter = 10;
-        for (int i = 0; i < 90; i++) {
+        var counter = 10;
+        for (var i = 0; i < 90; i++) {
             assertEquals(bytes[counter], bytes2[i]);
             counter++;
         }
@@ -350,11 +345,11 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteBoolean() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteBoolean() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
@@ -384,11 +379,11 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteByte() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteByte() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
@@ -408,7 +403,7 @@ public class FileReaderAndWriterTest {
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readByte(), b);
+        assertEquals(b, readerWriter.readByte());
 
         assertEquals(1, readerWriter.getPosition());
 
@@ -419,11 +414,11 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedByte() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteUnsignedByte() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
@@ -454,11 +449,11 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteShort() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteShort() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
@@ -489,11 +484,11 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteShortWithEndianType() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteShortWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
@@ -528,17 +523,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedShort() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteUnsignedShort() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write short
-        final int value = 45645;
+        final var value = 45645;
         readerWriter.writeUnsignedShort(value);
 
         assertEquals(2, readerWriter.getPosition());
@@ -563,17 +558,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedShortWithEndianType() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteUnsignedShortWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write unsigned short twice with big and little endian
-        final int value = 45645;
+        final var value = 45645;
         readerWriter.writeUnsignedShort(value, EndianType.BIG_ENDIAN_TYPE);
         assertEquals(2, readerWriter.getPosition());
 
@@ -589,7 +584,7 @@ public class FileReaderAndWriterTest {
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedShort(EndianType.BIG_ENDIAN_TYPE), value);
+        assertEquals(value, readerWriter.readUnsignedShort(EndianType.BIG_ENDIAN_TYPE));
         assertEquals(2, readerWriter.getPosition());
 
         assertEquals(value, readerWriter.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE));
@@ -602,17 +597,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteInt() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteInt() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write int
-        final int value = -5636634;
+        final var value = -5636634;
         readerWriter.writeInt(value);
 
         assertEquals(4, readerWriter.getPosition());
@@ -637,18 +632,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteIntWithEndianType()
-            throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteIntWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write int twice with big and little endian
-        final int value = -5636634;
+        final var value = -5636634;
         readerWriter.writeInt(value, EndianType.BIG_ENDIAN_TYPE);
         assertEquals(4, readerWriter.getPosition());
 
@@ -659,12 +653,12 @@ public class FileReaderAndWriterTest {
         readerWriter.close();
         assertEquals(8, f.length());
 
-        // reopen and read ints
+        // reopen and read integers
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readInt(EndianType.BIG_ENDIAN_TYPE), value);
+        assertEquals(value, readerWriter.readInt(EndianType.BIG_ENDIAN_TYPE));
         assertEquals(4, readerWriter.getPosition());
 
         assertEquals(value, readerWriter.readInt(EndianType.LITTLE_ENDIAN_TYPE));
@@ -677,17 +671,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedInt() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteUnsignedInt() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write unsigned int
-        final long value = 436680954;
+        final var value = 436680954;
         readerWriter.writeUnsignedInt(value);
 
         assertEquals(4, readerWriter.getPosition());
@@ -712,17 +706,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUnsignedIntWithEndianType() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteUnsignedIntWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
-        // write unsigned ints twice with big and little endian
-        final long value = 436680954;
+        // write unsigned integers twice with big and little endian
+        final var value = 436680954L;
         readerWriter.writeUnsignedInt(value, EndianType.BIG_ENDIAN_TYPE);
         assertEquals(4, readerWriter.getPosition());
 
@@ -733,15 +727,15 @@ public class FileReaderAndWriterTest {
         readerWriter.close();
         assertEquals(8, f.length());
 
-        // reopen and read unsigned ints
+        // reopen and read unsigned integers
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE), value);
+        assertEquals(value, readerWriter.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE));
         assertEquals(4, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE), value);
+        assertEquals(value, readerWriter.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE));
         assertEquals(8, readerWriter.getPosition());
 
         // close and delete file
@@ -751,17 +745,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteLong() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteLong() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write long
-        final long value = -436680954;
+        final var value = -436680954;
         readerWriter.writeLong(value);
 
         assertEquals(8, readerWriter.getPosition());
@@ -786,17 +780,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteLongWithEndianType() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteLongWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write long twice with big and little endian
-        final long value = -436680954;
+        final var value = -436680954;
         readerWriter.writeLong(value, EndianType.BIG_ENDIAN_TYPE);
         assertEquals(8, readerWriter.getPosition());
 
@@ -812,7 +806,7 @@ public class FileReaderAndWriterTest {
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readLong(EndianType.BIG_ENDIAN_TYPE), value);
+        assertEquals(value, readerWriter.readLong(EndianType.BIG_ENDIAN_TYPE));
         assertEquals(8, readerWriter.getPosition());
 
         assertEquals(value, readerWriter.readLong(EndianType.LITTLE_ENDIAN_TYPE));
@@ -825,17 +819,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadFloat() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadFloat() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write float
-        final float value = 234523.34f;
+        final var value = 234523.34f;
         readerWriter.writeFloat(value);
 
         assertEquals(4, readerWriter.getPosition());
@@ -860,17 +854,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteFloatWithEndianType() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteFloatWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write float twice with big and little endian
-        final float value = 234523.34f;
+        final var value = 234523.34f;
         readerWriter.writeFloat(value, EndianType.BIG_ENDIAN_TYPE);
         assertEquals(4, readerWriter.getPosition());
 
@@ -886,7 +880,7 @@ public class FileReaderAndWriterTest {
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readFloat(EndianType.BIG_ENDIAN_TYPE), value, 0.0);
+        assertEquals(value, readerWriter.readFloat(EndianType.BIG_ENDIAN_TYPE), 0.0);
         assertEquals(4, readerWriter.getPosition());
 
         assertEquals(value, readerWriter.readFloat(EndianType.LITTLE_ENDIAN_TYPE), 0.0);
@@ -899,17 +893,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadDouble() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadDouble() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write double
-        final double value = 234523.344545;
+        final var value = 234523.344545;
         readerWriter.writeDouble(value);
 
         assertEquals(8, readerWriter.getPosition());
@@ -923,7 +917,7 @@ public class FileReaderAndWriterTest {
 
         assertEquals(0, readerWriter.getPosition());
 
-        assertEquals(readerWriter.readDouble(), value, 0.0);
+        assertEquals(value, readerWriter.readDouble(), 0.0);
 
         assertEquals(8, readerWriter.getPosition());
 
@@ -934,17 +928,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteDoubleWithEndianType() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteDoubleWithEndianType() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write double twice with big and little endian
-        final double value = 234523.344545;
+        final var value = 234523.344545;
         readerWriter.writeDouble(value, EndianType.BIG_ENDIAN_TYPE);
         assertEquals(8, readerWriter.getPosition());
 
@@ -973,17 +967,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadLine() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadLine() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write text into file
-        final String text = "first line\nsecond line";
+        final var text = "first line\nsecond line";
         readerWriter.writeASCII(text);
 
         // close file
@@ -991,8 +985,8 @@ public class FileReaderAndWriterTest {
 
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final String firstLine = readerWriter.readLine();
-        final String secondLine = readerWriter.readLine();
+        final var firstLine = readerWriter.readLine();
+        final var secondLine = readerWriter.readLine();
 
         assertEquals("first line", firstLine);
         assertEquals("second line", secondLine);
@@ -1004,17 +998,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWord() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWord() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write text into file
-        final String text = "first line\nsecond line";
+        final var text = "first line\nsecond line";
         readerWriter.writeASCII(text);
 
         // close file
@@ -1022,12 +1016,12 @@ public class FileReaderAndWriterTest {
 
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final String firstWord = readerWriter.readWord();
-        final String secondWord = readerWriter.readWord();
-        final String thirdWord = readerWriter.readWord();
-        final String fourthWord = readerWriter.readWord();
+        final var firstWord = readerWriter.readWord();
+        final var secondWord = readerWriter.readWord();
+        final var thirdWord = readerWriter.readWord();
+        final var fourthWord = readerWriter.readWord();
         // this is null because end is reached
-        final String fifthWord = readerWriter.readWord();
+        final var fifthWord = readerWriter.readWord();
 
         assertEquals("first", firstWord);
         assertEquals("line", secondWord);
@@ -1042,17 +1036,17 @@ public class FileReaderAndWriterTest {
     }
 
     @Test
-    public void testReadWriteUTF() throws IOException {
-        final File f = new File("./src/test/java/readWriteFile");
+    void testReadWriteUTF() throws IOException {
+        final var f = new File("./src/test/java/readWriteFile");
         assertFalse(f.exists());
 
-        FileReaderAndWriter readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
+        var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE);
         assertTrue(f.exists());
 
         assertEquals(0, readerWriter.getPosition());
 
         // write text into file
-        final String text = "first line\nsecond line";
+        final var text = "first line\nsecond line";
         readerWriter.writeUTF(text);
 
         // close file
@@ -1060,7 +1054,7 @@ public class FileReaderAndWriterTest {
 
         readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);
 
-        final String text2 = readerWriter.readUTF();
+        final var text2 = readerWriter.readUTF();
         assertEquals(text, text2);
 
         // close and delete file

@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DataChunkTest {
+class DataChunkTest {
 
     @Test
-    public void testConstructor() {
-        final DataChunk chunk = new DataChunk();
+    void testConstructor() {
+        final var chunk = new DataChunk();
 
         assertNull(chunk.getVerticesCoordinatesData());
         assertFalse(chunk.isVerticesCoordinatesDataAvailable());
@@ -36,8 +36,7 @@ public class DataChunkTest {
         assertNull(chunk.getNormalsData());
         assertFalse(chunk.isNormalsDataAvailable());
 
-        assertEquals(DataChunk.DEFAULT_COLOR_COMPONENTS,
-                chunk.getColorComponents());
+        assertEquals(DataChunk.DEFAULT_COLOR_COMPONENTS, chunk.getColorComponents());
 
         assertEquals(Float.MAX_VALUE, chunk.getMinX(), 0.0);
         assertEquals(Float.MAX_VALUE, chunk.getMinY(), 0.0);
@@ -49,14 +48,14 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetVerticesCoordinatesData() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetVerticesCoordinatesData() {
+        final var chunk = new DataChunk();
 
         assertNull(chunk.getVerticesCoordinatesData());
         assertFalse(chunk.isVerticesCoordinatesDataAvailable());
 
         // set data
-        final float[] data = new float[1024];
+        final var data = new float[1024];
         chunk.setVerticesCoordinatesData(data);
 
         // check correctness
@@ -65,14 +64,14 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetColorData() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetColorData() {
+        final var chunk = new DataChunk();
 
         assertNull(chunk.getColorData());
         assertFalse(chunk.isColorDataAvailable());
 
         // set data
-        final short[] data = new short[1024];
+        final var data = new short[1024];
         chunk.setColorData(data);
 
         // check correctness
@@ -81,14 +80,14 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetIndicesData() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetIndicesData() {
+        final var chunk = new DataChunk();
 
         assertNull(chunk.getIndicesData());
         assertFalse(chunk.isIndicesDataAvailable());
 
         // set data
-        final int[] data = new int[1024];
+        final var data = new int[1024];
         chunk.setIndicesData(data);
 
         // check correctness
@@ -97,14 +96,14 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetTextureCoordinatesData() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetTextureCoordinatesData() {
+        final var chunk = new DataChunk();
 
         assertNull(chunk.getTextureCoordinatesData());
         assertFalse(chunk.isTextureCoordinatesDataAvailable());
 
         // set data
-        final float[] data = new float[1024];
+        final var data = new float[1024];
         chunk.setTextureCoordinatesData(data);
 
         // check correctness
@@ -113,14 +112,14 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetNormalsData() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetNormalsData() {
+        final var chunk = new DataChunk();
 
         assertNull(chunk.getNormalsData());
         assertFalse(chunk.isNormalsDataAvailable());
 
         // set data
-        final float[] data = new float[1024];
+        final var data = new float[1024];
         chunk.setNormalsData(data);
 
         // check correctness
@@ -129,12 +128,12 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetColorComponents() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetColorComponents() {
+        final var chunk = new DataChunk();
 
         assertEquals(DataChunk.DEFAULT_COLOR_COMPONENTS, chunk.getColorComponents());
 
-        final int components = 4;
+        final var components = 4;
 
         // set new value
         chunk.setColorComponents(components);
@@ -142,21 +141,17 @@ public class DataChunkTest {
         assertEquals(components, chunk.getColorComponents());
 
         // Force IllegalArgumentException
-        try {
-            chunk.setColorComponents(0);
-            fail("IllegalArgumentException not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> chunk.setColorComponents(0));
     }
 
     @Test
-    public void testGetSetMinX() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMinX() {
+        final var chunk = new DataChunk();
 
         assertEquals(Float.MAX_VALUE, chunk.getMinX(), 0.0);
 
         // set value
-        final float value = 54213.23f;
+        final var value = 54213.23f;
         chunk.setMinX(value);
 
         // check correctness
@@ -164,13 +159,13 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetMinY() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMinY() {
+        final var chunk = new DataChunk();
 
         assertEquals(Float.MAX_VALUE, chunk.getMinY(), 0.0);
 
         // set value
-        final float value = 533.423f;
+        final var value = 533.423f;
         chunk.setMinY(value);
 
         // check correctness
@@ -178,13 +173,13 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetMinZ() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMinZ() {
+        final var chunk = new DataChunk();
 
         assertEquals(Float.MAX_VALUE, chunk.getMinZ(), 0.0);
 
         // set value
-        final float value = 21542314.2523f;
+        final var value = 21542314.2523f;
         chunk.setMinZ(value);
 
         // check correctness
@@ -192,13 +187,13 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetMaxX() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMaxX() {
+        final var chunk = new DataChunk();
 
         assertEquals(-Float.MAX_VALUE, chunk.getMaxX(), 0.0);
 
         // set value
-        final float value = 3255.52f;
+        final var value = 3255.52f;
         chunk.setMaxX(value);
 
         // check correctness
@@ -206,13 +201,13 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetMaxY() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMaxY() {
+        final var chunk = new DataChunk();
 
         assertEquals(-Float.MAX_VALUE, chunk.getMaxX(), 0.0);
 
         // set value
-        final float value = 43215324.32231f;
+        final var value = 43215324.32231f;
         chunk.setMaxY(value);
 
         // check correctness
@@ -220,13 +215,13 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetMaxZ() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMaxZ() {
+        final var chunk = new DataChunk();
 
         assertEquals(-Float.MAX_VALUE, chunk.getMaxZ(), 0.0);
 
         // set value
-        final float value = 4514235.3245f;
+        final var value = 4514235.3245f;
         chunk.setMaxZ(value);
 
         // check correctness
@@ -234,14 +229,14 @@ public class DataChunkTest {
     }
 
     @Test
-    public void testGetSetMaterial() {
-        final DataChunk chunk = new DataChunk();
+    void testGetSetMaterial() {
+        final var chunk = new DataChunk();
 
         // check default values
         assertNull(chunk.getMaterial());
         assertFalse(chunk.isMaterialAvailable());
 
-        final Material material = new Material();
+        final var material = new Material();
 
         // set new material
         chunk.setMaterial(material);

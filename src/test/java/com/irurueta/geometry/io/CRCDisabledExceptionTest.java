@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CRCDisabledExceptionTest {
+class CRCDisabledExceptionTest {
 
     @Test
-    public void testConstructor() {
-        CRCDisabledException ex = new CRCDisabledException();
+    void testConstructor() {
+        var ex = new CRCDisabledException();
         assertNotNull(ex);
 
         ex = new CRCDisabledException("message");
@@ -32,8 +32,7 @@ public class CRCDisabledExceptionTest {
         ex = new CRCDisabledException(new Exception());
         assertNotNull(ex);
 
-        ex = new CRCDisabledException("message",
-                new Exception());
+        ex = new CRCDisabledException("message", new Exception());
         assertNotNull(ex);
     }
 }

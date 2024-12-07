@@ -20,7 +20,6 @@ import org.apache.commons.codec.binary.Base64;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
@@ -89,7 +88,7 @@ public class MeshWriterJson extends MeshWriter {
      */
     public MeshWriterJson(final Loader loader, final OutputStream stream) {
         super(loader, stream);
-        this.charset = null;
+        charset = null;
         embedTexturesEnabled = DEFAULT_EMBED_TEXTURES;
         remoteTextureUrlEnabled = DEFAULT_USE_REMOTE_TEXTURE_URL;
         remoteTextureIdEnabled = DEFAULT_USE_REMOTE_TEXTURE_ID;
@@ -103,10 +102,9 @@ public class MeshWriterJson extends MeshWriter {
      * @param listener listener to be notified of progress changes or when
      *                 transcoding process starts or finishes.
      */
-    public MeshWriterJson(final Loader loader, final OutputStream stream,
-                          final MeshWriterListener listener) {
+    public MeshWriterJson(final Loader loader, final OutputStream stream, final MeshWriterListener listener) {
         super(loader, stream, listener);
-        this.charset = null;
+        charset = null;
         embedTexturesEnabled = DEFAULT_EMBED_TEXTURES;
         remoteTextureUrlEnabled = DEFAULT_USE_REMOTE_TEXTURE_URL;
         remoteTextureIdEnabled = DEFAULT_USE_REMOTE_TEXTURE_ID;
@@ -165,8 +163,7 @@ public class MeshWriterJson extends MeshWriter {
      *                             resulting JSON, false.
      * @throws LockedException if this mesh writer is locked processing a file.
      */
-    public void setEmbedTexturedEnabled(final boolean embedTexturesEnabled)
-            throws LockedException {
+    public void setEmbedTexturedEnabled(final boolean embedTexturesEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -192,8 +189,7 @@ public class MeshWriterJson extends MeshWriter {
      *                                can be located will be included into resulting file, false otherwise.
      * @throws LockedException if this mesh writer is locked processing a file.
      */
-    public void setRemoteTextureUrlEnabled(final boolean remoteTextureUrlEnabled)
-            throws LockedException {
+    public void setRemoteTextureUrlEnabled(final boolean remoteTextureUrlEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -219,8 +215,7 @@ public class MeshWriterJson extends MeshWriter {
      *                               be included into resulting file.
      * @throws LockedException if this mesh writer is locked processing  file.
      */
-    public void setRemoteTextureIdEnabled(final boolean remoteTextureIdEnabled)
-            throws LockedException {
+    public void setRemoteTextureIdEnabled(final boolean remoteTextureIdEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -239,9 +234,7 @@ public class MeshWriterJson extends MeshWriter {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public void write() throws LoaderException, IOException, NotReadyException,
-            LockedException {
-
+    public void write() throws LoaderException, IOException, NotReadyException, LockedException {
         if (!isReady()) {
             throw new NotReadyException();
         }
@@ -255,8 +248,7 @@ public class MeshWriterJson extends MeshWriter {
                 writer = new BufferedWriter(new OutputStreamWriter(stream));
             } else {
                 // use provided charset
-                writer = new BufferedWriter(new OutputStreamWriter(stream,
-                        charset));
+                writer = new BufferedWriter(new OutputStreamWriter(stream, charset));
             }
 
             locked = true;
@@ -268,35 +260,35 @@ public class MeshWriterJson extends MeshWriter {
             loader.setListener(this.internalListeners);
 
             writer.write("{\"textures\":[");
-            final LoaderIterator iter = loader.load();
+            final var iter = loader.load();
 
-            float minX = Float.MAX_VALUE;
-            float minY = Float.MAX_VALUE;
-            float minZ = Float.MAX_VALUE;
-            float maxX = -Float.MAX_VALUE;
-            float maxY = -Float.MAX_VALUE;
-            float maxZ = -Float.MAX_VALUE;
+            var minX = Float.MAX_VALUE;
+            var minY = Float.MAX_VALUE;
+            var minZ = Float.MAX_VALUE;
+            var maxX = -Float.MAX_VALUE;
+            var maxY = -Float.MAX_VALUE;
+            var maxZ = -Float.MAX_VALUE;
 
             // write array opening
             writer.write("],\"chunks\":[");
             // indicate that no more textures can follow
             ignoreTextureValidation = true;
             while (iter.hasNext()) {
-                final DataChunk chunk = iter.next();
-                final float[] coords = chunk.getVerticesCoordinatesData();
-                final short[] colors = chunk.getColorData();
-                final int[] indices = chunk.getIndicesData();
-                final float[] textureCoords = chunk.getTextureCoordinatesData();
-                final float[] normals = chunk.getNormalsData();
+                final var chunk = iter.next();
+                final var coords = chunk.getVerticesCoordinatesData();
+                final var colors = chunk.getColorData();
+                final var indices = chunk.getIndicesData();
+                final var textureCoords = chunk.getTextureCoordinatesData();
+                final var normals = chunk.getNormalsData();
 
-                final Material material = chunk.getMaterial();
+                final var material = chunk.getMaterial();
 
-                final boolean coordsAvailable = (coords != null);
-                final boolean colorsAvailable = (colors != null);
-                final boolean indicesAvailable = (indices != null);
-                final boolean textureCoordsAvailable = (textureCoords != null);
-                final boolean normalsAvailable = (normals != null);
-                boolean hasPreviousContent = false;
+                final var coordsAvailable = (coords != null);
+                final var colorsAvailable = (colors != null);
+                final var indicesAvailable = (indices != null);
+                final var textureCoordsAvailable = (textureCoords != null);
+                final var normalsAvailable = (normals != null);
+                var hasPreviousContent = false;
 
                 if (chunk.getMinX() < minX) {
                     minX = chunk.getMinX();
@@ -335,7 +327,7 @@ public class MeshWriterJson extends MeshWriter {
 
                     // write indices opening
                     writer.write("\"indices\":[");
-                    for (int i = 0; i < indices.length; i++) {
+                    for (var i = 0; i < indices.length; i++) {
                         writer.write(Integer.toString(indices[i]));
                         // write separator if more elements in array
                         if (i < (indices.length - 1)) {
@@ -354,9 +346,8 @@ public class MeshWriterJson extends MeshWriter {
 
                     // write normals opening
                     writer.write("\"vertexNormals\":[");
-                    for (int i = 0; i < normals.length; i++) {
-                        if (Float.isInfinite(normals[i]) ||
-                                Float.isNaN(normals[i])) {
+                    for (var i = 0; i < normals.length; i++) {
+                        if (Float.isInfinite(normals[i]) || Float.isNaN(normals[i])) {
                             writer.write(Float.toString(Float.MAX_VALUE));
                         } else {
                             writer.write(Float.toString(normals[i]));
@@ -378,9 +369,8 @@ public class MeshWriterJson extends MeshWriter {
 
                     // write coords opening
                     writer.write("\"vertexPositions\":[");
-                    for (int i = 0; i < coords.length; i++) {
-                        if (Float.isInfinite(coords[i]) ||
-                                Float.isNaN(coords[i])) {
+                    for (var i = 0; i < coords.length; i++) {
+                        if (Float.isInfinite(coords[i]) || Float.isNaN(coords[i])) {
                             writer.write(Float.toString(Float.MAX_VALUE));
                         } else {
                             writer.write(Float.toString(coords[i]));
@@ -402,9 +392,8 @@ public class MeshWriterJson extends MeshWriter {
 
                     // write texture coords opening
                     writer.write("\"vertexTextureCoords\":[");
-                    for (int i = 0; i < textureCoords.length; i++) {
-                        if (Float.isInfinite(textureCoords[i]) ||
-                                Float.isNaN(textureCoords[i])) {
+                    for (var i = 0; i < textureCoords.length; i++) {
+                        if (Float.isInfinite(textureCoords[i]) || Float.isNaN(textureCoords[i])) {
                             writer.write(Float.toString(Float.MAX_VALUE));
                         } else {
                             writer.write(Float.toString(textureCoords[i]));
@@ -423,12 +412,12 @@ public class MeshWriterJson extends MeshWriter {
                     writer.write(",");
 
                     // write min corner
-                    writer.write("\"minCorner\":[" + chunk.getMinX() + "," +
-                            chunk.getMinY() + "," + chunk.getMinZ() + "],");
+                    writer.write("\"minCorner\":[" + chunk.getMinX() + "," + chunk.getMinY() + ","
+                            + chunk.getMinZ() + "],");
 
                     // write max corner
-                    writer.write("\"maxCorner\":[" + chunk.getMaxX() + "," +
-                            chunk.getMaxY() + "," + chunk.getMaxZ() + "]");
+                    writer.write("\"maxCorner\":[" + chunk.getMaxX() + "," + chunk.getMaxY() + ","
+                            + chunk.getMaxZ() + "]");
                 }
                 if (colorsAvailable) {
                     // write separator for next piece of data
@@ -438,7 +427,7 @@ public class MeshWriterJson extends MeshWriter {
 
                     // write colors opening
                     writer.write("\"vertexColors\":[");
-                    for (int i = 0; i < colors.length; i++) {
+                    for (var i = 0; i < colors.length; i++) {
                         writer.write(Short.toString(colors[i]));
 
                         if (i < (colors.length - 1)) {
@@ -447,8 +436,7 @@ public class MeshWriterJson extends MeshWriter {
                     }
 
                     // write colors closing and color components
-                    writer.write("],\"colorComponents\": " +
-                            chunk.getColorComponents());
+                    writer.write("],\"colorComponents\": " + chunk.getColorComponents());
                 }
 
                 // write chunk closing
@@ -465,12 +453,10 @@ public class MeshWriterJson extends MeshWriter {
             writer.write("],");
             // write bounding box for all chunks
             // write min corner
-            writer.write("\"minCorner\":[" + minX + "," + minY + "," + minZ +
-                    "],");
+            writer.write("\"minCorner\":[" + minX + "," + minY + "," + minZ + "],");
 
             // write max corner
-            writer.write("\"maxCorner\":[" + maxX + "," + maxY + "," + maxZ +
-                    "]");
+            writer.write("\"maxCorner\":[" + maxX + "," + maxY + "," + maxZ + "]");
 
             // write object closing
             writer.write("}");
@@ -500,27 +486,23 @@ public class MeshWriterJson extends MeshWriter {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void processTextureFile(final Texture texture, final File textureFile)
-            throws IOException {
+    protected void processTextureFile(final Texture texture, final File textureFile) throws IOException {
         if (textureCounter > 0) {
             writer.write(",");
         }
         writer.write("{\"id\":" + texture.getId());
         writer.write(",\"width\":" + texture.getWidth());
         writer.write(",\"height\":" + texture.getHeight());
-        if (listener instanceof MeshWriterJsonListener) {
-            final MeshWriterJsonListener listener2 = (MeshWriterJsonListener) listener;
+        if (listener instanceof MeshWriterJsonListener listener2) {
             if (remoteTextureUrlEnabled) {
-                final String remoteUrl = listener2.onRemoteTextureUrlRequested(this,
-                        texture, textureFile);
+                final String remoteUrl = listener2.onRemoteTextureUrlRequested(this, texture, textureFile);
                 if (remoteUrl != null) {
                     // add url to json
                     writer.write(",\"remoteUrl\":\"" + remoteUrl + "\"");
                 }
             }
             if (remoteTextureIdEnabled) {
-                final String remoteId = listener2.onRemoteTextureIdRequested(this,
-                        texture, textureFile);
+                final var remoteId = listener2.onRemoteTextureIdRequested(this, texture, textureFile);
                 if (remoteId != null) {
                     // add id to json
                     writer.write(",\"remoteId\": \"" + remoteId + "\"");
@@ -536,8 +518,8 @@ public class MeshWriterJson extends MeshWriter {
             writer.flush();
 
 
-            try (final InputStream textureStream = Files.newInputStream(textureFile.toPath())) {
-                final byte[] imageData = new byte[(int) textureFile.length()];
+            try (final var textureStream = Files.newInputStream(textureFile.toPath())) {
+                final var imageData = new byte[(int) textureFile.length()];
 
                 if (textureStream.read(imageData) > 0) {
                     // convert image byte array into Base64 string
@@ -565,50 +547,45 @@ public class MeshWriterJson extends MeshWriter {
         writer.write("\"material\":{");
         writer.write("\"id\":" + material.getId());
         if (material.isAmbientColorAvailable()) {
-            writer.write(",\"ambientColor\":[" + material.getAmbientRedColor() +
-                    "," + material.getAmbientGreenColor() + "," +
-                    material.getAmbientBlueColor() + "]");
+            writer.write(",\"ambientColor\":[" + material.getAmbientRedColor() + ","
+                    + material.getAmbientGreenColor() + "," + material.getAmbientBlueColor() + "]");
         }
         if (material.isDiffuseColorAvailable()) {
-            writer.write(",\"diffuseColor\":[" + material.getDiffuseRedColor() +
-                    "," + material.getDiffuseGreenColor() + "," +
-                    material.getDiffuseBlueColor() + "]");
+            writer.write(",\"diffuseColor\":[" + material.getDiffuseRedColor() + ","
+                    + material.getDiffuseGreenColor() + "," + material.getDiffuseBlueColor() + "]");
         }
         if (material.isSpecularColorAvailable()) {
-            writer.write(",\"specularColor\":[" + material.getSpecularRedColor()
-                    + "," + material.getSpecularGreenColor() + "," +
-                    material.getSpecularBlueColor() + "]");
+            writer.write(",\"specularColor\":[" + material.getSpecularRedColor() + ","
+                    + material.getSpecularGreenColor() + "," + material.getSpecularBlueColor() + "]");
         }
         if (material.isSpecularCoefficientAvailable()) {
-            writer.write(",\"specularCoefficient\":" +
-                    material.getSpecularCoefficient());
+            writer.write(",\"specularCoefficient\":" + material.getSpecularCoefficient());
         }
         if (material.isAmbientTextureMapAvailable()) {
-            final Texture tex = material.getAmbientTextureMap();
+            final var tex = material.getAmbientTextureMap();
             writer.write(",\"ambientTextureId\":" + tex.getId());
         }
         if (material.isDiffuseTextureMapAvailable()) {
-            final Texture tex = material.getDiffuseTextureMap();
+            final var tex = material.getDiffuseTextureMap();
             writer.write(",\"diffuseTextureId\":" + tex.getId());
         }
         if (material.isSpecularTextureMapAvailable()) {
-            final Texture tex = material.getSpecularTextureMap();
+            final var tex = material.getSpecularTextureMap();
             writer.write(",\"specularTextureId\":" + tex.getId());
         }
         if (material.isAlphaTextureMapAvailable()) {
-            final Texture tex = material.getAlphaTextureMap();
+            final var tex = material.getAlphaTextureMap();
             writer.write(",\"alphaTextureId\":" + tex.getId());
         }
         if (material.isBumpTextureMapAvailable()) {
-            final Texture tex = material.getBumpTextureMap();
+            final var tex = material.getBumpTextureMap();
             writer.write(",\"bumpTextureId\":" + tex.getId());
         }
         if (material.isTransparencyAvailable()) {
             writer.write(",\"transparency\":" + material.getTransparency());
         }
         if (material.isIlluminationAvailable()) {
-            writer.write(",\"illumination\":\"" + material.getIllumination().
-                    name() + "\"");
+            writer.write(",\"illumination\":\"" + material.getIllumination().name() + "\"");
         }
         writer.write("}");
     }

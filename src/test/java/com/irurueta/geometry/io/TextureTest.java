@@ -16,24 +16,23 @@
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TextureTest {
+class TextureTest {
 
     private static final int MIN_SIZE = 1;
     private static final int MAX_SIZE = 100;
 
     @Test
-    public void testConstructorAndGetFileName() {
+    void testConstructorAndGetFileName() {
 
-        final String fileName = "fake.png";
-        final int id = 1;
-        Texture tex = new Texture(fileName, id);
+        final var fileName = "fake.png";
+        final var id = 1;
+        var tex = new Texture(fileName, id);
 
         // check correctness
         assertNotNull(tex);
@@ -65,10 +64,10 @@ public class TextureTest {
     }
 
     @Test
-    public void testGetSetFile() {
-        final String fileName = "fake.png";
-        final int id = 1;
-        final Texture tex = new Texture(fileName, id);
+    void testGetSetFile() {
+        final var fileName = "fake.png";
+        final var id = 1;
+        final var tex = new Texture(fileName, id);
 
         // check correctness
         assertNotNull(tex);
@@ -78,10 +77,10 @@ public class TextureTest {
         assertEquals(fileName, tex.getFile().getName());
         assertTrue(tex.isFileAvailable());
 
-        final File f1 = tex.getFile();
+        final var f1 = tex.getFile();
 
-        final String fileName2 = "fake2.png";
-        final File f2 = new File(fileName2);
+        final var fileName2 = "fake2.png";
+        final var f2 = new File(fileName2);
 
         tex.setFile(f2);
         assertNotSame(f1, tex.getFile());
@@ -95,17 +94,17 @@ public class TextureTest {
     }
 
     @Test
-    public void testGetSetWidth() {
-        final int id = 1;
-        final Texture tex = new Texture("fake.png", id);
+    void testGetSetWidth() {
+        final var id = 1;
+        final var tex = new Texture("fake.png", id);
 
         // check default value
         assertEquals(-1, tex.getWidth());
         assertFalse(tex.isWidthAvailable());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int width = randomizer.nextInt(MIN_SIZE, MAX_SIZE);
+        final var randomizer = new UniformRandomizer();
+        final var width = randomizer.nextInt(MIN_SIZE, MAX_SIZE);
 
         tex.setWidth(width);
         // check correctness
@@ -115,17 +114,17 @@ public class TextureTest {
     }
 
     @Test
-    public void testGetSetHeight() {
-        final int id = 1;
-        final Texture tex = new Texture("fake.png", id);
+    void testGetSetHeight() {
+        final var id = 1;
+        final var tex = new Texture("fake.png", id);
 
         // check default value
         assertEquals(-1, tex.getHeight());
         assertFalse(tex.isHeightAvailable());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int height = randomizer.nextInt(MIN_SIZE, MAX_SIZE);
+        final var randomizer = new UniformRandomizer();
+        final var height = randomizer.nextInt(MIN_SIZE, MAX_SIZE);
 
         tex.setHeight(height);
         // check correctness
@@ -135,9 +134,9 @@ public class TextureTest {
     }
 
     @Test
-    public void testIsSetValid() {
-        final int id = 1;
-        final Texture tex = new Texture("fake.png", id);
+    void testIsSetValid() {
+        final var id = 1;
+        final var tex = new Texture("fake.png", id);
 
         // check default value
         assertFalse(tex.isValid());

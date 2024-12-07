@@ -75,8 +75,7 @@ public class ElementPLY {
      *                   vertices or faces).
      * @param properties List of properties to be assigned to this element.
      */
-    public ElementPLY(final String name, final long nInstances,
-                      final List<PropertyPLY> properties) {
+    public ElementPLY(final String name, final long nInstances, final List<PropertyPLY> properties) {
         this.name = name;
         this.nInstances = nInstances;
         this.properties = properties;
@@ -160,14 +159,14 @@ public class ElementPLY {
             return "";
         }
 
-        final StringBuilder builder = new StringBuilder("element ");
+        final var builder = new StringBuilder("element ");
 
         // add name and number of instances
         builder.append(name).append(" ").append(nInstances).append("\n");
 
         // add properties of this element
 
-        for (final PropertyPLY property : properties) {
+        for (final var property : properties) {
             // NOTE: properties already contain carrier return on their textual
             // representation
             builder.append(property.toString());

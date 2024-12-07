@@ -15,16 +15,16 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-public class InvalidTextureExceptionTest {
+class InvalidTextureExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InvalidTextureException ex = new InvalidTextureException();
+    void testConstructor() {
+        var ex = new InvalidTextureException();
         assertNotNull(ex);
 
         ex = new InvalidTextureException("message");
@@ -33,8 +33,7 @@ public class InvalidTextureExceptionTest {
         ex = new InvalidTextureException(new Exception());
         assertNotNull(ex);
 
-        ex = new InvalidTextureException("message",
-                new Exception());
+        ex = new InvalidTextureException("message", new Exception());
         assertNotNull(ex);
     }
 }

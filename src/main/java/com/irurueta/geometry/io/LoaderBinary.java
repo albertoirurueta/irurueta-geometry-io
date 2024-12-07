@@ -17,9 +17,7 @@ package com.irurueta.geometry.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.file.Files;
 
 /**
@@ -153,7 +151,7 @@ public class LoaderBinary extends Loader {
 
         if (!validityChecked) {
             // check that file version is supported
-            final byte version = reader.readByte();
+            final var version = reader.readByte();
             validFile = (version == SUPPORTED_VERSION);
         }
 
@@ -172,8 +170,7 @@ public class LoaderBinary extends Loader {
      * @throws LoaderException   if file is corrupted or cannot be interpreted.
      */
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException,
-            IOException, LoaderException {
+    public LoaderIterator load() throws LockedException, NotReadyException, IOException, LoaderException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -194,12 +191,12 @@ public class LoaderBinary extends Loader {
         // read textures until no more textures are available
         while (reader.readBoolean()) {
             // texture data follows
-            final int texId = reader.readInt();
-            final int texWidth = reader.readInt();
-            final int texHeight = reader.readInt();
-            final long texLength = reader.readLong();
-            final long textureFileStartPos = reader.getPosition();
-            final long textureFileEndPos = textureFileStartPos + texLength;
+            final var texId = reader.readInt();
+            final var texWidth = reader.readInt();
+            final var texHeight = reader.readInt();
+            final var texLength = reader.readLong();
+            final var textureFileStartPos = reader.getPosition();
+            final var textureFileEndPos = textureFileStartPos + texLength;
 
             // check that at least texLength bytes remain otherwise file is
             // incomplete or corrupted
@@ -208,22 +205,19 @@ public class LoaderBinary extends Loader {
             }
 
             // notify that texture data is available
-            if (listener instanceof LoaderListenerBinary) {
-                final LoaderListenerBinary loaderListener =
-                        (LoaderListenerBinary) listener;
+            if (listener instanceof LoaderListenerBinary loaderListener) {
 
                 // request file where texture will be stored
-                final File texFile = loaderListener.onTextureReceived(this, texId,
-                        texWidth, texHeight);
+                final var texFile = loaderListener.onTextureReceived(this, texId, texWidth, texHeight);
 
                 if (texFile != null) {
                     // write texture data at provided file
-                    final byte[] buffer = new byte[BUFFER_SIZE];
+                    final var buffer = new byte[BUFFER_SIZE];
 
-                    int counter = 0;
-                    try (OutputStream outStream = Files.newOutputStream(texFile.toPath())) {
+                    var counter = 0;
+                    try (final var outStream = Files.newOutputStream(texFile.toPath())) {
                         int n;
-                        int len = BUFFER_SIZE;
+                        var len = BUFFER_SIZE;
                         while (counter < texLength) {
                             if (counter + len > texLength) {
                                 len = (int) texLength - counter;
@@ -245,8 +239,8 @@ public class LoaderBinary extends Loader {
                     }
 
                     // notify that texture data has been written to provided file
-                    boolean valid = loaderListener.onTextureDataAvailable(this,
-                            texFile, texId, texWidth, texHeight);
+                    final var valid = loaderListener.onTextureDataAvailable(this, texFile, texId, texWidth,
+                            texHeight);
                     // texture processing couldn't be correctly done
                     if (!valid) {
                         throw new LoaderException();
@@ -370,14 +364,13 @@ public class LoaderBinary extends Loader {
          * @throws IOException           if an I/O error occurs.
          */
         @Override
-        public DataChunk next() throws NotAvailableException, LoaderException,
-                IOException {
+        public DataChunk next() throws NotAvailableException, LoaderException, IOException {
             if (!hasNext()) {
                 throw new NotAvailableException();
             }
 
             // read chunk size
-            final int chunkSize = reader.readInt();
+            final var chunkSize = reader.readInt();
 
             // ensure that chunk size is positive, otherwise file is corrupted
             if (chunkSize < 0) {
@@ -385,26 +378,26 @@ public class LoaderBinary extends Loader {
             }
 
             // get position of start of chunk
-            final long chunkStartPos = reader.getPosition();
+            final var chunkStartPos = reader.getPosition();
 
             // position of end of chunk
-            final long chunkEndPos = chunkStartPos + chunkSize;
+            final var chunkEndPos = chunkStartPos + chunkSize;
 
             // check that at least chunkSize bytes remain otherwise file is
             // incomplete or corrupted
-            final long fileLength = file.length();
+            final var fileLength = file.length();
             if (chunkEndPos > fileLength) {
                 throw new LoaderException();
             }
 
-            final DataChunk chunk = new DataChunk();
+            final var chunk = new DataChunk();
 
             // ----- MATERIAL ------
             if (reader.readBoolean()) {
                 // material is available
-                final int materialId = reader.readInt();
+                final var materialId = reader.readInt();
 
-                final Material material = new Material();
+                final var material = new Material();
                 chunk.setMaterial(material);
                 material.setId(materialId);
 
@@ -413,50 +406,39 @@ public class LoaderBinary extends Loader {
                     byte b;
                     // red
                     b = reader.readByte();
-                    material.setAmbientRedColor(
-                            (short) (b & 0x000000ff));
+                    material.setAmbientRedColor((short) (b & 0x000000ff));
                     // green
                     b = reader.readByte();
-                    material.setAmbientGreenColor(
-                            (short) (b & 0x000000ff));
+                    material.setAmbientGreenColor((short) (b & 0x000000ff));
                     // blue
                     b = reader.readByte();
-                    material.setAmbientBlueColor(
-                            (short) (b & 0x000000ff));
+                    material.setAmbientBlueColor((short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
                     // diffuse color is available
-                    byte b;
                     // red
-                    b = reader.readByte();
-                    material.setDiffuseRedColor(
-                            (short) (b & 0x000000ff));
+                    var b = reader.readByte();
+                    material.setDiffuseRedColor((short) (b & 0x000000ff));
                     // green
                     b = reader.readByte();
-                    material.setDiffuseGreenColor(
-                            (short) (b & 0x000000ff));
+                    material.setDiffuseGreenColor((short) (b & 0x000000ff));
                     // blue
                     b = reader.readByte();
-                    material.setDiffuseBlueColor(
-                            (short) (b & 0x000000ff));
+                    material.setDiffuseBlueColor((short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
                     // specular color is available
-                    byte b;
                     // red
-                    b = reader.readByte();
-                    material.setSpecularRedColor(
-                            (short) (b & 0x000000ff));
+                    var b = reader.readByte();
+                    material.setSpecularRedColor((short) (b & 0x000000ff));
                     // green
                     b = reader.readByte();
-                    material.setSpecularGreenColor(
-                            (short) (b & 0x000000ff));
+                    material.setSpecularGreenColor((short) (b & 0x000000ff));
                     // blue
                     b = reader.readByte();
-                    material.setSpecularBlueColor(
-                            (short) (b & 0x000000ff));
+                    material.setSpecularBlueColor((short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
@@ -466,8 +448,8 @@ public class LoaderBinary extends Loader {
 
                 if (reader.readBoolean()) {
                     // ambient texture map is available
-                    final int textureId = reader.readInt();
-                    final Texture tex = new Texture(textureId);
+                    final var textureId = reader.readInt();
+                    final var tex = new Texture(textureId);
                     material.setAmbientTextureMap(tex);
 
                     tex.setWidth(reader.readInt());
@@ -476,8 +458,8 @@ public class LoaderBinary extends Loader {
 
                 if (reader.readBoolean()) {
                     // diffuse texture map is available
-                    final int textureId = reader.readInt();
-                    final Texture tex = new Texture(textureId);
+                    final var textureId = reader.readInt();
+                    final var tex = new Texture(textureId);
                     material.setDiffuseTextureMap(tex);
 
                     tex.setWidth(reader.readInt());
@@ -486,8 +468,8 @@ public class LoaderBinary extends Loader {
 
                 if (reader.readBoolean()) {
                     // specular texture map is available
-                    final int textureId = reader.readInt();
-                    final Texture tex = new Texture(textureId);
+                    final var textureId = reader.readInt();
+                    final var tex = new Texture(textureId);
                     material.setSpecularTextureMap(tex);
 
                     tex.setWidth(reader.readInt());
@@ -496,8 +478,8 @@ public class LoaderBinary extends Loader {
 
                 if (reader.readBoolean()) {
                     // alpha texture map is available
-                    final int textureId = reader.readInt();
-                    final Texture tex = new Texture(textureId);
+                    final var textureId = reader.readInt();
+                    final var tex = new Texture(textureId);
                     material.setAlphaTextureMap(tex);
 
                     tex.setWidth(reader.readInt());
@@ -506,8 +488,8 @@ public class LoaderBinary extends Loader {
 
                 if (reader.readBoolean()) {
                     // bump texture map is available
-                    final int textureId = reader.readInt();
-                    final Texture tex = new Texture(textureId);
+                    final var textureId = reader.readInt();
+                    final var tex = new Texture(textureId);
                     material.setBumpTextureMap(tex);
 
                     tex.setWidth(reader.readInt());
@@ -516,13 +498,13 @@ public class LoaderBinary extends Loader {
 
                 if (reader.readBoolean()) {
                     // transparency is available
-                    final byte b = reader.readByte();
+                    final var b = reader.readByte();
                     material.setTransparency((short) (b & 0x000000ff));
                 }
 
                 if (reader.readBoolean()) {
                     // illumination is available
-                    final int value = reader.readInt();
+                    final var value = reader.readInt();
                     material.setIllumination(Illumination.forValue(value));
                 }
             }
@@ -530,7 +512,7 @@ public class LoaderBinary extends Loader {
             // ---- COORDS -------
 
             // read coords size
-            final int coordsSizeInBytes = reader.readInt();
+            final var coordsSizeInBytes = reader.readInt();
 
             // ensure that coords size is positive, otherwise file is corrupted
             if (coordsSizeInBytes < 0) {
@@ -551,14 +533,14 @@ public class LoaderBinary extends Loader {
                 }
 
                 // get number of floats in coords
-                final int coordsLength = coordsSizeInBytes / (Float.SIZE / 8);
+                final var coordsLength = coordsSizeInBytes / (Float.SIZE / 8);
 
                 // read coordsSize bytes into array of floats
-                final float[] coords = new float[coordsLength];
-                final byte[] bytes = new byte[coordsSizeInBytes];
+                final var coords = new float[coordsLength];
+                final var bytes = new byte[coordsSizeInBytes];
                 reader.read(bytes);
-                final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);
-                final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();
+                final var bytesBuffer = ByteBuffer.wrap(bytes);
+                final var floatBuffer = bytesBuffer.asFloatBuffer();
                 floatBuffer.get(coords);
 
                 chunk.setVerticesCoordinatesData(coords);
@@ -566,29 +548,25 @@ public class LoaderBinary extends Loader {
                 // compute progress
                 if (loader.listener != null) {
                     loader.listener.onLoadProgressChange(loader,
-                            (float) (reader.getPosition()) /
-                                    (float) (file.length()));
+                            (float) (reader.getPosition()) / (float) (file.length()));
                 }
             }
-
 
             // ----- COLORS ------
 
             // read colors size
-            final int colorsSizeInBytes = reader.readInt();
+            final var colorsSizeInBytes = reader.readInt();
 
             // ensure that colors size is positive, otherwise file is corrupted
             if (colorsSizeInBytes < 0) {
                 throw new LoaderException();
             }
 
-            // each color data is stored in a byte, so there is no need to
-            // check size multiplicity
+            // each color data is stored in a byte, so there is no need to check size multiplicity
 
             // if colors are available
             if (colorsSizeInBytes > 0) {
-                // ensure that colors fit within chunk, otherwise file is
-                // corrupted
+                // ensure that colors fit within chunk, otherwise file is corrupted
                 if (reader.getPosition() + colorsSizeInBytes > chunkEndPos) {
                     throw new LoaderException();
                 }
@@ -596,10 +574,10 @@ public class LoaderBinary extends Loader {
                 // read colorSizeInBytes into array of shorts (conversion
                 // must be done from unsigned bytes to shorts, as java does not
                 // support unsigned bytes values
-                final short[] colors = new short[colorsSizeInBytes];
-                final byte[] bytes = new byte[colorsSizeInBytes];
+                final var colors = new short[colorsSizeInBytes];
+                final var bytes = new byte[colorsSizeInBytes];
                 reader.read(bytes);
-                for (int i = 0; i < colorsSizeInBytes; i++) {
+                for (var i = 0; i < colorsSizeInBytes; i++) {
                     // convert signed bytes into unsigned bytes stored in shorts
                     colors[i] = (short) (bytes[i] & 0x000000ff);
                 }
@@ -611,45 +589,42 @@ public class LoaderBinary extends Loader {
                 // compute progress
                 if (loader.listener != null) {
                     loader.listener.onLoadProgressChange(loader,
-                            (float) (reader.getPosition()) /
-                                    (float) (file.length()));
+                            (float) (reader.getPosition()) / (float) (file.length()));
                 }
             }
 
             // ------ INDICES ------
 
             // read indices size
-            final int indicesSizeInBytes = reader.readInt();
+            final var indicesSizeInBytes = reader.readInt();
 
             // ensure that indices size is positive, otherwise file is corrupted
             if (indicesSizeInBytes < 0) {
                 throw new LoaderException();
             }
-            // if size in bytes is not multiple of float size (4 bytes), then
-            // file is corrupted
+            // if size in bytes is not multiple of float size (4 bytes), then file is corrupted
             if (indicesSizeInBytes % (Short.SIZE / 8) != 0) {
                 throw new LoaderException();
             }
 
             // if indices are available
             if (indicesSizeInBytes > 0) {
-                // ensure that indices fit within chunk, otherwise file is
-                // corrupted
+                // ensure that indices fit within chunk, otherwise file is corrupted
                 if (reader.getPosition() + indicesSizeInBytes > chunkEndPos) {
                     throw new LoaderException();
                 }
 
                 // get number of shorts in indices
-                final int indicesLength = indicesSizeInBytes / (Short.SIZE / 8);
+                final var indicesLength = indicesSizeInBytes / (Short.SIZE / 8);
 
                 // read coordsSize bytes into array of floats
-                final int[] indices = new int[indicesLength];
-                final byte[] bytes = new byte[indicesSizeInBytes];
+                final var indices = new int[indicesLength];
+                final var bytes = new byte[indicesSizeInBytes];
                 reader.read(bytes);
                 int firstByte;
                 int secondByte;
-                int counter = 0;
-                for (int i = 0; i < indicesLength; i++) {
+                var counter = 0;
+                for (var i = 0; i < indicesLength; i++) {
                     firstByte = bytes[counter] & 0x000000ff;
                     counter++;
                     secondByte = bytes[counter] & 0x000000ff;
@@ -661,18 +636,16 @@ public class LoaderBinary extends Loader {
                 // compute progress
                 if (loader.listener != null) {
                     loader.listener.onLoadProgressChange(loader,
-                            (float) (reader.getPosition()) /
-                                    (float) (file.length()));
+                            (float) (reader.getPosition()) / (float) (file.length()));
                 }
             }
 
             // -------- TEXTURE COORDS --------
 
             // read texture coords size
-            final int texCoordsSizeInBytes = reader.readInt();
+            final var texCoordsSizeInBytes = reader.readInt();
 
-            // ensure that texture coords size is positive, otherwise file is
-            // corrupted
+            // ensure that texture coords size is positive, otherwise file is corrupted
             if (texCoordsSizeInBytes < 0) {
                 throw new LoaderException();
             }
@@ -691,30 +664,28 @@ public class LoaderBinary extends Loader {
                 }
 
                 // get number of floats in coords
-                final int texCoordsLength = texCoordsSizeInBytes / (Float.SIZE / 8);
+                final var texCoordsLength = texCoordsSizeInBytes / (Float.SIZE / 8);
 
                 // read coordsSize bytes into array of floats
-                final float[] texCoords = new float[texCoordsLength];
-                final byte[] bytes = new byte[texCoordsSizeInBytes];
+                final var texCoords = new float[texCoordsLength];
+                final var bytes = new byte[texCoordsSizeInBytes];
                 reader.read(bytes);
-                final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);
-                final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();
+                final var bytesBuffer = ByteBuffer.wrap(bytes);
+                final var floatBuffer = bytesBuffer.asFloatBuffer();
                 floatBuffer.get(texCoords);
                 chunk.setTextureCoordinatesData(texCoords);
 
                 // compute progress
                 if (loader.listener != null) {
                     loader.listener.onLoadProgressChange(loader,
-                            (float) (reader.getPosition()) /
-                                    (float) (file.length()));
+                            (float) (reader.getPosition()) / (float) (file.length()));
                 }
             }
-
 
             // -------- NORMALS --------
 
             // read normals size
-            final int normalsSizeInBytes = reader.readInt();
+            final var normalsSizeInBytes = reader.readInt();
 
             // ensure that normals size is positive, otherwise file is
             // corrupted
@@ -736,38 +707,35 @@ public class LoaderBinary extends Loader {
                 }
 
                 // get number of floats in coords
-                final int normalsLength = normalsSizeInBytes / (Float.SIZE / 8);
+                final var normalsLength = normalsSizeInBytes / (Float.SIZE / 8);
 
                 // read coordsSize bytes into array of floats
-                final float[] normals = new float[normalsLength];
-                final byte[] bytes = new byte[normalsSizeInBytes];
+                final var normals = new float[normalsLength];
+                final var bytes = new byte[normalsSizeInBytes];
                 reader.read(bytes);
-                final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);
-                final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();
+                final var bytesBuffer = ByteBuffer.wrap(bytes);
+                final var floatBuffer = bytesBuffer.asFloatBuffer();
                 floatBuffer.get(normals);
                 chunk.setNormalsData(normals);
 
                 // compute progress
                 if (loader.listener != null) {
                     loader.listener.onLoadProgressChange(loader,
-                            (float) (reader.getPosition()) /
-                                    (float) (file.length()));
+                            (float) (reader.getPosition()) / (float) (file.length()));
                 }
             }
 
             // read bounding box for chunk (min/max x, y, z)
 
-            // we need to load 6 floats, so position + 6 * Float.SIZE / 8 bytes
-            // must fit within chunk
+            // we need to load 6 floats, so position + 6 * Float.SIZE / 8 bytes must fit within chunk
             if (reader.getPosition() + (BOUNDING_BYTES_SIZE) > chunkEndPos) {
                 throw new LoaderException();
             }
 
-
-            final byte[] bytes = new byte[BOUNDING_BYTES_SIZE];
+            final var bytes = new byte[BOUNDING_BYTES_SIZE];
             reader.read(bytes);
-            final ByteBuffer bytesBuffer = ByteBuffer.wrap(bytes);
-            final FloatBuffer floatBuffer = bytesBuffer.asFloatBuffer();
+            final var bytesBuffer = ByteBuffer.wrap(bytes);
+            final var floatBuffer = bytesBuffer.asFloatBuffer();
             chunk.setMinX(floatBuffer.get());
             chunk.setMinY(floatBuffer.get());
             chunk.setMinZ(floatBuffer.get());

@@ -84,8 +84,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @throws IOException raised if provided file does not exist or an I/O
      *                     exception occurs.
      */
-    public MaterialLoaderOBJ(final File f, final MaterialLoaderListener listener)
-            throws IOException {
+    public MaterialLoaderOBJ(final File f, final MaterialLoaderListener listener) throws IOException {
         super(f, listener);
     }
 
@@ -112,9 +111,7 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      * @throws LoaderException   if file is corrupted or cannot be interpreted.
      */
     @Override
-    public Set<Material> load() throws LockedException,
-            NotReadyException, IOException, LoaderException {
-
+    public Set<Material> load() throws LockedException, NotReadyException, IOException, LoaderException {
         if (!isReady()) {
             throw new NotReadyException();
         }
@@ -159,101 +156,82 @@ public class MaterialLoaderOBJ extends MaterialLoader {
      */
     @SuppressWarnings({"DuplicateExpressions", "DuplicatedCode"})
     private void parseLine(final String line) throws LoaderException {
-
         if (line == null || line.isEmpty()) {
             return;
         }
 
         try {
-            final StringTokenizer tokenizer = new StringTokenizer(line);
+            final var tokenizer = new StringTokenizer(line);
             if (!tokenizer.hasMoreTokens()) {
                 // empty line or simply
                 // containing separators (tabs, line feeds, etc)
                 return;
             }
 
-            final String command = tokenizer.nextToken();
+            final var command = tokenizer.nextToken();
 
             // search for command position
-            final int commandPos = line.indexOf(command);
+            final var commandPos = line.indexOf(command);
 
-            if (command.equalsIgnoreCase("newmtl")) {
+            if ("newmtl".equalsIgnoreCase(command)) {
                 if (currentMaterial != null) {
                     currentMaterial.setId(materials.size());
                     materials.add(currentMaterial);
                 }
-                final String name = line.substring(
-                        commandPos + command.length()).trim();
+                final var name = line.substring(commandPos + command.length()).trim();
                 currentMaterial = new MaterialOBJ(name);
 
-            } else if (command.equalsIgnoreCase("ka")) {
+            } else if ("ka".equalsIgnoreCase(command)) {
                 if (currentMaterial == null) {
                     throw new LoaderException();
                 }
                 currentMaterial.setAmbientColor(
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE),
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE),
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE));
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE),
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE),
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE));
 
-            } else if (command.equalsIgnoreCase("kd")) {
+            } else if ("kd".equalsIgnoreCase(command)) {
                 if (currentMaterial == null) {
                     throw new LoaderException();
                 }
                 currentMaterial.setDiffuseColor(
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE),
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE),
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE));
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE),
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE),
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE));
 
-            } else if (command.equalsIgnoreCase("Ks")) {
+            } else if ("Ks".equalsIgnoreCase(command)) {
                 if (currentMaterial == null) {
                     throw new LoaderException();
                 }
                 currentMaterial.setSpecularColor(
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE),
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE),
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE));
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE),
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE),
+                        (short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE));
 
-            } else if (command.equalsIgnoreCase("Ns") ||
-                    command.equalsIgnoreCase("Ni")) {
+            } else if ("Ns".equalsIgnoreCase(command) || "Ni".equalsIgnoreCase(command)) {
                 if (currentMaterial == null) {
                     throw new LoaderException();
                 }
-                currentMaterial.setSpecularCoefficient(
-                        Float.parseFloat(tokenizer.nextToken()));
+                currentMaterial.setSpecularCoefficient(Float.parseFloat(tokenizer.nextToken()));
 
-            } else if (command.equalsIgnoreCase("d") ||
-                    command.equalsIgnoreCase("Tr")) {
+            } else if ("d".equalsIgnoreCase(command) || "Tr".equalsIgnoreCase(command)) {
                 if (currentMaterial == null) {
                     throw new LoaderException();
                 }
-                currentMaterial.setTransparency(
-                        (short) (Float.parseFloat(tokenizer.nextToken()) *
-                                MAX_COLOR_VALUE));
+                currentMaterial.setTransparency((short) (Float.parseFloat(tokenizer.nextToken()) * MAX_COLOR_VALUE));
 
-            } else if (command.equalsIgnoreCase("illum")) {
+            } else if ("illum".equalsIgnoreCase(command)) {
                 if (currentMaterial == null) {
                     throw new LoaderException();
                 }
-                currentMaterial.setIllumination(
-                        Illumination.forValue(
-                                Integer.parseInt(tokenizer.nextToken())));
+                currentMaterial.setIllumination(Illumination.forValue(Integer.parseInt(tokenizer.nextToken())));
 
-            } else if (command.equalsIgnoreCase("map_Kd")) {
-                final String textureName = line.substring(
-                        commandPos + command.length()).trim();
-                final Texture tex = new Texture(textureName, textureCounter);
+            } else if ("map_Kd".equalsIgnoreCase(command)) {
+                final var textureName = line.substring(commandPos + command.length()).trim();
+                final var tex = new Texture(textureName, textureCounter);
                 textureCounter++;
 
-                boolean valid = true;
+                var valid = true;
                 if (textureValidationEnabled && listener != null) {
                     valid = listener.onValidateTexture(this, tex);
                 }
@@ -263,13 +241,12 @@ public class MaterialLoaderOBJ extends MaterialLoader {
 
                 currentMaterial.setDiffuseTextureMap(tex);
 
-            } else if (command.equalsIgnoreCase("map_Ka")) {
-                final String textureName = line.substring(
-                        commandPos + command.length()).trim();
-                final Texture tex = new Texture(textureName, textureCounter);
+            } else if ("map_Ka".equalsIgnoreCase(command)) {
+                final var textureName = line.substring(commandPos + command.length()).trim();
+                final var tex = new Texture(textureName, textureCounter);
                 textureCounter++;
 
-                boolean valid = true;
+                var valid = true;
                 if (textureValidationEnabled && listener != null) {
                     valid = listener.onValidateTexture(this, tex);
                 }
@@ -277,13 +254,12 @@ public class MaterialLoaderOBJ extends MaterialLoader {
 
                 currentMaterial.setAmbientTextureMap(tex);
 
-            } else if (command.equalsIgnoreCase("map_Ks")) {
-                final String textureName = line.substring(
-                        commandPos + command.length()).trim();
-                final Texture tex = new Texture(textureName, textureCounter);
+            } else if ("map_Ks".equalsIgnoreCase(command)) {
+                final var textureName = line.substring(commandPos + command.length()).trim();
+                final var tex = new Texture(textureName, textureCounter);
                 textureCounter++;
 
-                boolean valid = true;
+                var valid = true;
                 if (textureValidationEnabled && listener != null) {
                     valid = listener.onValidateTexture(this, tex);
                 }
@@ -293,13 +269,12 @@ public class MaterialLoaderOBJ extends MaterialLoader {
 
                 currentMaterial.setSpecularTextureMap(tex);
 
-            } else if (command.equalsIgnoreCase("map_d")) {
-                final String textureName = line.substring(
-                        commandPos + command.length()).trim();
-                final Texture tex = new Texture(textureName, textureCounter);
+            } else if ("map_d".equalsIgnoreCase(command)) {
+                final var textureName = line.substring(commandPos + command.length()).trim();
+                final var tex = new Texture(textureName, textureCounter);
                 textureCounter++;
 
-                boolean valid = true;
+                var valid = true;
                 if (textureValidationEnabled && listener != null) {
                     valid = listener.onValidateTexture(this, tex);
                 }
@@ -309,14 +284,12 @@ public class MaterialLoaderOBJ extends MaterialLoader {
 
                 currentMaterial.setAlphaTextureMap(tex);
 
-            } else if (command.equalsIgnoreCase("map_bump") ||
-                    command.equalsIgnoreCase("bump")) {
-                final String textureName = line.substring(
-                        commandPos + command.length()).trim();
-                final Texture tex = new Texture(textureName, textureCounter);
+            } else if ("map_bump".equalsIgnoreCase(command) || "bump".equalsIgnoreCase(command)) {
+                final var textureName = line.substring(commandPos + command.length()).trim();
+                final var tex = new Texture(textureName, textureCounter);
                 textureCounter++;
 
-                boolean valid = true;
+                var valid = true;
                 if (textureValidationEnabled && listener != null) {
                     valid = listener.onValidateTexture(this, tex);
                 }
@@ -360,9 +333,8 @@ public class MaterialLoaderOBJ extends MaterialLoader {
             return null;
         }
 
-        for (final Material m : this.materials) {
-            if (m instanceof MaterialOBJ) {
-                final MaterialOBJ m2 = (MaterialOBJ) m;
+        for (final var m : this.materials) {
+            if (m instanceof MaterialOBJ m2) {
 
                 if (m2.getMaterialName() == null) {
                     continue;
@@ -398,27 +370,23 @@ public class MaterialLoaderOBJ extends MaterialLoader {
         }
 
         for (final Material m : this.materials) {
-            if (m.getAlphaTextureMap() != null &&
-                    m.getAlphaTextureMap().getFileName() != null &&
-                    m.getAlphaTextureMap().getFileName().equals(name)) {
+            if (m.getAlphaTextureMap() != null && m.getAlphaTextureMap().getFileName() != null
+                    && m.getAlphaTextureMap().getFileName().equals(name)) {
                 return m;
             }
 
-            if (m.getAmbientTextureMap() != null &&
-                    m.getAmbientTextureMap().getFileName() != null &&
-                    m.getAmbientTextureMap().getFileName().equals(name)) {
+            if (m.getAmbientTextureMap() != null && m.getAmbientTextureMap().getFileName() != null
+                    && m.getAmbientTextureMap().getFileName().equals(name)) {
                 return m;
             }
 
-            if (m.getDiffuseTextureMap() != null &&
-                    m.getDiffuseTextureMap().getFileName() != null &&
-                    m.getDiffuseTextureMap().getFileName().equals(name)) {
+            if (m.getDiffuseTextureMap() != null && m.getDiffuseTextureMap().getFileName() != null
+                    && m.getDiffuseTextureMap().getFileName().equals(name)) {
                 return m;
             }
 
-            if (m.getSpecularTextureMap() != null &&
-                    m.getSpecularTextureMap().getFileName() != null &&
-                    m.getSpecularTextureMap().getFileName().equals(name)) {
+            if (m.getSpecularTextureMap() != null && m.getSpecularTextureMap().getFileName() != null
+                    && m.getSpecularTextureMap().getFileName().equals(name)) {
                 return m;
             }
         }

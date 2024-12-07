@@ -17,7 +17,6 @@ package com.irurueta.geometry.io;
 
 import com.irurueta.geometry.InhomogeneousPoint3D;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Triangle3D;
 import com.irurueta.geometry.Triangulator3D;
 import com.irurueta.geometry.TriangulatorException;
 
@@ -26,7 +25,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -75,8 +73,7 @@ public class LoaderPLY extends Loader {
      * contain redundant vertices. If your environment is memory constrained,
      * this should be disabled. By default, it is disabled.
      */
-    public static final boolean DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK =
-            false;
+    public static final boolean DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK = false;
 
     /**
      * Constant defining default maximum number of stream positions to be
@@ -161,8 +158,7 @@ public class LoaderPLY extends Loader {
         validityChecked = false;
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -181,8 +177,7 @@ public class LoaderPLY extends Loader {
         validityChecked = false;
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -196,8 +191,7 @@ public class LoaderPLY extends Loader {
      * @throws IllegalArgumentException Raised if maximum number of vertices is
      *                                  smaller than MIN_MAX_VERTICES_IN_CHUNK.
      */
-    public LoaderPLY(final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk) {
+    public LoaderPLY(final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk) {
         reader = null;
         header = null;
         validStream = false;
@@ -221,8 +215,8 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_MAX_VERTICES_IN_CHUNK or if maximum stream positions is
      *                                  smaller than MIN_STREAM_POSITIONS.
      */
-    public LoaderPLY(final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk, long maxStreamPositions) {
+    public LoaderPLY(final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk,
+                     final long maxStreamPositions) {
         reader = null;
         header = null;
         validStream = false;
@@ -246,8 +240,7 @@ public class LoaderPLY extends Loader {
         validityChecked = false;
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -261,16 +254,14 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_MAX_VERTICES_IN_CHUNK.
      * @throws IOException              if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final int maxVerticesInChunk)
-            throws IOException {
+    public LoaderPLY(final File f, final int maxVerticesInChunk) throws IOException {
         super(f);
         header = null;
         validStream = false;
         validityChecked = false;
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -286,8 +277,8 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_MAX_VERTICES_IN_CHUNK.
      * @throws IOException              if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk) throws IOException {
+    public LoaderPLY(final File f, final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk)
+            throws IOException {
         super(f);
         header = null;
         validStream = false;
@@ -313,8 +304,7 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_STREAM_POSITIONS.
      * @throws IOException              if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
+    public LoaderPLY(final File f, final int maxVerticesInChunk, final boolean allowDuplicateVerticesInChunk,
                      final long maxStreamPositions) throws IOException {
         super(f);
         header = null;
@@ -339,8 +329,7 @@ public class LoaderPLY extends Loader {
         validityChecked = false;
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -361,8 +350,7 @@ public class LoaderPLY extends Loader {
         validityChecked = false;
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -405,8 +393,7 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_STREAM_POSITIONS.
      */
     public LoaderPLY(final LoaderListener listener, final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
-                     final long maxStreamPositions) {
+                     final boolean allowDuplicateVerticesInChunk, final long maxStreamPositions) {
         super(listener);
         reader = null;
         header = null;
@@ -425,16 +412,14 @@ public class LoaderPLY extends Loader {
      * @param listener listener to notify start, end and progress events.
      * @throws IOException if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final LoaderListener listener)
-            throws IOException {
+    public LoaderPLY(final File f, final LoaderListener listener) throws IOException {
         super(f, listener);
         header = null;
         validStream = false;
         validityChecked = false;
         loaderIterator = null;
         maxVerticesInChunk = DEFAULT_MAX_VERTICES_IN_CHUNK;
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -449,16 +434,14 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_MAX_VERTICES_IN_CHUNK.
      * @throws IOException              if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final LoaderListener listener,
-                     final int maxVerticesInChunk) throws IOException {
+    public LoaderPLY(final File f, final LoaderListener listener, final int maxVerticesInChunk) throws IOException {
         super(f, listener);
         header = null;
         validStream = false;
         validityChecked = false;
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
-        allowDuplicateVerticesInChunk =
-                DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
+        allowDuplicateVerticesInChunk = DEFAULT_ALLOW_DUPLICATE_VERTICES_IN_CHUNK;
         maxStreamPositions = DEFAULT_MAX_STREAM_POSITIONS;
     }
 
@@ -475,8 +458,7 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_MAX_VERTICES_IN_CHUNK.
      * @throws IOException              if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final LoaderListener listener,
-                     final int maxVerticesInChunk,
+    public LoaderPLY(final File f, final LoaderListener listener, final int maxVerticesInChunk,
                      final boolean allowDuplicateVerticesInChunk) throws IOException {
         super(f, listener);
         header = null;
@@ -504,10 +486,8 @@ public class LoaderPLY extends Loader {
      *                                  smaller than MIN_STREAM_POSITIONS.
      * @throws IOException              if file does not exist or cannot be loaded.
      */
-    public LoaderPLY(final File f, final LoaderListener listener,
-                     final int maxVerticesInChunk,
-                     final boolean allowDuplicateVerticesInChunk,
-                     final long maxStreamPositions) throws IOException {
+    public LoaderPLY(final File f, final LoaderListener listener, final int maxVerticesInChunk,
+                     final boolean allowDuplicateVerticesInChunk, final long maxStreamPositions) throws IOException {
         super(f, listener);
         header = null;
         validStream = false;
@@ -541,8 +521,7 @@ public class LoaderPLY extends Loader {
      * @throws LockedException          Raised if this instance is locked because loading
      *                                  is in progress.
      */
-    public void setMaxVerticesInChunk(final int maxVerticesInChunk)
-            throws LockedException {
+    public void setMaxVerticesInChunk(final int maxVerticesInChunk) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -573,8 +552,7 @@ public class LoaderPLY extends Loader {
      * @throws LockedException Raised if this instance is locked because loading
      *                         is in progress.
      */
-    public void setAllowDuplicateVerticesInChunk(final boolean allow)
-            throws LockedException {
+    public void setAllowDuplicateVerticesInChunk(final boolean allow) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -611,8 +589,7 @@ public class LoaderPLY extends Loader {
      * @throws LockedException          Raised if this instance is locked because loading
      *                                  is in progress.
      */
-    public void setMaxStreamPositions(final long maxStreamPositions)
-            throws LockedException {
+    public void setMaxStreamPositions(final long maxStreamPositions) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -682,8 +659,7 @@ public class LoaderPLY extends Loader {
      * @throws LoaderException   Raised if file is not a valid PLY or is corrupted.
      */
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException,
-            IOException, LoaderException {
+    public LoaderIterator load() throws LockedException, NotReadyException, IOException, LoaderException {
         if (!isReady()) {
             throw new NotReadyException();
         }
@@ -752,8 +728,7 @@ public class LoaderPLY extends Loader {
      * @throws IOException     if an i/O error occurs.
      * @throws LoaderException Raised if file is not a valid PLY or is corrupted
      */
-    private void readFromStream()
-            throws LockedException, IOException, LoaderException {
+    private void readFromStream() throws LockedException, IOException, LoaderException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -795,9 +770,9 @@ public class LoaderPLY extends Loader {
         validityChecked = true;
 
         // first line must be equal to string "ply"
-        String str = reader.readLine();
+        var str = reader.readLine();
 
-        if (!str.equals("ply") || reader.isEndOfStream()) {
+        if (!"ply".equals(str) || reader.isEndOfStream()) {
             validStream = false;
             throw new LoaderException();
         }
@@ -810,7 +785,7 @@ public class LoaderPLY extends Loader {
             str = reader.readWord();
         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
-        if (!str.equals("format") || reader.isEndOfStream()) {
+        if (!"format".equals(str) || reader.isEndOfStream()) {
             validStream = false;
             throw new LoaderException();
         }
@@ -826,25 +801,22 @@ public class LoaderPLY extends Loader {
             throw new LoaderException();
         }
 
-        final PLYStorageMode storageMode;
-        switch (str) {
-            case "ascii":
+        final PLYStorageMode storageMode = switch (str) {
+            case "ascii" ->
                 // ASCII storage mode
-                storageMode = PLYStorageMode.PLY_ASCII;
-                break;
-            case "binary_big_endian":
+                    PLYStorageMode.PLY_ASCII;
+            case "binary_big_endian" ->
                 // Binary big endian storage mode
-                storageMode = PLYStorageMode.PLY_BIG_ENDIAN;
-                break;
-            case "binary_little_endian":
+                    PLYStorageMode.PLY_BIG_ENDIAN;
+            case "binary_little_endian" ->
                 // Binary little endian storage mode
-                storageMode = PLYStorageMode.PLY_LITTLE_ENDIAN;
-                break;
-            default:
+                    PLYStorageMode.PLY_LITTLE_ENDIAN;
+            default -> {
                 // non supported storage mode
                 validStream = false;
                 throw new LoaderException();
-        }
+            }
+        };
 
         // next comes version (always must be 1.0)
         do {
@@ -852,7 +824,7 @@ public class LoaderPLY extends Loader {
             str = reader.readWord();
         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
-        if (!str.equals("1.0") || reader.isEndOfStream()) {
+        if (!"1.0".equals(str) || reader.isEndOfStream()) {
             validStream = false;
             throw new LoaderException();
         }
@@ -863,7 +835,7 @@ public class LoaderPLY extends Loader {
         header.setStorageMode(storageMode);
 
         // read until we find the line end_header
-        boolean endOfHeader = false;
+        var endOfHeader = false;
         ElementPLY lastElement = null;
         PropertyPLY property;
         do {
@@ -872,12 +844,12 @@ public class LoaderPLY extends Loader {
                 str = reader.readWord();
             } while ((str.isEmpty()) && !reader.isEndOfStream());
 
-            if (str.equals("comment")) {
+            if ("comment".equals(str)) {
                 // if word is "comment", read until end of line
                 str = reader.readLine();
                 // add comment to list of comments in header
                 header.getComments().add(str);
-            } else if (str.equals("obj_info")) {
+            } else if ("obj_info".equals(str)) {
                 // if word is "obj_info", read until end of line
                 str = reader.readLine();
                 // add obj_info to list of obj_infos in header
@@ -897,7 +869,7 @@ public class LoaderPLY extends Loader {
                     throw new LoaderException();
                 }
 
-                final String elementName = str;
+                final var elementName = str;
 
                 // next word contains number of instances of this element
                 do {
@@ -921,7 +893,7 @@ public class LoaderPLY extends Loader {
 
                 // add element to header
                 header.getElements().add(lastElement);
-            } else if (str.equals("property")) {
+            } else if ("property".equals(str)) {
                 // a property for last element that has been found. We read its
                 // information and add it to the element
 
@@ -942,7 +914,7 @@ public class LoaderPLY extends Loader {
                     throw new LoaderException();
                 }
 
-                if (str.equals("list")) {
+                if ("list".equals(str)) {
                     // property is a list
                     final DataTypePLY lengthDataType;
                     final DataTypePLY valueDataType;
@@ -987,10 +959,9 @@ public class LoaderPLY extends Loader {
                         throw new LoaderException();
                     }
 
-                    final String propertyName = str;
+                    final var propertyName = str;
 
-                    property = new PropertyPLY(propertyName, lengthDataType,
-                            valueDataType);
+                    property = new PropertyPLY(propertyName, lengthDataType, valueDataType);
                 } else {
                     // property is scalar
                     // word that we have already read should contain value data
@@ -1014,7 +985,7 @@ public class LoaderPLY extends Loader {
                         throw new LoaderException();
                     }
 
-                    final String propertyName = str;
+                    final var propertyName = str;
 
                     property = new PropertyPLY(propertyName, valueDataType);
                 }
@@ -1025,7 +996,7 @@ public class LoaderPLY extends Loader {
                     validStream = false;
                     throw new LoaderException(ex);
                 }
-            } else if (str.equals("end_header")) {
+            } else if ("end_header".equals(str)) {
                 // end of header has been found
                 endOfHeader = true;
             } else {
@@ -1048,7 +1019,7 @@ public class LoaderPLY extends Loader {
      *                         corrupted (i.e. an unsupported word is found).
      */
     private DataTypePLY wordToDataType(final String word) throws LoaderException {
-        final DataTypePLY dataType = DataTypePLY.forValue(word);
+        final var dataType = DataTypePLY.forValue(word);
         if (dataType == null) {
             throw new LoaderException();
         }
@@ -1396,16 +1367,14 @@ public class LoaderPLY extends Loader {
          *                         loaded.
          * @throws IOException     if an I/O error occurs.
          */
-        public LoaderIteratorPLY(final LoaderPLY loader)
-                throws LoaderException, IOException {
+        public LoaderIteratorPLY(final LoaderPLY loader) throws LoaderException, IOException {
             this.loader = loader;
             listElems = 1;
             nX = nY = nZ = 1.0f;
             alpha = 255;
             index = 0;
             colorComponents = 0;
-            verticesAvailable = colorsAvailable = indicesAvailable =
-                    normalsAvailable = false;
+            verticesAvailable = colorsAvailable = indicesAvailable = normalsAvailable = false;
             endHeaderStreamPosition = numberOfVertices = numberOfFaces = 0;
             firstVertexStreamPosition = 0;
             firstVertexStreamPositionAvailable = false;
@@ -1468,8 +1437,7 @@ public class LoaderPLY extends Loader {
          */
         @Override
         @SuppressWarnings("all")
-        public DataChunk next() throws NotAvailableException, LoaderException,
-                IOException {
+        public DataChunk next() throws NotAvailableException, LoaderException, IOException {
 
             if (reader == null) {
                 throw new IOException();
@@ -1485,23 +1453,22 @@ public class LoaderPLY extends Loader {
             minX = minY = minZ = Float.MAX_VALUE;
             maxX = maxY = maxZ = -Float.MAX_VALUE;
 
-            final ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+            final var buffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-            final long nElems = faceElement.getNumberOfInstances();
-            final long progressStep = Math.max(
-                    (long) (LoaderPLY.PROGRESS_DELTA * nElems), 1);
+            final var nElems = faceElement.getNumberOfInstances();
+            final var progressStep = Math.max((long) (LoaderPLY.PROGRESS_DELTA * nElems), 1);
 
-            boolean end = false;
+            var end = false;
 
             // initialize list indices to a list of one element to be reused
-            int previousListElems = 1;
-            long[] listIndices = new long[previousListElems];
+            var previousListElems = 1;
+            var listIndices = new long[previousListElems];
 
             while ((currentFace < nElems) && !end) {
 
-                final long faceStreamPos = reader.getPosition();
+                final var faceStreamPos = reader.getPosition();
                 // Iterate on properties
-                for (final PropertyPLY property : faceElement.getProperties()) {
+                for (final var property : faceElement.getProperties()) {
                     if (!property.isValidProperty()) {
                         throw new LoaderException();
                     }
@@ -1520,8 +1487,7 @@ public class LoaderPLY extends Loader {
                         // read number of list elements
                         readValueFromStreamListener.readFromStream(buffer);
 
-                        if (reader.isEndOfStream() &&
-                                (currentFace < (nElems - 1))) {
+                        if (reader.isEndOfStream() && (currentFace < (nElems - 1))) {
                             throw new LoaderException();
                         }
 
@@ -1529,7 +1495,7 @@ public class LoaderPLY extends Loader {
                         readValueFromBufferListener.readValueFromBuffer(buffer);
                     }
 
-                    boolean needsTriangulation = false;
+                    var needsTriangulation = false;
                     if (listElems > 3) {
                         needsTriangulation = true;
                     } else if (listElems < 3) {
@@ -1543,8 +1509,7 @@ public class LoaderPLY extends Loader {
                         throw new LoaderException();
                     }
 
-                    if ((verticesInChunk + listElems) >
-                            loader.maxVerticesInChunk) {
+                    if ((verticesInChunk + listElems) > loader.maxVerticesInChunk) {
                         // no more vertices can be added to chunk so we reset stream
                         // to start on current face
                         reader.seek(faceStreamPos);
@@ -1553,10 +1518,8 @@ public class LoaderPLY extends Loader {
                     }
 
                     // set listeners to read property value
-                    readValueFromStreamListener =
-                            property.getReadValueFromStreamListener();
-                    readValueFromBufferListener =
-                            property.getReadValueFromBufferListener();
+                    readValueFromStreamListener = property.getReadValueFromStreamListener();
+                    readValueFromBufferListener = property.getReadValueFromBufferListener();
 
                     if (previousListElems != listElems) {
                         // listIndices can no longer be reused
@@ -1564,12 +1527,11 @@ public class LoaderPLY extends Loader {
                     }
 
                     // read property list data
-                    for (int u = 0; u < listElems; u++) {
+                    for (var u = 0; u < listElems; u++) {
                         // reads face index from stream and saves it into buffer
                         readValueFromStreamListener.readFromStream(buffer);
 
-                        if (reader.isEndOfStream() && (currentFace <
-                                (nElems - 1))) {
+                        if (reader.isEndOfStream() && (currentFace < (nElems - 1))) {
                             throw new LoaderException();
                         }
 
@@ -1585,9 +1547,8 @@ public class LoaderPLY extends Loader {
 
                     if (needsTriangulation) {
                         // search vertices data corresponding to read indices
-                        final List<Point3D> polygonVertices =
-                                new ArrayList<>(listElems);
-                        for (int u = 0; u < listElems; u++) {
+                        final var polygonVertices = new ArrayList<Point3D>(listElems);
+                        for (var u = 0; u < listElems; u++) {
                             index = listIndices[u];
                             // vertex needs to be added into chunk, so we need to
                             // read vertex data
@@ -1596,34 +1557,29 @@ public class LoaderPLY extends Loader {
                             fetchVertexListener.fetch(index);
 
                             // read all vertex data
-                            for (final PropertyPLY vertexProperty :
-                                    vertexElement.getProperties()) {
+                            for (final var vertexProperty : vertexElement.getProperties()) {
 
                                 // set delegates to read property value from stream
-                                readValueFromStreamListener =
-                                        vertexProperty.getReadValueFromStreamListener();
+                                readValueFromStreamListener = vertexProperty.getReadValueFromStreamListener();
 
                                 // read property from stream to buffer
                                 readValueFromStreamListener.readFromStream(buffer);
 
                                 if (vertexProperty.isReadValueFromBufferListenerAvailable()) {
                                     // only read from buffer if property is recognized by this class
-                                    readValueFromBufferListener =
-                                            vertexProperty.getReadValueFromBufferListener();
+                                    readValueFromBufferListener = vertexProperty.getReadValueFromBufferListener();
 
                                     // move value from buffer to apropriate member
                                     readValueFromBufferListener.readValueFromBuffer(buffer);
                                 }
                             }
 
-                            final Point3D point = new InhomogeneousPoint3D(
-                                    coordX, coordY, coordZ);
+                            final var point = new InhomogeneousPoint3D(coordX, coordY, coordZ);
                             polygonVertices.add(point);
                         }
 
                         try {
-                            listIndices = buildTriangulatedIndices(
-                                    polygonVertices, listIndices);
+                            listIndices = buildTriangulatedIndices(polygonVertices, listIndices);
                             listElems = listIndices.length;
                         } catch (final TriangulatorException e) {
                             // reset face stream position
@@ -1633,12 +1589,11 @@ public class LoaderPLY extends Loader {
                     }
 
                     // search for vertices indices contained in list
-                    for (int u = 0; u < listElems; u++) {
+                    for (var u = 0; u < listElems; u++) {
                         index = listIndices[u];
                         // index contains original face index in PLY file
                         int chunkIndex;
-                        if (!loader.allowDuplicateVerticesInChunk &&
-                                (chunkIndex = searchIndexInChunk(index)) >= 0) {
+                        if (!loader.allowDuplicateVerticesInChunk && (chunkIndex = searchIndexInChunk(index)) >= 0) {
                             // vertex is already stored in chunk with chunkIndex
                             addExistingVertexToChunk(chunkIndex);
                         } else {
@@ -1649,20 +1604,17 @@ public class LoaderPLY extends Loader {
                             fetchVertexListener.fetch(index);
 
                             // read all vertex data
-                            for (final PropertyPLY vertexProperty :
-                                    vertexElement.getProperties()) {
+                            for (final var vertexProperty : vertexElement.getProperties()) {
 
                                 // set delegates to read property value from stream
-                                readValueFromStreamListener =
-                                        vertexProperty.getReadValueFromStreamListener();
+                                readValueFromStreamListener = vertexProperty.getReadValueFromStreamListener();
 
                                 // read property from stream to buffer
                                 readValueFromStreamListener.readFromStream(buffer);
 
                                 if (vertexProperty.isReadValueFromBufferListenerAvailable()) {
                                     // only read from buffer if property is recognized by this class
-                                    readValueFromBufferListener =
-                                            vertexProperty.getReadValueFromBufferListener();
+                                    readValueFromBufferListener = vertexProperty.getReadValueFromBufferListener();
 
                                     // move value from buffer to apropriate member
                                     readValueFromBufferListener.readValueFromBuffer(buffer);
@@ -1693,8 +1645,7 @@ public class LoaderPLY extends Loader {
                 // compute progress
                 if (loader.listener != null) {
                     if ((currentFace % progressStep) == 0) {
-                        loader.listener.onLoadProgressChange(loader,
-                                (float) (currentFace) / (float) (nElems));
+                        loader.listener.onLoadProgressChange(loader, (float) (currentFace) / (float) (nElems));
                     }
                 }
             }
@@ -1703,7 +1654,7 @@ public class LoaderPLY extends Loader {
             trimArrays();
 
             // Instantiate DataChunk with chunk arrays
-            final DataChunk dataChunk = new DataChunk();
+            final var dataChunk = new DataChunk();
             if (verticesAvailable) {
                 dataChunk.setVerticesCoordinatesData(coordsInChunkArray);
                 dataChunk.setMinX(minX);
@@ -1767,20 +1718,18 @@ public class LoaderPLY extends Loader {
          *                               is degenerate or vertices contains invalid values such as NaN or
          *                               infinity.
          */
-        private long[] buildTriangulatedIndices(
-                final List<Point3D> polygonVertices,
-                final long[] plyIndices) throws TriangulatorException {
+        private long[] buildTriangulatedIndices(final List<Point3D> polygonVertices, final long[] plyIndices)
+                throws TriangulatorException {
 
-            final List<int[]> indices = new ArrayList<>();
-            final Triangulator3D triangulator = Triangulator3D.create();
-            final List<Triangle3D> triangles = triangulator.triangulate(
-                    polygonVertices, indices);
+            final var indices = new ArrayList<int[]>();
+            final var triangulator = Triangulator3D.create();
+            final var triangles = triangulator.triangulate(polygonVertices, indices);
 
-            final long[] result = new long[triangles.size() * 3];
-            int pos = 0;
+            final var result = new long[triangles.size() * 3];
+            var pos = 0;
             long plyIndex;
-            for (final int[] triangleIndices : indices) {
-                for (final int triangleIndex : triangleIndices) {
+            for (final var triangleIndices : indices) {
+                for (final var triangleIndex : triangleIndices) {
                     plyIndex = plyIndices[triangleIndex];
                     result[pos] = plyIndex;
                     pos++;
@@ -1796,8 +1745,7 @@ public class LoaderPLY extends Loader {
          */
         private void initChunkArrays() {
             coordsInChunkArray = new float[loader.maxVerticesInChunk * 3];
-            colorsInChunkArray = new short[
-                    loader.maxVerticesInChunk * colorComponents];
+            colorsInChunkArray = new short[loader.maxVerticesInChunk * colorComponents];
             indicesInChunkArray = new int[loader.maxVerticesInChunk];
             originalIndicesInChunkArray = new long[loader.maxVerticesInChunk];
             normalsInChunkArray = new float[loader.maxVerticesInChunk * 3];
@@ -1815,7 +1763,7 @@ public class LoaderPLY extends Loader {
          * @return Vertex index in current chunk of data.
          */
         private int searchIndexInChunk(final long originalIndex) {
-            final Integer chunkIndex = indicesMap.get(originalIndex);
+            final var chunkIndex = indicesMap.get(originalIndex);
 
             if (chunkIndex == null) {
                 return -1;
@@ -1832,18 +1780,15 @@ public class LoaderPLY extends Loader {
          * @param originalIndex  Vertex index in original stream of data.
          * @param streamPosition Stream position where vertex is found.
          */
-        private void addVertexPositionToMap(final long originalIndex,
-                                            final long streamPosition) {
-
+        private void addVertexPositionToMap(final long originalIndex, final long streamPosition) {
             if (loader.header.getStorageMode() == PLYStorageMode.PLY_ASCII) {
                 if (verticesStreamPositionsMap.size() > loader.maxStreamPositions) {
                     // Map is full. Remove 1st item before adding a new one
-                    final Long origIndex = verticesStreamPositionsMap.firstKey();
+                    final var origIndex = verticesStreamPositionsMap.firstKey();
                     verticesStreamPositionsMap.remove(origIndex);
                 }
                 // add new item
-                verticesStreamPositionsMap.put(originalIndex,
-                        streamPosition);
+                verticesStreamPositionsMap.put(originalIndex, streamPosition);
             }
         }
 
@@ -1852,8 +1797,8 @@ public class LoaderPLY extends Loader {
          * chunk of data.
          */
         private void addNewVertexDataToChunk() {
-            int pos = 3 * verticesInChunk;
-            int colorPos = colorComponents * verticesInChunk;
+            var pos = 3 * verticesInChunk;
+            var colorPos = colorComponents * verticesInChunk;
             coordsInChunkArray[pos] = coordX;
             normalsInChunkArray[pos] = nX;
             if (colorComponents >= 1) {
@@ -1945,17 +1890,14 @@ public class LoaderPLY extends Loader {
          * enlarged.
          */
         private void increaseIndicesArraySize() {
-            final int newIndicesInChunkSize = indicesInChunkSize +
-                    loader.maxVerticesInChunk;
-            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
-            final long[] newOriginalIndicesInChunkArray =
-                    new long[newIndicesInChunkSize];
+            final var newIndicesInChunkSize = indicesInChunkSize + loader.maxVerticesInChunk;
+            final var newIndicesInChunkArray = new int[newIndicesInChunkSize];
+            final var newOriginalIndicesInChunkArray = new long[newIndicesInChunkSize];
 
             // copy contents of old arrays
-            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,
+            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, indicesInChunkSize);
+            System.arraycopy(originalIndicesInChunkArray, 0, newOriginalIndicesInChunkArray, 0,
                     indicesInChunkSize);
-            System.arraycopy(originalIndicesInChunkArray, 0,
-                    newOriginalIndicesInChunkArray, 0, indicesInChunkSize);
 
             // set new arrays and new size
             indicesInChunkArray = newIndicesInChunkArray;
@@ -1970,20 +1912,17 @@ public class LoaderPLY extends Loader {
          */
         private void trimArrays() {
             if (verticesInChunk > 0) {
-                final int elems = verticesInChunk * 3;
-                final int colorElems = verticesInChunk * colorComponents;
+                final var elems = verticesInChunk * 3;
+                final var colorElems = verticesInChunk * colorComponents;
 
-                final float[] newCoordsInChunkArray = new float[elems];
-                final short[] newColorsInChunkArray = new short[colorElems];
-                final float[] newNormalsInChunkArray = new float[elems];
+                final var newCoordsInChunkArray = new float[elems];
+                final var newColorsInChunkArray = new short[colorElems];
+                final var newNormalsInChunkArray = new float[elems];
 
                 // copy contents of old arrays
-                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,
-                        0, elems);
-                System.arraycopy(colorsInChunkArray, 0, newColorsInChunkArray,
-                        0, colorElems);
-                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,
-                        0, elems);
+                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray, 0, elems);
+                System.arraycopy(colorsInChunkArray, 0, newColorsInChunkArray, 0, colorElems);
+                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray, 0, elems);
 
                 // set new arrays
                 coordsInChunkArray = newCoordsInChunkArray;
@@ -1997,9 +1936,8 @@ public class LoaderPLY extends Loader {
             }
 
             if (indicesInChunk > 0) {
-                final int[] newIndicesInChunkArray = new int[indicesInChunk];
-                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,
-                        0, indicesInChunk);
+                final var newIndicesInChunkArray = new int[indicesInChunk];
+                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, indicesInChunk);
 
                 // set new array
                 indicesInChunkArray = newIndicesInChunkArray;
@@ -2019,21 +1957,20 @@ public class LoaderPLY extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         private void setUp() throws LoaderException, IOException {
-
             endHeaderStreamPosition = reader.getPosition();
-            long streamPositionOffset = endHeaderStreamPosition;
+            var streamPositionOffset = endHeaderStreamPosition;
 
             // read header to set up listeners
             try {
                 totalInstances = 0;
                 colorComponents = 0;
-                for (final ElementPLY element : loader.header.getElements()) {
+                for (final var element : loader.header.getElements()) {
                     if (!element.isValidElement()) {
                         throw new LoaderException();
                     }
                     totalInstances += element.getNumberOfInstances();
 
-                    if (element.getName().equals("vertex")) {
+                    if ("vertex".equals(element.getName())) {
                         vertexElement = element;
 
                         // obtain position of first vertex
@@ -2042,11 +1979,10 @@ public class LoaderPLY extends Loader {
                         numberOfVertices = element.getNumberOfInstances();
 
                         vertexDataSize = 0;
-                        for (final PropertyPLY property : element.getProperties()) {
+                        for (final var property : element.getProperties()) {
 
                             // set listener to read data from stream
-                            setReadValueFromStreamListener(property,
-                                    loader.header.getStorageMode());
+                            setReadValueFromStreamListener(property, loader.header.getStorageMode());
 
                             // set listener to read data stored in buffer
                             switch (property.getName()) {
@@ -2775,8 +2711,8 @@ public class LoaderPLY extends Loader {
                             }
                         }
 
-                        if (loader.header.getStorageMode() != PLYStorageMode.PLY_ASCII &&
-                                !firstFaceStreamPositionAvailable) {
+                        if (loader.header.getStorageMode() != PLYStorageMode.PLY_ASCII
+                                && !firstFaceStreamPositionAvailable) {
 
                             firstVertexStreamPosition = streamPositionOffset;
                             firstVertexStreamPositionAvailable = true;
@@ -2784,26 +2720,23 @@ public class LoaderPLY extends Loader {
                             streamPositionOffset += numberOfVertices * vertexDataSize;
                         }
 
-                    } else if (element.getName().equals("face")) {
+                    } else if ("face".equals(element.getName())) {
                         faceElement = element;
                         indicesAvailable = true;
 
                         // obtain number of faces
                         numberOfFaces = element.getNumberOfInstances();
 
-                        for (final PropertyPLY property : element.getProperties()) {
+                        for (final var property : element.getProperties()) {
 
                             // set listener to read data from stream
-                            setReadValueFromStreamListener(property,
-                                    loader.header.getStorageMode());
+                            setReadValueFromStreamListener(property, loader.header.getStorageMode());
 
-                            if (property.getPropertyType() ==
-                                    PropertyTypePLY.PROPERTY_PLY_LIST) {
+                            if (property.getPropertyType() == PropertyTypePLY.PROPERTY_PLY_LIST) {
                                 // set listeners to get number of elements in a
                                 // list
                                 setReadLengthValueFromBufferListener(property);
-                                setReadLengthValueFromStreamListener(property,
-                                        loader.header.getStorageMode());
+                                setReadLengthValueFromStreamListener(property, loader.header.getStorageMode());
                             }
 
                             switch (property.getValueType()) {
@@ -2882,12 +2815,10 @@ public class LoaderPLY extends Loader {
                             firstFaceStreamPosition = streamPositionOffset;
                             firstFaceStreamPositionAvailable = true;
 
-                            fetchVertexListener =
-                                    new BinaryVertexFetcherListener();
+                            fetchVertexListener = new BinaryVertexFetcherListener();
                         } else {
                             // ASCII storage mode
-                            fetchVertexListener =
-                                    new AsciiVertexFetcherListener();
+                            fetchVertexListener = new AsciiVertexFetcherListener();
                         }
                     }
                 }
@@ -2913,33 +2844,14 @@ public class LoaderPLY extends Loader {
          *
          * @param type A data type.
          * @return Size in bytes for a given data type.
-         * @throws LoaderException Raised if provided data type is not supported.
          */
-        private long sizeForDataType(final DataTypePLY type) throws LoaderException {
-            switch (type) {
-                case PLY_INT8:
-                case PLY_UINT8:
-                case PLY_CHAR:
-                case PLY_UCHAR:
-                    return 1; // 1 byte
-                case PLY_INT16:
-                case PLY_UINT16:
-                case PLY_SHORT:
-                case PLY_USHORT:
-                    return 2; // 2 bytes
-                case PLY_INT32:
-                case PLY_UINT32:
-                case PLY_FLOAT32:
-                case PLY_INT:
-                case PLY_UINT:
-                case PLY_FLOAT:
-                    return 4; // 4 bytes
-                case PLY_FLOAT64:
-                case PLY_DOUBLE:
-                    return 8; // 8 bytes
-                default:
-                    throw new LoaderException();
-            }
+        private long sizeForDataType(final DataTypePLY type) {
+            return switch (type) {
+                case PLY_INT8, PLY_UINT8, PLY_CHAR, PLY_UCHAR -> 1; // 1 byte
+                case PLY_INT16, PLY_UINT16, PLY_SHORT, PLY_USHORT -> 2; // 2 bytes
+                case PLY_INT32, PLY_UINT32, PLY_FLOAT32, PLY_INT, PLY_UINT, PLY_FLOAT -> 4; // 4 bytes
+                case PLY_FLOAT64, PLY_DOUBLE -> 8; // 8 bytes
+            };
         }
 
         /**
@@ -2951,28 +2863,26 @@ public class LoaderPLY extends Loader {
          *                               given element.
          * @throws IOException           if an I/O error occurs.
          */
-        private void findFirstVertexAndFaceStreamPosition()
-                throws LoaderException, NotAvailableException, IOException {
+        private void findFirstVertexAndFaceStreamPosition() throws LoaderException, NotAvailableException, IOException {
 
-            if (firstVertexStreamPositionAvailable &&
-                    firstFaceStreamPositionAvailable) {
+            if (firstVertexStreamPositionAvailable && firstFaceStreamPositionAvailable) {
                 // already computed
                 return;
             }
 
-            final ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+            final var buffer = ByteBuffer.allocate(BUFFER_SIZE);
 
             long nElems;
-            long counter = 0;
+            var counter = 0L;
 
             // iterate over elements in header
-            for (final ElementPLY element : loader.header.getElements()) {
+            for (final var element : loader.header.getElements()) {
                 if (!element.isValidElement()) {
                     throw new LoaderException();
                 }
 
-                boolean stop = false;
-                if (element.getName().equals("vertex")) {
+                var stop = false;
+                if ("vertex".equals(element.getName())) {
                     // FIRST VERTEX FOUND!
                     firstVertexStreamPosition = reader.getPosition();
                     firstVertexStreamPositionAvailable = true;
@@ -2981,7 +2891,7 @@ public class LoaderPLY extends Loader {
 
                     // stop if both 1st vertex and face are known
                     stop = firstFaceStreamPositionAvailable;
-                } else if (element.getName().equals("face")) {
+                } else if ("face".equals(element.getName())) {
                     // FIRST FACE FOUND!
                     firstFaceStreamPosition = reader.getPosition();
                     firstFaceStreamPositionAvailable = true;
@@ -2998,16 +2908,14 @@ public class LoaderPLY extends Loader {
 
                 nElems = element.getNumberOfInstances();
                 // repeat properties iteration for each element
-                for (long i = 0; i < nElems; i++) {
+                for (var i = 0L; i < nElems; i++) {
 
-                    PLYReadValueFromStreamListener
-                            readLengthValueFromStreamListener;
-                    PLYReadValueFromBufferListener
-                            readLengthValueFromBufferListener;
+                    PLYReadValueFromStreamListener readLengthValueFromStreamListener;
+                    PLYReadValueFromBufferListener readLengthValueFromBufferListener;
                     PLYReadValueFromStreamListener readValueFromStreamListener;
 
                     // iterate on properties of element
-                    for (final PropertyPLY property : element.getProperties()) {
+                    for (final var property : element.getProperties()) {
                         if (!property.isValidProperty()) {
                             throw new LoaderException();
                         }
@@ -3016,21 +2924,16 @@ public class LoaderPLY extends Loader {
                         // scalar, hence 1
                         listElems = 1;
 
-                        if (property.getPropertyType() ==
-                                PropertyTypePLY.PROPERTY_PLY_LIST) {
+                        if (property.getPropertyType() == PropertyTypePLY.PROPERTY_PLY_LIST) {
                             // read number of list elements
-                            readLengthValueFromStreamListener =
-                                    property.getReadLengthValueFromStreamListener();
-                            readLengthValueFromStreamListener.readFromStream(
-                                    buffer);
+                            readLengthValueFromStreamListener = property.getReadLengthValueFromStreamListener();
+                            readLengthValueFromStreamListener.readFromStream(buffer);
 
-                            if (reader.isEndOfStream() &&
-                                    (counter < (totalInstances - 1))) {
+                            if (reader.isEndOfStream() && (counter < (totalInstances - 1))) {
                                 throw new LoaderException();
                             }
 
-                            readLengthValueFromBufferListener =
-                                    property.getReadLengthValueFromBufferListener();
+                            readLengthValueFromBufferListener = property.getReadLengthValueFromBufferListener();
                             readLengthValueFromBufferListener.readValueFromBuffer(buffer);
                         }
 
@@ -3038,11 +2941,10 @@ public class LoaderPLY extends Loader {
                         readValueFromStreamListener = property.getReadValueFromStreamListener();
 
                         // read property data
-                        for (long u = 0; u < listElems; u++) {
+                        for (var u = 0L; u < listElems; u++) {
                             readValueFromStreamListener.readFromStream(buffer);
 
-                            if (reader.isEndOfStream() &&
-                                    (counter < (totalInstances - 1))) {
+                            if (reader.isEndOfStream() && (counter < (totalInstances - 1))) {
                                 throw new LoaderException();
                             }
                         }
@@ -3068,15 +2970,14 @@ public class LoaderPLY extends Loader {
              * @throws IOException     if an I/O error occurs.
              */
             @Override
-            public void fetch(final long index)
-                    throws LoaderException, IOException {
+            public void fetch(final long index) throws LoaderException, IOException {
 
-                final long nElems = vertexElement.getNumberOfInstances();
+                final var nElems = vertexElement.getNumberOfInstances();
                 if (index >= nElems) {
                     throw new LoaderException();
                 }
 
-                final long pos = firstVertexStreamPosition + (index * vertexDataSize);
+                final var pos = firstVertexStreamPosition + (index * vertexDataSize);
                 if (reader.getPosition() != pos) {
                     reader.seek(pos);
                 }
@@ -3100,27 +3001,25 @@ public class LoaderPLY extends Loader {
              *                               is not available.
              */
             @Override
-            public void fetch(final long index)
-                    throws LoaderException, IOException, NotAvailableException {
+            public void fetch(final long index) throws LoaderException, IOException, NotAvailableException {
 
-                final long nElems = vertexElement.getNumberOfInstances();
+                final var nElems = vertexElement.getNumberOfInstances();
                 if (index >= nElems) {
                     throw new LoaderException();
                 }
 
-                final ByteBuffer fetchBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+                final var fetchBuffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-                long startStreamPos = firstVertexStreamPosition;
-                long startIndex = 0;
+                var startStreamPos = firstVertexStreamPosition;
+                var startIndex = 0L;
 
                 if (!verticesStreamPositionsMap.isEmpty()) {
                     // with floorEntry, we will pick element immediately
                     // before or equal to index if any exists
-                    final Map.Entry<Long, Long> entry =
-                            verticesStreamPositionsMap.floorEntry(index);
+                    final var entry = verticesStreamPositionsMap.floorEntry(index);
                     if (entry != null) {
-                        final long origIndex = entry.getKey();
-                        final long pos = entry.getValue();
+                        final var origIndex = entry.getKey();
+                        final var pos = entry.getValue();
                         if ((origIndex <= index) && (pos >= 0)) {
                             startIndex = origIndex;
                             startStreamPos = pos;
@@ -3137,24 +3036,23 @@ public class LoaderPLY extends Loader {
                 }
 
                 // read from stream until start of data of desired vertex
-                for (long i = startIndex; i < index; i++) {
+                for (var i = startIndex; i < index; i++) {
 
                     // when traversing stream of data until reaching desired
                     // index, we add all vertex positions into map
-                    final long streamPosition = reader.getPosition();
+                    final var streamPosition = reader.getPosition();
                     addVertexPositionToMap(i, streamPosition);
 
                     PLYReadValueFromStreamListener readValueFromStreamListener;
 
                     // iterate on vertex element properties
-                    for (final PropertyPLY property : vertexElement.getProperties()) {
+                    for (final var property : vertexElement.getProperties()) {
                         if (!property.isValidProperty()) {
                             throw new LoaderException();
                         }
 
                         // set delegates to read property value
-                        readValueFromStreamListener =
-                                property.getReadValueFromStreamListener();
+                        readValueFromStreamListener = property.getReadValueFromStreamListener();
                         // and read value
                         readValueFromStreamListener.readFromStream(fetchBuffer);
 
@@ -3171,8 +3069,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using int8 data type.
          */
-        private class Xint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3189,8 +3086,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using int8 data type.
          */
-        private class Yint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3207,8 +3103,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using int8 data type.
          */
-        private class Zint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3225,8 +3120,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using uint8 data type.
          */
-        private class Xuint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xuint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3245,8 +3139,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using uint8 data type.
          */
-        private class Yuint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yuint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3265,8 +3158,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using uint8 data type.
          */
-        private class Zuint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zuint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3285,8 +3177,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using int16 data type.
          */
-        private class Xint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3303,8 +3194,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using int16 data type.
          */
-        private class Yint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3321,8 +3211,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using int16 data type.
          */
-        private class Zint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3340,8 +3229,7 @@ public class LoaderPLY extends Loader {
          * Reads x vertex coordinate from temporal buffer using uint16 data
          * type.
          */
-        private class Xuint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xuint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3361,8 +3249,7 @@ public class LoaderPLY extends Loader {
          * Reads y vertex coordinate from temporal buffer using uint16 data
          * type.
          */
-        private class Yuint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yuint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3382,8 +3269,7 @@ public class LoaderPLY extends Loader {
          * Reads z vertex coordinate from temporal buffer using uint16 data
          * type.
          */
-        private class Zuint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zuint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3402,8 +3288,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using int32 data type.
          */
-        private class Xint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3420,8 +3305,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using int32 data type.
          */
-        private class Yint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3438,8 +3322,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using int32 data type.
          */
-        private class Zint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3457,8 +3340,7 @@ public class LoaderPLY extends Loader {
          * Reads x vertex coordinate from temporal buffer using uint32 data
          * type.
          */
-        private class Xuint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xuint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3478,8 +3360,7 @@ public class LoaderPLY extends Loader {
          * Reads y vertex coordinate from temporal buffer using uint32 data
          * type.
          */
-        private class Yuint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yuint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3499,8 +3380,7 @@ public class LoaderPLY extends Loader {
          * Reads z vertex coordinate from temporal buffer using uint32 data
          * type.
          */
-        private class Zuint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zuint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3520,8 +3400,7 @@ public class LoaderPLY extends Loader {
          * Reads x vertex coordinate from temporal buffer using float32 data
          * type.
          */
-        private class Xfloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xfloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3539,8 +3418,7 @@ public class LoaderPLY extends Loader {
          * Reads y vertex coordinate from temporal buffer using float32 data
          * type.
          */
-        private class Yfloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yfloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3558,8 +3436,7 @@ public class LoaderPLY extends Loader {
          * Reads z vertex coordinate from temporal buffer using float32 data
          * type.
          */
-        private class Zfloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zfloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3577,8 +3454,7 @@ public class LoaderPLY extends Loader {
          * Reads x vertex coordinate from temporal buffer using float64 data
          * type.
          */
-        private class Xfloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Xfloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3588,7 +3464,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.coordX = (float) value;
             }
@@ -3598,8 +3474,7 @@ public class LoaderPLY extends Loader {
          * Reads y vertex coordinate from temporal buffer using float64 data
          * type.
          */
-        private class Yfloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Yfloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3609,7 +3484,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.coordY = (float) value;
             }
@@ -3619,8 +3494,7 @@ public class LoaderPLY extends Loader {
          * Reads z vertex coordinate from temporal buffer using float64 data
          * type.
          */
-        private class Zfloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class Zfloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3630,7 +3504,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.coordZ = (float) value;
             }
@@ -3639,8 +3513,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using char data type.
          */
-        private class XcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3657,8 +3530,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using char data type.
          */
-        private class YcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3675,8 +3547,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using char data type.
          */
-        private class ZcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3693,8 +3564,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using uchar data type.
          */
-        private class XucharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XucharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3713,8 +3583,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using uchar data type.
          */
-        private class YucharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YucharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3733,8 +3602,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using uchar data type.
          */
-        private class ZucharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZucharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3753,8 +3621,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using short data type.
          */
-        private class XshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3771,8 +3638,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using short data type.
          */
-        private class YshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3789,8 +3655,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using short data type.
          */
-        private class ZshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3808,8 +3673,7 @@ public class LoaderPLY extends Loader {
          * Reads x vertex coordinate from temporal buffer using ushort data
          * type.
          */
-        private class XushortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XushortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3829,8 +3693,7 @@ public class LoaderPLY extends Loader {
          * Reads y vertex coordinate from temporal buffer using ushort data
          * type.
          */
-        private class YushortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YushortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3850,8 +3713,7 @@ public class LoaderPLY extends Loader {
          * Reads z vertex coordinate from temporal buffer using ushort data
          * type.
          */
-        private class ZushortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZushortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3870,8 +3732,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using int data type.
          */
-        private class XintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3888,8 +3749,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using int data type.
          */
-        private class YintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3906,8 +3766,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using int data type.
          */
-        private class ZintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3924,8 +3783,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using uint data type.
          */
-        private class XuintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XuintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -3944,8 +3802,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using uint data type.
          */
-        private class YuintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YuintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -3964,8 +3821,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using uint data type.
          */
-        private class ZuintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZuintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -3984,8 +3840,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads x vertex coordinate from temporal buffer using float data type.
          */
-        private class XfloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XfloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -4002,8 +3857,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads y vertex coordinate from temporal buffer using float data type.
          */
-        private class YfloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YfloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -4020,8 +3874,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads z vertex coordinate from temporal buffer using float data type.
          */
-        private class ZfloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZfloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -4039,8 +3892,7 @@ public class LoaderPLY extends Loader {
          * Reads x vertex coordinate from temporal buffer using double data
          * type.
          */
-        private class XdoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class XdoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads x vertex coordinate from temporal buffer and sets its value
@@ -4050,7 +3902,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.coordX = (float) value;
             }
@@ -4060,8 +3912,7 @@ public class LoaderPLY extends Loader {
          * Reads y vertex coordinate from temporal buffer using double data
          * type.
          */
-        private class YdoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class YdoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads y vertex coordinate from temporal buffer and sets its value
@@ -4071,7 +3922,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.coordY = (float) value;
             }
@@ -4081,8 +3932,7 @@ public class LoaderPLY extends Loader {
          * Reads z vertex coordinate from temporal buffer using double data
          * type.
          */
-        private class ZdoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class ZdoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads z vertex coordinate from temporal buffer and sets its value
@@ -4092,7 +3942,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.coordZ = (float) value;
             }
@@ -4101,8 +3951,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using int8 data type.
          */
-        private class RedInt8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedInt8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4120,8 +3969,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using int8 data
          * type.
          */
-        private class GreenInt8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenInt8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4138,8 +3986,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads blue color component from temporal buffer using int8 data type.
          */
-        private class BlueInt8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueInt8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4157,8 +4004,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using int8 data
          * type.
          */
-        private class AlphaInt8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaInt8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4175,8 +4021,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using uint8 data type.
          */
-        private class RedUint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedUint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4196,8 +4041,7 @@ public class LoaderPLY extends Loader {
          * Read green color component from temporal buffer using uint8 data
          * type.
          */
-        private class GreenUint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenUint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4217,8 +4061,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using uint8 data
          * type.
          */
-        private class BlueUint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueUint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4238,8 +4081,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using uint8 data
          * type.
          */
-        private class AlphaUint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaUint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4258,8 +4100,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using int16 data type.
          */
-        private class RedInt16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedInt16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4277,8 +4118,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using int16 data
          * type.
          */
-        private class GreenInt16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenInt16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4296,8 +4136,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using int16 data
          * type.
          */
-        private class BlueInt16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueInt16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4315,8 +4154,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using int16 data
          * type.
          */
-        private class AlphaInt16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaInt16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4334,8 +4172,7 @@ public class LoaderPLY extends Loader {
          * Reads red color component from temporal buffer using uint16 data
          * type.
          */
-        private class RedUint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedUint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4347,7 +4184,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -4357,8 +4194,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using uint16 data
          * type.
          */
-        private class GreenUint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenUint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4370,7 +4206,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -4380,8 +4216,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using uint16 data
          * type.
          */
-        private class BlueUint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueUint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4393,7 +4228,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -4403,8 +4238,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using uint16 data
          * type.
          */
-        private class AlphaUint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaUint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4416,7 +4250,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -4425,8 +4259,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using int32 data type.
          */
-        private class RedInt32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedInt32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its
@@ -4436,7 +4269,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -4446,8 +4279,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using int32 data
          * type.
          */
-        private class GreenInt32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenInt32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4457,7 +4289,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -4467,8 +4299,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using int32 data
          * type.
          */
-        private class BlueInt32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueInt32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4478,7 +4309,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -4488,8 +4319,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using int32 data
          * type.
          */
-        private class AlphaInt32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaInt32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4499,7 +4329,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -4509,8 +4339,7 @@ public class LoaderPLY extends Loader {
          * Reads red color component from temporal buffer using uint32 data
          * type.
          */
-        private class RedUint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedUint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4522,7 +4351,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -4532,8 +4361,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using uint32 data
          * type.
          */
-        private class GreenUint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenUint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4545,7 +4373,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -4555,8 +4383,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using uint32 data
          * type.
          */
-        private class BlueUint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueUint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4568,7 +4395,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -4578,8 +4405,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using uint32 data
          * type.
          */
-        private class AlphaUint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaUint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4591,7 +4417,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -4601,8 +4427,7 @@ public class LoaderPLY extends Loader {
          * Reads red color component from temporal buffer using float32 data
          * type.
          */
-        private class RedFloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedFloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4612,7 +4437,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -4622,8 +4447,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using float32 data
          * type.
          */
-        private class GreenFloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenFloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4633,7 +4457,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -4643,8 +4467,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using float32 data
          * type.
          */
-        private class BlueFloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueFloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4654,7 +4477,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -4664,8 +4487,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using float32 data
          * type.
          */
-        private class AlphaFloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaFloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4675,7 +4497,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -4685,8 +4507,7 @@ public class LoaderPLY extends Loader {
          * Reads red color component from temporal buffer using float64 data
          * type.
          */
-        private class RedFloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedFloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its
@@ -4696,7 +4517,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -4706,8 +4527,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using float64 data
          * type.
          */
-        private class GreenFloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenFloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4717,7 +4537,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -4727,8 +4547,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using float64 data
          * type.
          */
-        private class BlueFloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueFloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4738,7 +4557,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -4748,8 +4567,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using float64 data
          * type.
          */
-        private class AlphaFloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaFloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4759,7 +4577,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -4768,8 +4586,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using char data type.
          */
-        private class RedCharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedCharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4787,8 +4604,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using char data
          * type.
          */
-        private class GreenCharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenCharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4805,8 +4621,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads blue color component from temporal buffer using char data type.
          */
-        private class BlueCharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueCharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4824,8 +4639,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using char data
          * type.
          */
-        private class AlphaCharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaCharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4842,8 +4656,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using uchar data type.
          */
-        private class RedUcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedUcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4863,8 +4676,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using uchar data
          * type.
          */
-        private class GreenUcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenUcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4884,8 +4696,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using uchar data
          * type.
          */
-        private class BlueUcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueUcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4905,8 +4716,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using uchar data
          * type.
          */
-        private class AlphaUcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaUcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -4925,8 +4735,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using short data type.
          */
-        private class RedShortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedShortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -4944,8 +4753,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using short data
          * type.
          */
-        private class GreenShortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenShortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -4963,8 +4771,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using short data
          * type.
          */
-        private class BlueShortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueShortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -4982,8 +4789,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using short data
          * type.
          */
-        private class AlphaShortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaShortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -5001,8 +4807,7 @@ public class LoaderPLY extends Loader {
          * Reads red color component from temporal buffer using ushort data
          * type.
          */
-        private class RedUshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedUshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -5014,7 +4819,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -5024,8 +4829,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using ushort data
          * type.
          */
-        private class GreenUshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenUshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -5037,7 +4841,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -5047,8 +4851,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using ushort data
          * type.
          */
-        private class BlueUshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueUshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -5060,7 +4863,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -5070,8 +4873,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using ushort data
          * type.
          */
-        private class AlphaUshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaUshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -5083,7 +4885,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -5092,8 +4894,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using int data type.
          */
-        private class RedIntReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedIntReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -5103,7 +4904,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -5112,8 +4913,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads green color component from temporal buffer using int data type.
          */
-        private class GreenIntReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenIntReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -5123,7 +4923,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -5132,8 +4932,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads blue color component from temporal buffer using int data type.
          */
-        private class BlueIntReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueIntReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -5143,7 +4942,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -5152,8 +4951,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads alpha color component from temporal buffer using int data type.
          */
-        private class AlphaIntReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaIntReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -5163,7 +4961,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final int value = buffer.getInt(0);
+                final var value = buffer.getInt(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -5172,8 +4970,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using uint data type.
          */
-        private class RedUintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedUintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -5185,7 +4982,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -5195,8 +4992,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using uint data
          * type.
          */
-        private class GreenUintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenUintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -5208,7 +5004,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -5217,8 +5013,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads blue color component from temporal buffer using uint data type.
          */
-        private class BlueUintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueUintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -5230,7 +5025,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -5240,8 +5035,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using uint data
          * type.
          */
-        private class AlphaUintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaUintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -5253,7 +5047,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // because java doesn't support unsigned types we use the next
                 // type that can hold all desired values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -5262,8 +5056,7 @@ public class LoaderPLY extends Loader {
         /**
          * Reads red color component from temporal buffer using float data type.
          */
-        private class RedFloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedFloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -5273,7 +5066,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -5283,8 +5076,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using float data
          * type.
          */
-        private class GreenFloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenFloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -5294,7 +5086,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -5304,8 +5096,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using float data
          * type.
          */
-        private class BlueFloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueFloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -5315,7 +5106,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -5325,8 +5116,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using float data
          * type.
          */
-        private class AlphaFloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaFloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -5336,7 +5126,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -5346,8 +5136,7 @@ public class LoaderPLY extends Loader {
          * Reads red color component from temporal buffer using double data
          * type.
          */
-        private class RedDoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class RedDoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads red color component from temporal buffer and sets its value
@@ -5357,7 +5146,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.red = (short) value;
             }
@@ -5367,8 +5156,7 @@ public class LoaderPLY extends Loader {
          * Reads green color component from temporal buffer using double data
          * type.
          */
-        private class GreenDoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class GreenDoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads green color component from temporal buffer and sets its
@@ -5378,7 +5166,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.green = (short) value;
             }
@@ -5388,8 +5176,7 @@ public class LoaderPLY extends Loader {
          * Reads blue color component from temporal buffer using double data
          * type.
          */
-        private class BlueDoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class BlueDoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads blue color component from temporal buffer and sets its
@@ -5399,7 +5186,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.blue = (short) value;
             }
@@ -5409,8 +5196,7 @@ public class LoaderPLY extends Loader {
          * Reads alpha color component from temporal buffer using double data
          * type.
          */
-        private class AlphaDoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class AlphaDoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads alpha color component from temporal buffer and sets its
@@ -5420,7 +5206,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.alpha = (short) value;
             }
@@ -5430,8 +5216,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using int8 type.
          */
-        private class NXint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5449,8 +5234,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using int8 type.
          */
-        private class NYint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5468,8 +5252,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using int8 type.
          */
-        private class NZint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5487,8 +5270,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using uint8 type.
          */
-        private class NXuint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXuint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5508,8 +5290,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using uint8 type.
          */
-        private class NYuint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYuint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5529,8 +5310,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using uint8 type.
          */
-        private class NZuint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZuint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5550,8 +5330,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using int16 type.
          */
-        private class NXint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5569,8 +5348,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using int16 type.
          */
-        private class NYint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5588,8 +5366,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using int16 type.
          */
-        private class NZint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5607,8 +5384,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using uint16 type.
          */
-        private class NXuint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXuint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5628,8 +5404,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using uint16 type.
          */
-        private class NYuint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYuint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5649,8 +5424,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using uint16 type.
          */
-        private class NZuint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZuint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5670,8 +5444,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using int32 type.
          */
-        private class NXint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5689,8 +5462,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using int32 type.
          */
-        private class NYint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5708,8 +5480,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using int32 type.
          */
-        private class NZint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5727,8 +5498,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using int32 type.
          */
-        private class NXuint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXuint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5748,8 +5518,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using uint32 type.
          */
-        private class NYuint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYuint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5769,8 +5538,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using uint32 type.
          */
-        private class NZuint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZuint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5790,8 +5558,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using float32 type.
          */
-        private class NXfloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXfloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5809,8 +5576,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using float32 type.
          */
-        private class NYfloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYfloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5828,8 +5594,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using float32 type.
          */
-        private class NZfloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZfloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5847,8 +5612,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using float64 type.
          */
-        private class NXfloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXfloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5858,7 +5622,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.nX = (float) value;
             }
@@ -5868,8 +5632,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using float64 type.
          */
-        private class NYfloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYfloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5879,7 +5642,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.nY = (float) value;
             }
@@ -5889,8 +5652,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using float64 type.
          */
-        private class NZfloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZfloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5900,7 +5662,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.nZ = (float) value;
             }
@@ -5910,8 +5672,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using char type.
          */
-        private class NXcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5929,8 +5690,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using char type.
          */
-        private class NYcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -5948,8 +5708,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using char type.
          */
-        private class NZcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -5967,8 +5726,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using uchar type.
          */
-        private class NXucharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXucharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -5988,8 +5746,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using uchar type.
          */
-        private class NYucharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYucharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6009,8 +5766,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using uchar type.
          */
-        private class NZucharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZucharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6030,8 +5786,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using short type.
          */
-        private class NXshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -6049,8 +5804,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using short type.
          */
-        private class NYshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6068,8 +5822,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using short type.
          */
-        private class NZshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6087,8 +5840,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using ushort type.
          */
-        private class NXushortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXushortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -6108,8 +5860,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using ushort type.
          */
-        private class NYushortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYushortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6129,8 +5880,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using ushort type.
          */
-        private class NZushortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZushortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6150,8 +5900,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using int type.
          */
-        private class NXintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -6169,8 +5918,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using int type.
          */
-        private class NYintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6188,8 +5936,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using int type.
          */
-        private class NZintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6207,8 +5954,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using uint type.
          */
-        private class NXuintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXuintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -6228,8 +5974,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using uint type.
          */
-        private class NYuintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYuintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6249,8 +5994,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using uint type.
          */
-        private class NZuintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZuintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6270,8 +6014,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component form temporal buffer
          * using float type.
          */
-        private class NXfloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXfloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -6289,8 +6032,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using float type.
          */
-        private class NYfloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYfloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6308,8 +6050,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using float type.
          */
-        private class NZfloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZfloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6327,8 +6068,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal x coordinate component from temporal buffer
          * using double type.
          */
-        private class NXdoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NXdoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal x coordinate from temporal buffer and sets
@@ -6338,7 +6078,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.nX = (float) value;
             }
@@ -6348,8 +6088,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal y coordinate component from temporal buffer
          * using double type.
          */
-        private class NYdoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NYdoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal y coordinate from temporal buffer and sets
@@ -6359,7 +6098,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.nY = (float) value;
             }
@@ -6369,8 +6108,7 @@ public class LoaderPLY extends Loader {
          * Reads a vertex normal z coordinate component from temporal buffer
          * using double type.
          */
-        private class NZdoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class NZdoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads a vertex normal z coordinate from temporal buffer and sets
@@ -6380,7 +6118,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.nZ = (float) value;
             }
@@ -6390,8 +6128,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * int8 type.
          */
-        private class FaceInt8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceInt8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6409,8 +6146,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * uint8 type.
          */
-        private class FaceUint8ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUint8ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6430,8 +6166,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * int16 type.
          */
-        private class FaceInt16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceInt16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6449,8 +6184,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * uint16 type.
          */
-        private class FaceUint16ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUint16ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6470,8 +6204,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * int32 type.
          */
-        private class FaceInt32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceInt32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6489,8 +6222,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * uint32 type.
          */
-        private class FaceUint32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUint32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6510,8 +6242,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * float32 type.
          */
-        private class FaceFloat32ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceFloat32ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6521,7 +6252,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.index = (long) value;
             }
@@ -6531,8 +6262,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * float64 type.
          */
-        private class FaceFloat64ReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceFloat64ReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6542,7 +6272,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.index = (long) value;
             }
@@ -6552,8 +6282,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * char type.
          */
-        private class FaceCharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceCharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6571,8 +6300,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * uchar type.
          */
-        private class FaceUcharReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUcharReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6592,8 +6320,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * short type.
          */
-        private class FaceShortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceShortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6611,8 +6338,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * ushort type.
          */
-        private class FaceUshortReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUshortReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6632,8 +6358,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * int type.
          */
-        private class FaceIntReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceIntReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6651,8 +6376,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * uint type.
          */
-        private class FaceUintReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUintReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6672,8 +6396,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * float type.
          */
-        private class FaceFloatReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceFloatReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6683,7 +6406,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.index = (long) value;
             }
@@ -6693,8 +6416,7 @@ public class LoaderPLY extends Loader {
          * Reads the index of a face/polygon vertex from temporal buffer using
          * double type.
          */
-        private class FaceDoubleReadValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceDoubleReadValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads the index of a face/polygon vertex from temporal buffer and
@@ -6704,7 +6426,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.index = (long) value;
             }
@@ -6714,8 +6436,7 @@ public class LoaderPLY extends Loader {
          * Reads an int8 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiInt8ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiInt8ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6737,7 +6458,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final byte value = Byte.parseByte(str);
+                    final var value = Byte.parseByte(str);
 
                     // save to buffer
                     buffer.put(0, value);
@@ -6751,8 +6472,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint8 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiUint8ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiUint8ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6775,7 +6495,7 @@ public class LoaderPLY extends Loader {
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
                 try {
-                    final short value = Short.parseShort(str);
+                    final var value = Short.parseShort(str);
 
                     // save to buffer
                     buffer.putShort(0, value);
@@ -6789,8 +6509,7 @@ public class LoaderPLY extends Loader {
          * Reads an int16 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiInt16ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiInt16ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6812,7 +6531,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final short value = Short.parseShort(str);
+                    final var value = Short.parseShort(str);
 
                     // save to buffer
                     buffer.putShort(0, value);
@@ -6826,8 +6545,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint16 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiUint16ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiUint16ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6850,7 +6568,7 @@ public class LoaderPLY extends Loader {
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
                 try {
-                    final int value = Integer.parseInt(str);
+                    final var value = Integer.parseInt(str);
 
                     // save to buffer
                     buffer.putInt(0, value);
@@ -6864,8 +6582,7 @@ public class LoaderPLY extends Loader {
          * Reads an int32 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiInt32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiInt32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6887,7 +6604,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final int value = Integer.parseInt(str);
+                    final var value = Integer.parseInt(str);
 
                     // save to buffer
                     buffer.putInt(0, value);
@@ -6901,8 +6618,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint32 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiUint32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiUint32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6925,7 +6641,7 @@ public class LoaderPLY extends Loader {
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
                 try {
-                    final long value = Long.parseLong(str);
+                    final var value = Long.parseLong(str);
 
                     // save to buffer
                     buffer.putLong(0, value);
@@ -6939,8 +6655,7 @@ public class LoaderPLY extends Loader {
          * Reads a float32 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiFloat32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiFloat32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6962,7 +6677,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final float value = Float.parseFloat(str);
+                    final var value = Float.parseFloat(str);
 
                     // save to buffer
                     buffer.putFloat(0, value);
@@ -6976,8 +6691,7 @@ public class LoaderPLY extends Loader {
          * Reads a float64 from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiFloat64ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiFloat64ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -6999,7 +6713,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final double value = Double.parseDouble(str);
+                    final var value = Double.parseDouble(str);
 
                     // save to buffer
                     buffer.putDouble(0, value);
@@ -7013,8 +6727,7 @@ public class LoaderPLY extends Loader {
          * Reads a char from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiCharReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiCharReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7036,7 +6749,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final byte value = Byte.parseByte(str);
+                    final var value = Byte.parseByte(str);
 
                     // save to buffer
                     buffer.put(0, value);
@@ -7050,8 +6763,7 @@ public class LoaderPLY extends Loader {
          * Reads a uchar from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiUcharReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiUcharReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7074,7 +6786,7 @@ public class LoaderPLY extends Loader {
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
                 try {
-                    final short value = Short.parseShort(str);
+                    final var value = Short.parseShort(str);
 
                     // save to buffer
                     buffer.putShort(0, value);
@@ -7088,8 +6800,7 @@ public class LoaderPLY extends Loader {
          * Reads a short from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiShortReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiShortReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7111,7 +6822,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final short value = Short.parseShort(str);
+                    final var value = Short.parseShort(str);
 
                     // save to buffer
                     buffer.putShort(0, value);
@@ -7125,8 +6836,7 @@ public class LoaderPLY extends Loader {
          * Reads a ushort from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiUshortReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiUshortReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7149,7 +6859,7 @@ public class LoaderPLY extends Loader {
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
                 try {
-                    final int value = Integer.parseInt(str);
+                    final var value = Integer.parseInt(str);
 
                     // save to buffer
                     buffer.putInt(0, value);
@@ -7163,8 +6873,7 @@ public class LoaderPLY extends Loader {
          * Reads an int from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiIntReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiIntReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7186,7 +6895,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final int value = Integer.parseInt(str);
+                    final var value = Integer.parseInt(str);
 
                     // save to buffer
                     buffer.putInt(0, value);
@@ -7200,8 +6909,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiUintReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiUintReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7224,7 +6932,7 @@ public class LoaderPLY extends Loader {
                 // Because Java doesn't support unsigned types we use the next type
                 // capable of holding all values
                 try {
-                    final long value = Long.parseLong(str);
+                    final var value = Long.parseLong(str);
 
                     // save to buffer
                     buffer.putLong(0, value);
@@ -7238,8 +6946,7 @@ public class LoaderPLY extends Loader {
          * Reads a float from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiFloatReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiFloatReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7261,7 +6968,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final float value = Float.parseFloat(str);
+                    final var value = Float.parseFloat(str);
 
                     // save to buffer
                     buffer.putFloat(0, value);
@@ -7275,8 +6982,7 @@ public class LoaderPLY extends Loader {
          * Reads a double from the file stream of data assuming that file is in
          * ascii text format.
          */
-        private class AsciiDoubleReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class AsciiDoubleReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads next word of text within file at current position and
@@ -7298,7 +7004,7 @@ public class LoaderPLY extends Loader {
 
                 // retrieve word value
                 try {
-                    final double value = Double.parseDouble(str);
+                    final var value = Double.parseDouble(str);
 
                     // save to buffer
                     buffer.putDouble(0, value);
@@ -7312,8 +7018,7 @@ public class LoaderPLY extends Loader {
          * Reads an int8 from the file stream of data assuming that file is in
          * binary format.
          */
-        private class BinaryInt8ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryInt8ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int8 from the stream of data at current file position
@@ -7324,7 +7029,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final byte value = reader.readByte();
+                final var value = reader.readByte();
 
                 // save to buffer
                 buffer.put(0, value);
@@ -7335,8 +7040,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint8 from the file stream of data assuming that file is in
          * binary format.
          */
-        private class BinaryUint8ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryUint8ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint8 from the stream of data at current file position
@@ -7349,7 +7053,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final short value = reader.readUnsignedByte();
+                final var value = reader.readUnsignedByte();
 
                 // save to buffer
                 buffer.putShort(0, value);
@@ -7360,8 +7064,7 @@ public class LoaderPLY extends Loader {
          * Reads a char from the file stream of data assuming that file is in
          * binary format.
          */
-        private class BinaryCharReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryCharReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a char from the stream of data at current file position
@@ -7372,7 +7075,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final byte value = reader.readByte();
+                final var value = reader.readByte();
 
                 // save to buffer
                 buffer.put(0, value);
@@ -7383,8 +7086,7 @@ public class LoaderPLY extends Loader {
          * Reads a uchar from the file stream of data assuming that file is in
          * binary format.
          */
-        private class BinaryUcharReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryUcharReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uchar from the stream of data at current file position
@@ -7397,7 +7099,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final short value = reader.readUnsignedByte();
+                final var value = reader.readUnsignedByte();
 
                 // save to buffer
                 buffer.putShort(0, value);
@@ -7408,8 +7110,7 @@ public class LoaderPLY extends Loader {
          * Reads an int16 from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianInt16ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianInt16ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int16 from the stream of data at current file position
@@ -7421,7 +7122,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final short value = reader.readShort(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readShort(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putShort(0, value);
@@ -7432,8 +7133,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint16 from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianUint16ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianUint16ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint16 from the stream of data at current file position
@@ -7447,8 +7147,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final int value = reader.readUnsignedShort(
-                        EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7459,8 +7158,7 @@ public class LoaderPLY extends Loader {
          * Reads an int32 from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianInt32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianInt32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int32 from the stream of data at current file position
@@ -7472,7 +7170,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final int value = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7483,8 +7181,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint32 from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianUint32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianUint32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint32 from the stream of data at current file position
@@ -7498,8 +7195,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final long value = reader.readUnsignedInt(
-                        EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putLong(0, value);
@@ -7510,8 +7206,7 @@ public class LoaderPLY extends Loader {
          * Reads a float32 from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianFloat32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianFloat32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a float32 from the stream of data at current file position
@@ -7523,7 +7218,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final float value = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putFloat(0, value);
@@ -7534,8 +7229,7 @@ public class LoaderPLY extends Loader {
          * Reads a float64 from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianFloat64ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianFloat64ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a float64 from the stream of data at current file position
@@ -7547,7 +7241,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final double value = reader.readDouble(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readDouble(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putDouble(0, value);
@@ -7558,8 +7252,7 @@ public class LoaderPLY extends Loader {
          * Reads a short from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianShortReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianShortReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a short from the stream of data at current file position
@@ -7571,7 +7264,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final short value = reader.readShort(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readShort(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putShort(0, value);
@@ -7582,8 +7275,7 @@ public class LoaderPLY extends Loader {
          * Reads a ushort from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianUshortReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianUshortReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a ushort from the stream of data at current file position
@@ -7597,8 +7289,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final int value = reader.readUnsignedShort(
-                        EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readUnsignedShort(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7609,8 +7300,7 @@ public class LoaderPLY extends Loader {
          * Reads an int from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianIntReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianIntReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int from the stream of data at current file position
@@ -7622,7 +7312,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final int value = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readInt(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7633,8 +7323,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianUintReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianUintReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint from the stream of data at current file position
@@ -7648,8 +7337,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final long value = reader.readUnsignedInt(
-                        EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putLong(0, value);
@@ -7660,8 +7348,7 @@ public class LoaderPLY extends Loader {
          * Reads a float from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianFloatReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianFloatReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a float from the stream of data at current file position
@@ -7673,7 +7360,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final float value = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putFloat(0, value);
@@ -7684,8 +7371,7 @@ public class LoaderPLY extends Loader {
          * Reads a double from the file stream of data assuming that file is in
          * little endian binary format.
          */
-        private class BinaryLittleEndianDoubleReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryLittleEndianDoubleReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a double from the stream of data at current file position
@@ -7697,7 +7383,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final double value = reader.readDouble(EndianType.LITTLE_ENDIAN_TYPE);
+                final var value = reader.readDouble(EndianType.LITTLE_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putDouble(0, value);
@@ -7708,8 +7394,7 @@ public class LoaderPLY extends Loader {
          * Reads an int16 from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianInt16ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianInt16ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int16 from the stream of data at current file position
@@ -7721,7 +7406,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final short value = reader.readShort(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readShort(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putShort(0, value);
@@ -7732,8 +7417,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint16 from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianUint16ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianUint16ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint16 from the stream of data at current file position
@@ -7747,8 +7431,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final int value = reader.readUnsignedShort(
-                        EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readUnsignedShort(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7759,8 +7442,7 @@ public class LoaderPLY extends Loader {
          * Reads an int32 from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianInt32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianInt32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int32 from the stream of data at current file position
@@ -7772,7 +7454,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final int value = reader.readInt(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readInt(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7783,8 +7465,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint32 from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianUint32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianUint32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint32 from the stream of data at current file position
@@ -7798,7 +7479,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final long value = reader.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putLong(0, value);
@@ -7809,8 +7490,7 @@ public class LoaderPLY extends Loader {
          * Reads a float32 from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianFloat32ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianFloat32ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a float32 from the stream of data at current file position
@@ -7822,7 +7502,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final float value = reader.readFloat(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readFloat(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putFloat(0, value);
@@ -7833,8 +7513,7 @@ public class LoaderPLY extends Loader {
          * Reads a float64 from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianFloat64ReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianFloat64ReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a float64 from the stream of data at current file position
@@ -7846,7 +7525,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final double value = reader.readDouble(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readDouble(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putDouble(0, value);
@@ -7857,8 +7536,7 @@ public class LoaderPLY extends Loader {
          * Reads a short from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianShortReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianShortReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a short from the stream of data at current file position
@@ -7870,7 +7548,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final short value = reader.readShort(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readShort(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putShort(0, value);
@@ -7881,8 +7559,7 @@ public class LoaderPLY extends Loader {
          * Reads a ushort from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianUshortReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianUshortReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a ushort from the stream of data at current file position
@@ -7896,8 +7573,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final int value = reader.readUnsignedShort(
-                        EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readUnsignedShort(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7908,8 +7584,7 @@ public class LoaderPLY extends Loader {
          * Reads an int from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianIntReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianIntReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads an int from the stream of data at current file position
@@ -7921,7 +7596,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final int value = reader.readInt(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readInt(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putInt(0, value);
@@ -7932,8 +7607,7 @@ public class LoaderPLY extends Loader {
          * Reads a uint from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianUintReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianUintReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a uint from the stream of data at current file position
@@ -7947,7 +7621,7 @@ public class LoaderPLY extends Loader {
             public void readFromStream(final ByteBuffer buffer) throws IOException {
                 // Because Java doesn't support unsigned types, we use the next
                 // type that can hold all values
-                final long value = reader.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readUnsignedInt(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putLong(0, value);
@@ -7958,8 +7632,7 @@ public class LoaderPLY extends Loader {
          * Reads a float from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianFloatReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianFloatReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a float from the stream of data at current file position
@@ -7971,7 +7644,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final float value = reader.readFloat(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readFloat(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putFloat(0, value);
@@ -7982,8 +7655,7 @@ public class LoaderPLY extends Loader {
          * Reads a double from the file stream of data assuming that file is in
          * big endian binary format.
          */
-        private class BinaryBigEndianDoubleReadValueFromStreamListener
-                implements PLYReadValueFromStreamListener {
+        private class BinaryBigEndianDoubleReadValueFromStreamListener implements PLYReadValueFromStreamListener {
 
             /**
              * Reads a double from the stream of data at current file position
@@ -7995,7 +7667,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readFromStream(final ByteBuffer buffer) throws IOException {
-                final double value = reader.readDouble(EndianType.BIG_ENDIAN_TYPE);
+                final var value = reader.readDouble(EndianType.BIG_ENDIAN_TYPE);
 
                 // save to buffer
                 buffer.putDouble(0, value);
@@ -8006,8 +7678,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has int8 data type.
          */
-        private class FaceInt8ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceInt8ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8026,8 +7697,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has uint8 data type.
          */
-        private class FaceUint8ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUint8ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8048,8 +7718,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has int16 data type.
          */
-        private class FaceInt16ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceInt16ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8068,8 +7737,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has uint16 data type.
          */
-        private class FaceUint16ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUint16ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8090,8 +7758,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has int32 data type.
          */
-        private class FaceInt32ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceInt32ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8110,8 +7777,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has uint32 data type.
          */
-        private class FaceUint32ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUint32ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8124,7 +7790,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // Because Jave doesn't support unsigned types, we use next
                 // type capable of holding all values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.listElems = (int) value;
             }
@@ -8134,8 +7800,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has float32 data type.
          */
-        private class FaceFloat32ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceFloat32ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8146,7 +7811,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.listElems = (int) value;
             }
@@ -8156,8 +7821,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has float64 data type.
          */
-        private class FaceFloat64ReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceFloat64ReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8168,7 +7832,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.listElems = (int) value;
             }
@@ -8178,8 +7842,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has char data type.
          */
-        private class FaceCharReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceCharReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8198,8 +7861,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has uchar data type.
          */
-        private class FaceUcharReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUcharReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8220,8 +7882,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has short data type.
          */
-        private class FaceShortReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceShortReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8240,8 +7901,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has ushort data type.
          */
-        private class FaceUshortReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUshortReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8262,8 +7922,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has int data type.
          */
-        private class FaceIntReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceIntReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8282,8 +7941,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has uint data type.
          */
-        private class FaceUintReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceUintReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8296,7 +7954,7 @@ public class LoaderPLY extends Loader {
             public void readValueFromBuffer(final ByteBuffer buffer) {
                 // Because Jave doesn't support unsigned types, we use next
                 // type capable of holding all values
-                final long value = buffer.getLong(0);
+                final var value = buffer.getLong(0);
 
                 loaderIterator.listElems = (int) value;
             }
@@ -8306,8 +7964,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has float data type.
          */
-        private class FaceFloatReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceFloatReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8318,7 +7975,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final float value = buffer.getFloat(0);
+                final var value = buffer.getFloat(0);
 
                 loaderIterator.listElems = (int) value;
             }
@@ -8328,8 +7985,7 @@ public class LoaderPLY extends Loader {
          * Reads length value of a list header element from temporal buffer of
          * data assuming it has double data type.
          */
-        private class FaceDoubleReadLengthValueFromBufferListener
-                implements PLYReadValueFromBufferListener {
+        private class FaceDoubleReadLengthValueFromBufferListener implements PLYReadValueFromBufferListener {
 
             /**
              * Reads length value of a list header element from temporal buffer
@@ -8340,7 +7996,7 @@ public class LoaderPLY extends Loader {
              */
             @Override
             public void readValueFromBuffer(final ByteBuffer buffer) {
-                final double value = buffer.getDouble(0);
+                final var value = buffer.getDouble(0);
 
                 loaderIterator.listElems = (int) value;
             }
@@ -8355,11 +8011,9 @@ public class LoaderPLY extends Loader {
          * @throws NotAvailableException Raised if the listener cannot be set
          *                               for provided property and storage mode.
          */
-        private void setReadValueFromStreamListener(
-                final PropertyPLY property,
-                final PLYStorageMode storageMode) throws NotAvailableException {
-            property.setReadValueFromStreamListener(getReadFromStreamListener(
-                    property.getValueType(), storageMode));
+        private void setReadValueFromStreamListener(final PropertyPLY property, final PLYStorageMode storageMode)
+                throws NotAvailableException {
+            property.setReadValueFromStreamListener(getReadFromStreamListener(property.getValueType(), storageMode));
         }
 
         /**
@@ -8373,11 +8027,9 @@ public class LoaderPLY extends Loader {
          *                               for provided property and storage mode.
          */
         private void setReadLengthValueFromStreamListener(
-                final PropertyPLY property,
-                final PLYStorageMode storageMode) throws NotAvailableException {
+                final PropertyPLY property, final PLYStorageMode storageMode) throws NotAvailableException {
             property.setReadLengthValueFromStreamListener(
-                    getReadFromStreamListener(property.getLengthType(),
-                            storageMode));
+                    getReadFromStreamListener(property.getLengthType(), storageMode));
         }
 
         /**
@@ -8388,204 +8040,87 @@ public class LoaderPLY extends Loader {
          * @param dataType    Data type to read.
          * @param storageMode Storage mode of file.
          * @return A listener.
-         * @throws NotAvailableException Raised if the combination of data type
-         *                               and storage mode is not supported.
          */
         private PLYReadValueFromStreamListener getReadFromStreamListener(
-                final DataTypePLY dataType, final PLYStorageMode storageMode)
-                throws NotAvailableException {
-            switch (dataType) {
-                case PLY_INT8:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiInt8ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryInt8ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_UINT8:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiUint8ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryUint8ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_INT16:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiInt16ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianInt16ReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianInt16ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_UINT16:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiUint16ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianUint16ReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianUint16ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_INT32:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiInt32ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianInt32ReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianInt32ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_UINT32:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiUint32ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianUint32ReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianUint32ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_FLOAT32:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiFloat32ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianFloat32ReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianFloat32ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_FLOAT64:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiFloat64ReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianFloat64ReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianFloat64ReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_CHAR:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiCharReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryCharReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_UCHAR:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiUcharReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryUcharReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_SHORT:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiShortReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianShortReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianShortReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_USHORT:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiUshortReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianUshortReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianUshortReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_INT:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiIntReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianIntReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianIntReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_UINT:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiUintReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianUintReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianUintReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_FLOAT:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiFloatReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianFloatReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianFloatReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                case PLY_DOUBLE:
-                    switch (storageMode) {
-                        case PLY_ASCII:
-                            return new AsciiDoubleReadValueFromStreamListener();
-                        case PLY_LITTLE_ENDIAN:
-                            return new BinaryLittleEndianDoubleReadValueFromStreamListener();
-                        case PLY_BIG_ENDIAN:
-                            return new BinaryBigEndianDoubleReadValueFromStreamListener();
-                        default:
-                            throw new NotAvailableException();
-                    }
-
-                default:
-                    throw new NotAvailableException();
-            }
+                final DataTypePLY dataType, final PLYStorageMode storageMode) {
+            return switch (dataType) {
+                case PLY_INT8 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiInt8ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN, PLY_BIG_ENDIAN -> new BinaryInt8ReadValueFromStreamListener();
+                };
+                case PLY_UINT8 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiUint8ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN, PLY_BIG_ENDIAN -> new BinaryUint8ReadValueFromStreamListener();
+                };
+                case PLY_INT16 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiInt16ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianInt16ReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianInt16ReadValueFromStreamListener();
+                };
+                case PLY_UINT16 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiUint16ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianUint16ReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianUint16ReadValueFromStreamListener();
+                };
+                case PLY_INT32 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiInt32ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianInt32ReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianInt32ReadValueFromStreamListener();
+                };
+                case PLY_UINT32 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiUint32ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianUint32ReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianUint32ReadValueFromStreamListener();
+                };
+                case PLY_FLOAT32 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiFloat32ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianFloat32ReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianFloat32ReadValueFromStreamListener();
+                };
+                case PLY_FLOAT64 -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiFloat64ReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianFloat64ReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianFloat64ReadValueFromStreamListener();
+                };
+                case PLY_CHAR -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiCharReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN, PLY_BIG_ENDIAN -> new BinaryCharReadValueFromStreamListener();
+                };
+                case PLY_UCHAR -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiUcharReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN, PLY_BIG_ENDIAN -> new BinaryUcharReadValueFromStreamListener();
+                };
+                case PLY_SHORT -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiShortReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianShortReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianShortReadValueFromStreamListener();
+                };
+                case PLY_USHORT -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiUshortReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianUshortReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianUshortReadValueFromStreamListener();
+                };
+                case PLY_INT -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiIntReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianIntReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianIntReadValueFromStreamListener();
+                };
+                case PLY_UINT -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiUintReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianUintReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianUintReadValueFromStreamListener();
+                };
+                case PLY_FLOAT -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiFloatReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianFloatReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianFloatReadValueFromStreamListener();
+                };
+                case PLY_DOUBLE -> switch (storageMode) {
+                    case PLY_ASCII -> new AsciiDoubleReadValueFromStreamListener();
+                    case PLY_LITTLE_ENDIAN -> new BinaryLittleEndianDoubleReadValueFromStreamListener();
+                    case PLY_BIG_ENDIAN -> new BinaryBigEndianDoubleReadValueFromStreamListener();
+                };
+            };
         }
 
         /**
@@ -8596,72 +8131,55 @@ public class LoaderPLY extends Loader {
          * @throws NotAvailableException Raised if a listener cannot be set
          *                               for given property because its data type is not supported.
          */
-        private void setReadLengthValueFromBufferListener(final PropertyPLY property)
-                throws NotAvailableException {
+        private void setReadLengthValueFromBufferListener(final PropertyPLY property) throws NotAvailableException {
             switch (property.getLengthType()) {
                 case PLY_INT8:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceInt8ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceInt8ReadLengthValueFromBufferListener());
                     break;
                 case PLY_UINT8:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceUint8ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceUint8ReadLengthValueFromBufferListener());
                     break;
                 case PLY_INT16:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceInt16ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceInt16ReadLengthValueFromBufferListener());
                     break;
                 case PLY_UINT16:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceUint16ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceUint16ReadLengthValueFromBufferListener());
                     break;
                 case PLY_INT32:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceInt32ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceInt32ReadLengthValueFromBufferListener());
                     break;
                 case PLY_UINT32:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceUint32ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceUint32ReadLengthValueFromBufferListener());
                     break;
                 case PLY_FLOAT32:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceFloat32ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceFloat32ReadLengthValueFromBufferListener());
                     break;
                 case PLY_FLOAT64:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceFloat64ReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceFloat64ReadLengthValueFromBufferListener());
                     break;
                 case PLY_CHAR:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceCharReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceCharReadLengthValueFromBufferListener());
                     break;
                 case PLY_UCHAR:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceUcharReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceUcharReadLengthValueFromBufferListener());
                     break;
                 case PLY_SHORT:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceShortReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceShortReadLengthValueFromBufferListener());
                     break;
                 case PLY_USHORT:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceUshortReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceUshortReadLengthValueFromBufferListener());
                     break;
                 case PLY_INT:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceIntReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceIntReadLengthValueFromBufferListener());
                     break;
                 case PLY_UINT:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceUintReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceUintReadLengthValueFromBufferListener());
                     break;
                 case PLY_FLOAT:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceFloatReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceFloatReadLengthValueFromBufferListener());
                     break;
                 case PLY_DOUBLE:
-                    property.setReadLengthValueFromBufferListener(
-                            new FaceDoubleReadLengthValueFromBufferListener());
+                    property.setReadLengthValueFromBufferListener(new FaceDoubleReadLengthValueFromBufferListener());
                     break;
                 default:
                     throw new NotAvailableException();

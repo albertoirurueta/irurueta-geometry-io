@@ -86,8 +86,7 @@ public class LoaderSTL extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderSTL(final File f, final int maxVerticesInChunk)
-            throws IOException {
+    public LoaderSTL(final File f, final int maxVerticesInChunk) throws IOException {
         super(f);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -148,8 +147,7 @@ public class LoaderSTL extends Loader {
      *                                  a chunk is lower than 1.
      * @throws IOException              if an I/O error occurs.
      */
-    public LoaderSTL(final File f, final LoaderListener listener, final int maxVerticesInChunk)
-            throws IOException {
+    public LoaderSTL(final File f, final LoaderListener listener, final int maxVerticesInChunk) throws IOException {
         super(f, listener);
         loaderIterator = null;
         internalSetMaxVerticesInChunk(maxVerticesInChunk);
@@ -164,8 +162,7 @@ public class LoaderSTL extends Loader {
      * @throws IllegalArgumentException if provided value is lower than 1.
      * @throws LockedException          if this loader is currently loading a file.
      */
-    public void setMaxVerticesInChunk(final int maxVerticesInChunk)
-            throws LockedException {
+    public void setMaxVerticesInChunk(final int maxVerticesInChunk) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -235,9 +232,7 @@ public class LoaderSTL extends Loader {
      * @throws LoaderException   if file is corrupted or cannot be interpreted.
      */
     @Override
-    public LoaderIterator load() throws LockedException, NotReadyException,
-            IOException, LoaderException {
-
+    public LoaderIterator load() throws LockedException, NotReadyException, IOException, LoaderException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -319,7 +314,6 @@ public class LoaderSTL extends Loader {
             } catch (final Exception ignore) {
                 // this is the best effort operation, if it fails it is ignored
             }
-
 
             // on subsequent calls
             if (listener != null) {
@@ -548,8 +542,7 @@ public class LoaderSTL extends Loader {
          * @throws LoaderException if file data is corrupt or cannot be
          *                         understood.
          */
-        public LoaderIteratorSTL(final LoaderSTL loader) throws IOException,
-                LoaderException {
+        public LoaderIteratorSTL(final LoaderSTL loader) throws IOException, LoaderException {
             this.loader = loader;
             nX = nY = nZ = 1.0f;
             listener = null;
@@ -605,8 +598,7 @@ public class LoaderSTL extends Loader {
          * @throws IOException           if an I/O error occurs.
          */
         @Override
-        public DataChunk next() throws NotAvailableException, LoaderException,
-                IOException {
+        public DataChunk next() throws NotAvailableException, LoaderException, IOException {
 
             if (reader == null) {
                 throw new IOException();
@@ -623,12 +615,11 @@ public class LoaderSTL extends Loader {
             maxX = maxY = maxZ = -Float.MAX_VALUE;
 
             // read data until chunk is full
-            boolean endOfChunk = false;
-            final long fileLength = file.length();
+            var endOfChunk = false;
+            final var fileLength = file.length();
 
-            final long progressStep = Math.max(
-                    (long) (LoaderSTL.PROGRESS_DELTA * fileLength), 1);
-            long previousPos = 0;
+            final var progressStep = Math.max((long) (LoaderSTL.PROGRESS_DELTA * fileLength), 1);
+            var previousPos = 0L;
 
             try {
                 if (isAscii) {
@@ -653,7 +644,6 @@ public class LoaderSTL extends Loader {
 
                             if (word.equalsIgnoreCase(ASCII_NORMAL)) {
                                 // read 3 normal values
-
                                 word = readNonEmptyWord();
                                 nX = Float.parseFloat(word);
                                 word = readNonEmptyWord();
@@ -698,18 +688,15 @@ public class LoaderSTL extends Loader {
 
                         } else if (word.equalsIgnoreCase(ASCII_END_LOOP)) {
                             // check if chunk is full
-                            if (verticesInChunk + VERTICES_PER_TRIANGLE >=
-                                    loader.maxVerticesInChunk) {
+                            if (verticesInChunk + VERTICES_PER_TRIANGLE >= loader.maxVerticesInChunk) {
                                 // no more triangles vertices can be added to
                                 // this chunk
                                 break;
                             }
 
                         } else if (word.equalsIgnoreCase(ASCII_END_FACET)) {
-
                             // check if chunk is full
-                            if (verticesInChunk + VERTICES_PER_TRIANGLE >=
-                                    loader.maxVerticesInChunk) {
+                            if (verticesInChunk + VERTICES_PER_TRIANGLE >= loader.maxVerticesInChunk) {
                                 // no more triangles vertices can be added to
                                 // this chunk
                                 break;
@@ -723,8 +710,7 @@ public class LoaderSTL extends Loader {
                         }
 
                         // compute progress
-                        if ((loader.listener != null) &&
-                                (reader.getPosition() - previousPos) >= progressStep) {
+                        if ((loader.listener != null) && (reader.getPosition() - previousPos) >= progressStep) {
                             previousPos = reader.getPosition();
                             loader.listener.onLoadProgressChange(loader,
                                     (float) (reader.getPosition()) / fileLength);
@@ -738,42 +724,30 @@ public class LoaderSTL extends Loader {
                         // and two bytes attribute byte count
 
                         // read vertex normals
-                        nX = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        nY = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        nZ = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
+                        nX = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        nY = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        nZ = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
 
                         // read 1st vertex coordinates of triangle
-                        coordX = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        coordY = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        coordZ = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
+                        coordX = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        coordY = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        coordZ = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
 
                         // add coordinates into chunk arrays
                         addNewVertexDataToChunk();
 
                         // read 2nd vertex coordinates of triangle
-                        coordX = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        coordY = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        coordZ = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
+                        coordX = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        coordY = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        coordZ = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
 
                         // add coordinates into chunk arrays
                         addNewVertexDataToChunk();
 
                         // read 3rd vertex coordinates of triangle
-                        coordX = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        coordY = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
-                        coordZ = reader.readFloat(
-                                EndianType.LITTLE_ENDIAN_TYPE);
+                        coordX = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        coordY = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
+                        coordZ = reader.readFloat(EndianType.LITTLE_ENDIAN_TYPE);
 
                         // add coordinates into chunk arrays
                         addNewVertexDataToChunk();
@@ -784,24 +758,20 @@ public class LoaderSTL extends Loader {
                         currentTriangle++;
 
                         // compute progress
-                        if ((loader.listener != null) &&
-                                (reader.getPosition() - previousPos) >=
-                                        progressStep) {
+                        if ((loader.listener != null) && (reader.getPosition() - previousPos) >= progressStep) {
                             previousPos = reader.getPosition();
                             loader.listener.onLoadProgressChange(loader,
                                     (float) (reader.getPosition()) / fileLength);
                         }
 
-                        if (verticesInChunk + VERTICES_PER_TRIANGLE >=
-                                loader.maxVerticesInChunk) {
+                        if (verticesInChunk + VERTICES_PER_TRIANGLE >= loader.maxVerticesInChunk) {
                             // no more triangles vertices can be added to this
                             // chunk
                             endOfChunk = true;
                             break;
                         }
 
-                    } while (!reader.isEndOfStream() &&
-                            currentTriangle < numberOfTriangles);
+                    } while (!reader.isEndOfStream() && currentTriangle < numberOfTriangles);
 
                     // file ended before all triangles were read
                     if (currentTriangle < numberOfTriangles && !endOfChunk) {
@@ -818,7 +788,7 @@ public class LoaderSTL extends Loader {
             trimArrays();
 
             // Instantiate DataChunk with chunk arrays
-            final DataChunk dataChunk = new DataChunk();
+            final var dataChunk = new DataChunk();
 
             dataChunk.setVerticesCoordinatesData(coordsInChunkArray);
             dataChunk.setMinX(minX);
@@ -884,10 +854,8 @@ public class LoaderSTL extends Loader {
          * Initializes arrays forming current chunk of data.
          */
         private void initChunkArrays() {
-            coordsInChunkArray = new float[loader.maxVerticesInChunk *
-                    VERTICES_PER_TRIANGLE];
-            normalsInChunkArray = new float[loader.maxVerticesInChunk *
-                    VERTICES_PER_TRIANGLE];
+            coordsInChunkArray = new float[loader.maxVerticesInChunk * VERTICES_PER_TRIANGLE];
+            normalsInChunkArray = new float[loader.maxVerticesInChunk * VERTICES_PER_TRIANGLE];
             indicesInChunkArray = new int[loader.maxVerticesInChunk];
 
             verticesInChunk = indicesInChunk = 0;
@@ -899,7 +867,7 @@ public class LoaderSTL extends Loader {
          * new vertex.
          */
         private void addNewVertexDataToChunk() {
-            int pos = 3 * verticesInChunk;
+            var pos = 3 * verticesInChunk;
 
             coordsInChunkArray[pos] = coordX;
             normalsInChunkArray[pos] = nX;
@@ -949,13 +917,11 @@ public class LoaderSTL extends Loader {
          * Increases size of arrays of data. This method is called when needed.
          */
         private void increaseIndicesArraySize() {
-            final int newIndicesInChunkSize = indicesInChunkSize +
-                    loader.maxVerticesInChunk;
-            final int[] newIndicesInChunkArray = new int[newIndicesInChunkSize];
+            final var newIndicesInChunkSize = indicesInChunkSize + loader.maxVerticesInChunk;
+            final var newIndicesInChunkArray = new int[newIndicesInChunkSize];
 
             // copy contents of old array
-            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0,
-                    indicesInChunkSize);
+            System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, indicesInChunkSize);
 
             // set new arrays and new size
             indicesInChunkArray = newIndicesInChunkArray;
@@ -968,16 +934,14 @@ public class LoaderSTL extends Loader {
          */
         private void trimArrays() {
             if (verticesInChunk > 0) {
-                final int elems = verticesInChunk * VERTICES_PER_TRIANGLE;
+                final var elems = verticesInChunk * VERTICES_PER_TRIANGLE;
 
-                final float[] newCoordsInChunkArray = new float[elems];
-                final float[] newNormalsInChunkArray = new float[elems];
+                final var newCoordsInChunkArray = new float[elems];
+                final var newNormalsInChunkArray = new float[elems];
 
                 // copy contents of old arrays
-                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray,
-                        0, elems);
-                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray,
-                        0, elems);
+                System.arraycopy(coordsInChunkArray, 0, newCoordsInChunkArray, 0, elems);
+                System.arraycopy(normalsInChunkArray, 0, newNormalsInChunkArray, 0, elems);
 
                 // set new arrays
                 coordsInChunkArray = newCoordsInChunkArray;
@@ -989,9 +953,8 @@ public class LoaderSTL extends Loader {
             }
 
             if (indicesInChunk > 0) {
-                final int[] newIndicesInChunkArray = new int[indicesInChunk];
-                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray,
-                        0, indicesInChunk);
+                final var newIndicesInChunkArray = new int[indicesInChunk];
+                System.arraycopy(indicesInChunkArray, 0, newIndicesInChunkArray, 0, indicesInChunk);
 
                 // set new array
                 indicesInChunkArray = newIndicesInChunkArray;
@@ -1014,13 +977,13 @@ public class LoaderSTL extends Loader {
 
             // move to start of file
             reader.seek(0);
-            final int magicStartLength = ASCII_START.length();
-            final byte[] buffer = new byte[magicStartLength];
-            final int n = reader.read(buffer);
+            final var magicStartLength = ASCII_START.length();
+            final var buffer = new byte[magicStartLength];
+            final var n = reader.read(buffer);
             if (n != magicStartLength) {
                 throw new LoaderException();
             }
-            final String str = new String(buffer);
+            final var str = new String(buffer);
 
             isAscii = str.equalsIgnoreCase(ASCII_START);
             if (isAscii) {
@@ -1037,8 +1000,7 @@ public class LoaderSTL extends Loader {
                 reader.seek(BINARY_HEADER_SIZE);
 
                 // read number of triangles
-                numberOfTriangles = reader.readUnsignedInt
-                        (EndianType.LITTLE_ENDIAN_TYPE);
+                numberOfTriangles = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);
                 numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;
             }
         }

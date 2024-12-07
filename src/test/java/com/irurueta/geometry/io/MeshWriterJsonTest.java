@@ -15,26 +15,25 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MeshWriterJsonTest implements MeshWriterJsonListener {
+class MeshWriterJsonTest implements MeshWriterJsonListener {
 
-    private static final String INPUT_FOLDER =
-            "./src/test/java/com/irurueta/geometry/io/";
+    private static final String INPUT_FOLDER = "./src/test/java/com/irurueta/geometry/io/";
 
-    private static final String TMP_FOLDER =
-            "./src/test/java/com/irurueta/geometry/io/tmp/";
+    private static final String TMP_FOLDER = "./src/test/java/com/irurueta/geometry/io/tmp/";
 
     private boolean startValid = true;
     private boolean endValid = true;
@@ -45,25 +44,25 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     private int endCounter = 0;
     private float previousProgress = 0.0f;
 
-    @BeforeClass
-    public static void setUpClass() {
+    @BeforeAll
+    static void setUpClass() {
         // create folder for generated files
-        final File folder = new File(TMP_FOLDER);
+        final var folder = new File(TMP_FOLDER);
 
         //noinspection ResultOfMethodCallIgnored
         folder.mkdirs();
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    @AfterAll
+    static void tearDownClass() {
         // remove any remaining files in thumbnails folder
-        final File folder = new File(TMP_FOLDER);
-        final File[] files = folder.listFiles();
+        final var folder = new File(TMP_FOLDER);
+        final var files = folder.listFiles();
         if (files == null) {
             return;
         }
 
-        for (final File f : files) {
+        for (final var f : files) {
             //noinspection ResultOfMethodCallIgnored
             f.delete();
         }
@@ -74,46 +73,44 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Test
-    public void testConstructors() throws IOException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
+    void testConstructors() throws IOException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.json");
+        final var inF = new File("./src/test/java/com/irurueta/geometry/io/booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
         // test constructor with output stream and loader
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        var writer = new MeshWriterJson(loader, outStream);
         assertNull(writer.getCharset());
         assertTrue(writer.isDefaultCharsetBeingUsed());
-        assertEquals(MeshWriterJson.DEFAULT_EMBED_TEXTURES,
-                writer.isEmbedTexturesEnabled());
-        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL,
-                writer.isRemoteTextureUrlEnabled());
-        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID,
-                writer.isRemoteTextureIdEnabled());
+        assertEquals(MeshWriterJson.DEFAULT_EMBED_TEXTURES, writer.isEmbedTexturesEnabled());
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL, writer.isRemoteTextureUrlEnabled());
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID, writer.isRemoteTextureIdEnabled());
         assertTrue(writer.isReady());
         assertFalse(writer.isLocked());
         assertEquals(outStream, writer.getStream());
         assertNull(writer.getListener());
 
-        final MeshWriterListener listener = new MeshWriterListener() {
+        final var listener = new MeshWriterListener() {
 
             @Override
             public void onWriteStart(final MeshWriter writer) {
+                // no action needed
             }
 
             @Override
             public void onWriteEnd(final MeshWriter writer) {
+                // no action needed
             }
 
             @Override
-            public void onWriteProgressChange(final MeshWriter writer,
-                                              final float progress) {
+            public void onWriteProgressChange(final MeshWriter writer, final float progress) {
+                // no action needed
             }
 
             @Override
-            public File onMaterialFileRequested(final MeshWriter writer,
-                                                final String path) {
+            public File onMaterialFileRequested(final MeshWriter writer, final String path) {
                 return null;
             }
 
@@ -124,29 +121,29 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
 
             @Override
             public void onDidValidateTexture(final MeshWriter writer, final File f) {
+                // no action needed
             }
 
             @Override
-            public File onTextureReceived(final MeshWriter writer, final int textureWidth,
-                                          final int textureHeight) {
+            public File onTextureReceived(final MeshWriter writer, final int textureWidth, final int textureHeight) {
                 return null;
             }
 
             @Override
             public File onTextureDataAvailable(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
                 return null;
             }
 
             @Override
             public void onTextureDataProcessed(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
+                // no action needed
             }
 
             @Override
             public void onChunkAvailable(final MeshWriter writer, final DataChunk chunk) {
+                // no action needed
             }
         };
 
@@ -163,19 +160,19 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Test
-    public void testGetSetCharset() throws IOException, LockedException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
+    void testGetSetCharset() throws IOException, LockedException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.json");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        final var writer = new MeshWriterJson(loader, outStream);
         assertNull(writer.getCharset());
         assertTrue(writer.isDefaultCharsetBeingUsed());
 
         // set new charset
-        final Charset charset = StandardCharsets.ISO_8859_1;
+        final var charset = StandardCharsets.ISO_8859_1;
         writer.setCharset(charset);
         assertEquals(charset, writer.getCharset());
         assertFalse(writer.isDefaultCharsetBeingUsed());
@@ -185,15 +182,14 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Test
-    public void testGetSetEmbedTexturesEnabled() throws IOException,
-            LockedException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
+    void testGetSetEmbedTexturesEnabled() throws IOException, LockedException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.json");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        final var writer = new MeshWriterJson(loader, outStream);
         assertEquals(MeshWriterJson.DEFAULT_EMBED_TEXTURES, writer.isEmbedTexturesEnabled());
 
         // set new value
@@ -205,74 +201,70 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Test
-    public void testGetSetRemoteTextureUrlEnabled() throws IOException,
-            LockedException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
+    void testGetSetRemoteTextureUrlEnabled() throws IOException, LockedException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.json");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL,
-                writer.isRemoteTextureUrlEnabled());
+        final var writer = new MeshWriterJson(loader, outStream);
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL, writer.isRemoteTextureUrlEnabled());
 
         // set new value
         writer.setRemoteTextureUrlEnabled(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL);
-        assertEquals(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL,
-                writer.isRemoteTextureUrlEnabled());
+        assertEquals(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_URL, writer.isRemoteTextureUrlEnabled());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
     }
 
     @Test
-    public void testGetSetRemoteTextureIdEnabled() throws IOException,
-            LockedException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
+    void testGetSetRemoteTextureIdEnabled() throws IOException, LockedException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.json");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID,
-                writer.isRemoteTextureIdEnabled());
+        final var writer = new MeshWriterJson(loader, outStream);
+        assertEquals(MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID, writer.isRemoteTextureIdEnabled());
 
         // set new value
         writer.setRemoteTextureIdEnabled(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID);
-        assertEquals(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID,
-                writer.isRemoteTextureIdEnabled());
+        assertEquals(!MeshWriterJson.DEFAULT_USE_REMOTE_TEXTURE_ID, writer.isRemoteTextureIdEnabled());
 
         assertTrue(outF.exists());
         assertTrue(outF.delete());
     }
 
     @Test
-    public void testGetSetListener() throws IOException, LockedException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
+    void testGetSetListener() throws IOException, LockedException {
+        final var outF = new File(TMP_FOLDER, "booksBinary.json");
+        final var inF = new File(INPUT_FOLDER, "booksBinary.ply");
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        final MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        final var writer = new MeshWriterJson(loader, outStream);
         assertNull(writer.getListener());
 
         // set new listener
-        final MeshWriterListener listener = new MeshWriterListener() {
+        final var listener = new MeshWriterListener() {
 
             @Override
             public void onWriteStart(final MeshWriter writer) {
+                // no action needed
             }
 
             @Override
             public void onWriteEnd(final MeshWriter writer) {
+                // no action needed
             }
 
             @Override
-            public void onWriteProgressChange(final MeshWriter writer,
-                                              final float progress) {
+            public void onWriteProgressChange(final MeshWriter writer, final float progress) {
+                // no action needed
             }
 
             @Override
@@ -287,29 +279,29 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
 
             @Override
             public void onDidValidateTexture(final MeshWriter writer, final File f) {
+                // no action needed
             }
 
             @Override
-            public File onTextureReceived(final MeshWriter writer, final int textureWidth,
-                                          final int textureHeight) {
+            public File onTextureReceived(final MeshWriter writer, final int textureWidth, final int textureHeight) {
                 return null;
             }
 
             @Override
             public File onTextureDataAvailable(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
                 return null;
             }
 
             @Override
             public void onTextureDataProcessed(
-                    final MeshWriter writer,
-                    final File textureFile, final int textureWidth, final int textureHeight) {
+                    final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
+                // no action needed
             }
 
             @Override
             public void onChunkAvailable(final MeshWriter writer, final DataChunk chunk) {
+                // no action needed
             }
         };
 
@@ -320,16 +312,24 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         assertTrue(outF.delete());
     }
 
-    @Test
-    public void testWriteAndIsReadyRandomAsciiFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "randomAscii.json");
-        final File inF = new File(INPUT_FOLDER, "randomAscii.ply");
+    @ParameterizedTest(name = "{index} - inputFile = {0}, outputFile = {1}")
+    @CsvSource({"randomAscii.ply,randomAscii.json",
+            "randomLittle.ply,randomLittle.json",
+            "randomBig.ply,randomBig.json",
+            "booksBinary.ply,booksBinary.json",
+            "booksAscii.ply,booksAscii.json",
+            "pilarAscii.ply,pilarAscii.json",
+            "pilarLittleEndian.ply,pilarLittleEndian.json",
+            "pilarBigEndian.ply,pilarBigEndian.json"})
+    void testWriteAndIsReadyPly(final String inputFile, final String outputFile) throws IOException, LockedException,
+            LoaderException, NotReadyException {
+        final var outF = new File(TMP_FOLDER, outputFile);
+        final var inF = new File(INPUT_FOLDER, inputFile);
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderPLY(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        var writer = new MeshWriterJson(loader, outStream);
         writer.setListener(this);
         // enable texture embed, remote url and remote id
         writer.setEmbedTexturedEnabled(true);
@@ -353,30 +353,27 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         // Force NotReadyException
         writer = new MeshWriterJson(loader, null);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
         writer = new MeshWriterJson(null, outStream);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
     }
 
-    @Test
-    public void testWriteAndIsReadyRandomLittleFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "randomLittle.json");
-        final File inF = new File(INPUT_FOLDER, "randomLittle.ply");
+    @ParameterizedTest(name = "{index} - inputFile = {0}, outputFile = {1}")
+    @CsvSource({"books.obj,booksObj.json",
+            "pitcher.obj,pitcherObj.json",
+            "potro.obj,potroObj.json",
+            "M1112.obj,M1112.json",
+            "newObject.obj,newObject.json"})
+    void testWriteAndIsReadyObj(final String inputFile, final String outputFile) throws IOException, LockedException,
+            LoaderException, NotReadyException {
+        final var outF = new File(TMP_FOLDER, outputFile);
+        final var inF = new File(INPUT_FOLDER, inputFile);
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderOBJ(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        var writer = new MeshWriterJson(loader, outStream);
         writer.setListener(this);
         // enable texture embed, remote url and remote id
         writer.setEmbedTexturedEnabled(true);
@@ -400,30 +397,24 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         // Force NotReadyException
         writer = new MeshWriterJson(loader, null);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
         writer = new MeshWriterJson(null, outStream);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
     }
 
-    @Test
-    public void testWriteAndIsReadyRandomBigFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "randomBig.json");
-        final File inF = new File(INPUT_FOLDER, "randomBig.ply");
+    @ParameterizedTest(name = "{index} - inputFile = {0}, outputFile = {1}")
+    @CsvSource({"booksBinary.stl,booksBinaryStl.json",
+            "booksAscii.stl,booksAsciiStl.json"})
+    void testWriteAndIsReadyStl(final String inputFile, final String outputFile) throws IOException, LockedException,
+            LoaderException, NotReadyException {
+        final var outF = new File(TMP_FOLDER, outputFile);
+        final var inF = new File(INPUT_FOLDER, inputFile);
 
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
+        final var loader = new LoaderSTL(inF);
+        final var outStream = new FileOutputStream(outF);
 
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
+        var writer = new MeshWriterJson(loader, outStream);
         writer.setListener(this);
         // enable texture embed, remote url and remote id
         writer.setEmbedTexturedEnabled(true);
@@ -447,590 +438,10 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
         // Force NotReadyException
         writer = new MeshWriterJson(loader, null);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
         writer = new MeshWriterJson(null, outStream);
         assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksBinaryFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksBinary.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksAsciiFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksAscii.json");
-        final File inF = new File(INPUT_FOLDER, "booksAscii.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksObjFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksObj.json");
-        final File inF = new File(INPUT_FOLDER, "books.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksBinaryStlFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksBinaryStl.json");
-        final File inF = new File(INPUT_FOLDER, "booksBinary.stl");
-
-        final Loader loader = new LoaderSTL(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyBooksAsciiStlFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "booksAsciiStl.json");
-        final File inF = new File(INPUT_FOLDER, "booksAscii.stl");
-
-        final Loader loader = new LoaderSTL(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPitcherFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pitcherObj.json");
-        // This file references textures which are already in jpeg format, those
-        // textures will be embedded in resulting json file
-        final File inF = new File(INPUT_FOLDER, "pitcher.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPotroFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "potroObj.json");
-        // This file references textures which are already in jpeg format, those
-        // textures will be embedded in resulting json file
-        final File inF = new File(INPUT_FOLDER, "potro.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyM1112File() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "M1112.json");
-        // This file references textures which are already in jpeg format, those
-        // textures will be embedded in resulting json file
-        final File inF = new File(INPUT_FOLDER, "M1112.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPilarAsciiFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pilarAscii.json");
-        final File inF = new File(INPUT_FOLDER, "pilarAscii.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPilarLittleEndianFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pilarLittleEndian.json");
-        final File inF = new File(INPUT_FOLDER, "pilarLittleEndian.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsReadyPilarBigEndianFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "pilarBigEndian.json");
-        final File inF = new File(INPUT_FOLDER, "pilarBigEndian.ply");
-
-        final Loader loader = new LoaderPLY(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteAndIsNewObjectFile() throws IOException,
-            LockedException, LoaderException, NotReadyException {
-        final File outF = new File(TMP_FOLDER, "newObject.json");
-        // This file references textures which are already in jpeg format, those
-        // textures will be embedded in resulting json file
-        final File inF = new File(INPUT_FOLDER, "newObject.obj");
-
-        final Loader loader = new LoaderOBJ(inF);
-        final FileOutputStream outStream = new FileOutputStream(outF);
-
-        MeshWriterJson writer = new MeshWriterJson(loader, outStream);
-        writer.setListener(this);
-        // enable texture embed, remote url and remote id
-        writer.setEmbedTexturedEnabled(true);
-        writer.setRemoteTextureUrlEnabled(true);
-        writer.setRemoteTextureIdEnabled(true);
-        assertTrue(writer.isReady());
-
-        // write into json
-        writer.write();
-        outStream.close();
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        assertTrue(outF.exists());
-        assertTrue(outF.delete());
-
-        // Force NotReadyException
-        writer = new MeshWriterJson(loader, null);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
-        writer = new MeshWriterJson(null, outStream);
-        assertFalse(writer.isReady());
-        try {
-            writer.write();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, writer::write);
     }
 
     @Override
@@ -1075,14 +486,14 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     // FOR OBJ LOADER
     @Override
     public File onMaterialFileRequested(final MeshWriter writer, final String path) {
-        final File origF = new File(path);
+        final var origF = new File(path);
         return new File(INPUT_FOLDER, origF.getName());
     }
 
     @Override
     public File onValidateTexture(final MeshWriter writer, final Texture texture) {
-        final File origF = new File(texture.getFileName());
-        final File inputTextureFile = new File(INPUT_FOLDER, origF.getName());
+        final var origF = new File(texture.getFileName());
+        final var inputTextureFile = new File(INPUT_FOLDER, origF.getName());
         // image needs to be in jpg format, if it isn't here we have a chance
         // to convert it
         texture.setValid(true);
@@ -1097,22 +508,20 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Override
-    public File onTextureReceived(final MeshWriter writer, final int textureWidth,
-                                  final int textureHeight) {
+    public File onTextureReceived(final MeshWriter writer, final int textureWidth, final int textureHeight) {
         // generate a temporal file in TMP_FOLDER where texture data will be
         // stored
         try {
             // FOR BINARY LOADER
-            return File.createTempFile("tex", ".jpg", new File(
-                    TMP_FOLDER));
+            return File.createTempFile("tex", ".jpg", new File(TMP_FOLDER));
         } catch (final IOException ignore) {
             return null;
         }
     }
 
     @Override
-    public File onTextureDataAvailable(final MeshWriter writer, final File textureFile,
-                                       final int textureWidth, final int textureHeight) {
+    public File onTextureDataAvailable(
+            final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
         // texture file needs to be rewritten into JPG format, since the data
         // contained in that file will be used by the MeshWriter.
         // Because textures are already in JPG format in this test, there is no
@@ -1121,8 +530,8 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Override
-    public void onTextureDataProcessed(final MeshWriter writer, final File textureFile,
-                                       final int textureWidth, final int textureHeight) {
+    public void onTextureDataProcessed(
+            final MeshWriter writer, final File textureFile, final int textureWidth, final int textureHeight) {
         // this method is called to give an opportunity to delete any generated
         // texture files
 
@@ -1131,16 +540,15 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
     }
 
     @Override
-    public String onRemoteTextureUrlRequested(final MeshWriterJson writer,
-                                              final Texture texture, final File textureFile) {
-        final UUID uuid = UUID.randomUUID();
-        return "https://www.irurueta.com/image?uuid=" + uuid + "&id=" +
-                texture.getId();
+    public String onRemoteTextureUrlRequested(
+            final MeshWriterJson writer, final Texture texture, final File textureFile) {
+        final var uuid = UUID.randomUUID();
+        return "https://www.irurueta.com/image?uuid=" + uuid + "&id=" + texture.getId();
     }
 
     @Override
-    public String onRemoteTextureIdRequested(final MeshWriterJson writer,
-                                             final Texture texture, final File textureFile) {
+    public String onRemoteTextureIdRequested(
+            final MeshWriterJson writer, final Texture texture, final File textureFile) {
         return UUID.randomUUID().toString();
     }
 
@@ -1154,6 +562,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
             writer.setListener(null);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1162,6 +571,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
             writer.write();
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1170,6 +580,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
             writer.setCharset(null);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1178,6 +589,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
             writer.setEmbedTexturedEnabled(true);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1186,6 +598,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
             writer.setRemoteTextureUrlEnabled(true);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -1194,6 +607,7 @@ public class MeshWriterJsonTest implements MeshWriterJsonListener {
             writer.setRemoteTextureIdEnabled(true);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }

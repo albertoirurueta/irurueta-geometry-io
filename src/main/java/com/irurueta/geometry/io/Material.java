@@ -266,8 +266,7 @@ public class Material {
      * not negative).
      */
     public boolean isAmbientColorAvailable() {
-        return ambientRedColor >= 0 && ambientGreenColor >= 0 &&
-                ambientBlueColor >= 0;
+        return ambientRedColor >= 0 && ambientGreenColor >= 0 && ambientBlueColor >= 0;
     }
 
     /**
@@ -385,8 +384,7 @@ public class Material {
      * not negative).
      */
     public boolean isDiffuseColorAvailable() {
-        return diffuseRedColor >= 0 && diffuseGreenColor >= 0 &&
-                diffuseBlueColor >= 0;
+        return diffuseRedColor >= 0 && diffuseGreenColor >= 0 && diffuseBlueColor >= 0;
     }
 
     /**
@@ -504,8 +502,7 @@ public class Material {
      * not negative).
      */
     public boolean isSpecularColorAvailable() {
-        return specularRedColor >= 0 && specularGreenColor >= 0 &&
-                specularBlueColor >= 0;
+        return specularRedColor >= 0 && specularGreenColor >= 0 && specularBlueColor >= 0;
     }
 
     /**

@@ -15,33 +15,30 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LoaderBinaryTest implements LoaderListenerBinary,
-        LoaderListenerOBJ, MaterialLoaderListener, MeshWriterListener {
+class LoaderBinaryTest implements LoaderListenerBinary, LoaderListenerOBJ, MaterialLoaderListener, MeshWriterListener {
 
     private static final int BUFFER_SIZE = 1024;
 
-    private static final String INPUT_FOLDER =
-            "./src/test/java/com/irurueta/geometry/io/";
+    private static final String INPUT_FOLDER = "./src/test/java/com/irurueta/geometry/io/";
 
-    private static final String TMP_FOLDER =
-            "./src/test/java/com/irurueta/geometry/io/tmp/";
+    private static final String TMP_FOLDER = "./src/test/java/com/irurueta/geometry/io/tmp/";
 
     private boolean startValid = true;
     private boolean endValid = true;
@@ -61,25 +58,25 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     // Binary loader
     private final Map<Integer, File> binTextures = new HashMap<>();
 
-    @BeforeClass
-    public static void setUpClass() {
+    @BeforeAll
+    static void setUpClass() {
         // create folder for generated files
-        final File folder = new File(TMP_FOLDER);
+        final var folder = new File(TMP_FOLDER);
         //noinspection ResultOfMethodCallIgnored
         folder.mkdirs();
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    @AfterAll
+    static void tearDownClass() {
         //remove any remaining files in thumbnails folder
-        final File folder = new File(TMP_FOLDER);
+        final var folder = new File(TMP_FOLDER);
 
-        final File[] files = folder.listFiles();
+        final var files = folder.listFiles();
         if (files == null) {
             return;
         }
 
-        for (final File f : files) {
+        for (final var f : files) {
             //noinspection ResultOfMethodCallIgnored
             f.delete();
         }
@@ -90,118 +87,98 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Test
-    public void testConstructors() throws LockedException, IOException,
-            LoaderException, NotReadyException {
+    void testConstructors() throws LockedException, IOException, LoaderException, NotReadyException {
+
+        final var inputFile = new File(INPUT_FOLDER, "randomBig.ply");
+        final var outputFile = new File(TMP_FOLDER, "randomBig.bin");
 
         // test empty constructor
-        LoaderBinary loader = new LoaderBinary();
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
+        try (final var loader = new LoaderBinary()) {
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
+
+            // convert first randomBig.ply into randomBig.bin
+            convertToBin(inputFile, outputFile, MeshFormat.MESH_FORMAT_PLY);
+
+
+            // constructor with file
+            assertTrue(outputFile.exists()); //check that file exists
+            assertTrue(outputFile.isFile());
         }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
+
+        final var badF = new File("./non-existing");
+        try (final var loader = new LoaderBinary(outputFile)) {
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertNull(loader.getListener());
+
+            // Force IOException
+            assertFalse(badF.exists());
+            //noinspection resource
+            assertThrows(IOException.class, () -> new LoaderBinary(badF));
         }
-
-        // convert first randomBig.ply into randomBig.bin
-        final File inputFile = new File(INPUT_FOLDER, "randomBig.ply");
-        final File outputFile = new File(TMP_FOLDER, "randomBig.bin");
-        convertToBin(inputFile, outputFile, MeshFormat.MESH_FORMAT_PLY);
-
-        // constructor with file
-        assertTrue(outputFile.exists()); //check that file exists
-        assertTrue(outputFile.isFile());
-
-        loader = new LoaderBinary(outputFile);
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertNull(loader.getListener());
-
-        // Force IOException
-        final File badF = new File("./non-existing");
-        assertFalse(badF.exists());
-
-        loader = null;
-        try {
-            loader = new LoaderBinary(badF);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        assertNull(loader);
 
         // Test constructor with loader listener
-        final LoaderListener listener = new LoaderListener() {
+        final var listener = new LoaderListener() {
             @Override
             public void onLoadStart(final Loader loader) {
+                // no action needed
             }
 
             @Override
             public void onLoadEnd(final Loader loader) {
+                // no action needed
             }
 
             @Override
             public void onLoadProgressChange(final Loader loader, final float progress) {
+                // no action needed
             }
         };
 
-        loader = new LoaderBinary(listener);
-        assertFalse(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
-        try {
-            loader.isValidFile();
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
-        }
-        try {
-            loader.load();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
+        try (final var loader = new LoaderBinary(listener)) {
+            assertFalse(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
+            assertThrows(IOException.class, loader::isValidFile);
+            assertThrows(NotReadyException.class, loader::load);
         }
 
         // test constructor with file and listener
-        loader = new LoaderBinary(outputFile, listener);
-        assertTrue(loader.isReady());
-        assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
-        assertFalse(loader.isLocked());
-        assertEquals(listener, loader.getListener());
+        try (final var loader = new LoaderBinary(outputFile, listener)) {
+            assertTrue(loader.isReady());
+            assertEquals(MeshFormat.MESH_FORMAT_BINARY2, loader.getMeshFormat());
+            assertFalse(loader.isLocked());
+            assertEquals(listener, loader.getListener());
 
-        // Force IOException
-        loader = null;
-        try {
-            loader = new LoaderBinary(badF, listener);
-            fail("IOException expected but not thrown");
-        } catch (final IOException ignore) {
+            // Force IOException
+            //noinspection resource
+            assertThrows(IOException.class, () -> new LoaderBinary(badF, listener));
+
+            // delete generated outputFile
+            //noinspection all
+            outputFile.delete();
         }
-        assertNull(loader);
-
-        // delete generated outputFile
-        //noinspection all
-        outputFile.delete();
     }
 
     @Test
-    public void testHasSetFileAndIsReady() throws LockedException, IOException,
-            LoaderException, NotReadyException {
+    void testHasSetFileAndIsReady() throws LockedException, IOException, LoaderException, NotReadyException {
 
         // convert first randomBig.ply into randomBig.bin
-        final File inputFile = new File(INPUT_FOLDER, "randomBig.ply");
-        final File outputFile = new File(TMP_FOLDER, "randomBig.bin");
+        final var inputFile = new File(INPUT_FOLDER, "randomBig.ply");
+        final var outputFile = new File(TMP_FOLDER, "randomBig.bin");
         convertToBin(inputFile, outputFile, MeshFormat.MESH_FORMAT_PLY);
 
         assertTrue(outputFile.exists()); //check that file exists
         assertTrue(outputFile.isFile());
 
-        try (final LoaderBinary loader = new LoaderBinary()) {
+        try (final var loader = new LoaderBinary()) {
             assertFalse(loader.hasFile());
             assertFalse(loader.isReady());
 
@@ -218,21 +195,24 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Test
-    public void testGetSetListener() throws LockedException, IOException {
-        try (final LoaderBinary loader = new LoaderBinary()) {
+    void testGetSetListener() throws LockedException, IOException {
+        try (final var loader = new LoaderBinary()) {
             assertNull(loader.getListener());
 
-            final LoaderListener listener = new LoaderListener() {
+            final var listener = new LoaderListener() {
                 @Override
                 public void onLoadStart(final Loader loader) {
+                    // no action needed
                 }
 
                 @Override
                 public void onLoadEnd(final Loader loader) {
+                    // no action needed
                 }
 
                 @Override
                 public void onLoadProgressChange(final Loader loader, final float progress) {
+                    // no action needed
                 }
             };
 
@@ -242,19 +222,17 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Test
-    public void testIsValidFile() throws IOException, LockedException,
-            LoaderException, NotReadyException {
-
+    void testIsValidFile() throws IOException, LockedException, LoaderException, NotReadyException {
         // convert first randomBig.ply into randomBig.bin
-        final File inputFile = new File(INPUT_FOLDER, "randomBig.ply");
-        final File outputFile = new File(TMP_FOLDER, "randomBig.bin");
+        final var inputFile = new File(INPUT_FOLDER, "randomBig.ply");
+        final var outputFile = new File(TMP_FOLDER, "randomBig.bin");
         convertToBin(inputFile, outputFile, MeshFormat.MESH_FORMAT_PLY);
 
         // check that file exists
         assertTrue(outputFile.exists());
         assertTrue(outputFile.isFile());
 
-        final LoaderBinary loader = new LoaderBinary();
+        final var loader = new LoaderBinary();
         // to free file resources
         loader.close();
 
@@ -265,19 +243,18 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Test
-    public void testLoad() throws IOException, LockedException,
-            NotReadyException, LoaderException {
+    void testLoad() throws IOException, LockedException, NotReadyException, LoaderException {
 
         // convert first randomBig.ply into randomBig.bin
-        final File inputFile = new File(INPUT_FOLDER, "randomBig.ply");
-        final File outputFile = new File(TMP_FOLDER, "randomBig.bin");
+        final var inputFile = new File(INPUT_FOLDER, "randomBig.ply");
+        final var outputFile = new File(TMP_FOLDER, "randomBig.bin");
         convertToBin(inputFile, outputFile, MeshFormat.MESH_FORMAT_PLY);
 
         // check that file exists
         assertTrue(outputFile.exists());
         assertTrue(outputFile.isFile());
 
-        final LoaderBinary loader = new LoaderBinary(outputFile);
+        final var loader = new LoaderBinary(outputFile);
         loader.setListener(this);
 
         assertTrue(isEndValid());
@@ -294,27 +271,30 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
         outputFile.delete();
     }
 
-    @Test
-    public void testLoadAndIterate() throws IOException, LockedException,
+    @ParameterizedTest(name = "{index} => inputFile={0}, binFile={1}")
+    @CsvSource({"randomBig.ply,randomBig.bin",
+            "pilarBigEndian.ply,pilarBigEndian.bin",
+            "booksBinary.ply,booksBinary.bin"})
+    void testLoadAndIterate(final String inputFile, final String binFile) throws IOException, LockedException,
             NotReadyException, LoaderException, NotAvailableException {
 
         // convert first randomBig.ply into randomBig.bin
-        final File filePly = new File(INPUT_FOLDER, "randomBig.ply");
-        final File fileBin = new File(TMP_FOLDER, "randomBig.bin");
+        final var filePly = new File(INPUT_FOLDER, inputFile);
+        final var fileBin = new File(TMP_FOLDER, binFile);
         convertToBin(filePly, fileBin, MeshFormat.MESH_FORMAT_PLY);
 
-        final LoaderBinary loaderBin = new LoaderBinary(fileBin);
+        final var loaderBin = new LoaderBinary(fileBin);
         loaderBin.setListener(this);
 
-        final LoaderPLY loaderPly = new LoaderPLY(filePly);
+        final var loaderPly = new LoaderPLY(filePly);
 
-        final LoaderIterator binIt = loaderBin.load();
-        final LoaderIterator plyIt = loaderPly.load();
+        final var binIt = loaderBin.load();
+        final var plyIt = loaderPly.load();
 
         // check correctness of chunks
         while (binIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk binChunk = binIt.next();
-            final DataChunk plyChunk = plyIt.next();
+            final var binChunk = binIt.next();
+            final var plyChunk = plyIt.next();
 
             checkChunkEqualness(binChunk, plyChunk);
         }
@@ -342,123 +322,27 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Test
-    public void testLoadAndIterateRealFile() throws IOException, LockedException,
-            NotReadyException, LoaderException, NotAvailableException {
-
-        // convert first pilarBigEndian.ply into pilarBigEndian.bin
-        final File filePly = new File(INPUT_FOLDER, "pilarBigEndian.ply");
-        final File fileBin = new File(TMP_FOLDER, "pilarBigEndian.bin");
-        convertToBin(filePly, fileBin, MeshFormat.MESH_FORMAT_PLY);
-
-        final LoaderBinary loaderBin = new LoaderBinary(fileBin);
-        loaderBin.setListener(this);
-
-        final LoaderPLY loaderPly = new LoaderPLY(filePly);
-
-        final LoaderIterator binIt = loaderBin.load();
-        final LoaderIterator plyIt = loaderPly.load();
-
-        // check correctness of chunks
-        while (binIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk binChunk = binIt.next();
-            final DataChunk plyChunk = plyIt.next();
-
-            checkChunkEqualness(binChunk, plyChunk);
-        }
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        if (binIt.hasNext()) {
-            fail("Wrong number of chunks for binary loader");
-        }
-        if (plyIt.hasNext()) {
-            fail("Wrong number of chunks for ply loader");
-        }
-
-        loaderBin.close();
-        loaderPly.close();
-
-        // delete generated bin file
-
-        //noinspection all
-        fileBin.delete();
-    }
-
-    @Test
-    public void testLoadAndIterateRealFileWithNormals() throws IOException,
-            LockedException, NotReadyException, LoaderException,
-            NotAvailableException {
-
-        // convert first booksBinary.ply into booksBinary.bin
-        final File filePly = new File(INPUT_FOLDER, "booksBinary.ply");
-        final File fileBin = new File(TMP_FOLDER, "booksBinary.bin");
-        convertToBin(filePly, fileBin, MeshFormat.MESH_FORMAT_PLY);
-
-        final LoaderBinary loaderBin = new LoaderBinary(fileBin);
-        loaderBin.setListener(this);
-
-        final LoaderPLY loaderPly = new LoaderPLY(filePly);
-
-        final LoaderIterator binIt = loaderBin.load();
-        final LoaderIterator plyIt = loaderPly.load();
-
-        // check correctness of chunks
-        while (binIt.hasNext() && plyIt.hasNext()) {
-            final DataChunk binChunk = binIt.next();
-            final DataChunk plyChunk = plyIt.next();
-
-            checkChunkEqualness(binChunk, plyChunk);
-        }
-
-        assertTrue(isEndValid());
-        assertTrue(isLockedValid());
-        assertTrue(isProgressValid());
-        assertTrue(isStartValid());
-        resetListener();
-
-        if (binIt.hasNext()) {
-            fail("Wrong number of chunks for binary loader");
-        }
-        if (plyIt.hasNext()) {
-            fail("Wrong number of chunks for ply loader");
-        }
-
-        loaderBin.close();
-        loaderPly.close();
-
-        // delete generated bin file
-
-        //noinspection all
-        fileBin.delete();
-    }
-
-    @Test
-    public void testLoadAndIterateRealFileWithNormals2() throws IOException,
-            LockedException, NotReadyException, LoaderException,
-            NotAvailableException {
+    void testLoadAndIterateRealFileWithNormals2() throws IOException, LockedException, NotReadyException,
+            LoaderException, NotAvailableException {
 
         // convert first pitcher.obj into pitcherObj.bin
-        final File fileObj = new File(INPUT_FOLDER, "pitcher.obj");
-        final File fileBin = new File(TMP_FOLDER, "pitcherObj.bin");
+        final var fileObj = new File(INPUT_FOLDER, "pitcher.obj");
+        final var fileBin = new File(TMP_FOLDER, "pitcherObj.bin");
         convertToBin(fileObj, fileBin, MeshFormat.MESH_FORMAT_OBJ);
 
-        final LoaderBinary loaderBin = new LoaderBinary(fileBin);
+        final var loaderBin = new LoaderBinary(fileBin);
         loaderBin.setListener(this);
 
-        final LoaderOBJ loaderObj = new LoaderOBJ(fileObj);
+        final var loaderObj = new LoaderOBJ(fileObj);
         loaderObj.setListener(this);
 
-        final LoaderIterator binIt = loaderBin.load();
-        final LoaderIterator objIt = loaderObj.load();
+        final var binIt = loaderBin.load();
+        final var objIt = loaderObj.load();
 
         // check correctness of chunks
         while (binIt.hasNext() && objIt.hasNext()) {
-            final DataChunk binChunk = binIt.next();
-            final DataChunk objChunk = objIt.next();
+            final var binChunk = binIt.next();
+            final var objChunk = objIt.next();
 
             checkChunkEqualness(binChunk, objChunk);
         }
@@ -486,9 +370,8 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Test
-    public void testLoadAndIterateRealFileWithTextures() throws IOException,
-            LockedException, NotReadyException, LoaderException,
-            NotAvailableException {
+    void testLoadAndIterateRealFileWithTextures() throws IOException, LockedException, NotReadyException,
+            LoaderException, NotAvailableException {
 
         // convert first "potro.obj" into "potroObj.bin"
         saveChunks = true;
@@ -496,26 +379,26 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
         // in this file, mostly because of the triangulation algorithm, for that
         // reason we store the original chunks loaded when doing the conversion
         // to binary
-        final File fileObj = new File(INPUT_FOLDER, "potro.obj");
-        final File fileBin = new File(TMP_FOLDER, "potroObj.bin");
+        final var fileObj = new File(INPUT_FOLDER, "potro.obj");
+        final var fileBin = new File(TMP_FOLDER, "potroObj.bin");
         convertToBin(fileObj, fileBin, MeshFormat.MESH_FORMAT_OBJ);
         saveChunks = false;
 
-        final LoaderBinary loaderBin = new LoaderBinary(fileBin);
+        final var loaderBin = new LoaderBinary(fileBin);
         loaderBin.setListener(this);
 
-        final LoaderOBJ loaderObj = new LoaderOBJ(fileObj);
+        final var loaderObj = new LoaderOBJ(fileObj);
         loaderObj.setListener(this);
 
-        final LoaderIterator binIt = loaderBin.load();
-        final LoaderIterator objIt = loaderObj.load();
+        final var binIt = loaderBin.load();
+        final var objIt = loaderObj.load();
 
         // check correctness of chunks
-        int counter = 0;
+        var counter = 0;
         while (binIt.hasNext() && objIt.hasNext()) {
-            final DataChunk binChunk = binIt.next();
+            final var binChunk = binIt.next();
             objIt.next();
-            final DataChunk objChunk2 = chunks.get(counter);
+            final var objChunk2 = chunks.get(counter);
             counter++;
 
             checkChunkEqualness(binChunk, objChunk2);
@@ -538,13 +421,13 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
         loaderBin.close();
         loaderObj.close();
 
-        final Set<Integer> keys = binTextures.keySet();
+        final var keys = binTextures.keySet();
 
         // compare texture files between the original obj file and the converted
         // binary file and then delete generated textures for binary file
-        for (final Integer key : keys) {
-            final File objTexFile = objTextures.get(key);
-            final File binTexFile = binTextures.get(key);
+        for (final var key : keys) {
+            final var objTexFile = objTextures.get(key);
+            final var binTexFile = binTextures.get(key);
 
             assertTrue(areEqual(objTexFile, binTexFile));
 
@@ -559,68 +442,55 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     private void checkChunkEqualness(DataChunk chunk, DataChunk otherChunk) {
-        assertTrue((chunk.getVerticesCoordinatesData() != null &&
-                otherChunk.getVerticesCoordinatesData() != null) ||
-                (chunk.getVerticesCoordinatesData() == null &&
-                        otherChunk.getVerticesCoordinatesData() == null));
+        assertTrue((chunk.getVerticesCoordinatesData() != null
+                && otherChunk.getVerticesCoordinatesData() != null) || (chunk.getVerticesCoordinatesData() == null
+                && otherChunk.getVerticesCoordinatesData() == null));
         if (chunk.getVerticesCoordinatesData() != null) {
             // vertices coordinates available
-            float[] coords = chunk.getVerticesCoordinatesData();
-            float[] otherCoords = otherChunk.getVerticesCoordinatesData();
+            var coords = chunk.getVerticesCoordinatesData();
+            var otherCoords = otherChunk.getVerticesCoordinatesData();
             assertEquals(coords.length, otherCoords.length);
             assertArrayEquals(coords, otherCoords, 0.0f);
         }
 
-        assertTrue((chunk.getColorData() != null &&
-                otherChunk.getColorData() != null) ||
-                (chunk.getColorData() == null &&
-                        otherChunk.getColorData() == null));
+        assertTrue((chunk.getColorData() != null && otherChunk.getColorData() != null)
+                || (chunk.getColorData() == null && otherChunk.getColorData() == null));
         if (chunk.getColorData() != null) {
             // color available
-            assertEquals(chunk.getColorData().length,
-                    otherChunk.getColorData().length);
-            for (int i = 0; i < chunk.getColorData().length; i++) {
-                assertEquals(chunk.getColorData()[i],
-                        otherChunk.getColorData()[i]);
+            assertEquals(chunk.getColorData().length, otherChunk.getColorData().length);
+            for (var i = 0; i < chunk.getColorData().length; i++) {
+                assertEquals(chunk.getColorData()[i], otherChunk.getColorData()[i]);
             }
-            assertEquals(chunk.getColorComponents(),
-                    otherChunk.getColorComponents());
+            assertEquals(chunk.getColorComponents(), otherChunk.getColorComponents());
         }
 
-        assertTrue((chunk.getIndicesData() != null &&
-                otherChunk.getIndicesData() != null) ||
-                (chunk.getIndicesData() == null &&
-                        otherChunk.getIndicesData() == null));
+        assertTrue((chunk.getIndicesData() != null && otherChunk.getIndicesData() != null)
+                || (chunk.getIndicesData() == null && otherChunk.getIndicesData() == null));
         if (chunk.getIndicesData() != null) {
             // indices available
-            assertEquals(chunk.getIndicesData().length,
-                    otherChunk.getIndicesData().length);
-            for (int i = 0; i < chunk.getIndicesData().length; i++) {
-                assertEquals(chunk.getIndicesData()[i],
-                        otherChunk.getIndicesData()[i]);
+            assertEquals(chunk.getIndicesData().length, otherChunk.getIndicesData().length);
+            for (var i = 0; i < chunk.getIndicesData().length; i++) {
+                assertEquals(chunk.getIndicesData()[i], otherChunk.getIndicesData()[i]);
             }
         }
 
-        assertTrue((chunk.getNormalsData() != null &&
-                otherChunk.getNormalsData() != null) ||
-                (chunk.getNormalsData() == null &&
-                        otherChunk.getNormalsData() == null));
+        assertTrue((chunk.getNormalsData() != null && otherChunk.getNormalsData() != null)
+                || (chunk.getNormalsData() == null && otherChunk.getNormalsData() == null));
         if (chunk.getNormalsData() != null) {
             // normals available
-            final float[] normals = chunk.getNormalsData();
-            final float[] otherNormals = chunk.getNormalsData();
+            final var normals = chunk.getNormalsData();
+            final var otherNormals = chunk.getNormalsData();
             assertEquals(normals.length, otherNormals.length);
             assertArrayEquals(normals, otherNormals, 0.0f);
         }
 
-        assertTrue((chunk.getTextureCoordinatesData() != null &&
-                otherChunk.getTextureCoordinatesData() != null) ||
-                (chunk.getTextureCoordinatesData() == null &&
-                        otherChunk.getTextureCoordinatesData() == null));
+        assertTrue((chunk.getTextureCoordinatesData() != null
+                && otherChunk.getTextureCoordinatesData() != null) || (chunk.getTextureCoordinatesData() == null
+                && otherChunk.getTextureCoordinatesData() == null));
         if (chunk.getTextureCoordinatesData() != null) {
             // texture coordinates available
-            final float[] texCoords = chunk.getTextureCoordinatesData();
-            final float[] otherTexCoords = chunk.getTextureCoordinatesData();
+            final var texCoords = chunk.getTextureCoordinatesData();
+            final var otherTexCoords = chunk.getTextureCoordinatesData();
             assertEquals(texCoords.length, otherTexCoords.length);
             assertArrayEquals(texCoords, otherTexCoords, 0.0f);
         }
@@ -637,7 +507,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     //OBJ loader
     @Override
     public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader, final String path) {
-        final File materialFile = new File(INPUT_FOLDER, path);
+        final var materialFile = new File(INPUT_FOLDER, path);
         if (!materialFile.exists() || !materialFile.isFile()) {
             return null;
         }
@@ -651,26 +521,28 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
     @Override
     public void onLoadStart(final MaterialLoader loader) {
+        // no action needed
     }
 
     @Override
     public void onLoadEnd(final MaterialLoader loader) {
+        // no action needed
     }
 
     @Override
     public boolean onValidateTexture(final MaterialLoader loader, final Texture texture) {
         // save texture files in a list to check correctness
-        final File texFile = new File(INPUT_FOLDER, texture.getFileName());
+        final var texFile = new File(INPUT_FOLDER, texture.getFileName());
         objTextures.put(texture.getId(), texFile);
         return true;
     }
 
     @Override
-    public File onTextureReceived(final LoaderBinary loader, final int textureId,
-                                  final int textureImageWidth, final int textureImageHeight) {
+    public File onTextureReceived(final LoaderBinary loader, final int textureId, final int textureImageWidth,
+                                  final int textureImageHeight) {
         try {
-            final File fileToStoreTexture = File.createTempFile(
-                    "id" + textureId + "-", ".jpg", new File(TMP_FOLDER));
+            final var fileToStoreTexture = File.createTempFile("id" + textureId + "-", ".jpg",
+                    new File(TMP_FOLDER));
             binTextures.put(textureId, fileToStoreTexture);
             return fileToStoreTexture;
         } catch (final IOException e) {
@@ -680,8 +552,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
     @Override
     public boolean onTextureDataAvailable(
-            final LoaderBinary loader,
-            final File textureFile, final int textureId, final int textureImageWidth,
+            final LoaderBinary loader, final File textureFile, final int textureId, final int textureImageWidth,
             final int textureImageHeight) {
         return true;
     }
@@ -729,14 +600,17 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     // Mesh writer listener
     @Override
     public void onWriteStart(final MeshWriter writer) {
+        // no action needed
     }
 
     @Override
     public void onWriteEnd(final MeshWriter writer) {
+        // no action needed
     }
 
     @Override
     public void onWriteProgressChange(final MeshWriter writer, final float progress) {
+        // no action needed
     }
 
     @Override
@@ -748,7 +622,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
     @Override
     public File onMaterialFileRequested(final MeshWriter writer, final String path) {
-        final File materialFile = new File(INPUT_FOLDER, path);
+        final var materialFile = new File(INPUT_FOLDER, path);
         if (materialFile.exists() && materialFile.isFile()) {
             return materialFile;
         } else {
@@ -758,8 +632,8 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
     @Override
     public File onValidateTexture(final MeshWriter writer, final Texture texture) {
-        final File origF = new File(texture.getFileName());
-        final File inputTextureFile = new File(INPUT_FOLDER, origF.getName());
+        final var origF = new File(texture.getFileName());
+        final var inputTextureFile = new File(INPUT_FOLDER, origF.getName());
         // image needs to be in jpg format, if it isn't here we have a chance
         // to convert it
         texture.setValid(true);
@@ -772,25 +646,23 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
 
     @Override
     public void onDidValidateTexture(final MeshWriter writer, final File f) {
+        // no action needed
     }
 
     @Override
-    public File onTextureReceived(final MeshWriter writer, final int textureWidth,
-                                  final int textureHeight) {
-        // generate a temporal file in TMP_FOLDER where texture data will be
-        // stored
+    public File onTextureReceived(final MeshWriter writer, final int textureWidth, final int textureHeight) {
+        // generate a temporal file in TMP_FOLDER where texture data will be stored
         try {
             // for binary loader within mesh writer
-            return File.createTempFile("tex", ".jpg", new File(
-                    TMP_FOLDER));
+            return File.createTempFile("tex", ".jpg", new File(TMP_FOLDER));
         } catch (IOException e) {
             return null;
         }
     }
 
     @Override
-    public File onTextureDataAvailable(final MeshWriter writer, final File textureFile,
-                                       final int textureWidth, final int textureHeight) {
+    public File onTextureDataAvailable(final MeshWriter writer, final File textureFile, final int textureWidth,
+                                       final int textureHeight) {
         // texture file needs to be rewritten into JPG format, since the data
         // contained in that file will be used by the MeshWriter.
         // Because textures are already in JPG format in this test, there is no
@@ -799,8 +671,8 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     @Override
-    public void onTextureDataProcessed(final MeshWriter writer, final File textureFile,
-                                       final int textureWidth, final int textureHeight) {
+    public void onTextureDataProcessed(final MeshWriter writer, final File textureFile, final int textureWidth,
+                                       final int textureHeight) {
         //this method is called to give an opportunity to delete any generated
         //texture files
         //noinspection all
@@ -816,6 +688,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             loader.setListener(null);
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -824,6 +697,7 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             loader.load();
             lockedValid = false;
         } catch (final LockedException ignore) {
+            // no action needed
         } catch (final Throwable e) {
             lockedValid = false;
         }
@@ -856,23 +730,23 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             return false;
         }
 
-        final InputStream stream1 = Files.newInputStream(f1.toPath());
-        final InputStream stream2 = Files.newInputStream(f2.toPath());
+        final var stream1 = Files.newInputStream(f1.toPath());
+        final var stream2 = Files.newInputStream(f2.toPath());
 
-        final byte[] buffer1 = new byte[BUFFER_SIZE];
-        final byte[] buffer2 = new byte[BUFFER_SIZE];
-        int n1, n2;
+        final var buffer1 = new byte[BUFFER_SIZE];
+        final var buffer2 = new byte[BUFFER_SIZE];
+        int n1;
         boolean valid = true;
         do {
             n1 = stream1.read(buffer1);
-            n2 = stream2.read(buffer2);
+            final var n2 = stream2.read(buffer2);
             // check number of bytes is equal
             if (n1 != n2) {
                 valid = false;
             }
             // check buffers are equal
             if (valid) {
-                for (int i = 0; i < n1; i++) {
+                for (var i = 0; i < n1; i++) {
                     if (buffer1[i] != buffer2[i]) {
                         valid = false;
                         break;
@@ -892,8 +766,8 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
     }
 
     private void convertToBin(
-            final File inputFile, final File outputFile, final MeshFormat inputFormat)
-            throws IOException, LockedException, LoaderException, NotReadyException {
+            final File inputFile, final File outputFile, final MeshFormat inputFormat) throws IOException,
+            LockedException, LoaderException, NotReadyException {
 
         final Loader loader;
         if (inputFormat == MeshFormat.MESH_FORMAT_PLY) {
@@ -906,8 +780,8 @@ public class LoaderBinaryTest implements LoaderListenerBinary,
             throw new IOException();
         }
 
-        final FileOutputStream outStream = new FileOutputStream(outputFile);
-        final MeshWriterBinary writer = new MeshWriterBinary(loader, outStream);
+        final var outStream = new FileOutputStream(outputFile);
+        final var writer = new MeshWriterBinary(loader, outStream);
         writer.setListener(this);
 
         writer.write();

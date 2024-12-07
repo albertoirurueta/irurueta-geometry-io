@@ -15,16 +15,16 @@
  */
 package com.irurueta.geometry.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class HeaderPLYTest {
+class HeaderPLYTest {
 
     @Test
-    public void testConstructor() {
-        final HeaderPLY header = new HeaderPLY();
+    void testConstructor() {
+        final var header = new HeaderPLY();
 
         assertEquals(PLYStorageMode.PLY_ASCII, header.getStorageMode());
         assertTrue(header.getElements().isEmpty());
@@ -33,14 +33,14 @@ public class HeaderPLYTest {
     }
 
     @Test
-    public void testToString() {
-        final HeaderPLY header = new HeaderPLY();
+    void testToString() {
+        final var header = new HeaderPLY();
 
-        final String name = "name";
-        final long number = 2143245;
+        final var name = "name";
+        final var number = 2143245L;
 
-        final PropertyPLY property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
-        final ElementPLY element = new ElementPLY(name, number, property);
+        final var property = new PropertyPLY(name, DataTypePLY.PLY_FLOAT32);
+        final var element = new ElementPLY(name, number, property);
         header.getElements().add(element);
 
         assertEquals("ply\nformat ascii 1.0\n" + element + "end_header\n", header.toString());

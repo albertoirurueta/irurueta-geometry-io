@@ -16,19 +16,17 @@
 package com.irurueta.geometry.io;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class Chunk3DSTest {
+class Chunk3DSTest {
 
     private static final int MIN_VALUE = 0;
     private static final int MAX_VALUE = 1000;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(0x0000, Chunk3DS.NULL_CHUNK);
         assertEquals(0x4D4D, Chunk3DS.M3DMAGIC);
         assertEquals(0x2D2D, Chunk3DS.SMAGIC);
@@ -258,8 +256,8 @@ public class Chunk3DSTest {
     }
 
     @Test
-    public void testConstructor() {
-        final Chunk3DS chunk = new Chunk3DS();
+    void testConstructor() {
+        final var chunk = new Chunk3DS();
 
         // check default values
         assertEquals(-1, chunk.getChunkId());
@@ -273,11 +271,11 @@ public class Chunk3DSTest {
     }
 
     @Test
-    public void testGetSetChunkIdAndAvailability() {
-        final Chunk3DS chunk = new Chunk3DS();
+    void testGetSetChunkIdAndAvailability() {
+        final var chunk = new Chunk3DS();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int id = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var id = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
 
         // check default value
         assertEquals(-1, chunk.getChunkId());
@@ -292,11 +290,11 @@ public class Chunk3DSTest {
     }
 
     @Test
-    public void testGetSetSizeAndAvailability() {
-        final Chunk3DS chunk = new Chunk3DS();
+    void testGetSetSizeAndAvailability() {
+        final var chunk = new Chunk3DS();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
 
         // check default value
         assertEquals(-1, chunk.getSize());
@@ -311,14 +309,14 @@ public class Chunk3DSTest {
     }
 
     @Test
-    public void testGetSetStartStreamPositionAndAvailability() {
-        final Chunk3DS chunk = new Chunk3DS();
+    void testGetSetStartStreamPositionAndAvailability() {
+        final var chunk = new Chunk3DS();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
 
         // check default value
-        assertEquals(chunk.getStartStreamPosition(), -1);
+        assertEquals(-1, chunk.getStartStreamPosition());
         assertFalse(chunk.isStartStreamPositionAvailable());
 
         // set new value
@@ -330,11 +328,11 @@ public class Chunk3DSTest {
     }
 
     @Test
-    public void testGetSetEndStreamPositionAndAvailability() {
-        final Chunk3DS chunk = new Chunk3DS();
+    void testGetSetEndStreamPositionAndAvailability() {
+        final var chunk = new Chunk3DS();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var pos = randomizer.nextInt(MIN_VALUE, MAX_VALUE);
 
         // check default value
         assertEquals(-1, chunk.getEndStreamPosition());
