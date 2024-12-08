@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataTypePLY.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">DataTypePLY.java</span></div><h1>DataTypePLY.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Enumeration defining supported data types for PLY format.
+ */
+<span class="fc" id="L24">public enum DataTypePLY {</span>
+    /**
+     * Signed 8-bit integer.
+     */
+<span class="fc" id="L28">    PLY_INT8(&quot;int8&quot;),</span>
+
+    /**
+     * Unsigned 8-bit integer.
+     */
+<span class="fc" id="L33">    PLY_UINT8(&quot;uint8&quot;),</span>
+
+    /**
+     * Signed 16-bit integer.
+     */
+<span class="fc" id="L38">    PLY_INT16(&quot;int16&quot;),</span>
+
+    /**
+     * Unsigned 16-bit integer.
+     */
+<span class="fc" id="L43">    PLY_UINT16(&quot;uint16&quot;),</span>
+
+    /**
+     * Signed 32-bit integer.
+     */
+<span class="fc" id="L48">    PLY_INT32(&quot;int32&quot;),</span>
+
+    /**
+     * Unsigned 32-bit integer.
+     */
+<span class="fc" id="L53">    PLY_UINT32(&quot;uint32&quot;),</span>
+
+    /**
+     * 32-bit floating-point.
+     */
+<span class="fc" id="L58">    PLY_FLOAT32(&quot;float32&quot;),</span>
+
+    /**
+     * 64-bit floating-point.
+     */
+<span class="fc" id="L63">    PLY_FLOAT64(&quot;float64&quot;),</span>
+
+    /**
+     * Signed character (signed 8-bit integer).
+     */
+<span class="fc" id="L68">    PLY_CHAR(&quot;char&quot;),</span>
+
+    /**
+     * Unsigned character (unsigned 8-bit integer).
+     */
+<span class="fc" id="L73">    PLY_UCHAR(&quot;uchar&quot;),</span>
+
+    /**
+     * Signed short (signed 16-bit integer).
+     */
+<span class="fc" id="L78">    PLY_SHORT(&quot;short&quot;),</span>
+
+    /**
+     * Unsigned short (unsigned 16-bit integer).
+     */
+<span class="fc" id="L83">    PLY_USHORT(&quot;ushort&quot;),</span>
+
+    /**
+     * Signed integer (signed 32-bit integer).
+     */
+<span class="fc" id="L88">    PLY_INT(&quot;int&quot;),</span>
+
+    /**
+     * Unsigned integer (unsigned 32-bit integer).
+     */
+<span class="fc" id="L93">    PLY_UINT(&quot;uint&quot;),</span>
+
+    /**
+     * Float (32-bit floating-point).
+     */
+<span class="fc" id="L98">    PLY_FLOAT(&quot;float&quot;),</span>
+
+    /**
+     * Double (64-bit floating-point).
+     */
+<span class="fc" id="L103">    PLY_DOUBLE(&quot;double&quot;);</span>
+
+<span class="fc" id="L105">    private static final Map&lt;String, DataTypePLY&gt; LOOKUP = new HashMap&lt;&gt;();</span>
+
+    static {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (final var value : DataTypePLY.values()) {</span>
+<span class="fc" id="L109">            LOOKUP.put(value.getValue(), value);</span>
+        }
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Internal representation of this enum as a string.
+     */
+    private final String value;
+
+    /**
+     * Constructor of this enum with a string representation.
+     *
+     * @param value String value for this enum.
+     */
+<span class="fc" id="L123">    DataTypePLY(String value) {</span>
+<span class="fc" id="L124">        this.value = value;</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Returns string representation of an instance of this enum.
+     *
+     * @return String representation.
+     */
+    public String getValue() {
+<span class="fc" id="L133">        return this.value;</span>
+    }
+
+    /**
+     * Builds an instance of this enum.
+     *
+     * @param value String representation of this enum.
+     * @return An instance of this enum.
+     */
+    public static DataTypePLY forValue(final String value) {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (value != null) {</span>
+<span class="fc" id="L144">            return LOOKUP.get(value);</span>
+        }
+<span class="fc" id="L146">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

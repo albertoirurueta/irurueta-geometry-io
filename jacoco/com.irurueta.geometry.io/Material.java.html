@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Material.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">Material.java</span></div><h1>Material.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+/**
+ * Structure containing parameters defining a material, such as color, texture,
+ * etc.
+ */
+<span class="fc" id="L22">public class Material {</span>
+
+    /**
+     * Material ID.
+     * This value is generated automatically when loading a 3D file, and it is
+     * intended to uniquely identify a material.
+     */
+<span class="fc" id="L29">    private int id = 0;</span>
+
+    /**
+     * Ambient red color component value. If defined, must be between 0 and 255
+     * (both included).
+     */
+<span class="fc" id="L35">    private short ambientRedColor = -1;</span>
+
+    /**
+     * Ambient green color component value. If defined, must be between 0 and
+     * 255 (both included).
+     */
+<span class="fc" id="L41">    private short ambientGreenColor = -1;</span>
+
+    /**
+     * Ambient blue color component value. If defined, must be between 0 and 255
+     * (both included).
+     */
+<span class="fc" id="L47">    private short ambientBlueColor = -1;</span>
+
+    /**
+     * Diffuse red color component value. If defined, must be between 0 and 255
+     * (both included).
+     */
+<span class="fc" id="L53">    private short diffuseRedColor = -1;</span>
+
+    /**
+     * Diffuse green color component value. If defined, must be between 0 and
+     * 255 (both included).
+     */
+<span class="fc" id="L59">    private short diffuseGreenColor = -1;</span>
+
+    /**
+     * Diffuse blue color component value. If defined, must be between 0 and 255
+     * (both included).
+     */
+<span class="fc" id="L65">    private short diffuseBlueColor = -1;</span>
+
+    /**
+     * Specular red color component value. If defined, must be between 0 and 255
+     * (both included).
+     */
+<span class="fc" id="L71">    private short specularRedColor = -1;</span>
+
+    /**
+     * Specular green color component value. If defined, must be between 0 and
+     * 255 (both included).
+     */
+<span class="fc" id="L77">    private short specularGreenColor = -1;</span>
+
+    /**
+     * Specular blue color component value. If defined, must be between 0 and
+     * 255 (both included).
+     */
+<span class="fc" id="L83">    private short specularBlueColor = -1;</span>
+
+
+    /**
+     * Specular coefficient that determines how much shininess the material has.
+     */
+<span class="fc" id="L89">    private float specularCoefficient = 0.0f;</span>
+
+    /**
+     * Indicates if specular coefficient is available or not.
+     */
+<span class="fc" id="L94">    private boolean specularCoefficientAvailable = false;</span>
+
+    /**
+     * Ambient texture.
+     */
+    private Texture ambientTextureMap;
+
+    /**
+     * Diffuse texture.
+     */
+    private Texture diffuseTextureMap;
+
+    /**
+     * Specular texture.
+     */
+    private Texture specularTextureMap;
+
+    /**
+     * Alpha texture.
+     */
+    private Texture alphaTextureMap;
+
+    /**
+     * Bump texture.
+     */
+    private Texture bumpTextureMap;
+
+    /**
+     * Transparency value. If defined, must be a value between 0 and 100 (both
+     * included).
+     */
+<span class="fc" id="L125">    private short transparency = -1;</span>
+
+    /**
+     * Illumination of this material.
+     */
+    private Illumination illumination;
+
+    /**
+     * Returns id of material.
+     * This value is generated automatically when loading a 3D file, and it is
+     * intended to uniquely identify a material
+     *
+     * @return id of material.
+     */
+    public int getId() {
+<span class="fc" id="L140">        return id;</span>
+    }
+
+    /**
+     * Sets id of material.
+     * This value must be generated when loading a 3D file, and it is intended
+     * to uniquely identify a material.
+     *
+     * @param id id of material to be set.
+     */
+    public void setId(final int id) {
+<span class="fc" id="L151">        this.id = id;</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Returns ambient red color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @return ambient red color component value.
+     */
+    public short getAmbientRedColor() {
+<span class="fc" id="L161">        return ambientRedColor;</span>
+    }
+
+    /**
+     * Sets ambient red color component value. If defined, must be between 0 and
+     * 255 (both included).
+     *
+     * @param ambientRedColor ambient red color component value to be set.
+     */
+    public void setAmbientRedColor(final short ambientRedColor) {
+<span class="fc" id="L171">        this.ambientRedColor = ambientRedColor;</span>
+<span class="fc" id="L172">    }</span>
+
+    /**
+     * Indicates if ambient red color component value is available.
+     * Returns true if ambient red color is not negative.
+     *
+     * @return true if ambient red color is not negative.
+     */
+    public boolean isAmbientRedColorAvailable() {
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        return ambientRedColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns ambient green color component value. If defined, must be between
+     * 0 and 255 (both included).
+     *
+     * @return ambient green color component value.
+     */
+    public short getAmbientGreenColor() {
+<span class="fc" id="L191">        return ambientGreenColor;</span>
+    }
+
+    /**
+     * Sets ambient green color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param ambientGreenColor ambient green color component value to be set.
+     */
+    public void setAmbientGreenColor(final short ambientGreenColor) {
+<span class="fc" id="L201">        this.ambientGreenColor = ambientGreenColor;</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Indicates if ambient green color component value is available.
+     * Returns true if ambient green color is not negative.
+     *
+     * @return true if ambient green color is not negative.
+     */
+    public boolean isAmbientGreenColorAvailable() {
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        return ambientGreenColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns ambient blue color component value. If defined, must be between
+     * 0 and 255 (both included).
+     *
+     * @return ambient blue color component value.
+     */
+    public short getAmbientBlueColor() {
+<span class="fc" id="L221">        return ambientBlueColor;</span>
+    }
+
+    /**
+     * Sets ambient blue color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param ambientBlueColor ambient blue color component value to be set.
+     */
+    public void setAmbientBlueColor(final short ambientBlueColor) {
+<span class="fc" id="L231">        this.ambientBlueColor = ambientBlueColor;</span>
+<span class="fc" id="L232">    }</span>
+
+    /**
+     * Indicates if ambient blue color component value is available.
+     * Returns true if ambient blue color is not negative.
+     *
+     * @return true if ambient blue color is not negative.
+     */
+    public boolean isAmbientBlueColorAvailable() {
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        return ambientBlueColor &gt;= 0;</span>
+    }
+
+    /**
+     * Sets all color components of ambient color.
+     * Ambient color usually refers to the color of the light that gives a
+     * certain tonality to all the objects of a scene.
+     *
+     * @param red   ambient red color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     * @param green ambient green color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     * @param blue  ambient blue color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     */
+    public void setAmbientColor(final short red, final short green, final short blue) {
+<span class="fc" id="L257">        ambientRedColor = red;</span>
+<span class="fc" id="L258">        ambientGreenColor = green;</span>
+<span class="fc" id="L259">        ambientBlueColor = blue;</span>
+<span class="fc" id="L260">    }</span>
+
+    /**
+     * Indicates if ambient color has been defined.
+     *
+     * @return true if all components of ambient color have been defined (are
+     * not negative).
+     */
+    public boolean isAmbientColorAvailable() {
+<span class="pc bpc" id="L269" title="2 of 6 branches missed.">        return ambientRedColor &gt;= 0 &amp;&amp; ambientGreenColor &gt;= 0 &amp;&amp; ambientBlueColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns diffuse red color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @return diffuse red color component value.
+     */
+    public short getDiffuseRedColor() {
+<span class="fc" id="L279">        return diffuseRedColor;</span>
+    }
+
+    /**
+     * Sets diffuse red color component value. If defined, must be between 0 and
+     * 255 (both included).
+     *
+     * @param diffuseRedColor diffuse red color component value to be set.
+     */
+    public void setDiffuseRedColor(final short diffuseRedColor) {
+<span class="fc" id="L289">        this.diffuseRedColor = diffuseRedColor;</span>
+<span class="fc" id="L290">    }</span>
+
+    /**
+     * Indicates if diffuse red color component value is available.
+     * Returns true if diffuse red color is not negative.
+     *
+     * @return true if diffuse red color is not negative.
+     */
+    public boolean isDiffuseRedColorAvailable() {
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        return diffuseRedColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns diffuse green color component value. If defined, must be between
+     * 0 and 255 (both included).
+     *
+     * @return diffuse green color component value.
+     */
+    public short getDiffuseGreenColor() {
+<span class="fc" id="L309">        return diffuseGreenColor;</span>
+    }
+
+    /**
+     * Sets diffuse green color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param diffuseGreenColor diffuse green color component value to be set.
+     */
+    public void setDiffuseGreenColor(final short diffuseGreenColor) {
+<span class="fc" id="L319">        this.diffuseGreenColor = diffuseGreenColor;</span>
+<span class="fc" id="L320">    }</span>
+
+    /**
+     * Indicates if diffuse green color component value is available.
+     * Returns true if diffuse green color is not negative.
+     *
+     * @return true if diffuse green color is not negative.
+     */
+    public boolean isDiffuseGreenColorAvailable() {
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        return diffuseGreenColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns diffuse blue color component value. If defined, must be between
+     * 0 and 255 (both included).
+     *
+     * @return diffuse blue color component value.
+     */
+    public short getDiffuseBlueColor() {
+<span class="fc" id="L339">        return diffuseBlueColor;</span>
+    }
+
+    /**
+     * Sets diffuse blue color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param diffuseBlueColor diffuse blue color component value to be set.
+     */
+    public void setDiffuseBlueColor(final short diffuseBlueColor) {
+<span class="fc" id="L349">        this.diffuseBlueColor = diffuseBlueColor;</span>
+<span class="fc" id="L350">    }</span>
+
+    /**
+     * Indicates if diffuse blue color component value is available.
+     * Returns true if diffuse blue color is not negative.
+     *
+     * @return true if diffuse blue color is not negative.
+     */
+    public boolean isDiffuseBlueColorAvailable() {
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        return diffuseBlueColor &gt;= 0;</span>
+    }
+
+    /**
+     * Sets all color components of diffuse color.
+     * Diffuse color usually refers to the surface color of a given object
+     * without accounting for highlights or shininess.
+     *
+     * @param red   diffuse red color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     * @param green diffuse green color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     * @param blue  diffuse blue color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     */
+    public void setDiffuseColor(final short red, final short green, final short blue) {
+<span class="fc" id="L375">        diffuseRedColor = red;</span>
+<span class="fc" id="L376">        diffuseGreenColor = green;</span>
+<span class="fc" id="L377">        diffuseBlueColor = blue;</span>
+<span class="fc" id="L378">    }</span>
+
+    /**
+     * Indicates if diffuse color has been defined.
+     *
+     * @return true if all components of diffuse color have been defined (are
+     * not negative).
+     */
+    public boolean isDiffuseColorAvailable() {
+<span class="pc bpc" id="L387" title="2 of 6 branches missed.">        return diffuseRedColor &gt;= 0 &amp;&amp; diffuseGreenColor &gt;= 0 &amp;&amp; diffuseBlueColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns specular red color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @return specular red color component value.
+     */
+    public short getSpecularRedColor() {
+<span class="fc" id="L397">        return specularRedColor;</span>
+    }
+
+    /**
+     * Sets specular red color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param specularRedColor specular red color component value to be set.
+     */
+    public void setSpecularRedColor(final short specularRedColor) {
+<span class="fc" id="L407">        this.specularRedColor = specularRedColor;</span>
+<span class="fc" id="L408">    }</span>
+
+    /**
+     * Indicates if specular red color component value is available.
+     * Returns true if specular red color is not negative.
+     *
+     * @return true if specular red color is not negative.
+     */
+    public boolean isSpecularRedColorAvailable() {
+<span class="fc bfc" id="L417" title="All 2 branches covered.">        return specularRedColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns specular green color component value. If defined, must be between
+     * 0 and 255 (both included).
+     *
+     * @return specular green color component value.
+     */
+    public short getSpecularGreenColor() {
+<span class="fc" id="L427">        return specularGreenColor;</span>
+    }
+
+    /**
+     * Sets specular green color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param specularGreenColor specular green color component value to be set.
+     */
+    public void setSpecularGreenColor(final short specularGreenColor) {
+<span class="fc" id="L437">        this.specularGreenColor = specularGreenColor;</span>
+<span class="fc" id="L438">    }</span>
+
+    /**
+     * Indicates if specular green color component value is available.
+     * Returns true if specular green color is not negative.
+     *
+     * @return true if specular green color is not negative.
+     */
+    public boolean isSpecularGreenColorAvailable() {
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        return specularGreenColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns specular blue color component value. If defined, must be between
+     * 0 and 255 (both included).
+     *
+     * @return specular blue color component value.
+     */
+    public short getSpecularBlueColor() {
+<span class="fc" id="L457">        return specularBlueColor;</span>
+    }
+
+    /**
+     * Sets specular blue color component value. If defined, must be between 0
+     * and 255 (both included).
+     *
+     * @param specularBlueColor specular blue color component value to be set.
+     */
+    public void setSpecularBlueColor(final short specularBlueColor) {
+<span class="fc" id="L467">        this.specularBlueColor = specularBlueColor;</span>
+<span class="fc" id="L468">    }</span>
+
+    /**
+     * Indicates if specular blue color component value is available.
+     * Returns true if specular blue color is not negative.
+     *
+     * @return true if specular blue color is not negative.
+     */
+    public boolean isSpecularBlueColorAvailable() {
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        return specularBlueColor &gt;= 0;</span>
+    }
+
+    /**
+     * Sets all color components of specular color.
+     * Specular color usually refers to the color of the highlights on an object
+     * surface when it shines because of the light.
+     *
+     * @param red   specular red color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     * @param green specular green color component to be set. If defined, must
+     *              be between 0 and 255 (both included).
+     * @param blue  specular blue color component to be set. If defined, must be
+     *              between 0 and 255 (both included).
+     */
+    public void setSpecularColor(final short red, final short green, final short blue) {
+<span class="fc" id="L493">        specularRedColor = red;</span>
+<span class="fc" id="L494">        specularGreenColor = green;</span>
+<span class="fc" id="L495">        specularBlueColor = blue;</span>
+<span class="fc" id="L496">    }</span>
+
+    /**
+     * Indicates if specular color has been defined.
+     *
+     * @return true if all components of specular color have been defined (are
+     * not negative).
+     */
+    public boolean isSpecularColorAvailable() {
+<span class="pc bpc" id="L505" title="2 of 6 branches missed.">        return specularRedColor &gt;= 0 &amp;&amp; specularGreenColor &gt;= 0 &amp;&amp; specularBlueColor &gt;= 0;</span>
+    }
+
+    /**
+     * Returns specular coefficient. This indicates the amount of shininess of
+     * an object.
+     *
+     * @return specular coefficient.
+     */
+    public float getSpecularCoefficient() {
+<span class="fc" id="L515">        return specularCoefficient;</span>
+    }
+
+    /**
+     * Sets specular coefficient. This indicates the amount of shininess of an
+     * object.
+     *
+     * @param specularCoefficient specular coefficient to be set.
+     */
+    public void setSpecularCoefficient(final float specularCoefficient) {
+<span class="fc" id="L525">        this.specularCoefficient = specularCoefficient;</span>
+<span class="fc" id="L526">        specularCoefficientAvailable = true;</span>
+<span class="fc" id="L527">    }</span>
+
+    /**
+     * Indicates if specular coefficient has been defined for this material.
+     *
+     * @return true if specular coefficient has been defined and is available,
+     * false otherwise.
+     */
+    public boolean isSpecularCoefficientAvailable() {
+<span class="fc" id="L536">        return specularCoefficientAvailable;</span>
+    }
+
+    /**
+     * Returns ambient texture.
+     * Ambient texture usually refers to the texture used to give a certain
+     * tonality to an object, as if it was lit by some source of light.
+     *
+     * @return ambient texture.
+     */
+    public Texture getAmbientTextureMap() {
+<span class="fc" id="L547">        return ambientTextureMap;</span>
+    }
+
+    /**
+     * Sets ambient texture.
+     * Ambient texture usually refers to the texture used to give a certain
+     * tonality to anb object, as if it was lit by some source of light.
+     *
+     * @param ambientTextureMap ambient texture to be set.
+     */
+    public void setAmbientTextureMap(final Texture ambientTextureMap) {
+<span class="fc" id="L558">        this.ambientTextureMap = ambientTextureMap;</span>
+<span class="fc" id="L559">    }</span>
+
+    /**
+     * Indicates if ambient texture has been defined and is available.
+     *
+     * @return true if ambient texture has been defined and is available, false
+     * otherwise.
+     */
+    public boolean isAmbientTextureMapAvailable() {
+<span class="fc bfc" id="L568" title="All 2 branches covered.">        return ambientTextureMap != null;</span>
+    }
+
+    /**
+     * Returns diffuse texture.
+     * Diffuse texture usually refers to the texture applied on the surface of
+     * an object as its color.
+     *
+     * @return diffuse texture.
+     */
+    public Texture getDiffuseTextureMap() {
+<span class="fc" id="L579">        return diffuseTextureMap;</span>
+    }
+
+    /**
+     * Sets diffuse texture.
+     * Diffuse texture usually refers to the texture applied on the surface of
+     * an object as its color.
+     *
+     * @param diffuseTextureMap diffuse texture to be set.
+     */
+    public void setDiffuseTextureMap(final Texture diffuseTextureMap) {
+<span class="fc" id="L590">        this.diffuseTextureMap = diffuseTextureMap;</span>
+<span class="fc" id="L591">    }</span>
+
+    /**
+     * Indicates if diffuse texture has been defined and is available.
+     *
+     * @return true if diffuse texture has been defined and is available, false
+     * otherwise.
+     */
+    public boolean isDiffuseTextureMapAvailable() {
+<span class="fc bfc" id="L600" title="All 2 branches covered.">        return diffuseTextureMap != null;</span>
+    }
+
+    /**
+     * Returns specular texture.
+     * Specular texture usually refers to the highlights or sparkles applied
+     * on the surface of an object.
+     *
+     * @return specular texture.
+     */
+    public Texture getSpecularTextureMap() {
+<span class="fc" id="L611">        return specularTextureMap;</span>
+    }
+
+    /**
+     * Sets specular texture.
+     * Specular texture usually refers to the highlights or sparkles applied
+     * on the surface of an object.
+     *
+     * @param specularTextureMap specular texture to be set.
+     */
+    public void setSpecularTextureMap(final Texture specularTextureMap) {
+<span class="fc" id="L622">        this.specularTextureMap = specularTextureMap;</span>
+<span class="fc" id="L623">    }</span>
+
+    /**
+     * Indicates if specular texture has been defined and is available
+     *
+     * @return true if specular texture has been defined and is available, false
+     * otherwise.
+     */
+    public boolean isSpecularTextureMapAvailable() {
+<span class="fc bfc" id="L632" title="All 2 branches covered.">        return specularTextureMap != null;</span>
+    }
+
+    /**
+     * Returns alpha texture.
+     * Alpha texture usually contains information related to transparency.
+     *
+     * @return alpha texture.
+     */
+    public Texture getAlphaTextureMap() {
+<span class="fc" id="L642">        return alphaTextureMap;</span>
+    }
+
+    /**
+     * Sets alpha texture.
+     * Alpha texture usually contains information related to transparency.
+     *
+     * @param alphaTextureMap alpha texture to be set.
+     */
+    public void setAlphaTextureMap(final Texture alphaTextureMap) {
+<span class="fc" id="L652">        this.alphaTextureMap = alphaTextureMap;</span>
+<span class="fc" id="L653">    }</span>
+
+    /**
+     * Indicates if alpha texture has been defined and is available.
+     *
+     * @return true if alpha texture has been defined and is available, false
+     * otherwise.
+     */
+    public boolean isAlphaTextureMapAvailable() {
+<span class="fc bfc" id="L662" title="All 2 branches covered.">        return alphaTextureMap != null;</span>
+    }
+
+    /**
+     * Returns bump texture.
+     * Bump textures are used to give the appearance of bumpiness or rugosity to
+     * plain surfaces.
+     *
+     * @return bump texture.
+     */
+    public Texture getBumpTextureMap() {
+<span class="fc" id="L673">        return bumpTextureMap;</span>
+    }
+
+    /**
+     * Sets bump texture.
+     * Bump textures are used to give the appearance of bumpiness or rugosity to
+     * plain surfaces.
+     *
+     * @param bumpTextureMap bump texture.
+     */
+    public void setBumpTextureMap(final Texture bumpTextureMap) {
+<span class="fc" id="L684">        this.bumpTextureMap = bumpTextureMap;</span>
+<span class="fc" id="L685">    }</span>
+
+    /**
+     * Indicates if bump texture has been defined and is available.
+     *
+     * @return true if bump texture has been defined and is available, false
+     * otherwise.
+     */
+    public boolean isBumpTextureMapAvailable() {
+<span class="fc bfc" id="L694" title="All 2 branches covered.">        return bumpTextureMap != null;</span>
+    }
+
+    /**
+     * Returns transparency of this material. If defined, value must be between
+     * 0 (no transparency) and 100 (totally transparent).
+     *
+     * @return transparency of this material.
+     */
+    public short getTransparency() {
+<span class="fc" id="L704">        return transparency;</span>
+    }
+
+    /**
+     * Sets transparency of this material. If defined, value must be between
+     * 0 (no transparency) and 100 (totally transparent).
+     *
+     * @param transparency transparency of this material to be set.
+     */
+    public void setTransparency(final short transparency) {
+<span class="fc" id="L714">        this.transparency = transparency;</span>
+<span class="fc" id="L715">    }</span>
+
+    /**
+     * Indicates if transparency has been defined and is available.
+     *
+     * @return true if transparency is not negative, false otherwise.
+     */
+    public boolean isTransparencyAvailable() {
+<span class="fc bfc" id="L723" title="All 2 branches covered.">        return transparency &gt;= 0;</span>
+    }
+
+    /**
+     * Returns illumination method to be used for this material.
+     *
+     * @return illumination.
+     */
+    public Illumination getIllumination() {
+<span class="fc" id="L732">        return illumination;</span>
+    }
+
+    /**
+     * Sets illumination method to be used for this material.
+     *
+     * @param illumination illumination method to be used.
+     */
+    public void setIllumination(final Illumination illumination) {
+<span class="fc" id="L741">        this.illumination = illumination;</span>
+<span class="fc" id="L742">    }</span>
+
+    /**
+     * Indicates if an illumination has been defined and is available.
+     *
+     * @return true if illumination has been defined, false otherwise.
+     */
+    public boolean isIlluminationAvailable() {
+<span class="fc bfc" id="L750" title="All 2 branches covered.">        return illumination != null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

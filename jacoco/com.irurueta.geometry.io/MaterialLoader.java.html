@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MaterialLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">MaterialLoader.java</span></div><h1>MaterialLoader.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.Set;
+
+/**
+ * Abstract class defining the interface for classes in charge of loading
+ * materials.
+ */
+public abstract class MaterialLoader implements Closeable {
+
+    /**
+     * Maximum allowed file size to keep cached in memory. Files exceeding this
+     * size will just be streamed.
+     */
+    public static final long DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY = 50000000;
+
+    /**
+     * Constant defining whether textures must be validated by default.
+     */
+    public static final boolean DEFAULT_TEXTURE_VALIDATION_ENABLED = true;
+
+    /**
+     * Instance in charge of reading data from file.
+     */
+    protected AbstractFileReaderAndWriter reader;
+
+    /**
+     * Boolean indicating that this instance is locked because decoding is being
+     * done.
+     */
+    protected boolean locked;
+
+    /**
+     * Listener in charge of notifying when the decoding starts, ends or
+     * progress events.
+     */
+    protected MaterialLoaderListener listener;
+
+    /**
+     * File to be read.
+     */
+    protected File file;
+
+    /**
+     * Indicates if texture images must be validated to ensure that they are
+     * valid image files.
+     */
+    protected boolean textureValidationEnabled;
+
+    /**
+     * Limit of bytes to keep mapped in memory. If provided file exceeds this
+     * value, then it is not mapped into memory.
+     */
+    private long fileSizeLimitToKeepInMemory;
+
+    /**
+     * Default Constructor.
+     */
+<span class="fc" id="L78">    protected MaterialLoader() {</span>
+<span class="fc" id="L79">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L80">        reader = null;</span>
+<span class="fc" id="L81">        locked = false;</span>
+<span class="fc" id="L82">        listener = null;</span>
+<span class="fc" id="L83">        textureValidationEnabled = DEFAULT_TEXTURE_VALIDATION_ENABLED;</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param f material file to be read.
+     * @throws IOException raised if provided file does not exist or an I/O
+     *                     exception occurs.
+     */
+<span class="fc" id="L93">    protected MaterialLoader(final File f) throws IOException {</span>
+<span class="fc" id="L94">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L95">        file = f;</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L97">            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        } else {
+<span class="nc" id="L99">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        }
+<span class="fc" id="L101">        locked = false;</span>
+<span class="fc" id="L102">        listener = null;</span>
+<span class="fc" id="L103">        textureValidationEnabled = DEFAULT_TEXTURE_VALIDATION_ENABLED;</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener material listener to notify start, end and progress
+     *                 events.
+     */
+<span class="fc" id="L112">    protected MaterialLoader(final MaterialLoaderListener listener) {</span>
+<span class="fc" id="L113">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L114">        reader = null;</span>
+<span class="fc" id="L115">        locked = false;</span>
+<span class="fc" id="L116">        this.listener = listener;</span>
+<span class="fc" id="L117">        textureValidationEnabled = DEFAULT_TEXTURE_VALIDATION_ENABLED;</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param f        material file to be read.
+     * @param listener material listener to notify start, end and progress
+     *                 events.
+     * @throws IOException raised if provided file does not exist or an I/O
+     *                     exception occurs.
+     */
+<span class="fc" id="L129">    protected MaterialLoader(final File f, final MaterialLoaderListener listener) throws IOException {</span>
+<span class="fc" id="L130">        fileSizeLimitToKeepInMemory = DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY;</span>
+<span class="fc" id="L131">        file = f;</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L133">            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        } else {
+<span class="nc" id="L135">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        }
+<span class="fc" id="L137">        locked = false;</span>
+<span class="fc" id="L138">        this.listener = listener;</span>
+<span class="fc" id="L139">        textureValidationEnabled = DEFAULT_TEXTURE_VALIDATION_ENABLED;</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Returns maximum allowed file size to keep cached in memory. Files
+     * exceeding this size will just be streamed.
+     *
+     * @return maximum allowed file size to keep cached in memory.
+     */
+    public long getFileSizeLimitToKeepInMemory() {
+<span class="fc" id="L149">        return fileSizeLimitToKeepInMemory;</span>
+    }
+
+    /**
+     * Sets maximum allowed file size to keep cached in memory. Files exceeding
+     * this size will just be streamed.
+     *
+     * @param fileSizeLimitToKeepInMemory maximum allowed file size to keep
+     *                                    cached in memory.
+     * @throws LockedException if this instance is already loading another file.
+     */
+    public void setFileSizeLimitToKeepInMemory(final long fileSizeLimitToKeepInMemory) throws LockedException {
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L162">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L165">        this.fileSizeLimitToKeepInMemory = fileSizeLimitToKeepInMemory;</span>
+<span class="fc" id="L166">    }</span>
+
+    /**
+     * Indicates whether a material file to be loaded has already been set.
+     *
+     * @return True if material file has already been provided, false otherwise.
+     */
+    public boolean hasFile() {
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        return reader != null;</span>
+    }
+
+    /**
+     * Sets material file to be loaded.
+     *
+     * @param f material file to be loaded.
+     * @throws LockedException raised if this instance is loaded because a file
+     *                         is already being loaded.
+     * @throws IOException     raised if provided file does not exist or if an I/O
+     *                         exception occurs.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    public void setFile(final File f) throws LockedException, IOException {
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L189">            throw new LockedException();</span>
+        }
+<span class="fc" id="L191">        file = f;</span>
+
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (reader != null) {</span>
+            // close previous file
+<span class="fc" id="L195">            reader.close();</span>
+        }
+
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (f.length() &lt; fileSizeLimitToKeepInMemory) {</span>
+<span class="fc" id="L199">            reader = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        } else {
+<span class="nc" id="L201">            reader = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY);</span>
+        }
+<span class="fc" id="L203">    }</span>
+
+    /**
+     * Closes file provided to this loader.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void close() throws IOException {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (reader != null) {</span>
+<span class="fc" id="L213">            reader.close();</span>
+<span class="fc" id="L214">            reader = null;</span>
+        }
+<span class="fc" id="L216">    }</span>
+
+    /**
+     * Indicates if textures must be validated to ensure that image files are
+     * valid files.
+     *
+     * @return true if textures must be validated, false otherwise.
+     */
+    public boolean isTextureValidationEnabled() {
+<span class="fc" id="L225">        return textureValidationEnabled;</span>
+    }
+
+    /**
+     * Specifies whether textures must be validated to ensure that image files
+     * are valid files.
+     *
+     * @param textureValidationEnabled true if textures must be validated, false
+     *                                 otherwise.
+     */
+    public void setTextureValidationEnabled(final boolean textureValidationEnabled) {
+<span class="fc" id="L236">        this.textureValidationEnabled = textureValidationEnabled;</span>
+<span class="fc" id="L237">    }</span>
+
+    /**
+     * Determines whether this instance is locked.
+     * A material loader remains locked while decoding of a file is being done.
+     * This instance will remain locked once the loading process starts until
+     * it finishes either successfully or not.
+     * While this instance remains locked no parameters can be changed,
+     * otherwise a LockedException will be raised.
+     *
+     * @return True if instance is locked, false otherwise.
+     */
+    public synchronized boolean isLocked() {
+<span class="fc" id="L250">        return locked;</span>
+    }
+
+    /**
+     * Sets the lock value of this instance so that no parameters cannot be
+     * changed until this instance is unlocked.
+     *
+     * @param locked value that determines whether this instance is locked or
+     *               not.
+     */
+    protected synchronized void setLocked(final boolean locked) {
+<span class="fc" id="L261">        this.locked = locked;</span>
+<span class="fc" id="L262">    }</span>
+
+    /**
+     * Returns material listener of this instance.
+     * A material listener notifies of start, end and progress change events.
+     *
+     * @return material listener of this instance.
+     */
+    public MaterialLoaderListener getListener() {
+<span class="fc" id="L271">        return listener;</span>
+    }
+
+    /**
+     * Sets material listener of this instance.
+     * A material listener notifies of start, end and progress change events.
+     *
+     * @param listener material listener of this instance.
+     * @throws LockedException Raised if this instance is already locked.
+     */
+    public void setListener(final MaterialLoaderListener listener) throws LockedException {
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L283">            throw new LockedException();</span>
+        }
+<span class="fc" id="L285">        this.listener = listener;</span>
+<span class="fc" id="L286">    }</span>
+
+    /**
+     * Determines whether enough parameters have been set so that the loading
+     * process can start.
+     *
+     * @return True if this instance is ready to start loading a file, false
+     * otherwise.
+     */
+    public abstract boolean isReady();
+
+    /**
+     * Starts the loading process of provided file.
+     * This method returns a set containing all the materials that have been
+     * loaded.
+     *
+     * @return a set containing all the materials that have been loaded.
+     * @throws LockedException   raised if this instance is already locked.
+     * @throws NotReadyException raised if this instance is not yet ready.
+     * @throws IOException       if an I/O error occurs.
+     * @throws LoaderException   if file is corrupted or cannot be interpreted.
+     */
+    public abstract Set&lt;Material&gt; load() throws LockedException, NotReadyException, IOException, LoaderException;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MeshWriterBinary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">MeshWriterBinary.java</span></div><h1>MeshWriterBinary.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+
+/**
+ * Reads a 3D object and converts it into custom binary format.
+ */
+public class MeshWriterBinary extends MeshWriter {
+
+    /**
+     * Version of the binary file supported by this class.
+     */
+    public static final byte VERSION = 2;
+
+    /**
+     * Buffer size to write data into output stream.
+     */
+    public static final int BUFFER_SIZE = 1024;
+
+    /**
+     * Stream to write binary data to output.
+     */
+    private DataOutputStream dataStream;
+
+    /**
+     * Constructor.
+     *
+     * @param loader loader to load a 3D file.
+     * @param stream stream where trans-coded data will be written to.
+     */
+    public MeshWriterBinary(final Loader loader, final OutputStream stream) {
+<span class="fc" id="L52">        super(loader, stream);</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param loader   loader to load a 3D file.
+     * @param stream   stream where trans-coded data will be written to.
+     * @param listener listener to be notified of progress changes or when
+     *                 transcoding process starts or finishes.
+     */
+    public MeshWriterBinary(final Loader loader, final OutputStream stream, final MeshWriterListener listener) {
+<span class="fc" id="L64">        super(loader, stream, listener);</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Processes input file provided to loader and writes it trans-coded into
+     * output stream.
+     *
+     * @throws LoaderException   if 3D file loading fails.
+     * @throws IOException       if an I/O error occurs.
+     * @throws NotReadyException if mesh writer is not ready because either a
+     *                           loader has not been provided or an output stream has not been provided.
+     * @throws LockedException   if this mesh writer is locked processing a file.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public void write() throws LoaderException, IOException, NotReadyException, LockedException {
+
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L82">            throw new NotReadyException();</span>
+        }
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L85">            throw new LockedException();</span>
+        }
+
+        try {
+<span class="fc" id="L89">            dataStream = new DataOutputStream(new BufferedOutputStream(stream));</span>
+
+<span class="fc" id="L91">            locked = true;</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L93">                listener.onWriteStart(this);</span>
+            }
+
+<span class="fc" id="L96">            loader.setListener(this.internalListeners);</span>
+
+            // write version
+<span class="fc" id="L99">            dataStream.writeByte(VERSION);</span>
+
+<span class="fc" id="L101">            final var iter = loader.load();</span>
+
+<span class="fc" id="L103">            var minX = Float.MAX_VALUE;</span>
+<span class="fc" id="L104">            var minY = Float.MAX_VALUE;</span>
+<span class="fc" id="L105">            var minZ = Float.MAX_VALUE;</span>
+<span class="fc" id="L106">            var maxX = -Float.MAX_VALUE;</span>
+<span class="fc" id="L107">            var maxY = -Float.MAX_VALUE;</span>
+<span class="fc" id="L108">            var maxZ = -Float.MAX_VALUE;</span>
+
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            while (iter.hasNext()) {</span>
+<span class="fc" id="L111">                final var chunk = iter.next();</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L113">                    listener.onChunkAvailable(this, chunk);</span>
+                }
+
+<span class="fc" id="L116">                final var coords = chunk.getVerticesCoordinatesData();</span>
+<span class="fc" id="L117">                final var colors = chunk.getColorData();</span>
+<span class="fc" id="L118">                final var indices = chunk.getIndicesData();</span>
+<span class="fc" id="L119">                final var textureCoords = chunk.getTextureCoordinatesData();</span>
+<span class="fc" id="L120">                final var normals = chunk.getNormalsData();</span>
+<span class="fc" id="L121">                final var colorComponents = chunk.getColorComponents();</span>
+
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">                final var coordsAvailable = (coords != null);</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                final var colorsAvailable = (colors != null);</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                final var indicesAvailable = (indices != null);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                final var textureCoordsAvailable = (textureCoords != null);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                final var normalsAvailable = (normals != null);</span>
+
+<span class="fc bfc" id="L129" title="All 2 branches covered.">                if (chunk.getMinX() &lt; minX) {</span>
+<span class="fc" id="L130">                    minX = chunk.getMinX();</span>
+                }
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                if (chunk.getMinY() &lt; minY) {</span>
+<span class="fc" id="L133">                    minY = chunk.getMinY();</span>
+                }
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                if (chunk.getMinZ() &lt; minZ) {</span>
+<span class="fc" id="L136">                    minZ = chunk.getMinZ();</span>
+                }
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                if (chunk.getMaxX() &gt; maxX) {</span>
+<span class="fc" id="L140">                    maxX = chunk.getMaxX();</span>
+                }
+<span class="fc bfc" id="L142" title="All 2 branches covered.">                if (chunk.getMaxY() &gt; maxY) {</span>
+<span class="fc" id="L143">                    maxY = chunk.getMaxY();</span>
+                }
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                if (chunk.getMaxZ() &gt; maxZ) {</span>
+<span class="fc" id="L146">                    maxZ = chunk.getMaxZ();</span>
+                }
+
+                // compute size of material in bytes
+<span class="fc" id="L150">                final var material = chunk.getMaterial();</span>
+                // boolean indicating availability
+                // of material
+<span class="fc" id="L153">                var materialSizeInBytes = 1;</span>
+
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                if (material != null) {</span>
+                    // material id (int)
+<span class="fc" id="L157">                    materialSizeInBytes += Integer.SIZE / 8;</span>
+                    // ambient color (RGB) -&gt; 3 bytes
+
+                    //boolean indicating availability
+<span class="fc" id="L161">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">                    if (material.isAmbientColorAvailable()) {</span>
+                        // RGB components
+<span class="fc" id="L164">                        materialSizeInBytes += 3;</span>
+                    }
+
+                    // diffuse color
+
+                    // boolean indicating availability
+<span class="fc" id="L170">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">                    if (material.isDiffuseColorAvailable()) {</span>
+                        // RGB components
+<span class="fc" id="L173">                        materialSizeInBytes += 3;</span>
+                    }
+
+                    // specular color
+
+                    // boolean indicating availability
+<span class="fc" id="L179">                    materialSizeInBytes += 1;</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">                    if (material.isSpecularColorAvailable()) {</span>
+                        // RGB components
+<span class="fc" id="L182">                        materialSizeInBytes += 3;</span>
+                    }
+
+                    // specular coefficient (float)
+
+                    // boolean indicating availability
+<span class="fc" id="L188">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">                    if (material.isSpecularCoefficientAvailable()) {</span>
+<span class="fc" id="L190">                        materialSizeInBytes += Float.SIZE / 8;</span>
+                    }
+
+                    // ambient texture map
+
+                    // boolean indicating availability
+<span class="fc" id="L196">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">                    if (material.isAmbientTextureMapAvailable()) {</span>
+                        // id of texture (int)
+<span class="nc" id="L199">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture width (int)
+<span class="nc" id="L201">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture height (int)
+<span class="nc" id="L203">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                    }
+
+                    // diffuse texture map
+
+                    // boolean indicating availability
+<span class="fc" id="L209">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">                    if (material.isDiffuseTextureMapAvailable()) {</span>
+                        // id of texture (int)
+<span class="fc" id="L212">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture width (int)
+<span class="fc" id="L214">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture height (int)
+<span class="fc" id="L216">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                    }
+
+                    // specular texture map
+
+                    // boolean indicating availability
+<span class="fc" id="L222">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">                    if (material.isSpecularTextureMapAvailable()) {</span>
+                        // id of texture (int)
+<span class="nc" id="L225">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture width (int)
+<span class="nc" id="L227">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture height (int)
+<span class="nc" id="L229">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                    }
+
+                    // alpha texture map
+
+                    // boolean indicating availability
+<span class="fc" id="L235">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">                    if (material.isAlphaTextureMapAvailable()) {</span>
+                        // id of texture (int)
+<span class="nc" id="L238">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture width (int)
+<span class="nc" id="L240">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture height (int)
+<span class="nc" id="L242">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                    }
+
+                    // bump texture map
+
+                    // boolean indicating availability
+<span class="fc" id="L248">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">                    if (material.isBumpTextureMapAvailable()) {</span>
+                        // id of texture (int)
+<span class="nc" id="L251">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture width (int)
+<span class="nc" id="L253">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                        // texture height (int)
+<span class="nc" id="L255">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                    }
+
+                    // transparency
+
+                    // availability
+<span class="fc" id="L261">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">                    if (material.isTransparencyAvailable()) {</span>
+                        // one byte 0-255 of
+                        // transparency
+<span class="nc" id="L265">                        materialSizeInBytes += 1;</span>
+                    }
+
+                    // enum of illumination(int)
+                    // boolean containing availability
+<span class="fc" id="L270">                    materialSizeInBytes += 1;</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">                    if (material.isIlluminationAvailable()) {</span>
+<span class="fc" id="L272">                        materialSizeInBytes += Integer.SIZE / 8;</span>
+                    }
+                }
+
+                // compute size of chunk data in bytes
+<span class="fc" id="L277">                var coordsSizeInBytes = 0;</span>
+<span class="fc" id="L278">                var colorsSizeInBytes = 0;</span>
+<span class="fc" id="L279">                var indicesSizeInBytes = 0;</span>
+<span class="fc" id="L280">                var textureCoordsSizeInBytes = 0;</span>
+<span class="fc" id="L281">                var normalsSizeInBytes = 0;</span>
+
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
+<span class="fc" id="L284">                    coordsSizeInBytes = coords.length * Float.SIZE / 8;</span>
+                }
+<span class="fc bfc" id="L286" title="All 2 branches covered.">                if (colorsAvailable) {</span>
+<span class="fc" id="L287">                    colorsSizeInBytes = colors.length;</span>
+                }
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                if (indicesAvailable) {</span>
+<span class="fc" id="L290">                    indicesSizeInBytes = indices.length * Short.SIZE / 8;</span>
+                }
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                if (textureCoordsAvailable) {</span>
+<span class="fc" id="L293">                    textureCoordsSizeInBytes = textureCoords.length * Float.SIZE / 8;</span>
+                }
+<span class="fc bfc" id="L295" title="All 2 branches covered.">                if (normalsAvailable) {</span>
+<span class="fc" id="L296">                    normalsSizeInBytes = normals.length * Float.SIZE / 8;</span>
+                }
+
+<span class="fc" id="L299">                int chunkSize = materialSizeInBytes + coordsSizeInBytes + colorsSizeInBytes + indicesSizeInBytes</span>
+                        + textureCoordsSizeInBytes + normalsSizeInBytes
+                        + (5 * Integer.SIZE / 8) + // sizes
+                        (6 * Float.SIZE / 8); // min/max values
+<span class="fc bfc" id="L303" title="All 2 branches covered.">                if (colorsAvailable) {</span>
+                    // bytes for number of color components
+<span class="fc" id="L305">                    chunkSize += Integer.SIZE / 8;</span>
+                }
+
+                // indicate that no more textures follow
+<span class="fc bfc" id="L309" title="All 2 branches covered.">                if (!ignoreTextureValidation) {</span>
+                    // byte below is written only once after all textures and
+                    // before all vertex data
+<span class="fc" id="L312">                    dataStream.writeBoolean(false);</span>
+
+                    // so that no more textures are
+                    // written into stream
+<span class="fc" id="L316">                    ignoreTextureValidation = true;</span>
+                }
+
+                // write total chunk size
+<span class="fc" id="L320">                dataStream.writeInt(chunkSize);</span>
+
+                // indicate material availability
+<span class="fc bfc" id="L323" title="All 2 branches covered.">                dataStream.writeBoolean(material != null);</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">                if (material != null) {</span>
+                    // material id
+<span class="fc" id="L326">                    dataStream.writeInt(material.getId());</span>
+
+                    // ambient color
+<span class="fc" id="L329">                    dataStream.writeBoolean(material.isAmbientColorAvailable());</span>
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">                    if (material.isAmbientColorAvailable()) {</span>
+<span class="fc" id="L331">                        var b = (byte) (material.getAmbientRedColor() &amp; 0x00ff);</span>
+<span class="fc" id="L332">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L333">                        b = (byte) (material.getAmbientGreenColor() &amp; 0x00ff);</span>
+<span class="fc" id="L334">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L335">                        b = (byte) (material.getAmbientBlueColor() &amp; 0x00ff);</span>
+<span class="fc" id="L336">                        dataStream.writeByte(b);</span>
+                    }
+
+                    // diffuse color
+<span class="fc" id="L340">                    dataStream.writeBoolean(material.isDiffuseColorAvailable());</span>
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">                    if (material.isDiffuseColorAvailable()) {</span>
+<span class="fc" id="L342">                        var b = (byte) (material.getDiffuseRedColor() &amp; 0x00ff);</span>
+<span class="fc" id="L343">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L344">                        b = (byte) (material.getDiffuseGreenColor() &amp; 0x00ff);</span>
+<span class="fc" id="L345">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L346">                        b = (byte) (material.getDiffuseBlueColor() &amp; 0x00ff);</span>
+<span class="fc" id="L347">                        dataStream.writeByte(b);</span>
+                    }
+
+                    // specular color
+<span class="fc" id="L351">                    dataStream.writeBoolean(material.isSpecularColorAvailable());</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">                    if (material.isSpecularColorAvailable()) {</span>
+<span class="fc" id="L353">                        var b = (byte) (material.getSpecularRedColor() &amp; 0x00ff);</span>
+<span class="fc" id="L354">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L355">                        b = (byte) (material.getSpecularGreenColor() &amp; 0x00ff);</span>
+<span class="fc" id="L356">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L357">                        b = (byte) (material.getSpecularBlueColor() &amp; 0x00ff);</span>
+<span class="fc" id="L358">                        dataStream.writeByte(b);</span>
+                    }
+
+                    // specular coefficient (float)
+<span class="fc" id="L362">                    dataStream.writeBoolean(material.isSpecularCoefficientAvailable());</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">                    if (material.isSpecularCoefficientAvailable()) {</span>
+<span class="fc" id="L364">                        dataStream.writeFloat(material.getSpecularCoefficient());</span>
+                    }
+
+                    // ambient texture map
+<span class="fc" id="L368">                    dataStream.writeBoolean(material.isAmbientTextureMapAvailable());</span>
+<span class="pc bpc" id="L369" title="1 of 2 branches missed.">                    if (material.isAmbientTextureMapAvailable()) {</span>
+<span class="nc" id="L370">                        final var tex = material.getAmbientTextureMap();</span>
+                        // texture id
+<span class="nc" id="L372">                        dataStream.writeInt(tex.getId());</span>
+                        // texture width
+<span class="nc" id="L374">                        dataStream.writeInt(tex.getWidth());</span>
+                        // texture height
+<span class="nc" id="L376">                        dataStream.writeInt(tex.getHeight());</span>
+                    }
+
+                    // diffuse texture map
+<span class="fc" id="L380">                    dataStream.writeBoolean(material.isDiffuseTextureMapAvailable());</span>
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">                    if (material.isDiffuseTextureMapAvailable()) {</span>
+<span class="fc" id="L382">                        final var tex = material.getDiffuseTextureMap();</span>
+                        // texture id
+<span class="fc" id="L384">                        dataStream.writeInt(tex.getId());</span>
+                        // texture width
+<span class="fc" id="L386">                        dataStream.writeInt(tex.getWidth());</span>
+                        // texture height
+<span class="fc" id="L388">                        dataStream.writeInt(tex.getHeight());</span>
+                    }
+
+                    // specular texture map
+<span class="fc" id="L392">                    dataStream.writeBoolean(material.isSpecularTextureMapAvailable());</span>
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">                    if (material.isSpecularTextureMapAvailable()) {</span>
+<span class="nc" id="L394">                        final var tex = material.getSpecularTextureMap();</span>
+                        // texture id
+<span class="nc" id="L396">                        dataStream.writeInt(tex.getId());</span>
+                        // texture width
+<span class="nc" id="L398">                        dataStream.writeInt(tex.getWidth());</span>
+                        // texture height
+<span class="nc" id="L400">                        dataStream.writeInt(tex.getHeight());</span>
+                    }
+
+                    // alpha texture map
+<span class="fc" id="L404">                    dataStream.writeBoolean(material.isAlphaTextureMapAvailable());</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">                    if (material.isAlphaTextureMapAvailable()) {</span>
+<span class="nc" id="L406">                        final var tex = material.getAlphaTextureMap();</span>
+                        // texture id
+<span class="nc" id="L408">                        dataStream.writeInt(tex.getId());</span>
+                        // texture width
+<span class="nc" id="L410">                        dataStream.writeInt(tex.getWidth());</span>
+                        // texture height
+<span class="nc" id="L412">                        dataStream.writeInt(tex.getHeight());</span>
+                    }
+
+                    // bump texture map
+<span class="fc" id="L416">                    dataStream.writeBoolean(material.isBumpTextureMapAvailable());</span>
+<span class="pc bpc" id="L417" title="1 of 2 branches missed.">                    if (material.isBumpTextureMapAvailable()) {</span>
+<span class="nc" id="L418">                        final var tex = material.getBumpTextureMap();</span>
+                        // texture id
+<span class="nc" id="L420">                        dataStream.writeInt(tex.getId());</span>
+                        // texture width
+<span class="nc" id="L422">                        dataStream.writeInt(tex.getWidth());</span>
+                        // texture height
+<span class="nc" id="L424">                        dataStream.writeInt(tex.getHeight());</span>
+                    }
+
+<span class="fc" id="L427">                    dataStream.writeBoolean(material.isTransparencyAvailable());</span>
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">                    if (material.isTransparencyAvailable()) {</span>
+<span class="nc" id="L429">                        final var b = (byte) (material.getTransparency() &amp; 0x00ff);</span>
+<span class="nc" id="L430">                        dataStream.writeByte(b);</span>
+                    }
+
+<span class="fc" id="L433">                    dataStream.writeBoolean(material.isIlluminationAvailable());</span>
+<span class="pc bpc" id="L434" title="1 of 2 branches missed.">                    if (material.isIlluminationAvailable()) {</span>
+<span class="fc" id="L435">                        dataStream.writeInt(material.getIllumination().value());</span>
+                    }
+                }
+
+                // write coords size
+<span class="fc" id="L440">                dataStream.writeInt(coordsSizeInBytes);</span>
+                // write coords
+<span class="pc bpc" id="L442" title="1 of 2 branches missed.">                if (coordsAvailable) {</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">                    for (final var coord : coords) {</span>
+<span class="fc" id="L444">                        dataStream.writeFloat(coord);</span>
+                    }
+                }
+
+                // write colors size
+<span class="fc" id="L449">                dataStream.writeInt(colorsSizeInBytes);</span>
+                // write colors
+<span class="fc bfc" id="L451" title="All 2 branches covered.">                if (colorsAvailable) {</span>
+<span class="fc" id="L452">                    var i = 0;</span>
+<span class="fc bfc" id="L453" title="All 2 branches covered.">                    while (i &lt; colors.length) {</span>
+<span class="fc" id="L454">                        final var b = (byte) (colors[i] &amp; 0x00ff);</span>
+<span class="fc" id="L455">                        dataStream.writeByte(b);</span>
+<span class="fc" id="L456">                        i++;</span>
+<span class="fc" id="L457">                    }</span>
+<span class="fc" id="L458">                    dataStream.writeInt(colorComponents);</span>
+                }
+
+                // write indices size
+<span class="fc" id="L462">                dataStream.writeInt(indicesSizeInBytes);</span>
+                // write indices
+<span class="pc bpc" id="L464" title="1 of 2 branches missed.">                if (indicesAvailable) {</span>
+<span class="fc bfc" id="L465" title="All 2 branches covered.">                    for (final var index : indices) {</span>
+<span class="fc" id="L466">                        final var s = (short) (index &amp; 0x0000ffff);</span>
+<span class="fc" id="L467">                        dataStream.writeShort(s);</span>
+                    }
+                }
+
+                // write texture coords
+<span class="fc" id="L472">                dataStream.writeInt(textureCoordsSizeInBytes);</span>
+                // write texture coords
+<span class="fc bfc" id="L474" title="All 2 branches covered.">                if (textureCoordsAvailable) {</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">                    for (final var textureCoord : textureCoords) {</span>
+<span class="fc" id="L476">                        dataStream.writeFloat(textureCoord);</span>
+                    }
+                }
+
+                // write normals
+<span class="fc" id="L481">                dataStream.writeInt(normalsSizeInBytes);</span>
+                // write normals
+<span class="fc bfc" id="L483" title="All 2 branches covered.">                if (normalsAvailable) {</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">                    for (final var normal : normals) {</span>
+<span class="fc" id="L485">                        dataStream.writeFloat(normal);</span>
+                    }
+                }
+
+                // write min/max x, y, z
+<span class="fc" id="L490">                dataStream.writeFloat(chunk.getMinX());</span>
+<span class="fc" id="L491">                dataStream.writeFloat(chunk.getMinY());</span>
+<span class="fc" id="L492">                dataStream.writeFloat(chunk.getMinZ());</span>
+
+<span class="fc" id="L494">                dataStream.writeFloat(chunk.getMaxX());</span>
+<span class="fc" id="L495">                dataStream.writeFloat(chunk.getMaxY());</span>
+<span class="fc" id="L496">                dataStream.writeFloat(chunk.getMaxZ());</span>
+
+<span class="fc" id="L498">                dataStream.flush();</span>
+<span class="fc" id="L499">            }</span>
+
+<span class="pc bpc" id="L501" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L502">                listener.onWriteEnd(this);</span>
+            }
+<span class="fc" id="L504">            locked = false;</span>
+
+<span class="nc" id="L506">        } catch (final LoaderException | IOException e) {</span>
+<span class="nc" id="L507">            throw e;</span>
+<span class="nc" id="L508">        } catch (final Exception e) {</span>
+<span class="nc" id="L509">            throw new LoaderException(e);</span>
+<span class="fc" id="L510">        }</span>
+<span class="fc" id="L511">    }</span>
+
+    /**
+     * Processes texture file. By reading provided texture file that has been
+     * created in a temporal location and embedding it into resulting output
+     * stream.
+     *
+     * @param texture     reference to texture that uses texture image.
+     * @param textureFile file containing texture image. File will usually be
+     *                    created in a temporal location.
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    protected void processTextureFile(final Texture texture, final File textureFile) throws IOException {
+<span class="pc bpc" id="L525" title="1 of 2 branches missed.">        if (!textureFile.exists()) {</span>
+<span class="nc" id="L526">            return;</span>
+        }
+
+        // write boolean to true indicating that a texture follows
+<span class="fc" id="L530">        dataStream.writeBoolean(true);</span>
+
+        // write int containing texture id
+<span class="fc" id="L533">        final var textureId = texture.getId();</span>
+<span class="fc" id="L534">        dataStream.writeInt(textureId);</span>
+
+        // write int containing image width
+<span class="fc" id="L537">        final var width = texture.getWidth();</span>
+<span class="fc" id="L538">        dataStream.writeInt(width);</span>
+
+        // write int containing image height
+<span class="fc" id="L541">        final var height = texture.getHeight();</span>
+<span class="fc" id="L542">        dataStream.writeInt(height);</span>
+
+        // write length of texture file in bytes
+<span class="fc" id="L545">        final var length = textureFile.length();</span>
+<span class="fc" id="L546">        dataStream.writeLong(length);</span>
+
+        // write file data
+<span class="fc" id="L549">        try (final var textureStream = Files.newInputStream(textureFile.toPath())) {</span>
+<span class="fc" id="L550">            final var buffer = new byte[BUFFER_SIZE];</span>
+            int n;
+<span class="fc bfc" id="L552" title="All 2 branches covered.">            while ((n = textureStream.read(buffer)) &gt; 0) {</span>
+<span class="fc" id="L553">                dataStream.write(buffer, 0, n);</span>
+            }
+<span class="fc" id="L555">            dataStream.flush();</span>
+        }
+<span class="fc" id="L557">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

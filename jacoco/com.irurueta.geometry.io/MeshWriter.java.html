@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MeshWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">MeshWriter.java</span></div><h1>MeshWriter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+
+/**
+ * Abstract class that defines the interface for writers. A MeshWriter will be
+ * able to transcode a given 3D file into another format.
+ */
+public abstract class MeshWriter {
+
+    /**
+     * Loader to load a file to be trans-coded.
+     */
+    protected final Loader loader;
+
+    /**
+     * Stream where trans-coded data will be written to.
+     */
+    protected final OutputStream stream;
+
+    /**
+     * Listener to be notified when transcoding process starts, stops or when
+     * progress changes.
+     */
+    protected MeshWriterListener listener;
+
+    /**
+     * Indicates if mesh writer is locked because a file is being processed.
+     */
+    protected boolean locked;
+
+    /**
+     * Indicates if texture validation will be ignored or not. If not ignored,
+     * it will be ensured that textures are valid image files.
+     */
+<span class="fc" id="L53">    protected boolean ignoreTextureValidation = false;</span>
+
+    /**
+     * Internal class implementing specific listeners for some specific loader
+     * implementations.
+     */
+    final Listeners internalListeners;
+
+    /**
+     * Constructor.
+     *
+     * @param loader loader to load a 3D file.
+     * @param stream stream where trans-coded data will be written to.
+     */
+<span class="fc" id="L67">    protected MeshWriter(final Loader loader, final OutputStream stream) {</span>
+<span class="fc" id="L68">        this.loader = loader;</span>
+<span class="fc" id="L69">        this.stream = stream;</span>
+<span class="fc" id="L70">        listener = null;</span>
+<span class="fc" id="L71">        locked = false;</span>
+
+<span class="fc" id="L73">        internalListeners = new Listeners(this);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param loader   loader to load a 3D file.
+     * @param stream   stream where trans-coded data will be written to.
+     * @param listener listener to be notified of progress changes or when
+     *                 transcoding process starts or finishes.
+     */
+<span class="fc" id="L84">    protected MeshWriter(final Loader loader, final OutputStream stream, final MeshWriterListener listener) {</span>
+<span class="fc" id="L85">        this.loader = loader;</span>
+<span class="fc" id="L86">        this.stream = stream;</span>
+<span class="fc" id="L87">        this.listener = listener;</span>
+<span class="fc" id="L88">        locked = false;</span>
+
+<span class="fc" id="L90">        internalListeners = new Listeners(this);</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Boolean indicating whether this mesh writer is locked because a file is
+     * being processed.
+     *
+     * @return true if this instance is locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L100">        return locked;</span>
+    }
+
+    /**
+     * Returns stream where trans-coded data will be written to.
+     *
+     * @return stream where trans-coded data will be written to.
+     */
+    public OutputStream getStream() {
+<span class="fc" id="L109">        return stream;</span>
+    }
+
+    /**
+     * Returns listener to be notified when transcoding process starts, stops or
+     * when progress changes.
+     *
+     * @return listener of this mesh writer.
+     */
+    public MeshWriterListener getListener() {
+<span class="fc" id="L119">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified when transcoding process starts, stops or
+     * when progress changes.
+     *
+     * @param listener listener to be set.
+     * @throws LockedException if this instance is locked because this mesh
+     *                         writer is already processing a file.
+     */
+    public void setListener(final MeshWriterListener listener) throws LockedException {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L132">            throw new LockedException();</span>
+        }
+<span class="fc" id="L134">        this.listener = listener;</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Indicates if this mesh writer is ready because a file and a loader have
+     * been provided.
+     *
+     * @return true if mesh writer is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="fc bfc" id="L144" title="All 4 branches covered.">        return (stream != null) &amp;&amp; (loader != null);</span>
+    }
+
+    /**
+     * Internal class implementing listeners for different specific loaders.
+     */
+    private class Listeners implements LoaderListener, LoaderListenerOBJ, LoaderListenerBinary, MaterialLoaderListener {
+
+        /**
+         * Reference to mesh writer.
+         */
+        private final MeshWriter writer;
+
+        /**
+         * Constructor.
+         *
+         * @param writer reference to mesh writer.
+         */
+<span class="fc" id="L162">        public Listeners(final MeshWriter writer) {</span>
+<span class="fc" id="L163">            this.writer = writer;</span>
+<span class="fc" id="L164">        }</span>
+
+        //Loader listener
+
+        /**
+         * Method called when the loader starts processing a file.
+         *
+         * @param loader reference to loader.
+         */
+        @Override
+        public void onLoadStart(final Loader loader) {
+            //no action needed
+<span class="fc" id="L176">        }</span>
+
+        /**
+         * Method called when the loader ends processing a file.
+         *
+         * @param loader reference to loader.
+         */
+        @Override
+        public void onLoadEnd(final Loader loader) {
+            //no action needed
+<span class="fc" id="L186">        }</span>
+
+        /**
+         * Method called when loading progress changes enough to be notified.
+         *
+         * @param loader   reference to loader.
+         * @param progress progress amount as a value between 0.0 and 1.0.
+         */
+        @Override
+        public void onLoadProgressChange(final Loader loader, final float progress) {
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L197">                listener.onWriteProgressChange(writer, progress);</span>
+            }
+<span class="fc" id="L199">        }</span>
+
+        // OBJ loader listener (requesting a material loader for a given path)
+
+        /**
+         * Called when an OBJ loader requires a material loader to load the
+         * associated material (MTL) file.
+         *
+         * @param loader reference to loader.
+         * @param path   path where MTL file should be found. It's up to the
+         *               final implementation to determine where the file will be finally
+         *               found.
+         * @return an instance of a material loader.
+         */
+        @Override
+        public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader, final String path) {
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">            if (listener != null) {</span>
+<span class="fc" id="L216">                final var materialFile = listener.onMaterialFileRequested(writer, path);</span>
+
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                if (materialFile == null) {</span>
+<span class="fc" id="L219">                    return null;</span>
+                }
+
+                try {
+                    // when instantiating material loader it checks if file
+                    // exists, if not we return null
+<span class="fc" id="L225">                    return new MaterialLoaderOBJ(materialFile, this);</span>
+<span class="fc" id="L226">                } catch (final IOException ex) {</span>
+<span class="fc" id="L227">                    return null;</span>
+                }
+            }
+
+<span class="nc" id="L231">            return null;</span>
+        }
+
+        /**
+         * Called when a texture has been found.
+         *
+         * @param loader             reference to loader.
+         * @param textureId          id assigned to the texture that has been found.
+         * @param textureImageWidth  width of texture image that has been found.
+         * @param textureImageHeight height of texture image that has been found.
+         * @return File where texture data will be copied to.
+         */
+        @Override
+        public File onTextureReceived(final LoaderBinary loader, final int textureId, final int textureImageWidth,
+                                      final int textureImageHeight) {
+<span class="nc bnc" id="L246" title="All 2 branches missed.">            if (listener != null) {</span>
+<span class="nc" id="L247">                return listener.onTextureReceived(writer, textureImageWidth, textureImageHeight);</span>
+            }
+
+<span class="nc" id="L250">            return null;</span>
+        }
+
+        /**
+         * Called when texture data is available to be retrieved.
+         *
+         * @param loader             reference to loader.
+         * @param textureFile        reference to a File where texture data has been
+         *                           temporarily copied.
+         * @param textureId          id assigned to the texture.
+         * @param textureImageWidth  width of texture image.
+         * @param textureImageHeight height of texture image.
+         * @return converted image trans-coded into JPG format or resized if
+         * needed, or input textureFile if no changes are needed.
+         */
+        @Override
+        public boolean onTextureDataAvailable(final LoaderBinary loader, final File textureFile, final int textureId,
+                                              final int textureImageWidth, final int textureImageHeight) {
+<span class="nc" id="L268">            var valid = true;</span>
+<span class="nc" id="L269">            var convertedFile = textureFile;</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">            if (textureFile != null) {</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                if (listener != null) {</span>
+                    // notify that texture data has been copied into texture file
+                    // in case it needs to be handled elsewhere (to transform it
+                    // into another format)
+<span class="nc" id="L275">                    convertedFile = listener.onTextureDataAvailable(writer, textureFile, textureImageWidth,</span>
+                            textureImageHeight);
+                }
+
+<span class="nc bnc" id="L279" title="All 2 branches missed.">                if (convertedFile != null) {</span>
+<span class="nc" id="L280">                    final var tex = new Texture(textureId);</span>
+<span class="nc" id="L281">                    tex.setWidth(textureImageWidth);</span>
+<span class="nc" id="L282">                    tex.setHeight(textureImageHeight);</span>
+<span class="nc" id="L283">                    tex.setValid(true);</span>
+
+                    try {
+<span class="nc" id="L286">                        processTextureFile(tex, convertedFile);</span>
+<span class="nc" id="L287">                    } catch (final IOException ex) {</span>
+<span class="nc" id="L288">                        valid = false;</span>
+<span class="nc" id="L289">                    }</span>
+
+<span class="nc bnc" id="L291" title="All 2 branches missed.">                    if (listener != null) {</span>
+<span class="nc" id="L292">                        listener.onTextureDataProcessed(writer, textureFile, textureId, textureImageHeight);</span>
+                    }
+                }
+            }
+<span class="nc" id="L296">            return valid;</span>
+        }
+
+        // Material loader listener
+
+        /**
+         * Called when material loader starts processing materials.
+         *
+         * @param loader reference to loader.
+         */
+        @Override
+        public void onLoadStart(final MaterialLoader loader) {
+            // no action required
+<span class="fc" id="L309">        }</span>
+
+        /**
+         * Called when material loader finishes processing materials.
+         *
+         * @param loader reference to loader.
+         */
+        @Override
+        public void onLoadEnd(final MaterialLoader loader) {
+            // no action required
+<span class="fc" id="L319">        }</span>
+
+        /**
+         * Called when a texture assigned to a material must be validated to
+         * ensure that texture is valid.
+         *
+         * @param loader  reference to loader.
+         * @param texture texture reference to be validated.
+         * @return true if texture is valid, false otherwise.
+         */
+        @Override
+        public boolean onValidateTexture(final MaterialLoader loader, final Texture texture) {
+<span class="fc" id="L331">            var valid = true;</span>
+<span class="pc bpc" id="L332" title="2 of 4 branches missed.">            if (listener != null &amp;&amp; !ignoreTextureValidation) {</span>
+<span class="fc" id="L333">                final var textureFile = listener.onValidateTexture(writer, texture);</span>
+<span class="fc" id="L334">                valid = texture.isValid();</span>
+
+<span class="pc bpc" id="L336" title="2 of 4 branches missed.">                if (valid &amp;&amp; textureFile != null) {</span>
+                    try {
+<span class="fc" id="L338">                        processTextureFile(texture, textureFile);</span>
+<span class="nc" id="L339">                    } catch (final IOException ex) {</span>
+<span class="nc" id="L340">                        valid = false;</span>
+<span class="fc" id="L341">                    }</span>
+
+                    // notify that texture was validated in case that texture
+                    // file needs to be removed
+<span class="fc" id="L345">                    listener.onDidValidateTexture(writer, textureFile);</span>
+                }
+            }
+<span class="fc" id="L348">            return valid;</span>
+        }
+    }
+
+    /**
+     * Abstract method to process input file and write it into output stream.
+     *
+     * @throws LoaderException   if 3D file loading fails.
+     * @throws IOException       if an I/O error occurs.
+     * @throws NotReadyException if mesh writer is not ready because either a
+     *                           loader has not been provided or an output stream has not been provided.
+     * @throws LockedException   if this mesh writer is locked processing a file.
+     */
+    public abstract void write() throws LoaderException, IOException, NotReadyException, LockedException;
+
+    /**
+     * Abstract method to processes texture file. Usually this will imply
+     * validating that image file is not corrupt and has proper size (power of
+     * 2). If not image will be resized.
+     *
+     * @param texture     reference to texture.
+     * @param textureFile file where texture is temporarily copied.
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract void processTextureFile(final Texture texture, final File textureFile) throws IOException;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

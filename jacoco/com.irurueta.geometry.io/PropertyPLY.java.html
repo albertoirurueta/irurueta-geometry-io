@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PropertyPLY.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">PropertyPLY.java</span></div><h1>PropertyPLY.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+/**
+ * Property contained within a header element.
+ */
+public class PropertyPLY {
+    /**
+     * Name of the property.
+     */
+    final String name;
+
+    /**
+     * Property type (either scalar or list).
+     */
+    final PropertyTypePLY type;
+
+    /**
+     * Data type of the value indicating length of the array for list properties.
+     */
+    final DataTypePLY lengthType;
+
+    /**
+     * Data type for the values contained within this property.
+     */
+    final DataTypePLY valueType;
+
+    /**
+     * Listener to read the value of this property contained within the byte
+     * read buffer and transform it into the appropriate data type for this
+     * property.
+     */
+    PLYReadValueFromBufferListener readValueFromBufferListener;
+
+    /**
+     * Listener to read the appropriate amount of bytes from a PLY file
+     * corresponding to this property data type. The amount of bytes read are
+     * stored within the read buffer.
+     */
+    PLYReadValueFromStreamListener readValueFromStreamListener;
+
+    /**
+     * Listener to read the length value of this property contained within the
+     * byte read buffer and transform it into the appropriate data type for this
+     * property.
+     */
+    PLYReadValueFromBufferListener readLengthValueFromBufferListener;
+
+    /**
+     * Listener to read the appropriate amount of bytes from a PLY file
+     * corresponding to this property length data type. The amount of bytes
+     * read are stored within the read buffer.
+     */
+    PLYReadValueFromStreamListener readLengthValueFromStreamListener;
+
+    /**
+     * Constructor.
+     *
+     * @param name      name of this property.
+     * @param valueType data type of the value of this property.
+     */
+<span class="fc" id="L76">    public PropertyPLY(final String name, final DataTypePLY valueType) {</span>
+<span class="fc" id="L77">        this.name = name;</span>
+<span class="fc" id="L78">        type = PropertyTypePLY.PROPERTY_PLY_SCALAR;</span>
+<span class="fc" id="L79">        lengthType = null;</span>
+<span class="fc" id="L80">        this.valueType = valueType;</span>
+<span class="fc" id="L81">        readValueFromBufferListener = null;</span>
+<span class="fc" id="L82">        readValueFromStreamListener = null;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param name       name of this property.
+     * @param lengthType data type of the length value of this property.
+     * @param valueType  data type of the value of this property.
+     */
+<span class="fc" id="L92">    public PropertyPLY(final String name, final DataTypePLY lengthType, final DataTypePLY valueType) {</span>
+<span class="fc" id="L93">        this.name = name;</span>
+<span class="fc" id="L94">        type = PropertyTypePLY.PROPERTY_PLY_LIST;</span>
+<span class="fc" id="L95">        this.lengthType = lengthType;</span>
+<span class="fc" id="L96">        this.valueType = valueType;</span>
+<span class="fc" id="L97">        readValueFromBufferListener = null;</span>
+<span class="fc" id="L98">        readValueFromStreamListener = null;</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Returns name of this property.
+     *
+     * @return Name of this property.
+     * @throws NotAvailableException Raised if name has not been already
+     *                               provided.
+     */
+    public String getName() throws NotAvailableException {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (!isNameAvailable()) {</span>
+<span class="fc" id="L110">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L113">        return name;</span>
+    }
+
+    /**
+     * Determines if name has already been provided and is ready for retrieval.
+     *
+     * @return True if name is available, false otherwise.
+     */
+    public boolean isNameAvailable() {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        return (name != null);</span>
+    }
+
+    /**
+     * Property type (either scalar or list).
+     *
+     * @return property type.
+     */
+    public PropertyTypePLY getPropertyType() {
+<span class="fc" id="L131">        return type;</span>
+    }
+
+    /**
+     * Returns data type of the value indicating length of the array if this is
+     * a list property.
+     *
+     * @return data type of the value indicating length of the array if this is
+     * a list property.
+     * @throws NotAvailableException raised if property type has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public DataTypePLY getLengthType() throws NotAvailableException {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (!isLengthTypeAvailable()) {</span>
+<span class="fc" id="L145">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L147">        return lengthType;</span>
+    }
+
+    /**
+     * Determines whether length property type has been provided and is
+     * available for retrieval.
+     *
+     * @return True if length property type has been provided, false otherwise.
+     */
+    public boolean isLengthTypeAvailable() {
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        return (lengthType != null);</span>
+    }
+
+    /**
+     * Returns data type for the value contained within this property.
+     *
+     * @return data type for the value contained within this property.
+     * @throws NotAvailableException raised if property type has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public DataTypePLY getValueType() throws NotAvailableException {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (!isValueTypeAvailable()) {</span>
+<span class="fc" id="L169">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L171">        return valueType;</span>
+    }
+
+    /**
+     * Determines if data type for the value contained within this property has
+     * already been provided and is available for retrieval.
+     *
+     * @return True if data type for the value contained within this property
+     * is available for retrieval, false otherwise.
+     */
+    public boolean isValueTypeAvailable() {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        return (valueType != null);</span>
+    }
+
+    /**
+     * Determines if this property is valid with the values that have already
+     * been provided.
+     *
+     * @return True if property is valid, false otherwise.
+     */
+    public boolean isValidProperty() {
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">        return isNameAvailable() &amp;&amp; isValueTypeAvailable();</span>
+    }
+
+    /**
+     * Converts this property to string representation ready to be written in
+     * the header of a PLY file.
+     *
+     * @return String representation of this property.
+     */
+    @Override
+    public String toString() {
+        // if element is invalid, return empty string
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (!isValidProperty()) {</span>
+<span class="nc" id="L205">            return &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L208">        final var builder = new StringBuilder(&quot;property &quot;);</span>
+
+        // depending whether property is scalar or list
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (type == PropertyTypePLY.PROPERTY_PLY_SCALAR) {</span>
+            // add value data type
+<span class="fc" id="L213">            builder.append(valueType.getValue()).append(&quot; &quot;);</span>
+
+<span class="pc bpc" id="L215" title="2 of 4 branches missed.">        } else if (type == PropertyTypePLY.PROPERTY_PLY_LIST &amp;&amp; lengthType != null) {</span>
+            // indicate it is a list by adding length data type and values
+            // data type
+<span class="fc" id="L218">            builder.append(&quot;list &quot;).append(lengthType.getValue()).append(&quot; &quot;).append(valueType.getValue()).append(&quot; &quot;);</span>
+        }
+        // add name
+<span class="fc" id="L221">        builder.append(name).append(&quot;\n&quot;);</span>
+
+<span class="fc" id="L223">        return builder.toString();</span>
+    }
+
+    /**
+     * Returns listener to read the value of this property contained within the
+     * byte read buffer and transforms it into the appropriate data type for
+     * this property.
+     *
+     * @return listener to read the value of this property.
+     * @throws NotAvailableException Raised if listener has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public PLYReadValueFromBufferListener getReadValueFromBufferListener() throws NotAvailableException {
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (!isReadValueFromBufferListenerAvailable()) {</span>
+<span class="fc" id="L237">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L240">        return readValueFromBufferListener;</span>
+    }
+
+    /**
+     * Sets listener to read the value of this property contained within the
+     * byte read buffer and transforms it into the appropriate data type for
+     * this property.
+     *
+     * @param listener listener to read the value of this property.
+     */
+    public void setReadValueFromBufferListener(final PLYReadValueFromBufferListener listener) {
+<span class="fc" id="L251">        readValueFromBufferListener = listener;</span>
+<span class="fc" id="L252">    }</span>
+
+    /**
+     * Determines if listener to read the value of this property has been
+     * provided and is available for retrieval or not.
+     *
+     * @return True if listener is available, false otherwise.
+     */
+    public boolean isReadValueFromBufferListenerAvailable() {
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        return readValueFromBufferListener != null;</span>
+    }
+
+    /**
+     * Returns listener to read the appropriate amount of bytes from a PLY file
+     * corresponding to this property data type. The amount of bytes read are
+     * stored within the read buffer.
+     *
+     * @return listener to read the appropriate amount of bytes from a PLY file.
+     * @throws NotAvailableException Raised if listener has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public PLYReadValueFromStreamListener getReadValueFromStreamListener() throws NotAvailableException {
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (!isReadValueFromStreamListenerAvailable()) {</span>
+<span class="fc" id="L275">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L278">        return readValueFromStreamListener;</span>
+    }
+
+    /**
+     * Sets listener to read the appropriate amount of bytes from a PLY file
+     * corresponding to this property data type. The amount of bytes read are
+     * stored within the read buffer.
+     *
+     * @param listener listener to read the appropriate amount of bytes from a
+     *                 PLY file.
+     */
+    public void setReadValueFromStreamListener(final PLYReadValueFromStreamListener listener) {
+<span class="fc" id="L290">        readValueFromStreamListener = listener;</span>
+<span class="fc" id="L291">    }</span>
+
+    /**
+     * Determines if listener to read the appropriate amount of bytes from a PLY
+     * file has been provided and is available for retrieval or not.
+     *
+     * @return True if listener is available, false otherwise.
+     */
+    public boolean isReadValueFromStreamListenerAvailable() {
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        return readValueFromStreamListener != null;</span>
+    }
+
+    /**
+     * Returns listener to read the length value of this property contained
+     * within the byte read buffer and transform it into the appropriate data
+     * type for this property.
+     *
+     * @return listener to read the length value of this property.
+     * @throws NotAvailableException Raised if listener has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public PLYReadValueFromBufferListener getReadLengthValueFromBufferListener() throws NotAvailableException {
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        if (!isReadLengthValueFromBufferListenerAvailable()) {</span>
+<span class="fc" id="L314">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L317">        return readLengthValueFromBufferListener;</span>
+    }
+
+    /**
+     * Sets listener to read the length value of this property contained within
+     * the byte read buffer and transform it into the appropriate data type for
+     * this property.
+     *
+     * @param listener listener to read the length value of this property.
+     */
+    public void setReadLengthValueFromBufferListener(final PLYReadValueFromBufferListener listener) {
+<span class="fc" id="L328">        readLengthValueFromBufferListener = listener;</span>
+<span class="fc" id="L329">    }</span>
+
+    /**
+     * Determines if listener to read the length value of this property has been
+     * provided and is available for retrieval or not.
+     *
+     * @return True if listener is available, false otherwise.
+     */
+    public boolean isReadLengthValueFromBufferListenerAvailable() {
+<span class="fc bfc" id="L338" title="All 2 branches covered.">        return readLengthValueFromBufferListener != null;</span>
+    }
+
+    /**
+     * Returns listener to read the appropriate amount of bytes from a PLY file
+     * corresponding to this property length data type. The amount of bytes
+     * read are stored within the read buffer.
+     *
+     * @return listener to read the appropriate amount of bytes from a PLY file.
+     * @throws NotAvailableException Raised if listener has not yet been
+     *                               provided and is not available for retrieval.
+     */
+    public PLYReadValueFromStreamListener getReadLengthValueFromStreamListener() throws NotAvailableException {
+<span class="fc bfc" id="L351" title="All 2 branches covered.">        if (!isReadLengthValueFromStreamListenerAvailable()) {</span>
+<span class="fc" id="L352">            throw new NotAvailableException();</span>
+        }
+
+<span class="fc" id="L355">        return readLengthValueFromStreamListener;</span>
+    }
+
+    /**
+     * Sets listener to read the appropriate amount of bytes from a PLY file
+     * corresponding to this property length data type. The amount of bytes
+     * read are stored within the read buffer.
+     *
+     * @param listener listener to read the appropriate amount of bytes from a
+     *                 PLY file.
+     */
+    public void setReadLengthValueFromStreamListener(final PLYReadValueFromStreamListener listener) {
+<span class="fc" id="L367">        readLengthValueFromStreamListener = listener;</span>
+<span class="fc" id="L368">    }</span>
+
+    /**
+     * Determines if listener to read the appropriate amount of bytes from a PLY
+     * file has been provided and is available for retrieval or not.
+     *
+     * @return True if listener is available, false otherwise.
+     */
+    public boolean isReadLengthValueFromStreamListenerAvailable() {
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        return readLengthValueFromStreamListener != null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

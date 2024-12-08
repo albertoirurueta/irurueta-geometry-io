@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VertexOBJ.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">VertexOBJ.java</span></div><h1>VertexOBJ.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+import com.irurueta.geometry.Point3D;
+
+/**
+ * This class defines the structure that contains data for a single vertex in
+ * an OBJ file.
+ */
+public class VertexOBJ {
+
+    /**
+     * Contains coordinates of 3D point.
+     */
+    private Point3D vertex;
+
+    /**
+     * Index of vertex in OBJ file.
+     */
+    private int vertexIndex;
+
+    /**
+     * Index of normal corresponding to this vertex in OBJ file.
+     */
+    private int normalIndex;
+
+    /**
+     * Index of texture assigned to this vertex in OBJ file.
+     */
+    private int textureIndex;
+
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L50">    public VertexOBJ() {</span>
+<span class="fc" id="L51">        vertex = null;</span>
+<span class="fc" id="L52">        vertexIndex = normalIndex = textureIndex = -1;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Returns coordinates of 3D point.
+     *
+     * @return coordinates of 3D point.
+     */
+    public Point3D getVertex() {
+<span class="fc" id="L61">        return vertex;</span>
+    }
+
+    /**
+     * Sets coordinates of 3D point.
+     *
+     * @param vertex coordinates of 3D point.
+     */
+    public void setVertex(final Point3D vertex) {
+<span class="fc" id="L70">        this.vertex = vertex;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Indicates whether 3D point has been provided or not.
+     *
+     * @return true if 3D point is available, false otherwise.
+     */
+    public boolean isVertexAvailable() {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        return vertex != null;</span>
+    }
+
+    /**
+     * Returns index of vertex in OBJ file.
+     *
+     * @return index of vertex in OBJ file.
+     */
+    public int getVertexIndex() {
+<span class="fc" id="L88">        return vertexIndex;</span>
+    }
+
+    /**
+     * Sets index of vertex in OBJ file.
+     *
+     * @param vertexIndex index of vertex in OBJ file.
+     */
+    public void setVertexIndex(final int vertexIndex) {
+<span class="fc" id="L97">        this.vertexIndex = vertexIndex;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Indicates whether vertex index has been provided or not.
+     *
+     * @return true if vertex index is available, false otherwise.
+     */
+    public boolean isVertexIndexAvailable() {
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        return vertexIndex &gt;= 0;</span>
+    }
+
+    /**
+     * Returns index of normal corresponding to this vertex in OBJ file.
+     *
+     * @return index of normal corresponding to this vertex in OBJ file.
+     */
+    public int getNormalIndex() {
+<span class="fc" id="L115">        return normalIndex;</span>
+    }
+
+    /**
+     * Sets index of normal corresponding to this vertex in OBJ file.
+     *
+     * @param normalIndex index of normal corresponding to this vertex in OBJ
+     *                    file.
+     */
+    public void setNormalIndex(final int normalIndex) {
+<span class="fc" id="L125">        this.normalIndex = normalIndex;</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Indicates whether normal index has been provided or not.
+     *
+     * @return true if normal index is available, false otherwise.
+     */
+    public boolean isNormalIndexAvailable() {
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        return normalIndex &gt;= 0;</span>
+    }
+
+    /**
+     * Returns index of texture assigned to this vertex in OBJ file.
+     *
+     * @return index of texture assigned to this vertex in OBJ file.
+     */
+    public int getTextureIndex() {
+<span class="fc" id="L143">        return textureIndex;</span>
+    }
+
+    /**
+     * Sets index of texture assigned to this vertex in OBJ file.
+     *
+     * @param textureIndex index of texture assigned to this vertex in OBJ file.
+     */
+    public void setTextureIndex(final int textureIndex) {
+<span class="fc" id="L152">        this.textureIndex = textureIndex;</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Indicates if texture assigned to this vertex is available or not
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isTextureIndexAvailable() {
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        return textureIndex &gt;= 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

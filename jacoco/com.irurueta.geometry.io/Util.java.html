@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Util.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry-io</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.io</a> &gt; <span class="el_source">Util.java</span></div><h1>Util.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.io;
+
+/**
+ * Utility methods for I/O operations.
+ */
+@SuppressWarnings(&quot;SameParameterValue&quot;)
+public class Util {
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private Util() {
+    }
+
+    /**
+     * Converts provided value to big endian.
+     * NOTE: Java virtual machine always uses big endian values, so this method
+     * has no effect.
+     *
+     * @param value Value to be converted to big endian.
+     * @return Converted value.
+     */
+    static short toBigEndian(final short value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L41">        return value;</span>
+    }
+
+    /**
+     * Converts provided value to little endian.
+     * Little endian puts high bytes last, or in other words, byte order is
+     * reversed.
+     *
+     * @param value Value to be converted to little endian.
+     * @return Converted value.
+     */
+    static short toLittleEndian(final short value) {
+<span class="fc" id="L53">        return Short.reverseBytes(value);</span>
+    }
+
+    /**
+     * Converts provided value to provided endian type.
+     * Little endian puts high bytes last (having reversed byte order), and big
+     * endian puts high bytes first (following natural binary order).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static short toEndianType(final EndianType endianType, final short value) {
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts value from big endian to machine native endian type (in Java
+     * native endian type is always Big endian, for that reason this method has
+     * no effect).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static short fromBigEndian(final short value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L79">        return value;</span>
+    }
+
+    /**
+     * Converts value from little endian to machine native endian type (in Java
+     * native endian type is always Big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian type. Big endian preserves natural byte
+     * order (high bytes first).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static short fromLittleEndian(short value) {
+<span class="fc" id="L93">        return Short.reverseBytes(value);</span>
+    }
+
+    /**
+     * Converts provided value from provided endian type to machine native
+     * endian type (in Java native endian type is always big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian. Big endian preserves natural byte order
+     * (high bytes first).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static short fromEndianType(final EndianType endianType, final short value) {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts provided value to big endian.
+     * NOTE: Java virtual machine always uses big endian values, so this method
+     * has no effect.
+     *
+     * @param value Value to be converted to big endian.
+     * @return Converted value.
+     */
+    static int toBigEndian(int value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L121">        return value;</span>
+    }
+
+    /**
+     * Converts provided value to little endian.
+     * Little endian puts high bytes last, or in other words, byte order is
+     * reversed.
+     *
+     * @param value Value to be converted to little endian.
+     * @return Converted value.
+     */
+    static int toLittleEndian(int value) {
+<span class="fc" id="L133">        return Integer.reverseBytes(value);</span>
+    }
+
+    /**
+     * Converts provided value to provided endian type.
+     * Little endian puts high bytes last (having reversed byte order), and big
+     * endian puts high bytes first (following natural binary order).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static int toEndianType(final EndianType endianType, final int value) {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts value from big endian to machine native endian type (in Java
+     * native endian type is always Big endian, for that reason this method has
+     * no effect).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static int fromBigEndian(final int value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L159">        return value;</span>
+    }
+
+    /**
+     * Converts value from little endian to machine native endian type (in Java
+     * native endian type is always Big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian type. Big endian preserves natural byte
+     * order (high bytes first).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static int fromLittleEndian(final int value) {
+<span class="fc" id="L173">        return Integer.reverseBytes(value);</span>
+    }
+
+    /**
+     * Converts provided value from provided endian type to machine native
+     * endian type (in Java native endian type is always big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian. Big endian preserves natural byte order
+     * (high bytes first).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static int fromEndianType(final EndianType endianType, final int value) {
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts provided value to big endian.
+     * NOTE: Java virtual machine always uses big endian values, so this method
+     * has no effect.
+     *
+     * @param value Value to be converted to big endian.
+     * @return Converted value.
+     */
+    static long toBigEndian(final long value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L201">        return value;</span>
+    }
+
+    /**
+     * Converts provided value to little endian.
+     * Little endian puts high bytes last, or in other words, byte order is
+     * reversed.
+     *
+     * @param value Value to be converted to little endian.
+     * @return Converted value.
+     */
+    static long toLittleEndian(final long value) {
+<span class="fc" id="L213">        return Long.reverseBytes(value);</span>
+    }
+
+    /**
+     * Converts provided value to provided endian type.
+     * Little endian puts high bytes last (having reversed byte order), and big
+     * endian puts high bytes first (following natural binary order).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static long toEndianType(final EndianType endianType, final long value) {
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts value from big endian to machine native endian type (in Java
+     * native endian type is always Big endian, for that reason this method has
+     * no effect).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static long fromBigEndian(final long value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L239">        return value;</span>
+    }
+
+    /**
+     * Converts value from little endian to machine native endian type (in Java
+     * native endian type is always Big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian type. Big endian preserves natural byte
+     * order (high bytes first).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static long fromLittleEndian(final long value) {
+<span class="fc" id="L253">        return Long.reverseBytes(value);</span>
+    }
+
+    /**
+     * Converts provided value from provided endian type to machine native
+     * endian type (in Java native endian type is always big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian. Big endian preserves natural byte order
+     * (high bytes first).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static long fromEndianType(final EndianType endianType, final long value) {
+<span class="fc bfc" id="L268" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts provided value to big endian.
+     * NOTE: Java virtual machine always uses big endian values, so this method
+     * has no effect.
+     *
+     * @param value Value to be converted to big endian.
+     * @return Converted value.
+     */
+    static float toBigEndian(final float value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L281">        return value;</span>
+    }
+
+    /**
+     * Converts provided value to little endian.
+     * Little endian puts high bytes last, or in other words, byte order is
+     * reversed.
+     *
+     * @param value Value to be converted to little endian.
+     * @return Converted value.
+     */
+    static float toLittleEndian(final float value) {
+<span class="fc" id="L293">        return Float.intBitsToFloat(Integer.reverseBytes(Float.floatToRawIntBits(value)));</span>
+    }
+
+    /**
+     * Converts provided value to provided endian type.
+     * Little endian puts high bytes last (having reversed byte order), and big
+     * endian puts high bytes first (following natural binary order).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static float toEndianType(final EndianType endianType, final float value) {
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts value from big endian to machine native endian type (in Java
+     * native endian type is always Big endian, for that reason this method has
+     * no effect).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static float fromBigEndian(final float value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L319">        return value;</span>
+    }
+
+    /**
+     * Converts value from little endian to machine native endian type (in Java
+     * native endian type is always Big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian type. Big endian preserves natural byte
+     * order (high bytes first).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static float fromLittleEndian(final float value) {
+<span class="fc" id="L333">        return Float.intBitsToFloat(Integer.reverseBytes(Float.floatToRawIntBits(value)));</span>
+    }
+
+    /**
+     * Converts provided value from provided endian type to machine native
+     * endian type (in Java native endian type is always big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian. Big endian preserves natural byte order
+     * (high bytes first).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static float fromEndianType(final EndianType endianType, final float value) {
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts provided value to big endian.
+     * NOTE: Java virtual machine always uses big endian values, so this method
+     * has no effect.
+     *
+     * @param value Value to be converted to big endian.
+     * @return Converted value.
+     */
+    static double toBigEndian(final double value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L361">        return value;</span>
+    }
+
+    /**
+     * Converts provided value to little endian.
+     * Little endian puts high bytes last, or in other words, byte order is
+     * reversed.
+     *
+     * @param value Value to be converted to little endian.
+     * @return Converted value.
+     */
+    static double toLittleEndian(final double value) {
+<span class="fc" id="L373">        return Double.longBitsToDouble(Long.reverseBytes(Double.doubleToRawLongBits(value)));</span>
+    }
+
+    /**
+     * Converts provided value to provided endian type.
+     * Little endian puts high bytes last (having reversed byte order), and big
+     * endian puts high bytes first (following natural binary order).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static double toEndianType(final EndianType endianType, final double value) {
+<span class="fc bfc" id="L386" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? toLittleEndian(value) : value;</span>
+    }
+
+    /**
+     * Converts value from big endian to machine native endian type (in Java
+     * native endian type is always Big endian, for that reason this method has
+     * no effect).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static double fromBigEndian(final double value) {
+        // Java virtual machine always is big endian
+<span class="fc" id="L399">        return value;</span>
+    }
+
+    /**
+     * Converts value from little endian to machine native endian type (in Java
+     * native endian type is always Big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian type. Big endian preserves natural byte
+     * order (high bytes first).
+     *
+     * @param value Value to be converted.
+     * @return Converted value.
+     */
+    static double fromLittleEndian(final double value) {
+<span class="fc" id="L413">        return Double.longBitsToDouble(Long.reverseBytes(Double.doubleToRawLongBits(value)));</span>
+    }
+
+    /**
+     * Converts provided value from provided endian type to machine native
+     * endian type (in Java native endian type is always big endian).
+     * Little endian puts high bytes last, so byte order has to be reversed to
+     * convert to native machine endian. Big endian preserves natural byte order
+     * (high bytes first).
+     *
+     * @param endianType Endian type.
+     * @param value      Value to be converted.
+     * @return Converted value.
+     */
+    static double fromEndianType(final EndianType endianType, final double value) {
+<span class="fc bfc" id="L428" title="All 2 branches covered.">        return endianType == EndianType.LITTLE_ENDIAN_TYPE ? fromLittleEndian(value) : value;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
