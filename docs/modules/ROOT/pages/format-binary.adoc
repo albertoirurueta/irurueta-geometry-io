@@ -1,0 +1,56 @@
+= Binary v2 Format
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Binary v2 is this library's own compact, proprietary mesh format (the "2" is a version tag written into every
+file — `LoaderBinary`/`MeshWriterBinary` require it to match, and reject files that don't). Unlike OBJ, STL or
+PLY, it can be both written and read back by this library, making it a good target for re-saving a mesh loaded
+from another format into a smaller, faster-to-reload file.
+
+== Writing a binary v2 file
+
+`MeshWriterBinary` wraps *any* `Loader` (already pointed at its own source file, in any supported format) and
+re-encodes what that loader reads into binary v2. You do not call `loader.load()` yourself — `write()` drives the
+source loader internally:
+
+[source,java]
+----
+final var sourceLoader = new LoaderOBJ(new File("model.obj"));
+try (final var outStream = new FileOutputStream("model.bin")) {
+    final var writer = new MeshWriterBinary(sourceLoader, outStream);
+    writer.write();
+}
+----
+
+`write()` throws `LoaderException`, `IOException`, `NotReadyException` and `LockedException`.
+
+Any of `LoaderOBJ`, `LoaderSTL`, `LoaderPLY` or even another `LoaderBinary` can be used as the source loader —
+this is how a mesh loaded from any supported format is converted into binary v2.
+
+== Loading a binary v2 file
+
+Reading a file previously written by `MeshWriterBinary` uses the same `Loader`/`LoaderIterator` contract as
+every other format:
+
+[source,java]
+----
+final var loader = new LoaderBinary(new File("model.bin"));
+final var it = loader.load();
+while (it.hasNext()) {
+    final var chunk = it.next();
+    final float[] vertices = chunk.getVerticesCoordinatesData();
+    // process the chunk's geometry here
+}
+----
+
+The `LoaderBinary(File)` constructor throws `IOException`; `load()` throws `LockedException`,
+`NotReadyException`, `IOException` and `LoaderException`; `LoaderIterator.next()` throws
+`NotAvailableException`, `LoaderException` and `IOException` (omitted above for brevity).
+
+== Notes
+
+* Embedded textures are only written out to disk on load if a `LoaderListenerBinary` is set on the `LoaderBinary`
+  instance to supply a destination file for each texture; without one, texture bytes in the file are simply
+  skipped.
+* Files are memory-mapped or streamed depending on size, like every other loader in this library (see
+  xref:index.adoc[]).
