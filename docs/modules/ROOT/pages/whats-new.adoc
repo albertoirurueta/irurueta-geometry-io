@@ -1,0 +1,13 @@
+= What's New
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+== 1.6.0
+
+* ✨ Added an Antora-based documentation site, including a dedicated page for each supported file format (OBJ,
+  STL, PLY, binary v2, JSON) with load/write examples.
+* ✨ Added `CHANGELOG.md`.
+* ♻️ Raised the minimum/target JDK to 21.
+* ♻️ Migrated SonarCloud analysis from a standalone `sonar-scanner` GitHub Action to the `sonar-maven-plugin`,
+  configured directly in `pom.xml`.
+* ♻️ Expanded `README.md` with a project status table, documentation links, and a usage example.

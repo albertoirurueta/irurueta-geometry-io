@@ -1,0 +1,62 @@
+= JSON Format
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`MeshWriterJson` re-encodes a mesh into a JSON document, intended for consumption by web/JavaScript clients.
+This is a write-only, one-way export target — there is no loader that reads this JSON back into the library.
+If you need to reload an exported mesh, write to xref:format-binary.adoc[] instead.
+
+== Writing a JSON file
+
+Like `MeshWriterBinary`, `MeshWriterJson` wraps *any* `Loader` (already pointed at its own source file, in any
+supported format) and drives it internally — you do not call `loader.load()` yourself:
+
+[source,java]
+----
+final var sourceLoader = new LoaderPLY(new File("model.ply"));
+try (final var outStream = new FileOutputStream("model.json")) {
+    final var writer = new MeshWriterJson(sourceLoader, outStream);
+    writer.write();
+}
+----
+
+`write()` throws `LoaderException`, `IOException`, `NotReadyException` and `LockedException`.
+
+Any of `LoaderOBJ`, `LoaderSTL`, `LoaderPLY` or `LoaderBinary` can be used as the source loader.
+
+== Output shape
+
+The writer streams its output directly rather than building an in-memory JSON tree. Each mesh chunk becomes an
+entry with only the fields the source data actually has:
+
+[source,json]
+----
+{
+  "textures": [
+    { "id": 0, "width": 512, "height": 512, "data": "<base64>" }
+  ],
+  "chunks": [
+    {
+      "material": { "id": 0, "ambientColor": [0, 0, 0], "diffuseColor": [1, 1, 1] },
+      "indices": [0, 1, 2],
+      "vertexPositions": [0.0, 0.0, 0.0],
+      "vertexNormals": [0.0, 1.0, 0.0],
+      "vertexTextureCoords": [0.0, 0.0],
+      "vertexColors": [255, 255, 255],
+      "colorComponents": 3,
+      "minCorner": [0.0, 0.0, 0.0],
+      "maxCorner": [1.0, 1.0, 1.0]
+    }
+  ],
+  "minCorner": [0.0, 0.0, 0.0],
+  "maxCorner": [1.0, 1.0, 1.0]
+}
+----
+
+== Notes
+
+* Textures are embedded as base64 by default (`DEFAULT_EMBED_TEXTURES = true`, via `setEmbedTexturedEnabled`);
+  alternatively a `MeshWriterJsonListener` can supply a remote URL or ID per texture instead of embedding it.
+* `NaN`/infinite float values (coordinates, normals, texture coordinates) are replaced with `Float.MAX_VALUE`
+  to keep the output valid JSON.
+* The output charset defaults to UTF-8 and is configurable via `setCharset`.

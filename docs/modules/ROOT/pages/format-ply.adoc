@@ -1,0 +1,47 @@
+= PLY Format
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The PLY (Polygon File Format / Stanford Triangle Format) format, in both its ASCII and binary
+(big- or little-endian) variants, is read by `LoaderPLY`. This library only *loads* PLY files — there is no
+PLY writer; to export a mesh you loaded from PLY, convert it into one of the writable formats instead
+(xref:format-binary.adoc[] or xref:format-json.adoc[]).
+
+== Loading a PLY file
+
+[source,java]
+----
+final var loader = new LoaderPLY(new File("model.ply"));
+final var it = loader.load();
+while (it.hasNext()) {
+    final var chunk = it.next();
+    final float[] vertices = chunk.getVerticesCoordinatesData();
+    final short[] colors = chunk.getColorData();
+    final float[] normals = chunk.getNormalsData();
+    final float[] textureCoords = chunk.getTextureCoordinatesData();
+    final int[] indices = chunk.getIndicesData();
+    // process the chunk's geometry here
+}
+----
+
+The `LoaderPLY(File)` constructor throws `IOException`; `load()` throws `LockedException`, `NotReadyException`,
+`IOException` and `LoaderException`; `LoaderIterator.next()` throws `NotAvailableException`, `LoaderException`
+and `IOException` (omitted above for brevity).
+
+The storage mode (`ascii`, `binary_big_endian` or `binary_little_endian`) is declared in the file's own header
+and detected automatically — the caller never needs to specify it.
+
+== Self-describing header
+
+PLY files declare their own structure in a header, modeled by `HeaderPLY` (a list of `ElementPLY`, each with its
+own list of `PropertyPLY`, plus free-form comments). Because of this, whether a chunk's colors, normals or
+texture coordinates are populated depends entirely on what the *source file's* header actually declares:
+`chunk.getColorData()`, `chunk.getNormalsData()` and `chunk.getTextureCoordinatesData()` return `null` when the
+corresponding vertex property isn't present in that particular file.
+
+== Notes
+
+* `loader.isValidFile()` only parses the header (a cheap check) — actual per-vertex/per-face data errors
+  surface as a `LoaderException` during `load()`/iteration.
+* Large files are read a chunk at a time (`maxVerticesInChunk`, default `65535`) instead of being held entirely
+  in memory.

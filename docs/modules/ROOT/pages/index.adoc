@@ -1,0 +1,54 @@
+= irurueta-geometry-io
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+irurueta-geometry-io is a Java library that reads, writes and converts 3D mesh files between different formats.
+It supports the OBJ, STL and PLY formats, plus a custom binary format (binary v2) and JSON output, and is built
+so that a large 3D file can be processed a small chunk at a time instead of being held entirely in memory.
+
+== Why it exists
+
+3D scanning and modelling pipelines routinely need to move meshes between tools that each expect a different file
+format. This library provides a single, consistent API for that conversion step: point it at a source file, pick a
+target writer, and stream the result out — regardless of which of the supported formats is on either side.
+
+== Core concepts
+
+Two abstractions carry the whole library:
+
+`Loader`::
+An abstract class with one concrete subclass per supported format (`LoaderOBJ`, `LoaderSTL`, `LoaderPLY`, and the
+binary format's `LoaderBinary`). A loader is pointed at a `File`, validated, and then driven through a
+`LoaderIterator` that yields the mesh's vertices, textures and other chunks a piece at a time — so files far
+larger than available memory can still be processed. `Loader` decides automatically, based on
+`DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY`, whether to memory-map the file (`MappedFileReaderAndWriter`) or stream
+it (`FileReaderAndWriter`).
+
+`MeshWriter`::
+An abstract class that pairs a `Loader` with an `OutputStream` and re-encodes whatever the loader reads into a
+different format — `MeshWriterBinary` for the library's own binary format, `MeshWriterJson` for JSON. Progress and
+lifecycle are reported through `MeshWriterListener` / `LoaderListener`, so long conversions can be tracked or
+cancelled by the caller.
+
+The format a `Loader` or `MeshWriter` targets is identified by the `MeshFormat` enum
+(`MESH_FORMAT_OBJ`, `MESH_FORMAT_STL`, `MESH_FORMAT_PLY`, `MESH_FORMAT_BINARY2`).
+
+[mermaid]
+....
+flowchart LR
+    F[3D file<br/>OBJ / STL / PLY / binary] --> L(Loader)
+    L -->|LoaderIterator| C[Mesh chunks<br/>vertices, textures, materials]
+    C --> W(MeshWriter)
+    W --> O[Output stream<br/>binary v2 / JSON]
+....
+
+Supporting types round out the model: `DataChunk`/`Chunk3DS` carry decoded geometry data, `Material`/`Texture`
+(and their format-specific subclasses, e.g. `MaterialOBJ`) carry surface appearance, and `HeaderPLY`/`PropertyPLY`
+model the PLY format's self-describing header.
+
+== Where to go next
+
+* xref:installation.adoc[] — add the library as a dependency to your own project.
+* xref:format-obj.adoc[], xref:format-stl.adoc[], xref:format-ply.adoc[] and xref:format-binary.adoc[] — how to
+  load each supported format; xref:format-binary.adoc[] and xref:format-json.adoc[] — how to write one.
+* xref:reference.adoc[] — links to the reports generated for this project's build.

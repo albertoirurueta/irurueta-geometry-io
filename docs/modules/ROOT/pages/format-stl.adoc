@@ -1,0 +1,41 @@
+= STL Format
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The STL format (both its ASCII and binary variants) is read by `LoaderSTL`. This library only *loads* STL
+files — there is no STL writer; to export a mesh you loaded from STL, convert it into one of the writable
+formats instead (xref:format-binary.adoc[] or xref:format-json.adoc[]).
+
+== Loading an STL file
+
+[source,java]
+----
+final var loader = new LoaderSTL(new File("model.stl"));
+final var it = loader.load();
+while (it.hasNext()) {
+    final var chunk = it.next();
+    final float[] vertices = chunk.getVerticesCoordinatesData();
+    final float[] normals = chunk.getNormalsData();
+    final int[] indices = chunk.getIndicesData();
+    // process the chunk's geometry here
+}
+----
+
+The `LoaderSTL(File)` constructor throws `IOException`; `load()` throws `LockedException`, `NotReadyException`,
+`IOException` and `LoaderException`; `LoaderIterator.next()` throws `NotAvailableException`, `LoaderException`
+and `IOException` (omitted above for brevity).
+
+ASCII vs. binary STL is detected automatically from the file's own content (the first 5 bytes are checked
+against `"solid"`) — the caller never needs to specify which variant a file uses.
+
+== Notes
+
+* STL only carries geometry: `chunk.getNormalsData()` returns each triangle's facet normal duplicated onto its
+  3 vertices. `chunk.getTextureCoordinatesData()` and `chunk.getColorData()` are always `null`, and no material
+  is ever set — STL has no texture, color or material support in this library.
+* `loader.getNumberOfVertices()` is only populated for binary STL files (computed from the file's triangle
+  count); for ASCII files it stays `0`.
+* `loader.getSolidName()` is only populated for ASCII files (read from the `solid <name>` header line); binary
+  STL has no name field.
+* Large files are read a chunk at a time (`maxVerticesInChunk`, default `65535`) instead of being held entirely
+  in memory.

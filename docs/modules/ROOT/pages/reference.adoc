@@ -1,0 +1,28 @@
+= Reference
+:description: Links to generated API, test, coverage, and code quality reports.
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+This page links to reports produced by the project build and quality tooling.
+The Maven reports are generated during Maven site execution and are available after `target/site` is copied into the documentation output as `mvn-site`.
+
+[cols="1,3", options="header"]
+|===
+| Report
+| Description
+
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/package-summary.html[Javadoc]
+| API reference generated as part of Maven site execution.
+
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/jacoco/index.html[JaCoCo]
+| Code coverage report generated during the Maven build.
+
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/surefire.html[Surefire]
+| Unit test execution report.
+
+| link:https://sonarcloud.io/project/overview?id=albertoirurueta_irurueta-geometry-io[SonarCloud]
+| Code quality, issue, and coverage information from SonarCloud.
+
+|https://github.com/albertoirurueta/irurueta-geometry-io[Repository]
+|Github repository
+|===

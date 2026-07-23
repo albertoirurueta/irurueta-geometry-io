@@ -1,0 +1,71 @@
+= OBJ Format
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The Wavefront OBJ format is read by `LoaderOBJ`. This library only *loads* OBJ files — there is no OBJ writer;
+to export a mesh you loaded from OBJ, convert it into one of the writable formats instead
+(xref:format-binary.adoc[] or xref:format-json.adoc[]).
+
+== Loading an OBJ file
+
+[source,java]
+----
+final var loader = new LoaderOBJ(new File("model.obj"));
+final var it = loader.load();
+while (it.hasNext()) {
+    final var chunk = it.next();
+    final float[] vertices = chunk.getVerticesCoordinatesData();
+    final float[] normals = chunk.getNormalsData();
+    final float[] textureCoords = chunk.getTextureCoordinatesData();
+    final int[] indices = chunk.getIndicesData();
+    // process the chunk's geometry here
+}
+----
+
+The `LoaderOBJ(File)` constructor throws `IOException`; `load()` throws `LockedException`, `NotReadyException`,
+`IOException` and `LoaderException`; `LoaderIterator.next()` throws `NotAvailableException`, `LoaderException`
+and `IOException` (omitted above for brevity).
+
+== Materials (`mtllib`)
+
+If the OBJ file references a `.mtl` material library, `LoaderOBJ` resolves and loads it automatically while
+scanning the file. By default the referenced path is resolved as-is (relative to the working directory, not the
+OBJ file's own directory). To control resolution yourself, implement `LoaderListenerOBJ` and set it on the
+loader before calling `load()`:
+
+[source,java]
+----
+loader.setListener(new LoaderListenerOBJ() {
+    @Override
+    public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader, final String path) {
+        return new MaterialLoaderOBJ(new File(objFile.getParentFile(), path));
+    }
+
+    @Override
+    public void onLoadStart(final Loader loader) {
+        // optional
+    }
+
+    @Override
+    public void onLoadEnd(final Loader loader) {
+        // optional
+    }
+
+    @Override
+    public void onLoadProgressChange(final Loader loader, final float progress) {
+        // optional
+    }
+});
+----
+
+Once loaded, materials are available through `loader.getMaterials()`, and any chunk whose faces reference a
+material exposes it via `chunk.getMaterial()` / `chunk.isMaterialAvailable()`.
+
+== Notes
+
+* Faces with more than 3 vertices are triangulated automatically; by default a triangulation failure on one
+  face is skipped rather than aborting the whole load (`continueIfTriangulationError`, on by default).
+* Both 3-component (`x y z`) and homogeneous 4-component (`x y z w`) vertex lines are supported.
+* Large files are read a chunk at a time (`maxVerticesInChunk`, default `65535`) instead of being held entirely
+  in memory.
+* `chunk.getColorData()` is always `null` for OBJ — this format has no vertex-color data.

@@ -1,0 +1,10 @@
+* xref:index.adoc[]
+* xref:whats-new.adoc[]
+* xref:installation.adoc[]
+* Supported formats
+** xref:format-obj.adoc[OBJ]
+** xref:format-stl.adoc[STL]
+** xref:format-ply.adoc[PLY]
+** xref:format-binary.adoc[Binary v2]
+** xref:format-json.adoc[JSON]
+* xref:reference.adoc[]
