@@ -11,7 +11,7 @@ irurueta-geometry-io is published to Maven Central. Add it as a Maven dependency
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry-io</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <scope>compile</scope>
 </dependency>
 ----
@@ -23,7 +23,7 @@ irurueta-geometry-io is published to Maven Central. Add it as a Maven dependency
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry-io</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ----
