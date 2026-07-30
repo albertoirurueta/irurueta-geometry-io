@@ -39,6 +39,57 @@ texture coordinates are populated depends entirely on what the *source file's* h
 `chunk.getColorData()`, `chunk.getNormalsData()` and `chunk.getTextureCoordinatesData()` return `null` when the
 corresponding vertex property isn't present in that particular file.
 
+== Related classes
+
+[cols="1,1,1", options="header"]
+|===
+| Class | Source | Javadoc
+
+| `LoaderPLY`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderPLY.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderPLY.html[Javadoc]
+
+| `Loader`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html[Javadoc]
+
+| `LoaderIterator`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderIterator.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderIterator.html[Javadoc]
+
+| `DataChunk`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/DataChunk.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/DataChunk.html[Javadoc]
+
+| `HeaderPLY`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/HeaderPLY.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/HeaderPLY.html[Javadoc]
+
+| `ElementPLY`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/ElementPLY.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/ElementPLY.html[Javadoc]
+
+| `PropertyPLY`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/PropertyPLY.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/PropertyPLY.html[Javadoc]
+
+| `LoaderException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html[Javadoc]
+
+| `LockedException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html[Javadoc]
+
+| `NotReadyException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html[Javadoc]
+
+| `NotAvailableException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotAvailableException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotAvailableException.html[Javadoc]
+|===
+
 == Notes
 
 * `loader.isValidFile()` only parses the header (a cheap check) — actual per-vertex/per-face data errors

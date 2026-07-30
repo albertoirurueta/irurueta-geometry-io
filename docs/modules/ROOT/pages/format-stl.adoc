@@ -28,6 +28,45 @@ and `IOException` (omitted above for brevity).
 ASCII vs. binary STL is detected automatically from the file's own content (the first 5 bytes are checked
 against `"solid"`) — the caller never needs to specify which variant a file uses.
 
+== Related classes
+
+[cols="1,1,1", options="header"]
+|===
+| Class | Source | Javadoc
+
+| `LoaderSTL`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderSTL.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderSTL.html[Javadoc]
+
+| `Loader`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html[Javadoc]
+
+| `LoaderIterator`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderIterator.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderIterator.html[Javadoc]
+
+| `DataChunk`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/DataChunk.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/DataChunk.html[Javadoc]
+
+| `LoaderException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html[Javadoc]
+
+| `LockedException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html[Javadoc]
+
+| `NotReadyException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html[Javadoc]
+
+| `NotAvailableException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotAvailableException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotAvailableException.html[Javadoc]
+|===
+
 == Notes
 
 * STL only carries geometry: `chunk.getNormalsData()` returns each triangle's facet normal duplicated onto its

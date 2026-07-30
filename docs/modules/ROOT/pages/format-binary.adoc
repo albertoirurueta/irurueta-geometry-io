@@ -47,6 +47,61 @@ The `LoaderBinary(File)` constructor throws `IOException`; `load()` throws `Lock
 `NotReadyException`, `IOException` and `LoaderException`; `LoaderIterator.next()` throws
 `NotAvailableException`, `LoaderException` and `IOException` (omitted above for brevity).
 
+== Related classes
+
+[cols="1,1,1", options="header"]
+|===
+| Class | Source | Javadoc
+
+| `MeshWriterBinary`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MeshWriterBinary.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MeshWriterBinary.html[Javadoc]
+
+| `LoaderBinary`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderBinary.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderBinary.html[Javadoc]
+
+| `Loader`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html[Javadoc]
+
+| `LoaderOBJ`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderOBJ.html[Javadoc]
+
+| `LoaderSTL`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderSTL.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderSTL.html[Javadoc]
+
+| `LoaderPLY`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderPLY.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderPLY.html[Javadoc]
+
+| `LoaderIterator`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderIterator.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderIterator.html[Javadoc]
+
+| `DataChunk`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/DataChunk.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/DataChunk.html[Javadoc]
+
+| `LoaderListenerBinary`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderListenerBinary.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderListenerBinary.html[Javadoc]
+
+| `LoaderException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html[Javadoc]
+
+| `LockedException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html[Javadoc]
+
+| `NotReadyException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html[Javadoc]
+|===
+
 == Notes
 
 * Embedded textures are only written out to disk on load if a `LoaderListenerBinary` is set on the `LoaderBinary`

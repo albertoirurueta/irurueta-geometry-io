@@ -1,5 +1,5 @@
 site:
-  title: irurueta-geometry-io
+  title: Irurueta Geometry I/O
   start_page: irurueta-geometry-io::index.adoc
 content:
   sources:

@@ -53,6 +53,53 @@ entry with only the fields the source data actually has:
 }
 ----
 
+== Related classes
+
+[cols="1,1,1", options="header"]
+|===
+| Class | Source | Javadoc
+
+| `MeshWriterJson`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MeshWriterJson.html[Javadoc]
+
+| `Loader`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html[Javadoc]
+
+| `LoaderOBJ`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderOBJ.html[Javadoc]
+
+| `LoaderSTL`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderSTL.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderSTL.html[Javadoc]
+
+| `LoaderPLY`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderPLY.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderPLY.html[Javadoc]
+
+| `LoaderBinary`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderBinary.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderBinary.html[Javadoc]
+
+| `MeshWriterJsonListener`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MeshWriterJsonListener.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MeshWriterJsonListener.html[Javadoc]
+
+| `LoaderException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html[Javadoc]
+
+| `LockedException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html[Javadoc]
+
+| `NotReadyException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html[Javadoc]
+|===
+
 == Notes
 
 * Textures are embedded as base64 by default (`DEFAULT_EMBED_TEXTURES = true`, via `setEmbedTexturedEnabled`);
