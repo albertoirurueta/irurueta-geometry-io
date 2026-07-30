@@ -61,6 +61,53 @@ loader.setListener(new LoaderListenerOBJ() {
 Once loaded, materials are available through `loader.getMaterials()`, and any chunk whose faces reference a
 material exposes it via `chunk.getMaterial()` / `chunk.isMaterialAvailable()`.
 
+== Related classes
+
+[cols="1,1,1", options="header"]
+|===
+| Class | Source | Javadoc
+
+| `LoaderOBJ`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderOBJ.html[Javadoc]
+
+| `Loader`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html[Javadoc]
+
+| `LoaderIterator`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderIterator.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderIterator.html[Javadoc]
+
+| `DataChunk`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/DataChunk.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/DataChunk.html[Javadoc]
+
+| `LoaderListenerOBJ`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderListenerOBJ.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderListenerOBJ.html[Javadoc]
+
+| `MaterialLoaderOBJ`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MaterialLoaderOBJ.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MaterialLoaderOBJ.html[Javadoc]
+
+| `LoaderException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html[Javadoc]
+
+| `LockedException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html[Javadoc]
+
+| `NotReadyException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html[Javadoc]
+
+| `NotAvailableException`
+| https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotAvailableException.java[Source]
+| https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotAvailableException.html[Javadoc]
+|===
+
 == Notes
 
 * Faces with more than 3 vertices are triangulated automatically; by default a triangulation failure on one
