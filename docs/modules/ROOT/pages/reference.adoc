@@ -1,5 +1,6 @@
 = Reference
 :description: Links to generated API, test, coverage, and code quality reports.
+:keywords: irurueta-geometry-io reference, Javadoc, API documentation, JaCoCo code coverage, Surefire test report, SonarCloud, Maven site, GitHub repository
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

@@ -1,4 +1,6 @@
 = Overview
+:description: Overview of irurueta-geometry-io, a Java library that reads, writes and converts 3D mesh files between the OBJ, STL, PLY, binary v2 and JSON formats.
+:keywords: irurueta-geometry-io, Java 3D mesh library, OBJ STL PLY, binary v2 format, JSON mesh export, mesh converter, Loader, MeshWriter, 3D file format conversion
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

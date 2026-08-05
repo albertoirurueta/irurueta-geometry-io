@@ -1,4 +1,6 @@
 = What's New
+:description: Changelog of new features, improvements, and changes in each release of irurueta-geometry-io, starting with the 1.6.0 documentation and tooling updates.
+:keywords: irurueta-geometry-io changelog, release notes, what's new, version history
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

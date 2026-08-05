@@ -1,4 +1,6 @@
 = Binary v2 Format
+:description: How to read and write the binary v2 mesh format with LoaderBinary and MeshWriterBinary, this library's own compact, reloadable 3D mesh format.
+:keywords: binary v2 format, LoaderBinary, MeshWriterBinary, Java binary mesh format, mesh serialization, 3D mesh file conversion
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

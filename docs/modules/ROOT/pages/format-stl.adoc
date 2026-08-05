@@ -1,4 +1,6 @@
 = STL Format
+:description: How to load STL mesh files in Java with LoaderSTL, including automatic ASCII/binary detection and this format's geometry-only data model.
+:keywords: STL format, LoaderSTL, stereolithography, ASCII STL, binary STL, Java STL loader, 3D mesh loading
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
