@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>STL Format :: Irurueta Geometry I/O</title>
+    <meta name="description" content="How to load STL mesh files in Java with LoaderSTL, including automatic ASCII/binary detection and this format's geometry-only data model.">
+    <meta name="keywords" content="STL format, LoaderSTL, stereolithography, ASCII STL, binary STL, Java STL loader, 3D mesh loading">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Geometry I/O" class="navbar-brand-logo">Irurueta Geometry I/O</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-geometry-io" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Geometry I/O</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Supported formats</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-obj.html">OBJ</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="format-stl.html">STL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-ply.html">PLY</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-binary.html">Binary v2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-json.html">JSON</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Geometry I/O</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Geometry I/O</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Geometry I/O</a></li>
+    <li>Supported formats</li>
+    <li><a href="format-stl.html">STL</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/edit/develop/docs/modules/ROOT/pages/format-stl.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">STL Format</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The STL format (both its ASCII and binary variants) is read by <code>LoaderSTL</code>. This library only <strong>loads</strong> STL
+files — there is no STL writer; to export a mesh you loaded from STL, convert it into one of the writable
+formats instead (<a href="format-binary.html" class="xref page">Binary v2 Format</a> or <a href="format-json.html" class="xref page">JSON Format</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_loading_an_stl_file"><a class="anchor" href="#_loading_an_stl_file"></a>Loading an STL file</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">final var loader = new LoaderSTL(new File("model.stl"));
+final var it = loader.load();
+while (it.hasNext()) {
+    final var chunk = it.next();
+    final float[] vertices = chunk.getVerticesCoordinatesData();
+    final float[] normals = chunk.getNormalsData();
+    final int[] indices = chunk.getIndicesData();
+    // process the chunk's geometry here
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>LoaderSTL(File)</code> constructor throws <code>IOException</code>; <code>load()</code> throws <code>LockedException</code>, <code>NotReadyException</code>,
+<code>IOException</code> and <code>LoaderException</code>; <code>LoaderIterator.next()</code> throws <code>NotAvailableException</code>, <code>LoaderException</code>
+and <code>IOException</code> (omitted above for brevity).</p>
+</div>
+<div class="paragraph">
+<p>ASCII vs. binary STL is detected automatically from the file&#8217;s own content (the first 5 bytes are checked
+against <code>"solid"</code>) — the caller never needs to specify which variant a file uses.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_classes"><a class="anchor" href="#_related_classes"></a>Related classes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderSTL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderSTL.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderSTL.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Loader</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderIterator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderIterator.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderIterator.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DataChunk</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/DataChunk.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/DataChunk.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LockedException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NotReadyException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NotAvailableException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotAvailableException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotAvailableException.html">Javadoc</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_notes"><a class="anchor" href="#_notes"></a>Notes</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>STL only carries geometry: <code>chunk.getNormalsData()</code> returns each triangle&#8217;s facet normal duplicated onto its
+3 vertices. <code>chunk.getTextureCoordinatesData()</code> and <code>chunk.getColorData()</code> are always <code>null</code>, and no material
+is ever set — STL has no texture, color or material support in this library.</p>
+</li>
+<li>
+<p><code>loader.getNumberOfVertices()</code> is only populated for binary STL files (computed from the file&#8217;s triangle
+count); for ASCII files it stays <code>0</code>.</p>
+</li>
+<li>
+<p><code>loader.getSolidName()</code> is only populated for ASCII files (read from the <code>solid &lt;name&gt;</code> header line); binary
+STL has no name field.</p>
+</li>
+<li>
+<p>Large files are read a chunk at a time (<code>maxVerticesInChunk</code>, default <code>65535</code>) instead of being held entirely
+in memory.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

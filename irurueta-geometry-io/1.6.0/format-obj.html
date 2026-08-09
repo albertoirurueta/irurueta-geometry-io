@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OBJ Format :: Irurueta Geometry I/O</title>
+    <meta name="description" content="How to load Wavefront OBJ mesh files in Java with LoaderOBJ, including automatic mtllib material resolution and related classes.">
+    <meta name="keywords" content="OBJ format, Wavefront OBJ, LoaderOBJ, mtllib materials, Java OBJ loader, 3D mesh loading, triangulation">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Geometry I/O" class="navbar-brand-logo">Irurueta Geometry I/O</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-geometry-io" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Geometry I/O</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Supported formats</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="format-obj.html">OBJ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-stl.html">STL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-ply.html">PLY</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-binary.html">Binary v2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-json.html">JSON</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Geometry I/O</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Geometry I/O</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Geometry I/O</a></li>
+    <li>Supported formats</li>
+    <li><a href="format-obj.html">OBJ</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/edit/develop/docs/modules/ROOT/pages/format-obj.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">OBJ Format</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The Wavefront OBJ format is read by <code>LoaderOBJ</code>. This library only <strong>loads</strong> OBJ files — there is no OBJ writer;
+to export a mesh you loaded from OBJ, convert it into one of the writable formats instead
+(<a href="format-binary.html" class="xref page">Binary v2 Format</a> or <a href="format-json.html" class="xref page">JSON Format</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_loading_an_obj_file"><a class="anchor" href="#_loading_an_obj_file"></a>Loading an OBJ file</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">final var loader = new LoaderOBJ(new File("model.obj"));
+final var it = loader.load();
+while (it.hasNext()) {
+    final var chunk = it.next();
+    final float[] vertices = chunk.getVerticesCoordinatesData();
+    final float[] normals = chunk.getNormalsData();
+    final float[] textureCoords = chunk.getTextureCoordinatesData();
+    final int[] indices = chunk.getIndicesData();
+    // process the chunk's geometry here
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>LoaderOBJ(File)</code> constructor throws <code>IOException</code>; <code>load()</code> throws <code>LockedException</code>, <code>NotReadyException</code>,
+<code>IOException</code> and <code>LoaderException</code>; <code>LoaderIterator.next()</code> throws <code>NotAvailableException</code>, <code>LoaderException</code>
+and <code>IOException</code> (omitted above for brevity).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_materials_mtllib"><a class="anchor" href="#_materials_mtllib"></a>Materials (<code>mtllib</code>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If the OBJ file references a <code>.mtl</code> material library, <code>LoaderOBJ</code> resolves and loads it automatically while
+scanning the file. By default the referenced path is resolved as-is (relative to the working directory, not the
+OBJ file&#8217;s own directory). To control resolution yourself, implement <code>LoaderListenerOBJ</code> and set it on the
+loader before calling <code>load()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">loader.setListener(new LoaderListenerOBJ() {
+    @Override
+    public MaterialLoaderOBJ onMaterialLoaderRequested(final LoaderOBJ loader, final String path) {
+        return new MaterialLoaderOBJ(new File(objFile.getParentFile(), path));
+    }
+
+    @Override
+    public void onLoadStart(final Loader loader) {
+        // optional
+    }
+
+    @Override
+    public void onLoadEnd(final Loader loader) {
+        // optional
+    }
+
+    @Override
+    public void onLoadProgressChange(final Loader loader, final float progress) {
+        // optional
+    }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once loaded, materials are available through <code>loader.getMaterials()</code>, and any chunk whose faces reference a
+material exposes it via <code>chunk.getMaterial()</code> / <code>chunk.isMaterialAvailable()</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_classes"><a class="anchor" href="#_related_classes"></a>Related classes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderOBJ</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderOBJ.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Loader</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderIterator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderIterator.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderIterator.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DataChunk</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/DataChunk.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/DataChunk.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderListenerOBJ</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderListenerOBJ.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderListenerOBJ.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MaterialLoaderOBJ</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MaterialLoaderOBJ.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MaterialLoaderOBJ.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LockedException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NotReadyException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NotAvailableException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotAvailableException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotAvailableException.html">Javadoc</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_notes"><a class="anchor" href="#_notes"></a>Notes</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Faces with more than 3 vertices are triangulated automatically; by default a triangulation failure on one
+face is skipped rather than aborting the whole load (<code>continueIfTriangulationError</code>, on by default).</p>
+</li>
+<li>
+<p>Both 3-component (<code>x y z</code>) and homogeneous 4-component (<code>x y z w</code>) vertex lines are supported.</p>
+</li>
+<li>
+<p>Large files are read a chunk at a time (<code>maxVerticesInChunk</code>, default <code>65535</code>) instead of being held entirely
+in memory.</p>
+</li>
+<li>
+<p><code>chunk.getColorData()</code> is always <code>null</code> for OBJ — this format has no vertex-color data.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

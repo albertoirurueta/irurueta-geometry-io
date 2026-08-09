@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Overview :: Irurueta Geometry I/O</title>
+    <meta name="description" content="Overview of irurueta-geometry-io, a Java library that reads, writes and converts 3D mesh files between the OBJ, STL, PLY, binary v2 and JSON formats.">
+    <meta name="keywords" content="irurueta-geometry-io, Java 3D mesh library, OBJ STL PLY, binary v2 format, JSON mesh export, mesh converter, Loader, MeshWriter, 3D file format conversion">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Geometry I/O" class="navbar-brand-logo">Irurueta Geometry I/O</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" autofocus>
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-geometry-io" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Geometry I/O</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Supported formats</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-obj.html">OBJ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-stl.html">STL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-ply.html">PLY</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-binary.html">Binary v2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-json.html">JSON</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Geometry I/O</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Geometry I/O</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link is-current"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Geometry I/O</a></li>
+    <li><a href="index.html">Overview</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/edit/develop/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Overview</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>irurueta-geometry-io is a Java library that reads, writes and converts 3D mesh files between different formats.
+It supports the OBJ, STL and PLY formats, plus a custom binary format (binary v2) and JSON output, and is built
+so that a large 3D file can be processed a small chunk at a time instead of being held entirely in memory.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_it_exists"><a class="anchor" href="#_why_it_exists"></a>Why it exists</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>3D scanning and modelling pipelines routinely need to move meshes between tools that each expect a different file
+format. This library provides a single, consistent API for that conversion step: point it at a source file, pick a
+target writer, and stream the result out — regardless of which of the supported formats is on either side.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_core_concepts"><a class="anchor" href="#_core_concepts"></a>Core concepts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Two abstractions carry the whole library:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>Loader</code></dt>
+<dd>
+<p>An abstract class with one concrete subclass per supported format (<code>LoaderOBJ</code>, <code>LoaderSTL</code>, <code>LoaderPLY</code>, and the
+binary format&#8217;s <code>LoaderBinary</code>). A loader is pointed at a <code>File</code>, validated, and then driven through a
+<code>LoaderIterator</code> that yields the mesh&#8217;s vertices, textures and other chunks a piece at a time — so files far
+larger than available memory can still be processed. <code>Loader</code> decides automatically, based on
+<code>DEFAULT_FILE_SIZE_LIMIT_TO_KEEP_IN_MEMORY</code>, whether to memory-map the file (<code>MappedFileReaderAndWriter</code>) or stream
+it (<code>FileReaderAndWriter</code>).</p>
+</dd>
+<dt class="hdlist1"><code>MeshWriter</code></dt>
+<dd>
+<p>An abstract class that pairs a <code>Loader</code> with an <code>OutputStream</code> and re-encodes whatever the loader reads into a
+different format — <code>MeshWriterBinary</code> for the library&#8217;s own binary format, <code>MeshWriterJson</code> for JSON. Progress and
+lifecycle are reported through <code>MeshWriterListener</code> / <code>LoaderListener</code>, so long conversions can be tracked or
+cancelled by the caller.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The format a <code>Loader</code> or <code>MeshWriter</code> targets is identified by the <code>MeshFormat</code> enum
+(<code>MESH_FORMAT_OBJ</code>, <code>MESH_FORMAT_STL</code>, <code>MESH_FORMAT_PLY</code>, <code>MESH_FORMAT_BINARY2</code>).</p>
+</div>
+<div class="imageblock"><div class="mermaid content" style=" ">flowchart LR
+    F[3D file<br/>OBJ / STL / PLY / binary] --> L(Loader)
+    L -->|LoaderIterator| C[Mesh chunks<br/>vertices, textures, materials]
+    C --> W(MeshWriter)
+    W --> O[Output stream<br/>binary v2 / JSON]</div></div>
+<div class="paragraph">
+<p>Supporting types round out the model: <code>DataChunk</code>/<code>Chunk3DS</code> carry decoded geometry data, <code>Material</code>/<code>Texture</code>
+(and their format-specific subclasses, e.g. <code>MaterialOBJ</code>) carry surface appearance, and <code>HeaderPLY</code>/<code>PropertyPLY</code>
+model the PLY format&#8217;s self-describing header.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_where_to_go_next"><a class="anchor" href="#_where_to_go_next"></a>Where to go next</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="installation.html" class="xref page">Installation</a> — add the library as a dependency to your own project.</p>
+</li>
+<li>
+<p><a href="format-obj.html" class="xref page">OBJ Format</a>, <a href="format-stl.html" class="xref page">STL Format</a>, <a href="format-ply.html" class="xref page">PLY Format</a> and <a href="format-binary.html" class="xref page">Binary v2 Format</a> — how to
+load each supported format; <a href="format-binary.html" class="xref page">Binary v2 Format</a> and <a href="format-json.html" class="xref page">JSON Format</a> — how to write one.</p>
+</li>
+<li>
+<p><a href="reference.html" class="xref page">Reference</a> — links to the reports generated for this project&#8217;s build.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

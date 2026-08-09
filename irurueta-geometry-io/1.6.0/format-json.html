@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>JSON Format :: Irurueta Geometry I/O</title>
+    <meta name="description" content="How to export a loaded 3D mesh to JSON with MeshWriterJson, including the output document shape and texture embedding options for web and JavaScript clients.">
+    <meta name="keywords" content="JSON mesh export, MeshWriterJson, Java JSON writer, 3D mesh to JSON, web mesh format, texture embedding, base64 textures">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Geometry I/O" class="navbar-brand-logo">Irurueta Geometry I/O</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-geometry-io" data-version="1.6.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Geometry I/O</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Supported formats</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-obj.html">OBJ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-stl.html">STL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-ply.html">PLY</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="format-binary.html">Binary v2</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="format-json.html">JSON</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Geometry I/O</span>
+    <span class="version">1.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Geometry I/O</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Geometry I/O</a></li>
+    <li>Supported formats</li>
+    <li><a href="format-json.html">JSON</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/edit/develop/docs/modules/ROOT/pages/format-json.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">JSON Format</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>MeshWriterJson</code> re-encodes a mesh into a JSON document, intended for consumption by web/JavaScript clients.
+This is a write-only, one-way export target — there is no loader that reads this JSON back into the library.
+If you need to reload an exported mesh, write to <a href="format-binary.html" class="xref page">Binary v2 Format</a> instead.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_writing_a_json_file"><a class="anchor" href="#_writing_a_json_file"></a>Writing a JSON file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Like <code>MeshWriterBinary</code>, <code>MeshWriterJson</code> wraps <strong>any</strong> <code>Loader</code> (already pointed at its own source file, in any
+supported format) and drives it internally — you do not call <code>loader.load()</code> yourself:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">final var sourceLoader = new LoaderPLY(new File("model.ply"));
+try (final var outStream = new FileOutputStream("model.json")) {
+    final var writer = new MeshWriterJson(sourceLoader, outStream);
+    writer.write();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>write()</code> throws <code>LoaderException</code>, <code>IOException</code>, <code>NotReadyException</code> and <code>LockedException</code>.</p>
+</div>
+<div class="paragraph">
+<p>Any of <code>LoaderOBJ</code>, <code>LoaderSTL</code>, <code>LoaderPLY</code> or <code>LoaderBinary</code> can be used as the source loader.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_output_shape"><a class="anchor" href="#_output_shape"></a>Output shape</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The writer streams its output directly rather than building an in-memory JSON tree. Each mesh chunk becomes an
+entry with only the fields the source data actually has:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "textures": [
+    { "id": 0, "width": 512, "height": 512, "data": "&lt;base64&gt;" }
+  ],
+  "chunks": [
+    {
+      "material": { "id": 0, "ambientColor": [0, 0, 0], "diffuseColor": [1, 1, 1] },
+      "indices": [0, 1, 2],
+      "vertexPositions": [0.0, 0.0, 0.0],
+      "vertexNormals": [0.0, 1.0, 0.0],
+      "vertexTextureCoords": [0.0, 0.0],
+      "vertexColors": [255, 255, 255],
+      "colorComponents": 3,
+      "minCorner": [0.0, 0.0, 0.0],
+      "maxCorner": [1.0, 1.0, 1.0]
+    }
+  ],
+  "minCorner": [0.0, 0.0, 0.0],
+  "maxCorner": [1.0, 1.0, 1.0]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_classes"><a class="anchor" href="#_related_classes"></a>Related classes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MeshWriterJson</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MeshWriterJson.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MeshWriterJson.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Loader</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/Loader.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/Loader.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderOBJ</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderOBJ.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderOBJ.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderSTL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderSTL.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderSTL.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderPLY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderPLY.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderPLY.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderBinary</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderBinary.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderBinary.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MeshWriterJsonListener</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/MeshWriterJsonListener.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/MeshWriterJsonListener.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoaderException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LoaderException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LoaderException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LockedException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/LockedException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/LockedException.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NotReadyException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-geometry-io/blob/master/src/main/java/com/irurueta/geometry/io/NotReadyException.java">Source</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-geometry-io/mvn-site/apidocs/com/irurueta/geometry/io/NotReadyException.html">Javadoc</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_notes"><a class="anchor" href="#_notes"></a>Notes</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Textures are embedded as base64 by default (<code>DEFAULT_EMBED_TEXTURES = true</code>, via <code>setEmbedTexturedEnabled</code>);
+alternatively a <code>MeshWriterJsonListener</code> can supply a remote URL or ID per texture instead of embedding it.</p>
+</li>
+<li>
+<p><code>NaN</code>/infinite float values (coordinates, normals, texture coordinates) are replaced with <code>Float.MAX_VALUE</code>
+to keep the output valid JSON.</p>
+</li>
+<li>
+<p>The output charset defaults to UTF-8 and is configurable via <code>setCharset</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>
