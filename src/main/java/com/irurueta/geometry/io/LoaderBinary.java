@@ -17,7 +17,6 @@ package com.irurueta.geometry.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
@@ -189,12 +188,11 @@ public class LoaderBinary extends Loader {
             listener.onLoadStart(this);
         }
 
-        try {
+        // do not leave this loader locked if file cannot be loaded
+        loadReleasingLockOnFailure(() -> {
             readTextures();
-        } catch (final BufferUnderflowException e) {
-            // file ended unexpectedly, hence it is corrupted
-            throw new LoaderException(e);
-        }
+            return null;
+        });
 
         loaderIterator = new LoaderIteratorBinary(this);
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
@@ -385,12 +383,8 @@ public class LoaderBinary extends Loader {
                 throw new NotAvailableException();
             }
 
-            try {
-                return readNextChunk();
-            } catch (final BufferUnderflowException e) {
-                // file ended unexpectedly, hence it is corrupted
-                throw new LoaderException(e);
-            }
+            // do not leave loader locked if file cannot be read
+            return readReleasingLockOnFailure(this::readNextChunk);
         }
 
         /**

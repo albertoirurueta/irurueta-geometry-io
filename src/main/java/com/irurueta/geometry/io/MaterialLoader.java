@@ -262,6 +262,28 @@ public abstract class MaterialLoader implements Closeable {
     }
 
     /**
+     * Runs a step of the loading process (started while this loader is
+     * locked) and releases the lock if the step fails, so that this loader
+     * can be reused after a corrupted or unreadable file.
+     *
+     * @param operation loading step to be executed.
+     * @param <T>       type of result returned by the loading step.
+     * @return result of the loading step.
+     * @throws IOException     if an I/O error occurs.
+     * @throws LoaderException if file is corrupted or cannot be interpreted.
+     */
+    protected <T> T loadReleasingLockOnFailure(
+            final Loader.LoadOperation<T> operation)
+            throws IOException, LoaderException {
+        try {
+            return operation.run();
+        } catch (final IOException | LoaderException | RuntimeException e) {
+            setLocked(false);
+            throw e;
+        }
+    }
+
+    /**
      * Returns material listener of this instance.
      * A material listener notifies of start, end and progress change events.
      *

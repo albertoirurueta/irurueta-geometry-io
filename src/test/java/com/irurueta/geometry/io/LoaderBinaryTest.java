@@ -1345,4 +1345,44 @@ class LoaderBinaryTest implements LoaderListenerBinary, LoaderListenerOBJ, Mater
         writer.write();
         outStream.close();
     }
+
+    /**
+     * Checks that the loader is unlocked when a texture declares more bytes
+     * than the file contains, so that it can be reused.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenTextureLengthExceedsFile_throwsLoaderExceptionAndUnlocks() throws Exception {
+        final var f = tempDir.resolve("bigtexture.bin").toFile();
+        Files.write(f.toPath(), bytes(SUPPORTED_VERSION, true, TEXTURE_ID, 4, 4, 1000L, new byte[4]));
+
+        try (var loader = new LoaderBinary(f)) {
+            assertThrows(LoaderException.class, loader::load);
+            assertFalse(loader.isLocked());
+
+            // loader can be reused after the failure
+            assertThrows(LoaderException.class, loader::load);
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that the loader is unlocked when a chunk cannot be read while
+     * iterating, so that it can be reused.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenChunkIsCorrupted_throwsLoaderExceptionAndUnlocks() throws Exception {
+        final var f = tempDir.resolve("corruptedchunk.bin").toFile();
+        Files.write(f.toPath(), bytes(SUPPORTED_VERSION, false, 0));
+
+        try (var loader = new LoaderBinary(f)) {
+            final var it = loader.load();
+            assertTrue(loader.isLocked());
+            assertThrows(LoaderException.class, it::next);
+            assertFalse(loader.isLocked());
+        }
+    }
 }

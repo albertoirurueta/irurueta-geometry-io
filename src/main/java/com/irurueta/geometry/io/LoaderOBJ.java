@@ -695,7 +695,9 @@ public class LoaderOBJ extends Loader {
             listener.onLoadStart(this);
         }
 
-        loaderIterator = new LoaderIteratorOBJ(this);
+        // do not leave this loader locked if file cannot be loaded
+        loaderIterator = loadReleasingLockOnFailure(
+                () -> new LoaderIteratorOBJ(this));
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
@@ -1242,6 +1244,21 @@ public class LoaderOBJ extends Loader {
                 throw new NotAvailableException();
             }
 
+            // do not leave loader locked if file cannot be read
+            return readReleasingLockOnFailure(this::readNextChunk);
+        }
+
+        /**
+         * Reads next chunk of data.
+         *
+         * @return next chunk of data.
+         * @throws NotAvailableException if no more data is available.
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
+        private DataChunk readNextChunk()
+                throws NotAvailableException, LoaderException, IOException {
             initChunkArrays();
 
             // reset chunk bounding box values
@@ -1707,7 +1724,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         public void fetchVertex(long index) throws LoaderException, IOException {
-            if (index > numberOfVertices) {
+            if (index >= numberOfVertices) {
                 throw new LoaderException();
             }
 
@@ -1781,7 +1798,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         public void fetchTexture(final long index) throws LoaderException, IOException {
-            if (index > numberOfTextureCoords) {
+            if (index >= numberOfTextureCoords) {
                 throw new LoaderException();
             }
 
@@ -1855,7 +1872,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         public void fetchNormal(final long index) throws LoaderException, IOException {
-            if (index > numberOfNormals) {
+            if (index >= numberOfNormals) {
                 throw new LoaderException();
             }
 

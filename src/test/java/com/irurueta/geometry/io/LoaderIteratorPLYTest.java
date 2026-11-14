@@ -1469,7 +1469,7 @@ class LoaderIteratorPLYTest implements LoaderListener {
     }
 
     /**
-     * Checks that ASCII values that cannot be parsed are rejected.
+     * Checks that ASCII values that cannot be parsed are rejected as a corrupted file.
      *
      * @param dir temporary directory.
      * @throws Exception if any unexpected error occurs.
@@ -1482,7 +1482,8 @@ class LoaderIteratorPLYTest implements LoaderListener {
 
         try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
             final var it = loader.load();
-            assertThrows(IOException.class, it::next);
+            assertThrows(LoaderException.class, it::next);
+            assertFalse(loader.isLocked());
         }
     }
 
@@ -1495,14 +1496,15 @@ class LoaderIteratorPLYTest implements LoaderListener {
      */
     @ParameterizedTest
     @MethodSource("types")
-    void next_whenAsciiCoordinateIsNotANumber_throwsIOException(final String type, @TempDir final Path dir)
+    void next_whenAsciiCoordinateIsNotANumber_throwsLoaderException(final String type, @TempDir final Path dir)
             throws Exception {
         final var text = new String(new PLYTestFileBuilder(PLYTestFileBuilder.ASCII).coordType(type).build(),
                 java.nio.charset.StandardCharsets.US_ASCII).replace("end_header\n0", "end_header\nabc");
         final var file = PLYTestFileBuilder.writeText(dir, "badcoord.ply", text);
 
         try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
-            assertThrows(IOException.class, () -> loader.load().next());
+            assertThrows(LoaderException.class, () -> loader.load().next());
+            assertFalse(loader.isLocked());
         }
     }
 

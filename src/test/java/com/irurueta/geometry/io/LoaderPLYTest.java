@@ -856,4 +856,31 @@ class LoaderPLYTest implements LoaderListener {
     private boolean isLockedValid() {
         return lockedValid;
     }
+
+    /**
+     * Checks that an ASCII file whose body ends before all declared values are
+     * read is reported as a corrupted file (LoaderException) and that the
+     * loader is unlocked afterwards.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenAsciiBodyIsTruncated_throwsLoaderExceptionAndUnlocks(@TempDir final Path dir)
+            throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "truncatedbody.ply",
+                "ply\nformat ascii 1.0\nelement vertex 3\nproperty float x\nproperty float y\n"
+                        + "property float z\nelement face 1\nproperty list uchar int vertex_indices\n"
+                        + "end_header\n0 0 0\n1 0 0\n0 1 0\n3 0 1 x\n");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, () -> {
+                final var it = loader.load();
+                while (it.hasNext()) {
+                    it.next();
+                }
+            });
+            assertFalse(loader.isLocked());
+        }
+    }
 }

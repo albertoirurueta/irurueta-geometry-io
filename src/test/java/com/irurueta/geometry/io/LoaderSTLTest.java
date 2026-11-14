@@ -929,4 +929,29 @@ class LoaderSTLTest implements LoaderListener {
     private boolean isLockedValid() {
         return lockedValid;
     }
+
+    /**
+     * Checks that the loader is unlocked after a corrupted file fails while
+     * loading or iterating, so that it can be reused.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void loadAndIterate_whenFileIsCorrupted_unlocksLoader() throws Exception {
+        final var ascii = writeAscii("corrupted.stl", "solid broken\n facet normal 0 0 1\n  outer loop\n"
+                + "   vertex 0 0 0\n   vertex 1 0 0\n   vertex a b c\n  endloop\n endfacet\nendsolid broken\n");
+        final var binary = writeBinary("declared.stl", 10, 2);
+
+        for (final var file : new File[]{ascii, binary}) {
+            try (final var loader = new LoaderSTL(file)) {
+                assertThrows(LoaderException.class, () -> {
+                    final var it = loader.load();
+                    while (it.hasNext()) {
+                        it.next();
+                    }
+                });
+                assertFalse(loader.isLocked());
+            }
+        }
+    }
 }

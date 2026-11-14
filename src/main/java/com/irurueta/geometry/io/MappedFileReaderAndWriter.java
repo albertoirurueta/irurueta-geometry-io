@@ -68,8 +68,14 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
                     + " bytes). Use FileReaderAndWriter to stream it "
                     + "instead");
         }
-        this.buffer = randomAccessFile.getChannel().map(mode, 0, length);
-        this.buffer.load();
+        try {
+            this.buffer = randomAccessFile.getChannel().map(mode, 0, length);
+            this.buffer.load();
+        } catch (final IOException | RuntimeException e) {
+            // do not leak file descriptor if file cannot be mapped
+            randomAccessFile.close();
+            throw e;
+        }
     }
 
     /**

@@ -129,7 +129,8 @@ public class MaterialLoaderOBJ extends MaterialLoader {
             listener.onLoadStart(this);
         }
 
-        try {
+        // do not leave this loader locked if file cannot be loaded
+        loadReleasingLockOnFailure(() -> {
             String line;
             do {
                 line = reader.readLine();
@@ -137,11 +138,8 @@ public class MaterialLoaderOBJ extends MaterialLoader {
                     parseLine(line);
                 }
             } while (line != null);
-        } catch (final IOException | LoaderException | RuntimeException e) {
-            // do not leave this loader locked if file cannot be loaded
-            setLocked(false);
-            throw e;
-        }
+            return null;
+        });
 
         // files without any material definition produce an empty set
         if (currentMaterial != null) {

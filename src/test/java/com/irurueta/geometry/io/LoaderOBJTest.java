@@ -1928,4 +1928,31 @@ class LoaderOBJTest implements LoaderListenerOBJ {
     private boolean isLockedValid() {
         return lockedValid;
     }
+
+    /**
+     * Checks that face indices one past the last vertex, texture coordinate or
+     * normal are rejected, and that the loader is unlocked afterwards so that
+     * it can be reused.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenIndexIsOnePastLast_throwsLoaderExceptionAndUnlocks() throws Exception {
+        final var contents = new String[][]{
+                {"v 0 0 0", "v 1 0 0", "v 0 1 0", "f 1 2 4"},
+                {"v 0 0 0", "v 1 0 0", "v 0 1 0", "vt 0 0", "f 1/1 2/1 3/2"},
+                {"v 0 0 0", "v 1 0 0", "v 0 1 0", "vn 0 0 1", "f 1//1 2//1 3//2"}};
+
+        for (final var lines : contents) {
+            final var file = writeObj(lines);
+            try (final var loader = new LoaderOBJ(file, 1000)) {
+                assertThrows(LoaderException.class, () -> consume(loader));
+                assertFalse(loader.isLocked());
+
+                // loader can be reused after the failure
+                assertThrows(LoaderException.class, () -> consume(loader));
+                assertFalse(loader.isLocked());
+            }
+        }
+    }
 }

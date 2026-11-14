@@ -633,16 +633,18 @@ public class LoaderPLY extends Loader {
             throw new LockedException();
         }
 
-        setLocked(true);
         if (reader == null) {
             throw new IOException();
         }
+
+        setLocked(true);
         try {
             readHeader();
-        } catch (final LoaderException ex) {
+        } catch (final LoaderException | BufferUnderflowException ex) {
             validStream = false;
+        } finally {
+            setLocked(false);
         }
-        setLocked(false);
         return validStream;
     }
 
@@ -740,7 +742,8 @@ public class LoaderPLY extends Loader {
             listener.onLoadStart(this);
         }
 
-        try {
+        // do not leave this loader locked if file cannot be loaded
+        loaderIterator = loadReleasingLockOnFailure(() -> {
             if (reader == null) {
                 throw new IOException();
             }
@@ -752,17 +755,14 @@ public class LoaderPLY extends Loader {
                 throw new LoaderException();
             }
 
-            loaderIterator = new LoaderIteratorPLY(this);
-            loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
-        } catch (final BufferUnderflowException e) {
-            // file ended unexpectedly, hence it is corrupted
-            setLocked(false);
-            throw new LoaderException(e);
-        } catch (final IOException | LoaderException | RuntimeException e) {
-            // do not leave this loader locked if file cannot be loaded
-            setLocked(false);
-            throw e;
-        }
+            try {
+                return new LoaderIteratorPLY(this);
+            } catch (final CorruptValueException e) {
+                // a value could not be parsed, hence file is corrupted
+                throw new LoaderException(e);
+            }
+        });
+        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
     }
 
     /**
@@ -1052,6 +1052,25 @@ public class LoaderPLY extends Loader {
             throw new LoaderException();
         }
         return dataType;
+    }
+
+    /**
+     * Raised when a value stored as text in an ASCII PLY file cannot be
+     * parsed (e.g. because file is truncated or corrupted). It extends
+     * {@link IOException} because of the signature of
+     * {@link PLYReadValueFromStreamListener}, and it is converted into a
+     * {@link LoaderException} while iterating the file.
+     */
+    private static class CorruptValueException extends IOException {
+
+        /**
+         * Constructor.
+         *
+         * @param cause cause of this exception.
+         */
+        CorruptValueException(final Throwable cause) {
+            super(cause);
+        }
     }
 
     /**
@@ -1474,12 +1493,15 @@ public class LoaderPLY extends Loader {
                 throw new NotAvailableException();
             }
 
-            try {
-                return readNextChunk();
-            } catch (final BufferUnderflowException e) {
-                // file ended unexpectedly, hence it is corrupted
-                throw new LoaderException(e);
-            }
+            // do not leave loader locked if file cannot be read
+            return readReleasingLockOnFailure(() -> {
+                try {
+                    return readNextChunk();
+                } catch (final CorruptValueException e) {
+                    // a value could not be parsed, hence file is corrupted
+                    throw new LoaderException(e);
+                }
+            });
         }
 
         /**
@@ -6510,7 +6532,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.put(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6547,7 +6569,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6583,7 +6605,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6620,7 +6642,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6656,7 +6678,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6693,7 +6715,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putLong(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6729,7 +6751,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putFloat(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6765,7 +6787,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putDouble(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6801,7 +6823,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.put(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6838,7 +6860,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6874,7 +6896,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6911,7 +6933,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6947,7 +6969,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6984,7 +7006,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putLong(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -7020,7 +7042,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putFloat(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -7056,7 +7078,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putDouble(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
