@@ -48,7 +48,10 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
      *
      * @param f    file to read from or write to.
      * @param mode file opening mode (read only or read write).
-     * @throws IOException if an I/O error occurs .
+     * @throws IOException if an I/O error occurs or the file is larger than
+     *                     2 GB (the maximum size that can be memory
+     *                     mapped). Use {@link FileReaderAndWriter} to
+     *                     stream larger files.
      */
     public MappedFileReaderAndWriter(final File f, final FileChannel.MapMode mode) throws IOException {
         if (mode == FileChannel.MapMode.READ_ONLY) {
@@ -56,7 +59,16 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
         } else {
             this.randomAccessFile = new RandomAccessFile(f, "rw");
         }
-        this.buffer = randomAccessFile.getChannel().map(mode, 0, randomAccessFile.length());
+        final var length = randomAccessFile.length();
+        if (length > Integer.MAX_VALUE) {
+            // memory mapped buffers are limited to 2 GB
+            randomAccessFile.close();
+            throw new IOException("File is too large to be memory mapped "
+                    + "(limit is " + Integer.MAX_VALUE
+                    + " bytes). Use FileReaderAndWriter to stream it "
+                    + "instead");
+        }
+        this.buffer = randomAccessFile.getChannel().map(mode, 0, length);
         this.buffer.load();
     }
 
@@ -147,7 +159,7 @@ public class MappedFileReaderAndWriter extends AbstractFileReaderAndWriter {
             return 0;
         }
 
-        final var skipped = Math.min(buffer.remaining(), (int) n);
+        final var skipped = (int) Math.min(buffer.remaining(), n);
         final var newPos = buffer.position() + skipped;
         buffer.position(newPos);
         read = true;

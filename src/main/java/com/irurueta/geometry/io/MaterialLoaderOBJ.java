@@ -123,21 +123,31 @@ public class MaterialLoaderOBJ extends MaterialLoader {
 
         materials.clear();
         textureCounter = 0;
+        currentMaterial = null;
 
         if (listener != null) {
             listener.onLoadStart(this);
         }
 
-        String line;
-        do {
-            line = reader.readLine();
-            if (line != null) {
-                parseLine(line);
-            }
-        } while (line != null);
+        try {
+            String line;
+            do {
+                line = reader.readLine();
+                if (line != null) {
+                    parseLine(line);
+                }
+            } while (line != null);
+        } catch (final IOException | LoaderException | RuntimeException e) {
+            // do not leave this loader locked if file cannot be loaded
+            setLocked(false);
+            throw e;
+        }
 
-        currentMaterial.setId(materials.size());
-        materials.add(currentMaterial);
+        // files without any material definition produce an empty set
+        if (currentMaterial != null) {
+            currentMaterial.setId(materials.size());
+            materials.add(currentMaterial);
+        }
 
         if (listener != null) {
             listener.onLoadEnd(this);

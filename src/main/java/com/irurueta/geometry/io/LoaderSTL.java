@@ -245,7 +245,13 @@ public class LoaderSTL extends Loader {
             listener.onLoadStart(this);
         }
 
-        loaderIterator = new LoaderIteratorSTL(this);
+        try {
+            loaderIterator = new LoaderIteratorSTL(this);
+        } catch (final IOException | LoaderException | RuntimeException e) {
+            // do not leave this loader locked if file cannot be loaded
+            setLocked(false);
+            throw e;
+        }
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
@@ -533,6 +539,16 @@ public class LoaderSTL extends Loader {
          * Constant defining number of vertices in a triangle.
          */
         public static final int VERTICES_PER_TRIANGLE = 3;
+
+        /**
+         * Size in bytes of the number of triangles field in binary files.
+         */
+        private static final int BINARY_COUNT_SIZE = 4;
+
+        /**
+         * Size in bytes of each triangle (normal, 3 vertices and attribute).
+         */
+        private static final int BINARY_TRIANGLE_SIZE = 50;
 
         /**
          * Constructor.
@@ -999,8 +1015,23 @@ public class LoaderSTL extends Loader {
                 // set position after 80 byte header
                 reader.seek(BINARY_HEADER_SIZE);
 
+                // header + number of triangles must fit in file
+                final var fileLength = file.length();
+                if (fileLength < BINARY_HEADER_SIZE + BINARY_COUNT_SIZE) {
+                    throw new LoaderException();
+                }
+
                 // read number of triangles
                 numberOfTriangles = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);
+
+                // validate declared triangles against actual file length
+                // (long math to avoid overflow)
+                final var expectedLength = BINARY_HEADER_SIZE
+                        + BINARY_COUNT_SIZE
+                        + numberOfTriangles * BINARY_TRIANGLE_SIZE;
+                if (expectedLength > fileLength) {
+                    throw new LoaderException();
+                }
                 numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;
             }
         }

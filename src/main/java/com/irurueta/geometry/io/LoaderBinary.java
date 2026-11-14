@@ -17,6 +17,7 @@ package com.irurueta.geometry.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
@@ -188,6 +189,25 @@ public class LoaderBinary extends Loader {
             listener.onLoadStart(this);
         }
 
+        try {
+            readTextures();
+        } catch (final BufferUnderflowException e) {
+            // file ended unexpectedly, hence it is corrupted
+            throw new LoaderException(e);
+        }
+
+        loaderIterator = new LoaderIteratorBinary(this);
+        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
+        return loaderIterator;
+    }
+
+    /**
+     * Reads textures until no more textures are available.
+     *
+     * @throws IOException     if an I/O error occurs.
+     * @throws LoaderException if file is corrupted or cannot be interpreted.
+     */
+    private void readTextures() throws IOException, LoaderException {
         // read textures until no more textures are available
         while (reader.readBoolean()) {
             // texture data follows
@@ -196,11 +216,11 @@ public class LoaderBinary extends Loader {
             final var texHeight = reader.readInt();
             final var texLength = reader.readLong();
             final var textureFileStartPos = reader.getPosition();
-            final var textureFileEndPos = textureFileStartPos + texLength;
 
             // check that at least texLength bytes remain otherwise file is
             // incomplete or corrupted
-            if (textureFileEndPos > file.length()) {
+            if (texLength < 0
+                    || texLength > file.length() - textureFileStartPos) {
                 throw new LoaderException();
             }
 
@@ -255,10 +275,6 @@ public class LoaderBinary extends Loader {
                 reader.skip(texLength);
             }
         }
-
-        loaderIterator = new LoaderIteratorBinary(this);
-        loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
-        return loaderIterator;
     }
 
     /**
@@ -369,6 +385,23 @@ public class LoaderBinary extends Loader {
                 throw new NotAvailableException();
             }
 
+            try {
+                return readNextChunk();
+            } catch (final BufferUnderflowException e) {
+                // file ended unexpectedly, hence it is corrupted
+                throw new LoaderException(e);
+            }
+        }
+
+        /**
+         * Reads next chunk of data.
+         *
+         * @return next chunk of data.
+         * @throws LoaderException if file data is corrupt or cannot be
+         *                         understood.
+         * @throws IOException     if an I/O error occurs.
+         */
+        private DataChunk readNextChunk() throws LoaderException, IOException {
             // read chunk size
             final var chunkSize = reader.readInt();
 

@@ -11,6 +11,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Updated `irurueta-geometry` to 1.6.1 and `irurueta-statistics` (test scope) to 1.4.1.
 
+### Fixed
+
+- STL: binary files are validated with `long` arithmetic; truncated files (including 81-83 byte files) and
+  files declaring more triangles than they contain now fail with `LoaderException`.
+- PLY: truncated headers no longer throw `NullPointerException`; negative element counts, invalid face list
+  lengths, truncated binary bodies and negative or out-of-range vertex indices are rejected; `int`-typed blue
+  color values are read correctly.
+- Binary format: texture length overflow fixed; files ending inside a chunk fail with `LoaderException`.
+- OBJ: zero, negative or out-of-range face indices and faces that can never fit in a chunk are rejected
+  (previously could hang).
+- MTL: files without `newmtl` return an empty material set instead of throwing `NullPointerException`; loading
+  twice no longer leaks the previous material; loaders are unlocked after a failure.
+- `MappedFileReaderAndWriter` throws a clear `IOException` for files larger than 2 GB (use
+  `FileReaderAndWriter`); `skip` fixed for counts above 2 GB in both readers.
+
 ### Security
 
 - Updated `commons-codec` to 1.23.0 to address CVE-2026-119078 reported on 1.19.0.
