@@ -16,9 +16,16 @@
 package com.irurueta.geometry.io;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -506,6 +513,286 @@ class LoaderPLYTest implements LoaderListener {
         }
     }
 
+    /**
+     * Checks that generated files with header comments are valid and loadable in every storage mode.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {PLYTestFileBuilder.ASCII, PLYTestFileBuilder.LITTLE, PLYTestFileBuilder.BIG})
+    void isValidFile_whenGeneratedFile_returnsTrue(final String format, @TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(format).comment("first comment").comment("second").write(dir,
+                "valid.ply");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertTrue(loader.isValidFile());
+            assertFalse(loader.isLocked());
+            assertNotNull(loader.load());
+        }
+    }
+
+    /**
+     * Checks that every invalid header is reported as an invalid file.
+     *
+     * @param name   test case name.
+     * @param header invalid header contents.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("invalidHeaders")
+    void isValidFile_whenHeaderIsInvalid_returnsFalse(final String name, final String header,
+                                                      @TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "invalid.ply", header);
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertFalse(loader.isValidFile());
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that loading a file with invalid header fails.
+     *
+     * @param name   test case name.
+     * @param header invalid header contents.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("invalidHeaders")
+    void load_whenHeaderIsInvalid_throwsLoaderException(final String name, final String header,
+                                                        @TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "invalid.ply", header);
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Checks that a non numeric number of element instances raises an I/O error.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void isValidFile_whenElementCountIsNotANumber_throwsIOException(@TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "count.ply",
+                "ply\nformat ascii 1.0\nelement vertex many\nend_header\n");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(IOException.class, loader::isValidFile);
+        }
+    }
+
+    /**
+     * Checks that a header can have extra blank spaces and that data type aliases are accepted.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void isValidFile_whenHeaderHasExtraSpaces_returnsTrue(@TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "spaces.ply",
+                "ply\nformat   ascii   1.0\ncomment   hello\nelement  vertex  1\nproperty  float  x\n"
+                        + "property list  uchar  int8  l\nend_header\n");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertTrue(loader.isValidFile());
+        }
+    }
+
+    /**
+     * Checks that headers truncated at the end of the stream are rejected with a loader exception.
+     *
+     * @param header truncated header.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "ply\nformat ascii 1.0\ncomment hello\n",
+            "ply\nformat ascii 1.0\nelement",
+            "ply\nformat ascii 1.0\nelement vertex 1\nproperty",
+            "ply\nformat ascii 1.0\nelement vertex 1\nproperty float x\n",
+            "ply\nformat ascii 1.0\n",
+            "ply\nformat ascii 1.0\nobj_info x\n"})
+    void load_whenHeaderIsTruncated_throwsLoaderException(final String header, @TempDir final Path dir)
+            throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "truncated.ply", header);
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertFalse(loader.isValidFile());
+        }
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, loader::load);
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that negative element counts are rejected.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenElementCountIsNegative_throwsLoaderException(@TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "negative.ply",
+                "ply\nformat ascii 1.0\nelement vertex -5\nproperty float x\nproperty float y\n"
+                        + "property float z\nend_header\n");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertFalse(loader.isValidFile());
+        }
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, () -> consume(loader));
+        }
+    }
+
+    /**
+     * Checks that crafted files only fail with loader exceptions when being loaded.
+     *
+     * @param name  test case name.
+     * @param bytes file content.
+     * @param dir   temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("hostileFiles")
+    void load_whenFileIsHostile_throwsLoaderException(final String name, final byte[] bytes,
+                                                      @TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeBytes(dir, "hostile.ply", bytes);
+
+        try (final var loader = new LoaderPLY(file)) {
+            // only checked exceptions are allowed to be thrown (never runtime ones)
+            final var ex = assertThrows(Exception.class, () -> consume(loader));
+            assertTrue(ex instanceof LoaderException || ex instanceof IOException, ex.toString());
+        }
+    }
+
+    /**
+     * Loads a file and iterates over all its chunks.
+     *
+     * @param loader loader.
+     * @throws Exception if any error occurs.
+     */
+    private static void consume(final LoaderPLY loader) throws Exception {
+        final var iterator = loader.load();
+        while (iterator.hasNext()) {
+            iterator.next();
+        }
+    }
+
+    /**
+     * Provides crafted files with hostile counts and list lengths.
+     *
+     * @return test case names and file contents.
+     */
+    private static Stream<Arguments> hostileFiles() {
+        final var asciiVertex = "ply\nformat ascii 1.0\nelement vertex ";
+        final var props = "\nproperty float x\nproperty float y\nproperty float z\n";
+        final var face = "element face 1\nproperty list uchar int vertex_indices\nend_header\n";
+        final var binLe = "ply\nformat binary_little_endian 1.0\nelement vertex ";
+
+        return Stream.of(
+                Arguments.of("ascii huge vertex count",
+                        ascii(asciiVertex + "2147483647" + props + face + "0 0 0\n3 0 0 0\n")),
+                Arguments.of("ascii huge long vertex count",
+                        ascii(asciiVertex + "9223372036854775807" + props + face + "0 0 0\n3 0 0 0\n")),
+                Arguments.of("ascii huge face count",
+                        ascii(asciiVertex + "3" + props + "element face 2147483647\n"
+                                + "property list uchar int vertex_indices\nend_header\n"
+                                + "0 0 0\n1 0 0\n0 1 0\n3 0 1 2\n")),
+                Arguments.of("binary huge vertex count truncated body",
+                        concat(ascii(binLe + "2147483647" + props + face), new byte[12])),
+                Arguments.of("binary huge face count truncated body",
+                        concat(ascii(binLe + "3" + props + "element face 2147483647\n"
+                                + "property list uchar int vertex_indices\nend_header\n"), new byte[36],
+                                new byte[]{3, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0})),
+                Arguments.of("binary list of 255 entries with truncated body",
+                        concat(ascii(binLe + "3" + props + face), new byte[36], new byte[]{(byte) 255, 0, 0, 0, 0})),
+                Arguments.of("binary list of 255 entries without body",
+                        concat(ascii(binLe + "3" + props + face), new byte[36], new byte[]{(byte) 255})),
+                Arguments.of("binary list with negative int length",
+                        concat(ascii(binLe + "3" + props
+                                + "element face 1\nproperty list int int vertex_indices\nend_header\n"),
+                                new byte[36], new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff,
+                                        0, 0, 0, 0})),
+                Arguments.of("binary list with huge int length",
+                        concat(ascii(binLe + "3" + props
+                                + "element face 1\nproperty list int int vertex_indices\nend_header\n"),
+                                new byte[36], new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f,
+                                        0, 0, 0, 0})),
+                Arguments.of("binary list with huge uint length",
+                        concat(ascii(binLe + "3" + props
+                                + "element face 1\nproperty list uint int vertex_indices\nend_header\n"),
+                                new byte[36], new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff,
+                                        0, 0, 0, 0})),
+                Arguments.of("ascii list with huge length",
+                        ascii(asciiVertex + "3" + props + "element face 1\n"
+                                + "property list int int vertex_indices\nend_header\n"
+                                + "0 0 0\n1 0 0\n0 1 0\n2147483647 0 1 2\n")),
+                Arguments.of("ascii list with negative length",
+                        ascii(asciiVertex + "3" + props + "element face 1\n"
+                                + "property list int int vertex_indices\nend_header\n"
+                                + "0 0 0\n1 0 0\n0 1 0\n-1 0 1 2\n")),
+                Arguments.of("ascii list with truncated body",
+                        ascii(asciiVertex + "3" + props + "element face 1\n"
+                                + "property list uchar int vertex_indices\nend_header\n"
+                                + "0 0 0\n1 0 0\n0 1 0\n255 0 1 2\n")),
+                Arguments.of("face index out of range",
+                        ascii(asciiVertex + "3" + props + face + "0 0 0\n1 0 0\n0 1 0\n3 0 1 99999\n")),
+                Arguments.of("face negative index",
+                        ascii(asciiVertex + "3" + props + face + "0 0 0\n1 0 0\n0 1 0\n3 0 1 -5\n")));
+    }
+
+    private static byte[] ascii(final String text) {
+        return text.getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+    }
+
+    private static byte[] concat(final byte[]... arrays) {
+        final var out = new java.io.ByteArrayOutputStream();
+        for (final var array : arrays) {
+            out.writeBytes(array);
+        }
+        return out.toByteArray();
+    }
+
+    /**
+     * Provides headers that are not valid.
+     *
+     * @return test case names and headers.
+     */
+    private static Stream<Arguments> invalidHeaders() {
+        final var start = "ply\nformat ascii 1.0\n";
+        return Stream.of(
+                Arguments.of("empty file", ""),
+                Arguments.of("wrong magic", "plz\nformat ascii 1.0\nend_header\n"),
+                Arguments.of("only magic", "ply\n"),
+                Arguments.of("missing format keyword", "ply\nfmt ascii 1.0\nend_header\n"),
+                Arguments.of("format without mode", "ply\nformat"),
+                Arguments.of("unsupported storage mode", "ply\nformat binary_weird_endian 1.0\nend_header\n"),
+                Arguments.of("unsupported version", "ply\nformat ascii 2.0\nend_header\n"),
+                Arguments.of("missing version", "ply\nformat ascii"),
+                Arguments.of("missing end_header", start + "element vertex 1\nproperty float x\n"),
+                Arguments.of("unknown keyword", start + "unknown thing\nend_header\n"),
+                Arguments.of("property before element", start + "property float x\nend_header\n"),
+                Arguments.of("element without count", start + "element vertex"),
+                Arguments.of("unknown scalar type", start + "element vertex 1\nproperty foo x\nend_header\n"),
+                Arguments.of("scalar without name", start + "element vertex 1\nproperty float"),
+                Arguments.of("list without length type", start + "element face 1\nproperty list"),
+                Arguments.of("list with unknown length type",
+                        start + "element face 1\nproperty list foo int idx\nend_header\n"),
+                Arguments.of("list without value type", start + "element face 1\nproperty list uchar"),
+                Arguments.of("list with unknown value type",
+                        start + "element face 1\nproperty list uchar foo idx\nend_header\n"),
+                Arguments.of("list without name", start + "element face 1\nproperty list uchar int"));
+    }
+
     @Override
     public void onLoadStart(Loader loader) {
         if (startCounter != 0) {
@@ -568,5 +855,32 @@ class LoaderPLYTest implements LoaderListener {
 
     private boolean isLockedValid() {
         return lockedValid;
+    }
+
+    /**
+     * Checks that an ASCII file whose body ends before all declared values are
+     * read is reported as a corrupted file (LoaderException) and that the
+     * loader is unlocked afterwards.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenAsciiBodyIsTruncated_throwsLoaderExceptionAndUnlocks(@TempDir final Path dir)
+            throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "truncatedbody.ply",
+                "ply\nformat ascii 1.0\nelement vertex 3\nproperty float x\nproperty float y\n"
+                        + "property float z\nelement face 1\nproperty list uchar int vertex_indices\n"
+                        + "end_header\n0 0 0\n1 0 0\n0 1 0\n3 0 1 x\n");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, () -> {
+                final var it = loader.load();
+                while (it.hasNext()) {
+                    it.next();
+                }
+            });
+            assertFalse(loader.isLocked());
+        }
     }
 }

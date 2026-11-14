@@ -45,4 +45,22 @@ class HeaderPLYTest {
 
         assertEquals("ply\nformat ascii 1.0\n" + element + "end_header\n", header.toString());
     }
+
+    @Test
+    void toString_whenBinaryModesCommentsAndObjInfos_includesThem() {
+        final var header = new HeaderPLY();
+        header.getComments().add("a comment");
+        header.getObjInfos().add("some info");
+
+        header.setStorageMode(PLYStorageMode.PLY_LITTLE_ENDIAN);
+        assertEquals("ply\nformat binary_little_endian 1.0\ncomment a comment\nobj_info some info\nend_header\n",
+                header.toString());
+
+        header.setStorageMode(PLYStorageMode.PLY_BIG_ENDIAN);
+        assertEquals("ply\nformat binary_big_endian 1.0\ncomment a comment\nobj_info some info\nend_header\n",
+                header.toString());
+
+        header.setStorageMode(null);
+        assertEquals("ply\n1.0\ncomment a comment\nobj_info some info\nend_header\n", header.toString());
+    }
 }

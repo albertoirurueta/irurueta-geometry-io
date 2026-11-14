@@ -22,6 +22,7 @@ import com.irurueta.geometry.TriangulatorException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -632,16 +633,18 @@ public class LoaderPLY extends Loader {
             throw new LockedException();
         }
 
-        setLocked(true);
         if (reader == null) {
             throw new IOException();
         }
+
+        setLocked(true);
         try {
             readHeader();
-        } catch (final LoaderException ex) {
+        } catch (final LoaderException | BufferUnderflowException ex) {
             validStream = false;
+        } finally {
+            setLocked(false);
         }
-        setLocked(false);
         return validStream;
     }
 
@@ -739,19 +742,26 @@ public class LoaderPLY extends Loader {
             listener.onLoadStart(this);
         }
 
-        if (reader == null) {
-            throw new IOException();
-        }
+        // do not leave this loader locked if file cannot be loaded
+        loaderIterator = loadReleasingLockOnFailure(() -> {
+            if (reader == null) {
+                throw new IOException();
+            }
 
-        if (!validityChecked) {
-            readHeader();
-        }
-        if (!validStream) {
-            setLocked(false);
-            throw new LoaderException();
-        }
+            if (!validityChecked) {
+                readHeader();
+            }
+            if (!validStream) {
+                throw new LoaderException();
+            }
 
-        loaderIterator = new LoaderIteratorPLY(this);
+            try {
+                return new LoaderIteratorPLY(this);
+            } catch (final CorruptValueException e) {
+                // a value could not be parsed, hence file is corrupted
+                throw new LoaderException(e);
+            }
+        });
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
     }
 
@@ -782,7 +792,7 @@ public class LoaderPLY extends Loader {
         do {
             // loop is to avoid empty strings
             // (because of duplicate spaces or carriage returns)
-            str = reader.readWord();
+            str = readWordOrEmpty();
         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
         if (!"format".equals(str) || reader.isEndOfStream()) {
@@ -793,7 +803,7 @@ public class LoaderPLY extends Loader {
         // next to format word comes storage mode
         do {
             // loop to avoid empty strings
-            str = reader.readWord();
+            str = readWordOrEmpty();
         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
         if (reader.isEndOfStream()) {
@@ -821,7 +831,7 @@ public class LoaderPLY extends Loader {
         // next comes version (always must be 1.0)
         do {
             // loop to avoid empty strings
-            str = reader.readWord();
+            str = readWordOrEmpty();
         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
         if (!"1.0".equals(str) || reader.isEndOfStream()) {
@@ -841,7 +851,7 @@ public class LoaderPLY extends Loader {
         do {
             do {
                 // loop to avoid empty strings
-                str = reader.readWord();
+                str = readWordOrEmpty();
             } while ((str.isEmpty()) && !reader.isEndOfStream());
 
             if ("comment".equals(str)) {
@@ -861,7 +871,7 @@ public class LoaderPLY extends Loader {
                 // next word contains element name
                 do {
                     // loop to avoid empty strings
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 if (reader.isEndOfStream()) {
@@ -873,7 +883,7 @@ public class LoaderPLY extends Loader {
 
                 // next word contains number of instances of this element
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 if (reader.isEndOfStream()) {
@@ -886,6 +896,12 @@ public class LoaderPLY extends Loader {
                     elementInstances = Long.parseLong(str);
                 } catch (NumberFormatException e) {
                     throw new IOException(e);
+                }
+
+                if (elementInstances < 0) {
+                    // number of instances cannot be negative
+                    validStream = false;
+                    throw new LoaderException();
                 }
 
                 // instantiate element
@@ -906,7 +922,7 @@ public class LoaderPLY extends Loader {
                 // read next word
                 do {
                     // loop to avoid empty strings
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                 if (reader.isEndOfStream()) {
@@ -922,7 +938,7 @@ public class LoaderPLY extends Loader {
                         // read length data type
                         do {
                             // loop to avoid empty strings
-                            str = reader.readWord();
+                            str = readWordOrEmpty();
                         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                         if (reader.isEndOfStream()) {
@@ -934,7 +950,7 @@ public class LoaderPLY extends Loader {
 
                         // read value data type
                         do {
-                            str = reader.readWord();
+                            str = readWordOrEmpty();
                         } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                         if (reader.isEndOfStream()) {
@@ -951,7 +967,7 @@ public class LoaderPLY extends Loader {
 
                     // read property name
                     do {
-                        str = reader.readWord();
+                        str = readWordOrEmpty();
                     } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                     if (reader.isEndOfStream()) {
@@ -977,7 +993,7 @@ public class LoaderPLY extends Loader {
                     }
                     // read property name
                     do {
-                        str = reader.readWord();
+                        str = readWordOrEmpty();
                     } while ((str.isEmpty()) && !reader.isEndOfStream());
 
                     if (reader.isEndOfStream()) {
@@ -1010,6 +1026,18 @@ public class LoaderPLY extends Loader {
     }
 
     /**
+     * Reads next word of the file. At the end of the stream an empty word is
+     * returned instead of null.
+     *
+     * @return next word or an empty string if end of stream has been reached.
+     * @throws IOException if an I/O error occurs.
+     */
+    private String readWordOrEmpty() throws IOException {
+        final var word = reader.readWord();
+        return word != null ? word : "";
+    }
+
+    /**
      * Converts a word into a data type. If an unsupported word is found then a
      * LoaderException is raised.
      *
@@ -1024,6 +1052,25 @@ public class LoaderPLY extends Loader {
             throw new LoaderException();
         }
         return dataType;
+    }
+
+    /**
+     * Raised when a value stored as text in an ASCII PLY file cannot be
+     * parsed (e.g. because file is truncated or corrupted). It extends
+     * {@link IOException} because of the signature of
+     * {@link PLYReadValueFromStreamListener}, and it is converted into a
+     * {@link LoaderException} while iterating the file.
+     */
+    private static class CorruptValueException extends IOException {
+
+        /**
+         * Constructor.
+         *
+         * @param cause cause of this exception.
+         */
+        CorruptValueException(final Throwable cause) {
+            super(cause);
+        }
     }
 
     /**
@@ -1436,7 +1483,6 @@ public class LoaderPLY extends Loader {
          * @throws IOException           Raised if an I/O error occurs.
          */
         @Override
-        @SuppressWarnings("all")
         public DataChunk next() throws NotAvailableException, LoaderException, IOException {
 
             if (reader == null) {
@@ -1447,6 +1493,29 @@ public class LoaderPLY extends Loader {
                 throw new NotAvailableException();
             }
 
+            // do not leave loader locked if file cannot be read
+            return readReleasingLockOnFailure(() -> {
+                try {
+                    return readNextChunk();
+                } catch (final CorruptValueException e) {
+                    // a value could not be parsed, hence file is corrupted
+                    throw new LoaderException(e);
+                }
+            });
+        }
+
+        /**
+         * Reads next chunk of data.
+         *
+         * @return next chunk of data.
+         * @throws NotAvailableException if no more data is available.
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
+        @SuppressWarnings("all")
+        private DataChunk readNextChunk()
+                throws NotAvailableException, LoaderException, IOException {
             initChunkArrays();
 
             // reset chunk bounding box values
@@ -2609,7 +2678,7 @@ public class LoaderPLY extends Loader {
                                                     new BlueUshortReadValueFromBufferListener());
                                             break;
                                         case PLY_INT:
-                                            property.setReadLengthValueFromBufferListener(
+                                            property.setReadValueFromBufferListener(
                                                     new BlueIntReadValueFromBufferListener());
                                             break;
                                         case PLY_UINT:
@@ -2973,7 +3042,7 @@ public class LoaderPLY extends Loader {
             public void fetch(final long index) throws LoaderException, IOException {
 
                 final var nElems = vertexElement.getNumberOfInstances();
-                if (index >= nElems) {
+                if (index < 0 || index >= nElems) {
                     throw new LoaderException();
                 }
 
@@ -3004,7 +3073,7 @@ public class LoaderPLY extends Loader {
             public void fetch(final long index) throws LoaderException, IOException, NotAvailableException {
 
                 final var nElems = vertexElement.getNumberOfInstances();
-                if (index >= nElems) {
+                if (index < 0 || index >= nElems) {
                     throw new LoaderException();
                 }
 
@@ -6452,7 +6521,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6463,7 +6532,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.put(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6488,7 +6557,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6500,7 +6569,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6525,7 +6594,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6536,7 +6605,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6561,7 +6630,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6573,7 +6642,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6598,7 +6667,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6609,7 +6678,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6634,7 +6703,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6646,7 +6715,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putLong(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6671,7 +6740,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6682,7 +6751,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putFloat(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6707,7 +6776,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6718,7 +6787,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putDouble(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6743,7 +6812,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6754,7 +6823,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.put(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6779,7 +6848,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6791,7 +6860,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6816,7 +6885,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6827,7 +6896,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putShort(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6852,7 +6921,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6864,7 +6933,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6889,7 +6958,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6900,7 +6969,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putInt(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6925,7 +6994,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6937,7 +7006,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putLong(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6962,7 +7031,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -6973,7 +7042,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putFloat(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }
@@ -6998,7 +7067,7 @@ public class LoaderPLY extends Loader {
 
                 // read word
                 do {
-                    str = reader.readWord();
+                    str = readWordOrEmpty();
                     // loop to avoid empty strings
                 } while ((str.isEmpty()) && !reader.isEndOfStream());
 
@@ -7009,7 +7078,7 @@ public class LoaderPLY extends Loader {
                     // save to buffer
                     buffer.putDouble(0, value);
                 } catch (final NumberFormatException e) {
-                    throw new IOException(e);
+                    throw new CorruptValueException(e);
                 }
             }
         }

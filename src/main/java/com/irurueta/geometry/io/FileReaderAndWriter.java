@@ -140,7 +140,18 @@ public class FileReaderAndWriter extends AbstractFileReaderAndWriter {
      */
     @Override
     public long skip(final long n) throws IOException {
-        return randomAccessFile.skipBytes((int) n);
+        if (n <= 0) {
+            return 0;
+        }
+
+        // long math is used to support files larger than 2 GB
+        final var position = randomAccessFile.getFilePointer();
+        final var skipped = Math.min(n, randomAccessFile.length() - position);
+        if (skipped <= 0) {
+            return 0;
+        }
+        randomAccessFile.seek(position + skipped);
+        return skipped;
     }
 
     /**
