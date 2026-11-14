@@ -4,10 +4,13 @@
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
-== Unreleased
+== 1.7.0
 
 * 🐛 Hardened the STL, PLY, OBJ, MTL and binary loaders against malformed and truncated files: they now fail with `LoaderException` or `IOException` instead of `NullPointerException`, `BufferUnderflowException` or hangs, and files over 2 GB are handled explicitly. See xref:reference.adoc#_robustness_and_file_size_limits[Robustness and file size limits].
 * 🐛 PLY `int` blue color values are now read correctly.
+* 🐛 Loaders are no longer left locked after a failed load, so they can be reused after a bad file.
+* ♻️ Updated `irurueta-geometry` to 1.6.1 and `irurueta-statistics` (test scope) to 1.4.1.
+* 🔒 Updated `commons-codec` to 1.23.0 to address CVE-2026-119078 reported on 1.19.0.
 
 == 1.6.0
 
