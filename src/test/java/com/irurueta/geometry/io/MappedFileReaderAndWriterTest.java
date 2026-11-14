@@ -15,15 +15,31 @@
  */
 package com.irurueta.geometry.io;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MappedFileReaderAndWriterTest {
+
+    /**
+     * Number of bytes written into the temporary file used by end of stream tests.
+     */
+    private static final int CONTENT_LENGTH = 4;
+
+    /**
+     * Temporary folder where generated files are stored.
+     */
+    @TempDir
+    Path tempDir;
 
     @Test
     void testConstructor() throws IOException {
@@ -952,5 +968,121 @@ class MappedFileReaderAndWriterTest {
         readerWriter.close();
         assertTrue(f.exists());
         assertTrue(f.delete());
+    }
+
+    /**
+     * Checks that reading from a file after its end has been reached returns -1 for every read variant.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    void read_whenEndOfStreamReached_returnsMinusOne() throws IOException {
+        final var f = tempDir.resolve("content.bin").toFile();
+        Files.write(f.toPath(), new byte[CONTENT_LENGTH]);
+
+        try (final var readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY)) {
+            final var buffer = new byte[CONTENT_LENGTH];
+            assertEquals(CONTENT_LENGTH, readerWriter.read(buffer));
+            assertEquals(-1, readerWriter.read());
+            assertEquals(-1, readerWriter.read(buffer));
+            assertEquals(-1, readerWriter.read(buffer, 0, CONTENT_LENGTH));
+        }
+    }
+
+    /**
+     * Checks that skipping a negative number of bytes does not move the position.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    void skip_whenNegative_returnsZero() throws IOException {
+        final var f = tempDir.resolve("content.bin").toFile();
+        Files.write(f.toPath(), new byte[CONTENT_LENGTH]);
+
+        try (final var readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY)) {
+            assertEquals(0, readerWriter.skip(-1));
+            assertEquals(0, readerWriter.getPosition());
+        }
+    }
+
+    /**
+     * Checks that an empty pattern is rejected when reading until any of the given characters is found.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    void readUntilAnyOfTheseCharactersIsFound_whenEmptyPattern_throwsIllegalArgumentException()
+            throws IOException {
+        final var f = tempDir.resolve("content.bin").toFile();
+        Files.write(f.toPath(), new byte[CONTENT_LENGTH]);
+
+        try (final var readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY)) {
+            assertThrows(IllegalArgumentException.class, () -> readerWriter.readUntilAnyOfTheseCharactersIsFound(""));
+        }
+    }
+
+    /**
+     * Checks that files exceeding the 2 GB mapping limit are rejected with a clear IOException.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    void testConstructorWhenFileExceedsMappingLimit_throwsIOException() throws IOException {
+        final var f = createSparseFile("toolarge.bin", Integer.MAX_VALUE + 1L);
+
+        final var ex = assertThrows(IOException.class,
+                () -> new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY));
+        assertTrue(ex.getMessage().contains("FileReaderAndWriter"));
+
+        final var ex2 = assertThrows(IOException.class,
+                () -> new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_WRITE));
+        assertTrue(ex2.getMessage().contains("FileReaderAndWriter"));
+
+        // the file is still usable through the streaming alternative
+        try (final var readerWriter = new FileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY)) {
+            readerWriter.seek(Integer.MAX_VALUE);
+            assertEquals(0, readerWriter.read());
+            assertEquals(-1, readerWriter.read());
+        }
+    }
+
+    /**
+     * Checks that skipping a huge number of bytes is bounded by the remaining bytes instead of overflowing.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    void testSkipWithHugeCount() throws IOException {
+        final var f = tempDir.resolve("skip.bin").toFile();
+        Files.write(f.toPath(), new byte[]{1, 2, 3, 4});
+
+        try (final var readerWriter = new MappedFileReaderAndWriter(f, FileChannel.MapMode.READ_ONLY)) {
+            assertEquals(1, readerWriter.skip(1));
+            assertEquals(3, readerWriter.skip(Integer.MAX_VALUE + 5L));
+            assertEquals(4, readerWriter.getPosition());
+            assertEquals(0, readerWriter.skip(Long.MAX_VALUE));
+            assertEquals(4, readerWriter.getPosition());
+        }
+    }
+
+    /**
+     * Creates a sparse file of the given length, skipping the test if the file system does not support it.
+     *
+     * @param name   file name.
+     * @param length file length.
+     * @return created file.
+     * @throws IOException if an I/O error occurs.
+     */
+    private File createSparseFile(final String name, final long length) throws IOException {
+        final var f = tempDir.resolve(name).toFile();
+        try (final var raf = new RandomAccessFile(f, "rw")) {
+            raf.setLength(length);
+        } catch (final IOException e) {
+            Assumptions.assumeTrue(false, "Sparse files are not supported: " + e.getMessage());
+        }
+        // a non sparse file system would need to allocate the whole file
+        Assumptions.assumeTrue(f.length() == length);
+        Assumptions.assumeTrue(Files.getFileStore(f.toPath()).getUsableSpace() > length);
+        return f;
     }
 }

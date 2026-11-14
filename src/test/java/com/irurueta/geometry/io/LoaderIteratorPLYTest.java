@@ -16,16 +16,35 @@
 package com.irurueta.geometry.io;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoaderIteratorPLYTest implements LoaderListener {
 
     private static final double ERROR = 1e-4;
+
+    private static final int MAX_VERTICES = 100;
+
+    private static final int BYTES_TO_TRUNCATE = 3;
+
+    private static final float[] DEFAULT_COORDS = {0, 0, 0, 10, 0, 0, 10, 10, 0, 0, 10, 0, 5, 5, 10};
+
+    private static final int[] DEFAULT_INDICES = {0, 1, 2, 0, 2, 3, 0, 1, 4};
+
+    private static final int N_DEFAULT_VERTICES = 5;
 
     private boolean startValid = true;
     private boolean endValid = true;
@@ -1189,6 +1208,429 @@ class LoaderIteratorPLYTest implements LoaderListener {
         // releases file resources
         asciiLoader.close();
         binaryLoader.close();
+    }
+
+    /**
+     * Checks that files using every data type for coordinates, colors, normals and faces can be loaded in every
+     * storage mode, so that all value readers are executed.
+     *
+     * @param format storage format name.
+     * @param type   data type name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formatsAndTypes")
+    void next_whenAllPropertiesUseSameType_returnsExpectedChunk(final String format, final String type,
+                                                                 @TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(format).coordType(type).colors(type, 4).normals(type)
+                .faceTypes(type, type).write(dir, "all.ply");
+
+        final var chunks = loadAll(file, MAX_VERTICES, false);
+
+        assertEquals(1, chunks.size());
+        checkDefaultChunk(chunks.getFirst(), 4, !"int".equals(type));
+    }
+
+    /**
+     * Checks that mixed data types, three color components and unsupported texture properties are handled in
+     * every storage mode.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenColorsNormalsAndTextureArePresent_returnsExpectedChunk(final String format,
+                                                                          @TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(format).coordType("float").colors("uchar", 3).normals("double")
+                .texture("float").comment("a comment").write(dir, "mixed.ply");
+
+        final var chunks = loadAll(file, MAX_VERTICES, false);
+
+        assertEquals(1, chunks.size());
+        checkDefaultChunk(chunks.getFirst(), 3, true);
+    }
+
+    /**
+     * Checks that files without optional properties can be loaded in every storage mode.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenOnlyCoordinatesArePresent_returnsChunkWithoutColors(final String format,
+                                                                       @TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(format).write(dir, "coords.ply");
+
+        final var chunk = loadAll(file, MAX_VERTICES, false).getFirst();
+
+        assertArrayEquals(DEFAULT_COORDS, chunk.getVerticesCoordinatesData(), 0.0f);
+        assertArrayEquals(DEFAULT_INDICES, chunk.getIndicesData());
+        assertFalse(chunk.isColorDataAvailable());
+    }
+
+    /**
+     * Checks that duplicate vertices are kept when allowed.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenDuplicateVerticesAreAllowed_repeatsVertices(final String format, @TempDir final Path dir)
+            throws Exception {
+        final var file = new PLYTestFileBuilder(format).write(dir, "dup.ply");
+
+        final var chunk = loadAll(file, MAX_VERTICES, true).getFirst();
+
+        assertEquals(DEFAULT_INDICES.length * 3, chunk.getVerticesCoordinatesData().length);
+        assertEquals(DEFAULT_INDICES.length, chunk.getIndicesData().length);
+    }
+
+    /**
+     * Checks that faces are split into several chunks when they do not fit in one chunk.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenChunkIsTooSmall_returnsSeveralChunks(final String format, @TempDir final Path dir)
+            throws Exception {
+        final var file = new PLYTestFileBuilder(format).write(dir, "small.ply");
+
+        final var chunks = loadAll(file, 3, false);
+
+        assertEquals(DEFAULT_INDICES.length / 3, chunks.size());
+        for (final var chunk : chunks) {
+            assertEquals(3, chunk.getIndicesData().length);
+        }
+    }
+
+    /**
+     * Checks that polygons with more than three vertices are triangulated.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenFaceIsQuad_triangulatesFace(final String format, @TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(format).faces(new int[][]{{0, 1, 2, 3}}).write(dir, "quad.ply");
+
+        final var chunks = loadAll(file, MAX_VERTICES, false);
+
+        assertEquals(1, chunks.size());
+        assertEquals(6, chunks.getFirst().getIndicesData().length);
+    }
+
+    /**
+     * Checks that polygons with five vertices are triangulated.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenFaceIsPentagon_triangulatesFace(final String format, @TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(format).faces(new int[][]{{0, 1, 2, 3, 0}, {0, 1, 4}})
+                .write(dir, "pentagon.ply");
+
+        final var chunks = loadAll(file, MAX_VERTICES, false);
+
+        assertEquals(1, chunks.size());
+        assertTrue(chunks.getFirst().getIndicesData().length >= 3);
+    }
+
+    /**
+     * Checks that a face with fewer than three indices is rejected.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenFaceHasTwoIndices_throwsLoaderException(final String format, @TempDir final Path dir)
+            throws Exception {
+        final var file = new PLYTestFileBuilder(format).faces(new int[][]{{0, 1}, {0, 1, 2}})
+                .write(dir, "two.ply");
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            final var it = loader.load();
+            assertThrows(LoaderException.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that a face larger than the chunk is rejected.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenFaceDoesNotFitInChunk_throwsLoaderException(final String format, @TempDir final Path dir)
+            throws Exception {
+        final var file = new PLYTestFileBuilder(format).faces(new int[][]{{0, 1, 2, 3}}).write(dir, "large.ply");
+
+        try (final var loader = new LoaderPLY(file, 3, false)) {
+            final var it = loader.load();
+            assertThrows(LoaderException.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that a face referencing a missing vertex is rejected.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenFaceIndexIsOutOfRange_throwsLoaderException(final String format, @TempDir final Path dir)
+            throws Exception {
+        final var file = new PLYTestFileBuilder(format).faces(new int[][]{{0, 1, 9}}).write(dir, "range.ply");
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            final var it = loader.load();
+            assertThrows(LoaderException.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that a file truncated in the middle of the faces is rejected.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void next_whenFileIsTruncated_throwsException(final String format, @TempDir final Path dir) throws Exception {
+        final var bytes = new PLYTestFileBuilder(format).build();
+        final var truncated = Arrays.copyOf(bytes, bytes.length - BYTES_TO_TRUNCATE * 4);
+        final var file = PLYTestFileBuilder.writeBytes(dir, "truncated.ply", truncated);
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            final var it = loader.load();
+            assertThrows(Exception.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that a file truncated in the middle of the vertices is rejected.
+     *
+     * @param format storage format name.
+     * @param dir    temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("formats")
+    void load_whenFileEndsInsideVertices_throwsException(final String format, @TempDir final Path dir)
+            throws Exception {
+        final var bytes = new PLYTestFileBuilder(format).build();
+        final var headerLength = new String(bytes, java.nio.charset.StandardCharsets.US_ASCII)
+                .indexOf("end_header\n") + "end_header\n".length();
+        final var truncated = Arrays.copyOf(bytes, headerLength + BYTES_TO_TRUNCATE);
+        final var file = PLYTestFileBuilder.writeBytes(dir, "novertices.ply", truncated);
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            assertThrows(Exception.class, () -> loader.load().next());
+        }
+    }
+
+    /**
+     * Checks that calling next when there are no more chunks fails.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenNoMoreChunks_throwsNotAvailableException(@TempDir final Path dir) throws Exception {
+        final var file = new PLYTestFileBuilder(PLYTestFileBuilder.ASCII).write(dir, "done.ply");
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            final var it = loader.load();
+            it.next();
+            assertFalse(it.hasNext());
+            assertThrows(Exception.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that ASCII values that cannot be parsed are rejected as a corrupted file.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenAsciiValueIsNotANumber_throwsException(@TempDir final Path dir) throws Exception {
+        final var text = new String(new PLYTestFileBuilder(PLYTestFileBuilder.ASCII).build(),
+                java.nio.charset.StandardCharsets.US_ASCII).replace("\n3 0 1 2\n", "\n3 0 abc 2\n");
+        final var file = PLYTestFileBuilder.writeText(dir, "nan.ply", text);
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            final var it = loader.load();
+            assertThrows(LoaderException.class, it::next);
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that ASCII coordinates that cannot be parsed are rejected for every data type.
+     *
+     * @param type data type name.
+     * @param dir  temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @MethodSource("types")
+    void next_whenAsciiCoordinateIsNotANumber_throwsLoaderException(final String type, @TempDir final Path dir)
+            throws Exception {
+        final var text = new String(new PLYTestFileBuilder(PLYTestFileBuilder.ASCII).coordType(type).build(),
+                java.nio.charset.StandardCharsets.US_ASCII).replace("end_header\n0", "end_header\nabc");
+        final var file = PLYTestFileBuilder.writeText(dir, "badcoord.ply", text);
+
+        try (final var loader = new LoaderPLY(file, MAX_VERTICES, false)) {
+            assertThrows(LoaderException.class, () -> loader.load().next());
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that unknown elements declared before the vertices are rejected, because no reader is set for
+     * their properties.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenUnknownElementPrecedesVertices_throwsLoaderException(@TempDir final Path dir) throws Exception {
+        final var original = new String(new PLYTestFileBuilder(PLYTestFileBuilder.ASCII).build(),
+                java.nio.charset.StandardCharsets.US_ASCII);
+        final var text = original.replace("element vertex",
+                        "element extra 2\nproperty float a\nproperty list uchar int b\nelement vertex")
+                .replace("end_header\n", "end_header\n1.0 2 1 7\n2.0 3 7 8 9\n");
+        final var file = PLYTestFileBuilder.writeText(dir, "extra.ply", text);
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Checks that a file without face element cannot be iterated.
+     *
+     * @param dir temporary directory.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenThereAreNoFaces_throwsLoaderException(@TempDir final Path dir) throws Exception {
+        final var file = PLYTestFileBuilder.writeText(dir, "nofaces.ply", "ply\nformat ascii 1.0\n"
+                + "element vertex 1\nproperty float x\nproperty float y\nproperty float z\nend_header\n"
+                + "0 0 0\n");
+
+        try (final var loader = new LoaderPLY(file)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Provides the supported storage formats.
+     *
+     * @return storage formats.
+     */
+    private static Stream<String> formats() {
+        return Stream.of(PLYTestFileBuilder.ASCII, PLYTestFileBuilder.LITTLE, PLYTestFileBuilder.BIG);
+    }
+
+    /**
+     * Provides all data types.
+     *
+     * @return data type names.
+     */
+    private static Stream<String> types() {
+        return PLYTestFileBuilder.TYPES.stream();
+    }
+
+    /**
+     * Provides all combinations of storage format and data type.
+     *
+     * @return arguments.
+     */
+    private static Stream<Arguments> formatsAndTypes() {
+        return formats().flatMap(format -> PLYTestFileBuilder.TYPES.stream()
+                .map(type -> Arguments.of(format, type)));
+    }
+
+    /**
+     * Loads all chunks of a file.
+     *
+     * @param file                    file to be loaded.
+     * @param maxVerticesInChunk      maximum number of vertices in a chunk.
+     * @param allowDuplicateVertices  true to allow duplicate vertices in a chunk.
+     * @return loaded chunks.
+     * @throws Exception if any error occurs.
+     */
+    private static List<DataChunk> loadAll(final File file, final int maxVerticesInChunk,
+                                           final boolean allowDuplicateVertices) throws Exception {
+        final var chunks = new ArrayList<DataChunk>();
+        try (final var loader = new LoaderPLY(file, maxVerticesInChunk, allowDuplicateVertices)) {
+            final var it = loader.load();
+            while (it.hasNext()) {
+                chunks.add(it.next());
+            }
+        }
+        return chunks;
+    }
+
+    /**
+     * Checks that a chunk contains the data generated by default by {@link PLYTestFileBuilder}.
+     *
+     * @param chunk      chunk to be checked.
+     * @param components number of color components.
+     * @param checkBlue  true to check blue component (int typed blue components are not read by the loader).
+     */
+    private static void checkDefaultChunk(final DataChunk chunk, final int components,
+                                          final boolean checkBlue) {
+        assertArrayEquals(DEFAULT_COORDS, chunk.getVerticesCoordinatesData(), 0.0f);
+        assertArrayEquals(DEFAULT_INDICES, chunk.getIndicesData());
+
+        final var normals = chunk.getNormalsData();
+        assertEquals(N_DEFAULT_VERTICES * 3, normals.length);
+        for (var i = 0; i < N_DEFAULT_VERTICES; i++) {
+            assertEquals(0.0f, normals[3 * i], 0.0f);
+            assertEquals(0.0f, normals[3 * i + 1], 0.0f);
+            assertEquals(1.0f, normals[3 * i + 2], 0.0f);
+        }
+
+        assertEquals(components, chunk.getColorComponents());
+        final var colors = chunk.getColorData();
+        assertEquals(N_DEFAULT_VERTICES * components, colors.length);
+        for (var i = 0; i < N_DEFAULT_VERTICES; i++) {
+            assertEquals(PLYTestFileBuilder.RED, colors[components * i]);
+            assertEquals(PLYTestFileBuilder.GREEN, colors[components * i + 1]);
+            if (checkBlue) {
+                assertEquals(PLYTestFileBuilder.BLUE, colors[components * i + 2]);
+            }
+            if (components == 4) {
+                assertEquals(PLYTestFileBuilder.ALPHA, colors[components * i + 3]);
+            }
+        }
+
+        assertEquals(0.0f, chunk.getMinX(), 0.0f);
+        assertEquals(10.0f, chunk.getMaxZ(), 0.0f);
     }
 
     @Override

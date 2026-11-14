@@ -18,6 +18,7 @@ package com.irurueta.geometry.io;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.channels.FileChannel;
 
 /**
@@ -222,6 +223,100 @@ public abstract class Loader implements Closeable {
      */
     protected synchronized void setLocked(final boolean locked) {
         this.locked = locked;
+    }
+
+    /**
+     * Runs a step of the loading process (started while this loader is
+     * locked) and releases the lock if the step fails, so that this loader
+     * can be reused after a corrupted or unreadable file.
+     * A premature end of data ({@link BufferUnderflowException}) is reported
+     * as a {@link LoaderException}, since it means that file is corrupted.
+     *
+     * @param operation loading step to be executed.
+     * @param <T>       type of result returned by the loading step.
+     * @return result of the loading step.
+     * @throws IOException     if an I/O error occurs.
+     * @throws LoaderException if file is corrupted or cannot be interpreted.
+     */
+    protected <T> T loadReleasingLockOnFailure(
+            final LoadOperation<T> operation)
+            throws IOException, LoaderException {
+        try {
+            return operation.run();
+        } catch (final BufferUnderflowException e) {
+            setLocked(false);
+            throw new LoaderException(e);
+        } catch (final IOException | LoaderException | RuntimeException e) {
+            setLocked(false);
+            throw e;
+        }
+    }
+
+    /**
+     * Reads a chunk of data while iterating a file and releases the lock of
+     * this loader if reading fails, so that this loader can be reused after a
+     * corrupted or unreadable file.
+     * A premature end of data ({@link BufferUnderflowException}) is reported
+     * as a {@link LoaderException}, since it means that file is corrupted.
+     *
+     * @param operation reading step to be executed.
+     * @return read chunk of data.
+     * @throws IOException           if an I/O error occurs.
+     * @throws LoaderException       if file is corrupted or cannot be
+     *                               interpreted.
+     * @throws NotAvailableException if no more data is available.
+     */
+    protected DataChunk readReleasingLockOnFailure(
+            final ReadOperation operation)
+            throws IOException, LoaderException, NotAvailableException {
+        try {
+            return operation.run();
+        } catch (final BufferUnderflowException e) {
+            setLocked(false);
+            throw new LoaderException(e);
+        } catch (final IOException | LoaderException
+                       | NotAvailableException | RuntimeException e) {
+            setLocked(false);
+            throw e;
+        }
+    }
+
+    /**
+     * Step of the loading process executed while this loader is locked.
+     *
+     * @param <T> type of result returned by the loading step.
+     */
+    @FunctionalInterface
+    protected interface LoadOperation<T> {
+
+        /**
+         * Executes loading step.
+         *
+         * @return result of the loading step.
+         * @throws IOException     if an I/O error occurs.
+         * @throws LoaderException if file is corrupted or cannot be
+         *                         interpreted.
+         */
+        T run() throws IOException, LoaderException;
+    }
+
+    /**
+     * Reads a chunk of data while iterating a file.
+     */
+    @FunctionalInterface
+    protected interface ReadOperation {
+
+        /**
+         * Reads a chunk of data.
+         *
+         * @return read chunk of data.
+         * @throws IOException           if an I/O error occurs.
+         * @throws LoaderException       if file is corrupted or cannot be
+         *                               interpreted.
+         * @throws NotAvailableException if no more data is available.
+         */
+        DataChunk run()
+                throws IOException, LoaderException, NotAvailableException;
     }
 
     /**

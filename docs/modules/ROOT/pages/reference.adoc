@@ -30,3 +30,52 @@ The Maven reports are generated during Maven site execution and are available af
 |https://github.com/albertoirurueta/irurueta-geometry-io[Repository]
 |Github repository
 |===
+
+== Robustness and file size limits
+
+Loaders validate the file contents instead of trusting declared sizes.
+Malformed input is rejected with a `LoaderException` (or an `IOException` when the underlying stream ends or fails) and the loader is left unlocked so it can be reused.
+Declared element counts never drive large allocations: data is read in chunks bounded by `maxVerticesInChunk`.
+
+[cols="1,4,2", options="header"]
+|===
+| Format
+| Malformed input that is rejected
+| Exception
+
+| STL (binary)
+| Files shorter than 84 bytes, or files whose length is smaller than `84 + triangles * 50`.
+The header is validated with `long` arithmetic, so huge declared triangle counts (for example `0xFFFFFFFF`) are rejected before reading.
+A file declaring 0 triangles is accepted and produces an empty mesh.
+| `LoaderException` on `load()`
+
+| PLY
+| Truncated headers (`isValidFile()` returns `false`), negative element counts, face lists with fewer than 3 vertices, negative length or length above `maxVerticesInChunk`, truncated binary bodies, and negative or out-of-range vertex indices.
+A truncated ASCII body surfaces the end of the stream.
+| `LoaderException`; `IOException` for a truncated ASCII body
+
+| Binary (v2)
+| Negative or non-multiple-of-4 chunk sizes, texture lengths that overflow or exceed the file, and files ending inside a chunk.
+| `LoaderException`
+
+| OBJ
+| Zero, negative or out-of-range face indices, and faces that can never fit in a chunk.
+Garbage or binary input only produces `LoaderException` or `IOException`.
+| `LoaderException` / `IOException`
+
+| MTL
+| A file without `newmtl` yields an empty material set.
+A second load does not keep materials from the previous one.
+| `LoaderException` on failure
+|===
+
+=== Memory and size limits
+
+* Binary STL, PLY and binary v2 loaders use `MappedFileReaderAndWriter`, which cannot map files larger than `Integer.MAX_VALUE` bytes (2 GB). Larger files are rejected with an `IOException` that suggests using `FileReaderAndWriter`, which streams files beyond 2 GB.
+* `skip` operations in both `FileReaderAndWriter` and `MappedFileReaderAndWriter` support counts above 2 GB.
+* OBJ reads text line by line. `readLine()` is not bounded, so memory is proportional to the longest line (lines of 4 MB or 1 million tokens load fine).
+* Negative (relative) OBJ indices are not supported.
+
+=== Known limitations
+
+* Calling `isValidFile()` and then `load()` on the same binary v2 loader instance fails; use a separate instance for each.

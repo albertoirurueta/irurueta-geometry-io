@@ -16,15 +16,29 @@
 package com.irurueta.geometry.io;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoaderSTLTest implements LoaderListener {
 
     private static final double ERROR = 1e-4;
+
+    private static final int BINARY_HEADER_SIZE = 80;
+
+    @TempDir
+    private Path tempDir;
 
     private boolean startValid = true;
     private boolean endValid = true;
@@ -429,6 +443,405 @@ class LoaderSTLTest implements LoaderListener {
         }
     }
 
+    /**
+     * Checks that an ASCII STL file containing a single solid with two facets is loaded into a single chunk.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenAsciiSingleSolid_returnsSingleChunkWithAllVertices() throws Exception {
+        final var f = writeAscii("single.stl", "solid my solid\n" + facet(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0)
+                + facet(0, 1, 0, 1, 1, 1, 2, 1, 1, 2, 2, 2) + "endsolid my solid\n");
+
+        try (var loader = new LoaderSTL(f)) {
+            loader.setListener(this);
+            final var it = loader.load();
+            assertTrue(loader.isLocked());
+            assertEquals("my solid", loader.getSolidName().trim());
+            assertEquals(0L, loader.getNumberOfVertices());
+            assertTrue(it.hasNext());
+
+            final var chunk = it.next();
+            assertFalse(it.hasNext());
+            assertThrows(NotAvailableException.class, it::next);
+
+            assertEquals(6, chunk.getVerticesCoordinatesData().length / 3);
+            assertEquals(6, chunk.getIndicesData().length);
+            assertEquals(18, chunk.getNormalsData().length);
+            assertEquals(0.0f, chunk.getMinX());
+            assertEquals(2.0f, chunk.getMaxX());
+            assertEquals(0.0f, chunk.getMinZ());
+            assertEquals(2.0f, chunk.getMaxZ());
+            assertEquals(1.0f, chunk.getNormalsData()[2]);
+            assertFalse(loader.isLocked());
+            assertEquals(1, startCounter);
+            assertEquals(1, endCounter);
+        }
+    }
+
+    /**
+     * Checks that a small chunk size splits an ASCII solid into several chunks.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenAsciiAndSmallChunkSize_returnsSeveralChunks() throws Exception {
+        final var sb = new StringBuilder("solid s\n");
+        for (var i = 0; i < 5; i++) {
+            sb.append(facet(0, 0, 1, i, 0, 0, i, 1, 0, i, 0, 1));
+        }
+        sb.append("endsolid s\n");
+        final var f = writeAscii("chunks.stl", sb.toString());
+
+        try (var loader = new LoaderSTL(f, 3)) {
+            final var it = loader.load();
+            var count = 0;
+            var vertices = 0;
+            while (it.hasNext()) {
+                final var chunk = it.next();
+                if (chunk.getVerticesCoordinatesData() != null) {
+                    vertices += chunk.getVerticesCoordinatesData().length / 3;
+                }
+                count++;
+            }
+            assertTrue(count > 1);
+            assertEquals(15, vertices);
+        }
+    }
+
+    /**
+     * Checks that an ASCII solid without facets yields an empty chunk.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenAsciiEmptySolid_returnsEmptyChunk() throws Exception {
+        final var f = writeAscii("empty.stl", "solid empty\nendsolid empty\n");
+
+        try (var loader = new LoaderSTL(f)) {
+            final var it = loader.load();
+            final var chunk = it.next();
+            assertNull(chunk.getVerticesCoordinatesData());
+            assertNull(chunk.getIndicesData());
+            assertNull(chunk.getNormalsData());
+            assertFalse(it.hasNext());
+        }
+    }
+
+    /**
+     * Checks that after the first solid ends, a second solid in the same file is not loaded.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenAsciiMultipleSolids_loadsOnlyFirstSolid() throws Exception {
+        final var f = writeAscii("multi.stl", "solid a\n" + facet(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0)
+                + "endsolid a\nsolid b\n" + facet(0, 0, 1, 5, 5, 5, 6, 5, 5, 5, 6, 5) + "endsolid b\n");
+
+        try (var loader = new LoaderSTL(f)) {
+            final var it = loader.load();
+            final var chunk = it.next();
+            assertEquals(3, chunk.getVerticesCoordinatesData().length / 3);
+            assertFalse(it.hasNext());
+        }
+    }
+
+    /**
+     * Checks that malformed ASCII files raise a loader exception when read.
+     *
+     * @param content malformed file content.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "solid a\nfoo\n",
+            "solid a\nfacet foo 0 0 1\n",
+            "solid a\nfacet\n",
+            "solid a\nouter foo\n",
+            "solid a\nouter\n",
+            "solid a\nfacet normal 0 0\n",
+            "solid a\nfacet normal 0 0 1\nouter loop\nvertex 0 0 0\nvertex 1 0 0\n",
+            "solid a\nfacet normal 0 0 1\nouter loop\n"
+    })
+    void next_whenAsciiMalformed_throwsLoaderException(final String content) throws Exception {
+        final var f = writeAscii("bad.stl", content);
+
+        try (var loader = new LoaderSTL(f)) {
+            final var it = loader.load();
+            assertThrows(LoaderException.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that malformed numbers in ASCII files do not escape as unchecked exceptions.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenAsciiVertexNotANumber_throwsLoaderException() throws Exception {
+        final var f = writeAscii("nan.stl", "solid a\nfacet normal 0 0 1\nouter loop\nvertex a b c\n");
+
+        try (var loader = new LoaderSTL(f)) {
+            final var it = loader.load();
+            assertThrows(LoaderException.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that a file containing only the "solid" keyword is rejected.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenAsciiOnlyMagic_throwsLoaderException() throws Exception {
+        final var f = writeAscii("magic.stl", "solid");
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Checks that a file shorter than the "solid" keyword is rejected.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenFileTooShort_throwsLoaderException() throws Exception {
+        final var f = writeAscii("short.stl", "sol");
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Checks that a binary STL with several triangles is loaded in one chunk.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenBinary_returnsAllTriangles() throws Exception {
+        final var f = writeBinary("bin.stl", 3, 3);
+
+        try (var loader = new LoaderSTL(f)) {
+            loader.setListener(this);
+            final var it = loader.load();
+            assertEquals(9L, loader.getNumberOfVertices());
+            assertNull(loader.getSolidName());
+            final var chunk = it.next();
+            assertFalse(it.hasNext());
+            assertEquals(9, chunk.getVerticesCoordinatesData().length / 3);
+            assertEquals(9, chunk.getIndicesData().length);
+            assertEquals(1.0f, chunk.getNormalsData()[1]);
+            assertEquals(0.0f, chunk.getMinX());
+            assertEquals(2.0f, chunk.getMaxX());
+            assertEquals(1, endCounter);
+        }
+    }
+
+    /**
+     * Checks that a binary STL is split in several chunks when chunk size is small.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenBinaryAndSmallChunkSize_returnsSeveralChunks() throws Exception {
+        final var f = writeBinary("binchunks.stl", 7, 7);
+
+        try (var loader = new LoaderSTL(f, 3)) {
+            final var it = loader.load();
+            var count = 0;
+            var vertices = 0;
+            while (it.hasNext()) {
+                vertices += it.next().getVerticesCoordinatesData().length / 3;
+                count++;
+            }
+            assertEquals(7, count);
+            assertEquals(21, vertices);
+        }
+    }
+
+    /**
+     * Checks that a binary STL with zero triangles has no chunks.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void hasNext_whenBinaryWithoutTriangles_returnsFalse() throws Exception {
+        final var f = writeBinary("binempty.stl", 0, 0);
+
+        try (var loader = new LoaderSTL(f)) {
+            final var it = loader.load();
+            assertEquals(0L, loader.getNumberOfVertices());
+            assertFalse(it.hasNext());
+            assertThrows(NotAvailableException.class, it::next);
+        }
+    }
+
+    /**
+     * Checks that a binary STL declaring more triangles than stored fails.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenBinaryTruncatedTriangles_throwsException() throws Exception {
+        final var f = writeBinary("bintrunc.stl", 5, 2);
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that a binary STL truncated in the middle of a triangle fails.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenBinaryTruncatedMidTriangle_throwsException() throws Exception {
+        final var f = writeBinary("bintrunc2.stl", 2, 2);
+        final var bytes = Files.readAllBytes(f.toPath());
+        Files.write(f.toPath(), Arrays.copyOf(bytes, bytes.length - 20));
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Checks that a binary STL with a huge triangle count and no data fails with an exception.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void next_whenBinaryHugeTriangleCount_throwsException() throws Exception {
+        final var buffer = ByteBuffer.allocate(BINARY_HEADER_SIZE + 4).order(ByteOrder.LITTLE_ENDIAN);
+        buffer.position(BINARY_HEADER_SIZE);
+        buffer.putInt(-1);
+        final var f = tempDir.resolve("binhuge.stl").toFile();
+        Files.write(f.toPath(), buffer.array());
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Checks that crafted binary STL files with a tiny body are rejected at load time.
+     *
+     * @param declared number of declared triangles (unsigned 32 bit).
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 0x7FFFFFFFL, 0x80000000L, 0xFFFFFFFEL, 0xFFFFFFFFL})
+    void load_whenBinaryDeclaresMoreTrianglesThanFits_throwsLoaderException(final long declared) throws Exception {
+        final var buffer = ByteBuffer.allocate(BINARY_HEADER_SIZE + 4 + 10).order(ByteOrder.LITTLE_ENDIAN);
+        buffer.position(BINARY_HEADER_SIZE);
+        buffer.putInt((int) declared);
+        final var f = tempDir.resolve("crafted" + declared + ".stl").toFile();
+        Files.write(f.toPath(), buffer.array());
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+            assertFalse(loader.isLocked());
+        }
+    }
+
+    /**
+     * Checks that a binary STL declaring zero triangles with a tiny body loads without triangles.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void load_whenBinaryDeclaresZeroTrianglesWithTinyBody_hasNoData() throws Exception {
+        final var buffer = ByteBuffer.allocate(BINARY_HEADER_SIZE + 4 + 3).order(ByteOrder.LITTLE_ENDIAN);
+        final var f = tempDir.resolve("zero.stl").toFile();
+        Files.write(f.toPath(), buffer.array());
+
+        try (var loader = new LoaderSTL(f)) {
+            final var it = loader.load();
+            assertFalse(it.hasNext());
+        }
+    }
+
+    /**
+     * Checks that binary files shorter than the header plus triangle count are rejected with a checked exception.
+     *
+     * @param length file length in bytes.
+     * @throws Exception if any unexpected error occurs.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = {81, 82, 83})
+    void load_whenBinaryShorterThanHeader_throwsLoaderException(final int length) throws Exception {
+        final var bytes = new byte[length];
+        final var f = tempDir.resolve("short" + length + ".stl").toFile();
+        Files.write(f.toPath(), bytes);
+
+        try (var loader = new LoaderSTL(f)) {
+            assertThrows(LoaderException.class, loader::load);
+        }
+    }
+
+    /**
+     * Gets a single ASCII facet.
+     *
+     * @param values 3 normal values followed by 9 vertex coordinates.
+     * @return facet text.
+     */
+    private static String facet(final float... values) {
+        final var sb = new StringBuilder("facet normal ").append(values[0]).append(' ').append(values[1])
+                .append(' ').append(values[2]).append("\nouter loop\n");
+        for (var i = 0; i < 3; i++) {
+            sb.append("vertex ").append(values[3 + 3 * i]).append(' ').append(values[4 + 3 * i]).append(' ')
+                    .append(values[5 + 3 * i]).append('\n');
+        }
+        return sb.append("endloop\nendfacet\n").toString();
+    }
+
+    /**
+     * Writes an ASCII STL file.
+     *
+     * @param name    file name.
+     * @param content file content.
+     * @return written file.
+     * @throws IOException if an I/O error occurs.
+     */
+    private File writeAscii(final String name, final String content) throws IOException {
+        final var f = tempDir.resolve(name).toFile();
+        Files.write(f.toPath(), content.getBytes(StandardCharsets.US_ASCII));
+        return f;
+    }
+
+    /**
+     * Writes a binary STL file.
+     *
+     * @param name      file name.
+     * @param declared  number of triangles declared in the header.
+     * @param available number of triangles actually written.
+     * @return written file.
+     * @throws IOException if an I/O error occurs.
+     */
+    private File writeBinary(final String name, final int declared, final int available) throws IOException {
+        final var buffer = ByteBuffer.allocate(BINARY_HEADER_SIZE + 4 + available * 50)
+                .order(ByteOrder.LITTLE_ENDIAN);
+        buffer.position(BINARY_HEADER_SIZE);
+        buffer.putInt(declared);
+        for (var i = 0; i < available; i++) {
+            // normal
+            buffer.putFloat(0.0f).putFloat(1.0f).putFloat(0.0f);
+            // vertices
+            buffer.putFloat(i % 3).putFloat(0.0f).putFloat(0.0f);
+            buffer.putFloat(0.0f).putFloat(i % 3).putFloat(0.0f);
+            buffer.putFloat(0.0f).putFloat(0.0f).putFloat(i % 3);
+            buffer.putShort((short) 0);
+        }
+        final var f = tempDir.resolve(name).toFile();
+        Files.write(f.toPath(), buffer.array());
+        return f;
+    }
+
     @Override
     public void onLoadStart(final Loader loader) {
         if (startCounter != 0) {
@@ -515,5 +928,30 @@ class LoaderSTLTest implements LoaderListener {
 
     private boolean isLockedValid() {
         return lockedValid;
+    }
+
+    /**
+     * Checks that the loader is unlocked after a corrupted file fails while
+     * loading or iterating, so that it can be reused.
+     *
+     * @throws Exception if any unexpected error occurs.
+     */
+    @Test
+    void loadAndIterate_whenFileIsCorrupted_unlocksLoader() throws Exception {
+        final var ascii = writeAscii("corrupted.stl", "solid broken\n facet normal 0 0 1\n  outer loop\n"
+                + "   vertex 0 0 0\n   vertex 1 0 0\n   vertex a b c\n  endloop\n endfacet\nendsolid broken\n");
+        final var binary = writeBinary("declared.stl", 10, 2);
+
+        for (final var file : new File[]{ascii, binary}) {
+            try (final var loader = new LoaderSTL(file)) {
+                assertThrows(LoaderException.class, () -> {
+                    final var it = loader.load();
+                    while (it.hasNext()) {
+                        it.next();
+                    }
+                });
+                assertFalse(loader.isLocked());
+            }
+        }
     }
 }

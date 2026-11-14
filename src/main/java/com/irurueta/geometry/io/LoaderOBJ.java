@@ -38,6 +38,11 @@ import java.util.TreeMap;
 public class LoaderOBJ extends Loader {
 
     /**
+     * Number of vertices of a triangle.
+     */
+    private static final long VERTICES_PER_TRIANGLE = 3L;
+
+    /**
      * Constant defining the default value of maximum number of vertices to keep
      * in a chunk. This is 65535, which corresponds to the maximum value allowed
      * by graphical layer such as OpenGL when working with Vertex Buffer Objects.
@@ -690,7 +695,9 @@ public class LoaderOBJ extends Loader {
             listener.onLoadStart(this);
         }
 
-        loaderIterator = new LoaderIteratorOBJ(this);
+        // do not leave this loader locked if file cannot be loaded
+        loaderIterator = loadReleasingLockOnFailure(
+                () -> new LoaderIteratorOBJ(this));
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
@@ -1237,6 +1244,21 @@ public class LoaderOBJ extends Loader {
                 throw new NotAvailableException();
             }
 
+            // do not leave loader locked if file cannot be read
+            return readReleasingLockOnFailure(this::readNextChunk);
+        }
+
+        /**
+         * Reads next chunk of data.
+         *
+         * @return next chunk of data.
+         * @throws NotAvailableException if no more data is available.
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
+        private DataChunk readNextChunk()
+                throws NotAvailableException, LoaderException, IOException {
             initChunkArrays();
 
             // reset chunk bounding box values
@@ -1294,7 +1316,13 @@ public class LoaderOBJ extends Loader {
                         } else if (valuesTemp.length > 3) {
                             // if instead of a triangle we have a polygon then we
                             // to divide valuesTemp into a set of values forming
-                            // triangles
+                            // triangles. A polygon whose triangulation will
+                            // never fit in a chunk is rejected before
+                            // triangulating it
+                            if (VERTICES_PER_TRIANGLE * (valuesTemp.length - 2L)
+                                    > loader.maxVerticesInChunk) {
+                                throw new LoaderException();
+                            }
                             final var verticesList = getFaceValues(valuesTemp);
                             try {
                                 valuesSet.addAll(buildTriangulatedIndices(verticesList));
@@ -1310,6 +1338,12 @@ public class LoaderOBJ extends Loader {
                             throw new LoaderException();
                         }
 
+
+                        // a face that never fits in a chunk cannot be loaded
+                        if (valuesSet.size() * VERTICES_PER_TRIANGLE
+                                > loader.maxVerticesInChunk) {
+                            throw new LoaderException();
+                        }
 
                         // each word corresponds to a vertex/texture/normal index,
                         // so we check if such number of indices can be added into
@@ -1350,6 +1384,11 @@ public class LoaderOBJ extends Loader {
                                     // indices start at 1 in OBJ
                                     vertexIndex = Integer.parseInt(indices[0]) - 1;
 
+                                    if (vertexIndex < 0) {
+                                        // invalid index (<= 0 or overflow)
+                                        throw new LoaderException();
+                                    }
+
                                     // determine if vertex coordinates have to be
                                     // added as new, or they can be reused from an
                                     // existing vertex
@@ -1361,6 +1400,11 @@ public class LoaderOBJ extends Loader {
                                     // indices start at 1 in OBJ
                                     textureIndex = Integer.parseInt(indices[1]) - 1;
 
+                                    if (textureIndex < 0) {
+                                        // invalid index (<= 0 or overflow)
+                                        throw new LoaderException();
+                                    }
+
                                     // determine if texture coordinates have to be
                                     // added as new, or they can be reused from an
                                     // existing vertex
@@ -1371,6 +1415,11 @@ public class LoaderOBJ extends Loader {
                                     normalsAvailable = true;
                                     // indices start at 1 in OBJ
                                     normalIndex = Integer.parseInt(indices[2]) - 1;
+
+                                    if (normalIndex < 0) {
+                                        // invalid index (<= 0 or overflow)
+                                        throw new LoaderException();
+                                    }
 
                                     // determine if normal coordinates have to be
                                     // added as new, or they can be reused from an
@@ -1675,7 +1724,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         public void fetchVertex(long index) throws LoaderException, IOException {
-            if (index > numberOfVertices) {
+            if (index >= numberOfVertices) {
                 throw new LoaderException();
             }
 
@@ -1749,7 +1798,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         public void fetchTexture(final long index) throws LoaderException, IOException {
-            if (index > numberOfTextureCoords) {
+            if (index >= numberOfTextureCoords) {
                 throw new LoaderException();
             }
 
@@ -1823,7 +1872,7 @@ public class LoaderOBJ extends Loader {
          * @throws IOException     if an I/O error occurs.
          */
         public void fetchNormal(final long index) throws LoaderException, IOException {
-            if (index > numberOfNormals) {
+            if (index >= numberOfNormals) {
                 throw new LoaderException();
             }
 
@@ -1979,6 +2028,11 @@ public class LoaderOBJ extends Loader {
 
                 if (indices.length >= 1 && (!indices[0].isEmpty())) {
                     vertexIndex = Integer.parseInt(indices[0]) - 1;
+
+                    if (vertexIndex < 0) {
+                        // invalid index (<= 0 or overflow)
+                        throw new LoaderException();
+                    }
                     tmpVertex.setVertexIndex(vertexIndex + 1);
                     fetchVertex(vertexIndex);
                     vertexStreamPosition = reader.getPosition();

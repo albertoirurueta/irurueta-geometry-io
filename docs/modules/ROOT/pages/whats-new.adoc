@@ -4,6 +4,11 @@
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
+== Unreleased
+
+* 🐛 Hardened the STL, PLY, OBJ, MTL and binary loaders against malformed and truncated files: they now fail with `LoaderException` or `IOException` instead of `NullPointerException`, `BufferUnderflowException` or hangs, and files over 2 GB are handled explicitly. See xref:reference.adoc#_robustness_and_file_size_limits[Robustness and file size limits].
+* 🐛 PLY `int` blue color values are now read correctly.
+
 == 1.6.0
 
 * ✨ Added an Antora-based documentation site, including a dedicated page for each supported file format (OBJ,

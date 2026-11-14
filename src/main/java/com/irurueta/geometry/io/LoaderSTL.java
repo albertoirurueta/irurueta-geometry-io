@@ -245,7 +245,9 @@ public class LoaderSTL extends Loader {
             listener.onLoadStart(this);
         }
 
-        loaderIterator = new LoaderIteratorSTL(this);
+        // do not leave this loader locked if file cannot be loaded
+        loaderIterator = loadReleasingLockOnFailure(
+                () -> new LoaderIteratorSTL(this));
         loaderIterator.setListener(new LoaderIteratorListenerImpl(this));
         return loaderIterator;
     }
@@ -535,6 +537,16 @@ public class LoaderSTL extends Loader {
         public static final int VERTICES_PER_TRIANGLE = 3;
 
         /**
+         * Size in bytes of the number of triangles field in binary files.
+         */
+        private static final int BINARY_COUNT_SIZE = 4;
+
+        /**
+         * Size in bytes of each triangle (normal, 3 vertices and attribute).
+         */
+        private static final int BINARY_TRIANGLE_SIZE = 50;
+
+        /**
          * Constructor.
          *
          * @param loader reference to loader loading binary file.
@@ -608,6 +620,21 @@ public class LoaderSTL extends Loader {
                 throw new NotAvailableException();
             }
 
+            // do not leave loader locked if file cannot be read
+            return readReleasingLockOnFailure(this::readNextChunk);
+        }
+
+        /**
+         * Reads next chunk of data.
+         *
+         * @return next chunk of data.
+         * @throws NotAvailableException if no more data is available.
+         * @throws LoaderException       if file data is corrupt or cannot be
+         *                               understood.
+         * @throws IOException           if an I/O error occurs.
+         */
+        private DataChunk readNextChunk()
+                throws NotAvailableException, LoaderException, IOException {
             initChunkArrays();
 
             // reset chunk bounding box values
@@ -999,8 +1026,23 @@ public class LoaderSTL extends Loader {
                 // set position after 80 byte header
                 reader.seek(BINARY_HEADER_SIZE);
 
+                // header + number of triangles must fit in file
+                final var fileLength = file.length();
+                if (fileLength < BINARY_HEADER_SIZE + BINARY_COUNT_SIZE) {
+                    throw new LoaderException();
+                }
+
                 // read number of triangles
                 numberOfTriangles = reader.readUnsignedInt(EndianType.LITTLE_ENDIAN_TYPE);
+
+                // validate declared triangles against actual file length
+                // (long math to avoid overflow)
+                final var expectedLength = BINARY_HEADER_SIZE
+                        + BINARY_COUNT_SIZE
+                        + numberOfTriangles * BINARY_TRIANGLE_SIZE;
+                if (expectedLength > fileLength) {
+                    throw new LoaderException();
+                }
                 numberOfVertices = VERTICES_PER_TRIANGLE * numberOfTriangles;
             }
         }
