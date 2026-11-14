@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Updated `irurueta-geometry` to 1.6.1 and `irurueta-statistics` (test scope) to 1.4.1.
+
+### Security
+
+- Updated `commons-codec` to 1.23.0 to address CVE-2026-119078 reported on 1.19.0.
+
 ## [1.6.0] - 2026-07-24
 
 ### Added
