@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-11-25
+
+### Changed
+
+- Updated `irurueta-geometry` to 1.6.2.
+
 ## [1.7.0] - 2026-11-14
 
 ### Changed
@@ -106,7 +112,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   (`MappedFileReaderAndWriter`) for handling large files efficiently.
 - Migrated CI from Travis CI to GitHub Actions.
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-geometry-io/compare/1.7.0...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-geometry-io/compare/1.7.1...HEAD
+[1.7.1]: https://github.com/albertoirurueta/irurueta-geometry-io/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/albertoirurueta/irurueta-geometry-io/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/albertoirurueta/irurueta-geometry-io/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/albertoirurueta/irurueta-geometry-io/compare/1.4.0...1.5.0
