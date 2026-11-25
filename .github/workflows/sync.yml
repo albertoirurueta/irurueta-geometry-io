@@ -6,6 +6,12 @@ name: Sync
 on:
   release:
     types: [released]
+  # Manual re-run for a release whose sync was missed, e.g. `gh workflow run sync.yml -f tag=1.7.1`.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to sync back into develop (X.Y.Z)
+        required: true
 
 permissions:
   contents: write
@@ -15,7 +21,7 @@ jobs:
   sync:
     name: Open sync PR from the released branch into develop
     runs-on: ubuntu-latest
-    if: github.event.release.target_commitish == 'master'
+    if: github.event_name == 'workflow_dispatch' || github.event.release.target_commitish == 'master'
     steps:
       - name: Check out code
         uses: actions/checkout@v5
@@ -26,7 +32,7 @@ jobs:
         id: versions
         run: |
           set -euo pipefail
-          RELEASE_VERSION="${{ github.event.release.tag_name }}"
+          RELEASE_VERSION="${{ github.event.release.tag_name || inputs.tag }}"
           RELEASE_VERSION="${RELEASE_VERSION#v}"
 
           IFS='.' read -r MAJOR MINOR PATCH <<< "$RELEASE_VERSION"
@@ -37,7 +43,10 @@ jobs:
 
           NEXT_MINOR=$((MINOR + 1))
           NEXT_SNAPSHOT="${MAJOR}.${NEXT_MINOR}.0-SNAPSHOT"
-          SYNC_BRANCH="sync_${MAJOR}.${NEXT_MINOR}.0"
+          # Keyed on the release itself, not the next snapshot: a patch release (e.g. 1.7.1)
+          # computes the same next snapshot as the minor release before it (1.7.0 -> 1.8.0), so a
+          # snapshot-named branch left over from that earlier sync would wrongly skip this one.
+          SYNC_BRANCH="sync_${RELEASE_VERSION}"
 
           echo "release_version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
           echo "next_snapshot=$NEXT_SNAPSHOT" >> "$GITHUB_OUTPUT"
@@ -66,6 +75,12 @@ jobs:
           git fetch origin develop master
           git checkout -b "${{ steps.versions.outputs.sync_branch }}" "origin/develop"
 
+      - name: Read develop's current version
+        id: develop
+        if: steps.guard.outputs.exists == 'false'
+        run: |
+          echo "version=$(python3 -c 'import sys; sys.path.insert(0, ".github/scripts"); import sync_versions as s; print(s.read_project_version())')" >> "$GITHUB_OUTPUT"
+
       - name: Merge the released branch into the sync branch
         if: steps.guard.outputs.exists == 'false'
         run: |
@@ -80,17 +95,19 @@ jobs:
           python-version: '3.x'
 
       - name: Bump the development snapshot version
+        id: bump
         if: steps.guard.outputs.exists == 'false'
         env:
           RELEASE_VERSION: ${{ steps.versions.outputs.release_version }}
           NEXT_SNAPSHOT: ${{ steps.versions.outputs.next_snapshot }}
+          DEVELOP_VERSION: ${{ steps.develop.outputs.version }}
         run: python3 .github/scripts/sync_versions.py
 
       - name: Commit the version bump
         if: steps.guard.outputs.exists == 'false'
         run: |
           git add pom.xml README.md docs/antora.yml docs/modules/ROOT/pages
-          git diff --cached --quiet || git commit -m "Sync ${{ steps.versions.outputs.next_snapshot }}"
+          git diff --cached --quiet || git commit -m "Sync ${{ steps.bump.outputs.next_snapshot }}"
 
       - name: Push sync branch
         if: steps.guard.outputs.exists == 'false'
@@ -112,6 +129,6 @@ jobs:
           gh pr create \
             --base develop \
             --head "${{ steps.versions.outputs.sync_branch }}" \
-            --title "Sync ${{ steps.versions.outputs.next_snapshot }}" \
-            --body "Merges \`master\` back into \`develop\` after releasing \`${{ steps.versions.outputs.release_version }}\`, and bumps the development snapshot version to \`${{ steps.versions.outputs.next_snapshot }}\` in \`pom.xml\`, \`README.md\`, and the Antora docs." \
+            --title "Sync ${{ steps.bump.outputs.next_snapshot }}" \
+            --body "Merges \`master\` back into \`develop\` after releasing \`${{ steps.versions.outputs.release_version }}\`, and bumps the development snapshot version to \`${{ steps.bump.outputs.next_snapshot }}\` in \`pom.xml\`, \`README.md\`, and the Antora docs." \
             --label sync
