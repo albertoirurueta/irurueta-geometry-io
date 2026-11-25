@@ -27,7 +27,7 @@ Reads, writes and converts 3D files into different formats
 | Language | Java 21 |
 | Build tool | Maven |
 | Current development version | 1.8.0-SNAPSHOT |
-| Latest release | 1.7.0 |
+| Latest release | 1.7.1 |
 | License | [Apache License 2.0](LICENSE.txt) |
 | CI | GitHub Actions — builds on `develop` and on release |
 | Quality | SonarCloud, JaCoCo coverage, Checkstyle, SpotBugs, PMD |
@@ -48,7 +48,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry-io</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <scope>compile</scope>
 </dependency>
 ```
